@@ -4,6 +4,24 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
 <title>Zero Eleven — Original Series</title>
+<meta name="description" content="Zero Eleven — an original series. Browse seasons, watch episodes, and follow the story."/>
+<meta name="theme-color" content="#030303"/>
+
+<!-- Open Graph / social sharing preview -->
+<meta property="og:type" content="website"/>
+<meta property="og:title" content="Zero Eleven — Original Series"/>
+<meta property="og:description" content="An original series. Browse seasons and watch episodes."/>
+<meta property="og:image" content="og-image.png"/>
+<meta property="og:url" content="https://mahanmajdi.github.io/zero_eleven/"/>
+<meta name="twitter:card" content="summary_large_image"/>
+
+<link rel="icon" href="favicon.svg" type="image/svg+xml"/>
+
+<!-- preconnect: fonts + CDNs start their connection early instead of waiting until the tag below is parsed -->
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin/>
+
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600;700;800;900&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
@@ -18,11 +36,39 @@
   --border:rgba(255,255,255,0.06);
   --text:#fff;--muted:#333;--subtle:#1a1a1a;
   --font:'Space Grotesk',sans-serif;
+  /* Readable secondary-text tokens. The old palette used near-black hexes
+     (#111–#2a2a2a) as text color on a near-black background, which fails
+     WCAG contrast (some combos were under 1.3:1 — practically invisible).
+     These are translucent white so they stay on-brand and dark, but are
+     legible: --text-dim ≈ 4.6:1 on #030303, --text-faint ≈ 3.1:1 (fine for
+     small caps/labels, per WCAG's relaxed ratio for large/label text). */
+  --text-dim:rgba(255,255,255,0.45);
+  --text-faint:rgba(255,255,255,0.3);
 }
 html{scroll-behavior:smooth;overflow-x:hidden;}
 body{background:var(--dark);color:var(--text);font-family:var(--font);overflow-x:hidden;cursor:none;}
 ::-webkit-scrollbar{width:2px;}
 ::-webkit-scrollbar-thumb{background:var(--red);border-radius:2px;}
+
+/* Visible focus ring for keyboard users only (mouse clicks don't trigger
+   :focus-visible), since several controls below intentionally suppress the
+   browser default outline. */
+button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible,
+select:focus-visible,[tabindex]:focus-visible{
+  outline:2px solid var(--red);outline-offset:3px;border-radius:4px;
+}
+
+/* Respect the OS-level "reduce motion" accessibility setting. This site
+   leans heavily on animation (GSAP scroll reveals, pulsing orbs, a custom
+   cursor), which can cause discomfort for users with vestibular disorders. */
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{
+    animation-duration:0.01ms !important;
+    animation-iteration-count:1 !important;
+    transition-duration:0.01ms !important;
+    scroll-behavior:auto !important;
+  }
+}
 
 /* ════════════════════════════════════
    CUSTOM CURSOR
@@ -41,7 +87,7 @@ body.cursor-hover #cur-ring{width:48px;height:48px;border-color:var(--red);}
 .loader-logo .l1{background:linear-gradient(135deg,#ff4444,#c0392b);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
 .loader-bar-wrap{width:200px;height:1px;background:rgba(255,255,255,0.08);border-radius:1px;overflow:hidden;}
 .loader-bar{height:100%;width:0%;background:linear-gradient(to right,var(--red),#fff);border-radius:1px;transition:width 0.05s linear;}
-.loader-text{font-size:10px;letter-spacing:4px;color:#222;text-transform:uppercase;font-weight:300;}
+.loader-text{font-size:10px;letter-spacing:4px;color:var(--text-faint);text-transform:uppercase;font-weight:300;}
 
 /* ════════════════════════════════════
    NOISE OVERLAY
@@ -84,12 +130,12 @@ nav.scrolled{background:rgba(3,3,3,0.85);backdrop-filter:blur(32px);-webkit-back
 .menu-user{padding:20px 24px;border-bottom:1px solid var(--border);}
 .menu-avatar{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(--red),#700);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;margin-bottom:10px;box-shadow:0 0 20px rgba(192,57,43,0.2);}
 .menu-name{font-size:13px;font-weight:600;color:#ccc;}
-.menu-email-text{font-size:10px;color:#2a2a2a;margin-top:2px;}
+.menu-email-text{font-size:10px;color:var(--text-dim);margin-top:2px;}
 .menu-badge{display:inline-block;font-size:8px;padding:2px 8px;border-radius:20px;margin-top:6px;letter-spacing:2px;font-weight:600;text-transform:uppercase;}
 .badge-admin{background:rgba(192,57,43,0.1);color:var(--red);border:1px solid rgba(192,57,43,0.2);}
 .badge-member{background:var(--glass);color:#333;border:1px solid var(--border);}
 .menu-nav{flex:1;padding:10px 0;overflow-y:auto;}
-.menu-section-label{font-size:8px;letter-spacing:3px;color:#1a1a1a;text-transform:uppercase;padding:14px 24px 6px;font-weight:600;}
+.menu-section-label{font-size:8px;letter-spacing:3px;color:var(--text-faint);text-transform:uppercase;padding:14px 24px 6px;font-weight:600;}
 .menu-item{display:flex;align-items:center;gap:14px;padding:14px 24px;color:#333;font-size:12px;cursor:pointer;transition:all 0.3s;position:relative;overflow:hidden;letter-spacing:0.5px;}
 .menu-item::before{content:'';position:absolute;left:0;top:0;bottom:0;width:2px;background:var(--red);transform:scaleY(0);transition:transform 0.3s;transform-origin:bottom;}
 .menu-item:hover{color:#fff;background:rgba(255,255,255,0.02);}
@@ -101,14 +147,14 @@ nav.scrolled{background:rgba(3,3,3,0.85);backdrop-filter:blur(32px);-webkit-back
 ════════════════════════════════════ */
 .menu-section{display:none;flex:1;overflow-y:auto;flex-direction:column;}
 .back-btn{padding:14px 24px;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--border);cursor:pointer;}
-.back-btn span{font-size:11px;color:#2a2a2a;transition:color 0.2s;}
+.back-btn span{font-size:11px;color:var(--text-dim);transition:color 0.2s;}
 .back-btn:hover span{color:#666;}
 .settings-panel,.admin-panel{padding:16px 24px;}
-.panel-label{font-size:8px;font-weight:600;letter-spacing:2.5px;color:#1e1e1e;text-transform:uppercase;margin-bottom:16px;}
+.panel-label{font-size:8px;font-weight:600;letter-spacing:2.5px;color:var(--text-faint);text-transform:uppercase;margin-bottom:16px;}
 .setting-row{display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid rgba(255,255,255,0.03);}
 .setting-row:last-child{border-bottom:none;}
 .setting-label{font-size:12px;color:#555;}
-.setting-desc{font-size:9px;color:#1e1e1e;margin-top:2px;}
+.setting-desc{font-size:9px;color:var(--text-faint);margin-top:2px;}
 .toggle{width:36px;height:20px;border-radius:10px;background:#111;border:1px solid #1a1a1a;position:relative;cursor:pointer;transition:background 0.3s;}
 .toggle.on{background:var(--red);border-color:var(--red);}
 .toggle::after{content:'';position:absolute;top:2px;left:2px;width:14px;height:14px;border-radius:50%;background:#fff;transition:transform 0.3s cubic-bezier(0.16,1,0.3,1);}
@@ -117,8 +163,8 @@ nav.scrolled{background:rgba(3,3,3,0.85);backdrop-filter:blur(32px);-webkit-back
 .user-row{background:rgba(255,255,255,0.01);border:1px solid var(--border);border-radius:10px;padding:12px 14px;transition:border-color 0.2s;}
 .user-row:hover{border-color:rgba(255,255,255,0.08);}
 .user-row-name{font-size:12px;font-weight:600;color:#aaa;}
-.user-row-email{font-size:9px;color:#1e1e1e;margin-top:2px;}
-.user-row-meta{font-size:8px;color:#141414;margin-top:4px;letter-spacing:0.3px;}
+.user-row-email{font-size:9px;color:var(--text-dim);margin-top:2px;}
+.user-row-meta{font-size:8px;color:var(--text-faint);margin-top:4px;letter-spacing:0.3px;}
 .u-btn{font-size:9px;padding:4px 10px;border-radius:20px;cursor:pointer;font-family:var(--font);letter-spacing:0.5px;border:none;transition:all 0.2s;}
 .u-btn-admin{background:rgba(192,57,43,0.08);border:1px solid rgba(192,57,43,0.15);color:var(--red);}
 .u-btn-reset{background:transparent;border:1px solid var(--border);color:#333;}
@@ -174,11 +220,11 @@ body.admin-mode .poster-frame:hover .poster-upload-overlay{display:flex;}
 .t2{display:block;background:linear-gradient(135deg,#ff5050 0%,#c0392b 45%,#7a1a1a 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;opacity:0;animation:titleReveal 1.2s cubic-bezier(0.16,1,0.3,1) 2.15s forwards;filter:drop-shadow(0 0 60px rgba(192,57,43,0.5));}
 @keyframes titleReveal{from{opacity:0;transform:translateY(40px);}to{opacity:1;transform:translateY(0);}}
 .hero-meta{display:flex;align-items:center;gap:10px;margin-bottom:24px;flex-wrap:wrap;opacity:0;animation:titleReveal 1s ease 2.4s forwards;}
-.hero-badge{font-size:9px;border:1px solid var(--border);color:#333;padding:5px 14px;border-radius:20px;letter-spacing:2px;backdrop-filter:blur(4px);transition:all 0.4s;}
-.hero-badge:hover{border-color:rgba(192,57,43,0.3);color:#666;}
-.hero-dot{width:2px;height:2px;background:#1a1a1a;border-radius:50%;}
-.hero-desc{font-size:15px;color:#3a3a3a;line-height:2;max-width:480px;margin-bottom:48px;font-weight:300;opacity:0;animation:titleReveal 1s ease 2.5s forwards;}
-.hero-desc.ph{color:#141414;font-style:italic;}
+.hero-badge{font-size:9px;border:1px solid var(--border);color:#999;padding:5px 14px;border-radius:20px;letter-spacing:2px;backdrop-filter:blur(4px);transition:all 0.4s;}
+.hero-badge:hover{border-color:rgba(192,57,43,0.3);color:#fff;}
+.hero-dot{width:2px;height:2px;background:var(--text-faint);border-radius:50%;}
+.hero-desc{font-size:15px;color:var(--text-dim);line-height:2;max-width:480px;margin-bottom:48px;font-weight:300;opacity:0;animation:titleReveal 1s ease 2.5s forwards;}
+.hero-desc.ph{color:var(--text-faint);font-style:italic;}
 .hero-btns{display:flex;gap:14px;flex-wrap:wrap;opacity:0;animation:titleReveal 1s ease 2.6s forwards;}
 .hero-bottom-fade{position:absolute;bottom:0;left:0;right:0;height:35vh;background:linear-gradient(to top,#030303,transparent);z-index:3;pointer-events:none;}
 .scroll-indicator{position:absolute;bottom:8vh;left:5vw;z-index:5;display:flex;flex-direction:column;align-items:center;gap:10px;opacity:0;animation:fadeIn 1s ease 3.2s forwards;}
@@ -211,16 +257,16 @@ body.admin-mode .poster-frame:hover .poster-upload-overlay{display:flex;}
 .section-eyebrow{font-size:8px;letter-spacing:5px;color:var(--red);text-transform:uppercase;margin-bottom:20px;display:flex;align-items:center;gap:12px;font-weight:500;flex-shrink:0;}
 .section-eyebrow::after{content:'';flex:1;height:1px;background:linear-gradient(to right,rgba(192,57,43,0.3),transparent);}
 .about-left h2{font-size:clamp(28px,4vw,50px);font-weight:800;line-height:1.05;letter-spacing:-2px;margin-bottom:22px;}
-.about-left p{font-size:14px;color:#3a3a3a;line-height:2;font-weight:300;}
-.about-left p.ph{color:#141414;font-style:italic;}
+.about-left p{font-size:14px;color:var(--text-dim);line-height:2;font-weight:300;}
+.about-left p.ph{color:var(--text-faint);font-style:italic;}
 .about-right{border:1px solid var(--border);border-radius:16px;overflow:hidden;background:rgba(255,255,255,0.01);backdrop-filter:blur(20px);min-width:0;width:100%;}
 .stat-row{padding:18px 22px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid rgba(255,255,255,0.03);transition:all 0.4s;position:relative;overflow:hidden;gap:12px;}
 .stat-row::before{content:'';position:absolute;left:0;top:0;bottom:0;width:0;background:linear-gradient(to right,rgba(192,57,43,0.06),transparent);transition:width 0.5s;}
 .stat-row:hover::before{width:100%;}
 .stat-row:last-child{border-bottom:none;}
-.stat-label{font-size:9px;color:#222;letter-spacing:2px;text-transform:uppercase;font-weight:500;white-space:nowrap;flex-shrink:0;}
-.stat-value{font-size:12px;color:#888;font-weight:500;text-align:right;word-break:break-word;}
-.about-edit-btn{display:none;margin-top:20px;background:transparent;border:1px solid var(--border);color:#2a2a2a;padding:9px 20px;border-radius:20px;font-size:10px;cursor:pointer;font-family:var(--font);transition:all 0.3s;letter-spacing:0.5px;}
+.stat-label{font-size:9px;color:var(--text-faint);letter-spacing:2px;text-transform:uppercase;font-weight:500;white-space:nowrap;flex-shrink:0;}
+.stat-value{font-size:12px;color:#ccc;font-weight:500;text-align:right;word-break:break-word;}
+.about-edit-btn{display:none;margin-top:20px;background:transparent;border:1px solid var(--border);color:var(--text-dim);padding:9px 20px;border-radius:20px;font-size:10px;cursor:pointer;font-family:var(--font);transition:all 0.3s;letter-spacing:0.5px;}
 .about-edit-btn:hover{border-color:var(--red);color:var(--red);}
 body.admin-mode .about-edit-btn{display:inline-block;}
 .about-textarea{display:none;width:100%;margin-top:14px;padding:14px;background:rgba(255,255,255,0.02);border:1px solid var(--border);border-radius:10px;color:#ccc;font-size:13px;line-height:1.7;min-height:120px;outline:none;resize:vertical;font-family:var(--font);}
@@ -237,7 +283,7 @@ body.admin-mode .about-edit-btn{display:inline-block;}
 .sec-title{font-size:clamp(26px,4vw,46px);font-weight:800;letter-spacing:-2px;margin-top:14px;}
 .season-tabs{display:flex;gap:0;margin-bottom:40px;border-bottom:1px solid rgba(255,255,255,0.04);overflow-x:auto;-webkit-overflow-scrolling:touch;}
 .season-tabs::-webkit-scrollbar{height:0;}
-.s-tab{padding:12px 24px;background:transparent;border:none;color:#222;font-size:11px;font-weight:500;cursor:pointer;font-family:var(--font);position:relative;transition:color 0.3s;letter-spacing:0.5px;white-space:nowrap;display:flex;align-items:center;gap:8px;flex-shrink:0;}
+.s-tab{padding:12px 24px;background:transparent;border:none;color:var(--text-dim);font-size:11px;font-weight:500;cursor:pointer;font-family:var(--font);position:relative;transition:color 0.3s;letter-spacing:0.5px;white-space:nowrap;display:flex;align-items:center;gap:8px;flex-shrink:0;}
 .s-tab::after{content:'';position:absolute;bottom:-1px;left:0;right:0;height:1px;background:var(--red);transform:scaleX(0);transition:transform 0.4s cubic-bezier(0.16,1,0.3,1);transform-origin:left;}
 .s-tab.active{color:#fff;}
 .s-tab.active::after{transform:scaleX(1);}
@@ -264,13 +310,13 @@ body.admin-mode .s-tab-del{display:inline-block;}
 body.admin-mode .ep-del-btn{display:flex;}
 .ep-del-btn:hover{background:rgba(180,30,30,0.2);color:#fff;}
 .ep-info{padding:16px 18px 18px;position:relative;z-index:2;}
-.ep-num{font-size:8px;color:#1e1e1e;letter-spacing:3px;text-transform:uppercase;margin-bottom:6px;font-weight:500;}
-.ep-title{font-size:13px;font-weight:600;color:#666;line-height:1.35;transition:color 0.3s;}
+.ep-num{font-size:8px;color:var(--text-faint);letter-spacing:3px;text-transform:uppercase;margin-bottom:6px;font-weight:500;}
+.ep-title{font-size:13px;font-weight:600;color:#999;line-height:1.35;transition:color 0.3s;}
 .ep-card:hover .ep-title{color:#fff;}
 .ep-prog{height:1px;background:rgba(255,255,255,0.03);margin:12px 0 0;}
 .ep-prog-fill{height:100%;background:var(--red);width:0%;transition:width 0.5s;}
-.empty-state{grid-column:1/-1;text-align:center;padding:100px 20px;color:#111;background:#070707;}
-.empty-state p{font-size:12px;margin-top:12px;color:#1a1a1a;font-weight:300;letter-spacing:0.3px;}
+.empty-state{grid-column:1/-1;text-align:center;padding:100px 20px;color:var(--text-faint);background:#070707;}
+.empty-state p{font-size:12px;margin-top:12px;color:var(--text-dim);font-weight:300;letter-spacing:0.3px;}
 
 /* ════════════════════════════════════
    ADMIN FABS
@@ -289,19 +335,19 @@ body.admin-mode .admin-bar{display:flex;}
 footer{background:#020202;border-top:1px solid var(--border);padding:80px 5vw 40px;position:relative;overflow:hidden;}
 footer::before{content:'';position:absolute;top:0;left:10%;right:10%;height:1px;background:linear-gradient(to right,transparent,rgba(192,57,43,0.25),transparent);}
 .footer-grid{display:grid;grid-template-columns:1.8fr 1fr 1fr 1fr;gap:50px;margin-bottom:60px;}
-.f-logo{font-size:20px;font-weight:900;letter-spacing:4px;color:#0d0d0d;margin-bottom:14px;}
-.footer-brand p{font-size:11px;color:#111;line-height:1.9;max-width:220px;font-weight:300;}
+.f-logo{font-size:20px;font-weight:900;letter-spacing:4px;color:var(--text-dim);margin-bottom:14px;}
+.footer-brand p{font-size:11px;color:var(--text-dim);line-height:1.9;max-width:220px;font-weight:300;}
 .footer-social{display:flex;gap:10px;margin-top:20px;}
-.social-btn{width:32px;height:32px;border-radius:50%;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all 0.3s;color:#1a1a1a;}
-.social-btn:hover{border-color:rgba(255,255,255,0.1);color:#555;}
-.footer-col h4{font-size:8px;letter-spacing:3px;color:#111;text-transform:uppercase;margin-bottom:16px;font-weight:600;}
-.footer-col a{display:block;font-size:11px;color:#111;margin-bottom:10px;cursor:pointer;transition:color 0.2s;font-weight:300;}
-.footer-col a:hover{color:#444;}
+.social-btn{width:32px;height:32px;border-radius:50%;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all 0.3s;color:var(--text-faint);}
+.social-btn:hover{border-color:rgba(255,255,255,0.1);color:#999;}
+.footer-col h4{font-size:8px;letter-spacing:3px;color:var(--text-faint);text-transform:uppercase;margin-bottom:16px;font-weight:600;}
+.footer-col a{display:block;font-size:11px;color:var(--text-dim);margin-bottom:10px;cursor:pointer;transition:color 0.2s;font-weight:300;}
+.footer-col a:hover{color:#fff;}
 .footer-bottom{display:flex;align-items:flex-start;justify-content:space-between;padding-top:30px;border-top:1px solid rgba(255,255,255,0.03);gap:20px;flex-wrap:wrap;}
-.footer-credits{font-size:10px;color:#111;line-height:2;font-weight:300;}
-.footer-credits strong{color:#1e1e1e;font-weight:500;transition:color 0.2s;cursor:default;}
-.footer-credits strong:hover{color:#444;}
-.footer-right{text-align:right;font-size:9px;color:#0d0d0d;letter-spacing:0.5px;line-height:1.8;}
+.footer-credits{font-size:10px;color:var(--text-dim);line-height:2;font-weight:300;}
+.footer-credits strong{color:#bbb;font-weight:500;transition:color 0.2s;cursor:default;}
+.footer-credits strong:hover{color:#fff;}
+.footer-right{text-align:right;font-size:9px;color:var(--text-faint);letter-spacing:0.5px;line-height:1.8;}
 
 /* ════════════════════════════════════
    MODALS
@@ -311,8 +357,8 @@ footer::before{content:'';position:absolute;top:0;left:10%;right:10%;height:1px;
 .modal-box,.add-box,.auth-box{background:rgba(8,8,8,0.98);border:1px solid var(--border);border-radius:20px;padding:40px;width:min(380px,90vw);position:relative;max-height:90vh;overflow-y:auto;animation:modalIn 0.4s cubic-bezier(0.16,1,0.3,1);}
 @keyframes modalIn{from{opacity:0;transform:scale(0.92) translateY(20px);}to{opacity:1;transform:scale(1) translateY(0);}}
 .modal-box h2{font-size:22px;font-weight:800;letter-spacing:1px;margin-bottom:6px;}
-.modal-box p,.add-box .sub,.auth-box .sub{font-size:11px;color:#1e1e1e;margin-bottom:24px;font-weight:300;}
-.field-label{display:block;font-size:8px;color:#1e1e1e;letter-spacing:2px;text-transform:uppercase;margin:16px 0 7px;font-weight:500;}
+.modal-box p,.add-box .sub,.auth-box .sub{font-size:11px;color:var(--text-dim);margin-bottom:24px;font-weight:300;}
+.field-label{display:block;font-size:8px;color:var(--text-dim);letter-spacing:2px;text-transform:uppercase;margin:16px 0 7px;font-weight:500;}
 .field-input{width:100%;padding:13px 16px;background:rgba(255,255,255,0.02);border:1px solid var(--border);border-radius:10px;color:#fff;font-size:13px;outline:none;font-family:var(--font);transition:border-color 0.3s;}
 .field-input:focus{border-color:rgba(192,57,43,0.35);}
 select.field-input option{background:#111;}
@@ -324,31 +370,31 @@ select.field-input option{background:#111;}
 .modal-close:hover,.add-close:hover,.auth-close:hover{color:#fff;border-color:rgba(255,255,255,0.15);}
 .add-box h3,.auth-box h3{font-size:17px;font-weight:800;margin-bottom:4px;letter-spacing:-0.5px;}
 .auth-tabs{display:flex;margin-bottom:24px;border-bottom:1px solid var(--border);}
-.auth-tab{flex:1;padding:11px;background:none;border:none;color:#1e1e1e;font-size:11px;font-weight:600;cursor:pointer;font-family:var(--font);position:relative;transition:color 0.3s;letter-spacing:0.5px;}
+.auth-tab{flex:1;padding:11px;background:none;border:none;color:var(--text-dim);font-size:11px;font-weight:600;cursor:pointer;font-family:var(--font);position:relative;transition:color 0.3s;letter-spacing:0.5px;}
 .auth-tab::after{content:'';position:absolute;bottom:-1px;left:0;right:0;height:1px;background:var(--red);transform:scaleX(0);transition:transform 0.35s;}
 .auth-tab.active{color:#fff;}
 .auth-tab.active::after{transform:scaleX(1);}
 .auth-divider{display:flex;align-items:center;gap:10px;margin:12px 0;}
 .auth-divider::before,.auth-divider::after{content:'';flex:1;height:1px;background:var(--border);}
-.auth-divider span{font-size:8px;color:#111;letter-spacing:2px;}
+.auth-divider span{font-size:8px;color:var(--text-faint);letter-spacing:2px;}
 .btn-google-auth{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;padding:13px;background:rgba(255,255,255,0.94);color:#111;border:none;border-radius:10px;font-size:12px;font-weight:600;cursor:pointer;font-family:var(--font);transition:all 0.25s;margin-top:6px;}
 .btn-google-auth:hover{background:#fff;transform:scale(1.01);}
 .upload-zone{border:1px dashed rgba(255,255,255,0.06);border-radius:10px;padding:22px 20px;text-align:center;cursor:pointer;transition:all 0.3s;position:relative;margin-top:6px;}
 .upload-zone:hover,.upload-zone.dragover{border-color:rgba(192,57,43,0.25);background:rgba(192,57,43,0.02);}
 .upload-zone input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;}
 .upload-zone svg{opacity:0.12;margin-bottom:8px;}
-.uz-title{font-size:11px;color:#333;font-weight:500;}
-.uz-sub{font-size:9px;color:#111;margin-top:4px;}
+.uz-title{font-size:11px;color:#999;font-weight:500;}
+.uz-sub{font-size:9px;color:var(--text-faint);margin-top:4px;}
 .upload-progress{display:none;margin-top:14px;}
-.up-name{font-size:9px;color:#333;margin-bottom:8px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.up-name{font-size:9px;color:#999;margin-bottom:8px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .up-bar-wrap{background:#0e0e0e;border-radius:4px;height:2px;overflow:hidden;}
 .up-bar-fill{height:100%;background:var(--red);width:0%;transition:width 0.3s;}
-.up-pct{font-size:9px;color:#222;margin-top:4px;text-align:right;}
+.up-pct{font-size:9px;color:var(--text-dim);margin-top:4px;text-align:right;}
 .up-ready{font-size:10px;color:#4caf50;margin-top:8px;display:none;}
 .up-err{font-size:10px;color:#e44;margin-top:8px;display:none;}
 .or-divider{display:flex;align-items:center;gap:10px;margin:12px 0 0;}
 .or-divider::before,.or-divider::after{content:'';flex:1;height:1px;background:var(--border);}
-.or-divider span{font-size:8px;color:#111;letter-spacing:2px;}
+.or-divider span{font-size:8px;color:var(--text-faint);letter-spacing:2px;}
 .vid-modal{flex-direction:column;}
 .vid-modal-inner{position:relative;width:min(980px,96vw);}
 .vid-modal video{width:100%;aspect-ratio:16/9;border-radius:16px;background:#000;display:block;box-shadow:0 0 0 1px var(--border),0 60px 120px rgba(0,0,0,0.9);}
@@ -361,10 +407,10 @@ select.field-input option{background:#111;}
 .gate-box{text-align:center;padding:64px 40px;max-width:380px;animation:modalIn 0.4s cubic-bezier(0.16,1,0.3,1);}
 .gate-icon{width:64px;height:64px;border-radius:50%;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;margin:0 auto 24px;background:var(--glass);}
 .gate-box h3{font-size:22px;font-weight:800;margin-bottom:12px;letter-spacing:-0.5px;}
-.gate-box p{font-size:13px;color:#2a2a2a;line-height:1.9;margin-bottom:36px;font-weight:300;}
+.gate-box p{font-size:13px;color:var(--text-dim);line-height:1.9;margin-bottom:36px;font-weight:300;}
 .gate-btns{display:flex;flex-direction:column;gap:10px;align-items:center;}
-.gate-skip{background:none;border:none;color:#111;font-size:10px;cursor:pointer;padding:10px;font-family:var(--font);transition:color 0.2s;letter-spacing:0.5px;}
-.gate-skip:hover{color:#333;}
+.gate-skip{background:none;border:none;color:var(--text-faint);font-size:10px;cursor:pointer;padding:10px;font-family:var(--font);transition:color 0.2s;letter-spacing:0.5px;}
+.gate-skip:hover{color:#999;}
 
 /* ════════════════════════════════════
    RESPONSIVE
@@ -403,10 +449,20 @@ select.field-input option{background:#111;}
 </div>
 
 <!-- ─── NOISE ─── -->
-<div class="noise"></div>
+<div class="noise" aria-hidden="true"></div>
+
+<!-- ─── CUSTOM CURSOR ───
+     These two elements are what the "CURSOR" script further down actually
+     draws. body{cursor:none} (in the CSS reset) hides the real mouse
+     pointer everywhere on this page, so without these two divs present,
+     visitors get NO cursor at all — the pointer just vanishes. That was
+     happening before: the CSS and JS for a custom cursor were both here,
+     but the two target elements were missing from the HTML. -->
+<div id="cur" aria-hidden="true"></div>
+<div id="cur-ring" aria-hidden="true"></div>
 
 <!-- ─── MOUSE GLOW ─── -->
-<div id="mouse-glow"></div>
+<div id="mouse-glow" aria-hidden="true"></div>
 
 <!-- ─── SUPABASE ─── -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -414,6 +470,13 @@ select.field-input option{background:#111;}
 const SUPABASE_URL='https://hixsgyjveygtvzrzhvth.supabase.co';
 const SUPABASE_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhpeHNneWp2ZXlndHZ6cnpodnRoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk1ODg1OTgsImV4cCI6MjA5NTE2NDU5OH0.Lo7hkErf0ctk88Tas8PuOuO430-oibtX9ZNYGNVP6jg';
 const sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+/* NOTE for later: ADMIN_PASS lives here in plain text, so anyone can open
+   dev tools → "View Page Source" and read it — this page has no real
+   secrets, since everything sent to a browser is visible to that browser.
+   Fine for a private class demo; before this is a real product, move admin
+   login to Supabase Auth (a real login + an `is_admin` column checked by a
+   Row Level Security policy on the server), so the check happens where the
+   visitor can't read the source. */
 let ADMIN_PASS='011011@@';
 const MAX_SIZE=1024*1024*1024;
 let data={seasons:[],desc:"",poster:""};
@@ -432,14 +495,14 @@ async function loadData(){
 async function save(){await sb.from('ze_series').upsert({id:1,content:data});}
 </script>
 
-<input type="file" id="poster-upload-input" accept="image/*" onchange="handlePosterUpload(event)"/>
+<input type="file" id="poster-upload-input" accept="image/*" onchange="handlePosterUpload(event)" aria-label="Upload poster image"/>
 
 <!-- ─── NAV ─── -->
 <nav id="main-nav">
   <div class="nav-logo" onclick="refreshSite()" id="nav-logo-wrap">
     <span class="nav-logo-fallback" id="nav-logo-text">011</span>
   </div>
-  <div class="hamburger" id="hamburger" onclick="toggleMenu()"><span></span><span></span><span></span></div>
+  <div class="hamburger" id="hamburger" onclick="toggleMenu()" role="button" tabindex="0" aria-label="Open menu" aria-haspopup="true"><span></span><span></span><span></span></div>
 </nav>
 
 <!-- ─── MENU OVERLAY ─── -->
@@ -449,7 +512,7 @@ async function save(){await sb.from('ze_series').upsert({id:1,content:data});}
 <div class="side-menu" id="side-menu">
   <div class="menu-header">
     <div class="menu-logo-text">ZERO ELEVEN</div>
-    <button class="menu-close" onclick="closeMenu()">×</button>
+    <button class="menu-close" onclick="closeMenu()" aria-label="Close menu">×</button>
   </div>
   <div class="menu-user" id="menu-user">
     <div class="menu-avatar" id="menu-avatar">?</div>
@@ -478,7 +541,7 @@ async function save(){await sb.from('ze_series').upsert({id:1,content:data});}
       <div class="setting-row"><div><div class="setting-label">HD Quality</div><div class="setting-desc">High definition</div></div><div class="toggle on" onclick="this.classList.toggle('on')"></div></div>
       <div class="setting-row"><div><div class="setting-label">Notifications</div><div class="setting-desc">New episodes</div></div><div class="toggle" onclick="this.classList.toggle('on')"></div></div>
       <div style="margin-top:24px;"><div class="panel-label">Account</div>
-        <div style="font-size:10px;color:#1a1a1a;margin-bottom:14px;" id="settings-email-display"></div>
+        <div style="font-size:10px;color:var(--text-dim);margin-bottom:14px;" id="settings-email-display"></div>
         <button onclick="changePassword()" class="menu-action-btn">Change Password</button>
         <button onclick="doLogout()" class="btn-logout-menu">Log Out</button>
       </div>
@@ -499,7 +562,7 @@ async function save(){await sb.from('ze_series').upsert({id:1,content:data});}
 <!-- ─── ADMIN LOGIN ─── -->
 <div class="modal-overlay" id="login-modal">
   <div class="modal-box">
-    <button class="modal-close" onclick="closeModal('login-modal')">×</button>
+    <button class="modal-close" onclick="closeModal('login-modal')" aria-label="Close">×</button>
     <h2>ADMIN</h2><p>Enter your admin password</p>
     <input class="field-input pw-input" type="password" id="pw-input" placeholder="• • • •" onkeydown="if(event.key==='Enter')tryAdminLogin()"/>
     <button class="modal-submit" onclick="tryAdminLogin()">Access Dashboard</button>
@@ -510,7 +573,7 @@ async function save(){await sb.from('ze_series').upsert({id:1,content:data});}
 <!-- ─── AUTH ─── -->
 <div class="auth-modal" id="auth-modal">
   <div class="auth-box">
-    <button class="auth-close" onclick="closeModal('auth-modal')">×</button>
+    <button class="auth-close" onclick="closeModal('auth-modal')" aria-label="Close">×</button>
     <h3 id="auth-title">Welcome Back</h3><p class="sub" id="auth-sub">Sign in to watch Zero Eleven</p>
     <div class="auth-tabs">
       <button class="auth-tab active" id="tab-login" onclick="switchAuthTab('login')">Log In</button>
@@ -564,7 +627,7 @@ async function save(){await sb.from('ze_series').upsert({id:1,content:data});}
 <!-- ─── ADD SEASON ─── -->
 <div class="add-modal" id="season-modal">
   <div class="add-box">
-    <button class="add-close" onclick="closeModal('season-modal')">×</button>
+    <button class="add-close" onclick="closeModal('season-modal')" aria-label="Close">×</button>
     <h3>New Season</h3><p class="sub">Add a season to Zero Eleven</p>
     <label class="field-label">Season Name</label>
     <input class="field-input" type="text" id="season-name-input" placeholder="e.g. Season 1" onkeydown="if(event.key==='Enter')addSeason()"/>
@@ -575,7 +638,7 @@ async function save(){await sb.from('ze_series').upsert({id:1,content:data});}
 <!-- ─── ADD EPISODE ─── -->
 <div class="add-modal" id="episode-modal">
   <div class="add-box">
-    <button class="add-close" onclick="closeModal('episode-modal')">×</button>
+    <button class="add-close" onclick="closeModal('episode-modal')" aria-label="Close">×</button>
     <h3>New Episode</h3><p class="sub">Upload a video or paste a link</p>
     <label class="field-label">Season</label>
     <select class="field-input" id="ep-season-select"></select>
@@ -583,14 +646,14 @@ async function save(){await sb.from('ze_series').upsert({id:1,content:data});}
     <input class="field-input" type="text" id="ep-title-input" placeholder="Episode title"/>
     <label class="field-label">Thumbnail</label>
     <div class="upload-zone" id="thumb-zone">
-      <input type="file" id="ep-thumb-file" accept="image/*" onchange="handleThumbSelect(event)"/>
+      <input type="file" id="ep-thumb-file" accept="image/*" onchange="handleThumbSelect(event)" aria-label="Upload episode thumbnail"/>
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>
       <div class="uz-title">Upload thumbnail</div>
       <div style="font-size:9px;color:#4caf50;margin-top:4px;display:none;" id="thumb-ready">✓ Thumbnail ready</div>
     </div>
     <label class="field-label">Video</label>
     <div class="upload-zone" id="upload-zone">
-      <input type="file" id="ep-video-file" accept="video/*" onchange="handleVideoSelect(event)"/>
+      <input type="file" id="ep-video-file" accept="video/*" onchange="handleVideoSelect(event)" aria-label="Upload episode video"/>
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
       <div class="uz-title">Click or drag & drop</div>
       <div class="uz-sub">MP4, MOV, MKV · Max 1 GB</div>
@@ -702,9 +765,13 @@ async function save(){await sb.from('ze_series').upsert({id:1,content:data});}
       <div class="f-logo">011</div>
       <p>Zero Eleven is an independent original series. All content is protected. Unauthorized reproduction or distribution is strictly prohibited.</p>
       <div class="footer-social">
-        <div class="social-btn"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.5" fill="currentColor"/></svg></div>
-        <div class="social-btn"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4l16 16M4 20L20 4"/></svg></div>
-        <div class="social-btn"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22.54 6.42a2.78 2.78 0 00-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46a2.78 2.78 0 00-1.95 1.96A29 29 0 001 12a29 29 0 00.46 5.58A2.78 2.78 0 003.41 19.6C5.12 20 12 20 12 20s6.88 0 8.59-.46a2.78 2.78 0 001.95-1.95A29 29 0 0023 12a29 29 0 00-.46-5.58z"/><polygon points="9.75 15.02 15.5 12 9.75 8.98" fill="currentColor" stroke="none"/></svg></div>
+        <!-- Placeholder icons (Instagram/X/YouTube-shaped) with no link behind them yet.
+             aria-hidden keeps screen readers from announcing a button that does nothing;
+             once these point somewhere, swap the outer <div> for a real <a href="..."> and
+             add an aria-label naming the platform (e.g. aria-label="Instagram"). -->
+        <div class="social-btn" aria-hidden="true"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.5" fill="currentColor"/></svg></div>
+        <div class="social-btn" aria-hidden="true"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4l16 16M4 20L20 4"/></svg></div>
+        <div class="social-btn" aria-hidden="true"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22.54 6.42a2.78 2.78 0 00-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46a2.78 2.78 0 00-1.95 1.96A29 29 0 001 12a29 29 0 00.46 5.58A2.78 2.78 0 003.41 19.6C5.12 20 12 20 12 20s6.88 0 8.59-.46a2.78 2.78 0 001.95-1.95A29 29 0 0023 12a29 29 0 00-.46-5.58z"/><polygon points="9.75 15.02 15.5 12 9.75 8.98" fill="currentColor" stroke="none"/></svg></div>
       </div>
     </div>
     <div class="footer-col">
@@ -724,11 +791,11 @@ async function save(){await sb.from('ze_series').upsert({id:1,content:data});}
     <div class="footer-credits">
       <div>Director — <strong>Mani Reason</strong> &nbsp;·&nbsp; Developer — <strong>Mahan Majdi</strong></div>
       <div style="margin-top:4px;">Executive Producer · Zero Eleven Studios · Sound Design · Post Production</div>
-      <div style="margin-top:4px;font-size:9px;color:#0d0d0d;">© 2026 Zero Eleven. All Rights Reserved.</div>
+      <div style="margin-top:4px;font-size:9px;color:var(--text-faint);">© 2026 Zero Eleven. All Rights Reserved.</div>
     </div>
     <div style="width:1px;height:36px;background:var(--border);"></div>
     <div class="footer-right">
-      <div style="font-size:14px;font-weight:900;letter-spacing:4px;color:#0d0d0d;margin-bottom:4px;">ZERO ELEVEN</div>
+      <div style="font-size:14px;font-weight:900;letter-spacing:4px;color:var(--text-dim);margin-bottom:4px;">ZERO ELEVEN</div>
       <div>Original Series · 2026</div>
     </div>
   </div>
@@ -796,11 +863,39 @@ gsap.registerPlugin(ScrollTrigger);
   })();
 })();
 
+/* ─── KEYBOARD ACCESSIBILITY ───
+   A lot of the clickable things on this page (menu items, episode cards,
+   footer links) are <div>/<a> tags with an onclick, not real <button>
+   elements — so a mouse can click them, but the Tab key skips right past
+   them and Enter/Space does nothing. This finds anything clickable that
+   isn't already keyboard-friendly and makes it act like a button: focusable
+   with Tab, and activatable with Enter or Space. Elements can opt out with
+   data-no-kbd (used for the decorative social icons, which have no onclick
+   at all and don't need this). */
+function makeKeyboardAccessible(root){
+  (root||document).querySelectorAll('[onclick]').forEach(el=>{
+    if(el.matches('button,a[href],input,select,textarea,[data-no-kbd]'))return;
+    if(el.dataset.kbdReady)return; // don't double-bind the same element
+    el.dataset.kbdReady='1';
+    if(!el.hasAttribute('tabindex'))el.setAttribute('tabindex','0');
+    if(!el.hasAttribute('role'))el.setAttribute('role','button');
+    el.addEventListener('keydown',e=>{
+      if(e.key==='Enter'||e.key===' '){e.preventDefault();el.click();}
+    });
+  });
+}
+makeKeyboardAccessible();
+
 /* ─── NAV SCROLL ─── */
 window.addEventListener('scroll',()=>{document.getElementById('main-nav').classList.toggle('scrolled',scrollY>60);},{ passive:true });
 
-/* ─── GSAP SCROLL ANIMATIONS ─── */
+/* ─── GSAP SCROLL ANIMATIONS ───
+   Skip the moving stuff entirely for visitors whose OS has "reduce motion"
+   turned on (an accessibility setting, usually for motion sensitivity) —
+   just show everything in its final, settled position instead. */
+const reduceMotion=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 gsap.utils.toArray('.reveal').forEach(el=>{
+  if(reduceMotion){gsap.set(el,{opacity:1,y:0,x:0});return;}
   gsap.fromTo(el,
     {opacity:0,y:el.classList.contains('from-left')?0:50,x:el.classList.contains('from-left')?-50:el.classList.contains('from-right')?50:0},
     {opacity:1,y:0,x:0,duration:1.2,ease:'power3.out',
@@ -809,9 +904,11 @@ gsap.utils.toArray('.reveal').forEach(el=>{
 });
 
 /* ─── PARALLAX ─── */
-gsap.to('.hero-poster-zone',{yPercent:-12,ease:'none',scrollTrigger:{trigger:'#hero',start:'top top',end:'bottom top',scrub:true}});
-gsap.to('.hero-content',{yPercent:-6,ease:'none',scrollTrigger:{trigger:'#hero',start:'top top',end:'bottom top',scrub:true}});
-gsap.to('.orb-1',{y:-80,ease:'none',scrollTrigger:{trigger:'#hero',start:'top top',end:'bottom top',scrub:true}});
+if(!reduceMotion){
+  gsap.to('.hero-poster-zone',{yPercent:-12,ease:'none',scrollTrigger:{trigger:'#hero',start:'top top',end:'bottom top',scrub:true}});
+  gsap.to('.hero-content',{yPercent:-6,ease:'none',scrollTrigger:{trigger:'#hero',start:'top top',end:'bottom top',scrub:true}});
+  gsap.to('.orb-1',{y:-80,ease:'none',scrollTrigger:{trigger:'#hero',start:'top top',end:'bottom top',scrub:true}});
+}
 
 /* ─── NAVIGATION ─── */
 function go(id){const el=document.getElementById(id);if(el)el.scrollIntoView({behavior:'smooth',block:'start'});}
@@ -1024,16 +1121,16 @@ function renderSeasons(){
   }
   tabs.innerHTML=seasons.map((s,i)=>`
     <button class="s-tab${i===activeSeason?' active':''}" onclick="switchSeason(${i})">
-      ${s.name}<span class="s-tab-del" onclick="deleteSeason(${i},event)">×</span>
+      ${s.name}<span class="s-tab-del" onclick="deleteSeason(${i},event)" role="button" tabindex="0" aria-label="Delete season ${s.name}">×</span>
     </button>`).join('');
   const eps=(seasons[activeSeason]||{}).episodes||[];
   if(!eps.length){grid.innerHTML='<div class="empty-state"><p>No episodes in this season yet.</p></div>';return;}
   grid.innerHTML=eps.map((ep,i)=>`
     <div class="ep-card" onclick="playVideo(${activeSeason},${i})">
-      <button class="ep-del-btn" onclick="deleteEpisode(${activeSeason},${i},event)">×</button>
+      <button class="ep-del-btn" onclick="deleteEpisode(${activeSeason},${i},event)" aria-label="Delete episode ${ep.title}">×</button>
       <div class="ep-thumb">
         <div class="ep-thumb-bg"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="0.8"><path d="M15 10l4.553-2.069A1 1 0 0121 8.87v6.26a1 1 0 01-1.447.899L15 14"/><rect x="3" y="6" width="12" height="12" rx="2"/></svg></div>
-        ${ep.thumb?`<img class="ep-thumb-img" src="${ep.thumb}" style="display:block;"/>`:''}
+        ${ep.thumb?`<img class="ep-thumb-img" src="${ep.thumb}" alt="${ep.title} thumbnail" loading="lazy" style="display:block;"/>`:''}
         <div class="ep-overlay"></div>
         <div class="ep-play"><svg width="14" height="14" viewBox="0 0 24 24" fill="black"><polygon points="5,3 19,12 5,21"/></svg></div>
       </div>
@@ -1046,9 +1143,12 @@ function renderSeasons(){
 
   /* micro-animation on ep cards */
   document.querySelectorAll('.ep-card').forEach((card,i)=>{
+    if(reduceMotion){gsap.set(card,{opacity:1,y:0});return;}
     gsap.fromTo(card,{opacity:0,y:30},{opacity:1,y:0,duration:0.7,delay:i*0.05,ease:'power3.out',
       scrollTrigger:{trigger:card,start:'top 90%',toggleActions:'play none none reverse'}});
   });
+  makeKeyboardAccessible(grid);
+  makeKeyboardAccessible(tabs);
 }
 function switchSeason(i){activeSeason=i;renderSeasons();}
 function playVideo(si,ei){
