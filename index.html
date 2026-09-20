@@ -1,1186 +1,1184 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html lang="en" dir="ltr">
 <head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
-<title>Zero Eleven — Original Series</title>
-<meta name="description" content="Zero Eleven — an original series. Browse seasons, watch episodes, and follow the story."/>
-<meta name="theme-color" content="#030303"/>
-
-<!-- Open Graph / social sharing preview -->
-<meta property="og:type" content="website"/>
-<meta property="og:title" content="Zero Eleven — Original Series"/>
-<meta property="og:description" content="An original series. Browse seasons and watch episodes."/>
-<meta property="og:image" content="og-image.png"/>
-<meta property="og:url" content="https://mahanmajdi.github.io/zero_eleven/"/>
-<meta name="twitter:card" content="summary_large_image"/>
-
-<link rel="icon" href="favicon.svg" type="image/svg+xml"/>
-
-<!-- preconnect: fonts + CDNs start their connection early instead of waiting until the tag below is parsed -->
-<link rel="preconnect" href="https://fonts.googleapis.com"/>
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin/>
-
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600;700;800;900&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#141017">
+<meta name="description" content="A design concept for Hakim International School, Tehran: a bilingual English/Persian site built around a scroll-driven WebGL muqarnas vault, with a redesigned student portal. Unofficial proposal.">
+<!-- Kept out of search results so this concept is not mistaken for the school's official site.
+     Delete the next line if you want it indexed by Google. -->
+<meta name="robots" content="noindex, nofollow">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Hakim International School — design concept">
+<meta property="og:description" content="Bilingual EN/فارسی site concept with a scroll-driven 3D muqarnas vault and a redesigned student portal. An unofficial proposal.">
+<meta property="og:image" content="https://mahanmajdi.github.io/zero_eleven/og.png">
+<meta property="og:url" content="https://mahanmajdi.github.io/zero_eleven/">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2064%2064%22%3E%3Ccircle%20cx%3D%2232%22%20cy%3D%2232%22%20r%3D%2229.5%22%20fill%3D%22none%22%20stroke%3D%22%237A3A8C%22%20stroke-width%3D%223%22/%3E%3Cg%20fill%3D%22none%22%20stroke%3D%22%237A3A8C%22%20stroke-width%3D%223%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22M32%209%20L45.3%2016.5%20L45.3%2031.5%20L32%2039%20L18.7%2031.5%20L18.7%2016.5%20Z%22/%3E%3Cpath%20d%3D%22M32%2025%20L45.3%2032.5%20L45.3%2047.5%20L32%2055%20L18.7%2047.5%20L18.7%2032.5%20Z%22/%3E%3C/g%3E%3Ccircle%20cx%3D%2232%22%20cy%3D%2232%22%20r%3D%224%22%20fill%3D%22%23E3A23C%22/%3E%3C/svg%3E">
 <style>
-/* ════════════════════════════════════
-   ROOT & RESET
-════════════════════════════════════ */
-*{margin:0;padding:0;box-sizing:border-box;}
-:root{
-  --red:#c0392b;--red-glow:rgba(192,57,43,0.3);
-  --dark:#030303;--glass:rgba(255,255,255,0.03);
-  --border:rgba(255,255,255,0.06);
-  --text:#fff;--muted:#333;--subtle:#1a1a1a;
-  --font:'Space Grotesk',sans-serif;
-  /* Readable secondary-text tokens. The old palette used near-black hexes
-     (#111–#2a2a2a) as text color on a near-black background, which fails
-     WCAG contrast (some combos were under 1.3:1 — practically invisible).
-     These are translucent white so they stay on-brand and dark, but are
-     legible: --text-dim ≈ 4.6:1 on #030303, --text-faint ≈ 3.1:1 (fine for
-     small caps/labels, per WCAG's relaxed ratio for large/label text). */
-  --text-dim:rgba(255,255,255,0.45);
-  --text-faint:rgba(255,255,255,0.3);
-}
-html{scroll-behavior:smooth;overflow-x:hidden;}
-body{background:var(--dark);color:var(--text);font-family:var(--font);overflow-x:hidden;cursor:none;}
-::-webkit-scrollbar{width:2px;}
-::-webkit-scrollbar-thumb{background:var(--red);border-radius:2px;}
-
-/* Visible focus ring for keyboard users only (mouse clicks don't trigger
-   :focus-visible), since several controls below intentionally suppress the
-   browser default outline. */
-button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible,
-select:focus-visible,[tabindex]:focus-visible{
-  outline:2px solid var(--red);outline-offset:3px;border-radius:4px;
-}
-
-/* Respect the OS-level "reduce motion" accessibility setting. This site
-   leans heavily on animation (GSAP scroll reveals, pulsing orbs, a custom
-   cursor), which can cause discomfort for users with vestibular disorders. */
-@media (prefers-reduced-motion:reduce){
-  *,*::before,*::after{
-    animation-duration:0.01ms !important;
-    animation-iteration-count:1 !important;
-    transition-duration:0.01ms !important;
-    scroll-behavior:auto !important;
-  }
-}
-
-/* ════════════════════════════════════
-   CUSTOM CURSOR
-════════════════════════════════════ */
-#cur{position:fixed;width:8px;height:8px;background:#fff;border-radius:50%;pointer-events:none;z-index:99999;transition:transform 0.1s,width 0.3s,height 0.3s,background 0.3s;transform:translate(-50%,-50%);mix-blend-mode:difference;}
-#cur-ring{position:fixed;width:32px;height:32px;border:1px solid rgba(255,255,255,0.2);border-radius:50%;pointer-events:none;z-index:99998;transform:translate(-50%,-50%);transition:width 0.4s,height 0.4s,border-color 0.3s;mix-blend-mode:difference;}
-body.cursor-hover #cur{width:16px;height:16px;background:var(--red);}
-body.cursor-hover #cur-ring{width:48px;height:48px;border-color:var(--red);}
-
-/* ════════════════════════════════════
-   LOADER
-════════════════════════════════════ */
-#loader{position:fixed;inset:0;background:#000;z-index:99990;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:32px;}
-.loader-logo{font-size:clamp(48px,10vw,96px);font-weight:900;letter-spacing:-4px;opacity:0;}
-.loader-logo .l0{color:#fff;}
-.loader-logo .l1{background:linear-gradient(135deg,#ff4444,#c0392b);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
-.loader-bar-wrap{width:200px;height:1px;background:rgba(255,255,255,0.08);border-radius:1px;overflow:hidden;}
-.loader-bar{height:100%;width:0%;background:linear-gradient(to right,var(--red),#fff);border-radius:1px;transition:width 0.05s linear;}
-.loader-text{font-size:10px;letter-spacing:4px;color:var(--text-faint);text-transform:uppercase;font-weight:300;}
-
-/* ════════════════════════════════════
-   NOISE OVERLAY
-════════════════════════════════════ */
-.noise{position:fixed;inset:0;pointer-events:none;z-index:9990;opacity:0.025;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");background-size:256px;}
-
-/* ════════════════════════════════════
-   MOUSE GLOW
-════════════════════════════════════ */
-#mouse-glow{position:fixed;width:600px;height:600px;border-radius:50%;pointer-events:none;z-index:0;background:radial-gradient(circle,rgba(192,57,43,0.06) 0%,transparent 70%);transform:translate(-50%,-50%);transition:opacity 0.5s;}
-
-/* ════════════════════════════════════
-   NAV
-════════════════════════════════════ */
-nav{position:fixed;top:0;left:0;right:0;z-index:900;padding:0 5vw;height:72px;display:flex;align-items:center;justify-content:space-between;transition:all 0.5s;}
-nav.scrolled{background:rgba(3,3,3,0.85);backdrop-filter:blur(32px);-webkit-backdrop-filter:blur(32px);border-bottom:1px solid var(--border);}
-.nav-logo{cursor:pointer;transition:opacity 0.3s;display:flex;align-items:center;}
-.nav-logo img{height:32px;width:auto;filter:brightness(1);transition:filter 0.3s;}
-.nav-logo:hover img{filter:brightness(0.7);}
-.nav-logo-fallback{font-size:18px;font-weight:900;letter-spacing:4px;background:linear-gradient(135deg,#fff 40%,var(--red));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
-.hamburger{width:44px;height:44px;border-radius:50%;border:1px solid var(--border);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;cursor:pointer;transition:all 0.4s;background:var(--glass);backdrop-filter:blur(8px);}
-.hamburger:hover{border-color:rgba(192,57,43,0.4);background:rgba(192,57,43,0.05);}
-.hamburger span{display:block;width:16px;height:1px;background:#fff;transition:all 0.4s cubic-bezier(0.16,1,0.3,1);}
-.hamburger.open span:nth-child(1){transform:rotate(45deg) translate(4.5px,4.5px);}
-.hamburger.open span:nth-child(2){opacity:0;transform:scaleX(0);}
-.hamburger.open span:nth-child(3){transform:rotate(-45deg) translate(4.5px,-4.5px);}
-
-/* ════════════════════════════════════
-   SIDE MENU
-════════════════════════════════════ */
-.menu-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:9997;opacity:0;pointer-events:none;transition:opacity 0.4s;backdrop-filter:blur(12px);}
-.menu-overlay.open{opacity:1;pointer-events:all;}
-.side-menu{position:fixed;top:0;right:-360px;width:320px;height:100vh;background:rgba(6,6,6,0.98);backdrop-filter:blur(40px);border-left:1px solid var(--border);z-index:9998;transition:right 0.5s cubic-bezier(0.16,1,0.3,1);display:flex;flex-direction:column;overflow:hidden;}
-.side-menu::before{content:'';position:absolute;top:-100px;right:-100px;width:300px;height:300px;background:radial-gradient(circle,rgba(192,57,43,0.08),transparent 70%);pointer-events:none;}
-.side-menu.open{right:0;box-shadow:-80px 0 160px rgba(0,0,0,0.9);}
-.menu-header{padding:24px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
-.menu-logo-text{font-size:14px;font-weight:700;letter-spacing:3px;background:linear-gradient(135deg,#fff,var(--red));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
-.menu-close{background:var(--glass);border:1px solid var(--border);border-radius:50%;color:#444;font-size:16px;cursor:pointer;width:32px;height:32px;display:flex;align-items:center;justify-content:center;transition:all 0.2s;}
-.menu-close:hover{color:#fff;border-color:rgba(255,255,255,0.2);}
-.menu-user{padding:20px 24px;border-bottom:1px solid var(--border);}
-.menu-avatar{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(--red),#700);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;margin-bottom:10px;box-shadow:0 0 20px rgba(192,57,43,0.2);}
-.menu-name{font-size:13px;font-weight:600;color:#ccc;}
-.menu-email-text{font-size:10px;color:var(--text-dim);margin-top:2px;}
-.menu-badge{display:inline-block;font-size:8px;padding:2px 8px;border-radius:20px;margin-top:6px;letter-spacing:2px;font-weight:600;text-transform:uppercase;}
-.badge-admin{background:rgba(192,57,43,0.1);color:var(--red);border:1px solid rgba(192,57,43,0.2);}
-.badge-member{background:var(--glass);color:#333;border:1px solid var(--border);}
-.menu-nav{flex:1;padding:10px 0;overflow-y:auto;}
-.menu-section-label{font-size:8px;letter-spacing:3px;color:var(--text-faint);text-transform:uppercase;padding:14px 24px 6px;font-weight:600;}
-.menu-item{display:flex;align-items:center;gap:14px;padding:14px 24px;color:#333;font-size:12px;cursor:pointer;transition:all 0.3s;position:relative;overflow:hidden;letter-spacing:0.5px;}
-.menu-item::before{content:'';position:absolute;left:0;top:0;bottom:0;width:2px;background:var(--red);transform:scaleY(0);transition:transform 0.3s;transform-origin:bottom;}
-.menu-item:hover{color:#fff;background:rgba(255,255,255,0.02);}
-.menu-item:hover::before{transform:scaleY(1);}
-.menu-divider{height:1px;background:var(--border);margin:4px 0;}
-
-/* ════════════════════════════════════
-   SETTINGS / ADMIN SECTIONS
-════════════════════════════════════ */
-.menu-section{display:none;flex:1;overflow-y:auto;flex-direction:column;}
-.back-btn{padding:14px 24px;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--border);cursor:pointer;}
-.back-btn span{font-size:11px;color:var(--text-dim);transition:color 0.2s;}
-.back-btn:hover span{color:#666;}
-.settings-panel,.admin-panel{padding:16px 24px;}
-.panel-label{font-size:8px;font-weight:600;letter-spacing:2.5px;color:var(--text-faint);text-transform:uppercase;margin-bottom:16px;}
-.setting-row{display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid rgba(255,255,255,0.03);}
-.setting-row:last-child{border-bottom:none;}
-.setting-label{font-size:12px;color:#555;}
-.setting-desc{font-size:9px;color:var(--text-faint);margin-top:2px;}
-.toggle{width:36px;height:20px;border-radius:10px;background:#111;border:1px solid #1a1a1a;position:relative;cursor:pointer;transition:background 0.3s;}
-.toggle.on{background:var(--red);border-color:var(--red);}
-.toggle::after{content:'';position:absolute;top:2px;left:2px;width:14px;height:14px;border-radius:50%;background:#fff;transition:transform 0.3s cubic-bezier(0.16,1,0.3,1);}
-.toggle.on::after{transform:translateX(16px);}
-.user-list{display:flex;flex-direction:column;gap:8px;}
-.user-row{background:rgba(255,255,255,0.01);border:1px solid var(--border);border-radius:10px;padding:12px 14px;transition:border-color 0.2s;}
-.user-row:hover{border-color:rgba(255,255,255,0.08);}
-.user-row-name{font-size:12px;font-weight:600;color:#aaa;}
-.user-row-email{font-size:9px;color:var(--text-dim);margin-top:2px;}
-.user-row-meta{font-size:8px;color:var(--text-faint);margin-top:4px;letter-spacing:0.3px;}
-.u-btn{font-size:9px;padding:4px 10px;border-radius:20px;cursor:pointer;font-family:var(--font);letter-spacing:0.5px;border:none;transition:all 0.2s;}
-.u-btn-admin{background:rgba(192,57,43,0.08);border:1px solid rgba(192,57,43,0.15);color:var(--red);}
-.u-btn-reset{background:transparent;border:1px solid var(--border);color:#333;}
-.u-btn-del{background:transparent;border:1px solid rgba(255,60,60,0.1);color:#a33;}
-.menu-action-btn{width:100%;padding:11px;background:transparent;border:1px solid var(--border);color:#333;border-radius:20px;font-size:11px;cursor:pointer;font-family:var(--font);margin-bottom:8px;transition:all 0.2s;letter-spacing:0.5px;}
-.menu-action-btn:hover{border-color:rgba(255,255,255,0.15);color:#888;}
-.btn-logout-menu{width:100%;padding:11px;background:transparent;border:1px solid rgba(255,60,60,0.1);color:#a33;border-radius:20px;font-size:11px;cursor:pointer;font-family:var(--font);transition:all 0.2s;letter-spacing:0.5px;}
-.btn-logout-menu:hover{background:rgba(255,60,60,0.05);}
-
-/* ════════════════════════════════════
-   REVEAL SYSTEM
-════════════════════════════════════ */
-.reveal{opacity:0;transform:translateY(50px);transition:opacity 1.2s cubic-bezier(0.16,1,0.3,1),transform 1.2s cubic-bezier(0.16,1,0.3,1);}
-.reveal.from-left{transform:translateX(-50px);}
-.reveal.from-right{transform:translateX(50px);}
-.reveal.from-scale{transform:scale(0.9);}
-.reveal.visible{opacity:1;transform:none;}
-.rd1{transition-delay:0.1s;}.rd2{transition-delay:0.2s;}.rd3{transition-delay:0.3s;}.rd4{transition-delay:0.45s;}
-
-/* ════════════════════════════════════
-   HERO
-════════════════════════════════════ */
-#hero{min-height:100vh;position:relative;display:flex;align-items:flex-end;padding-bottom:10vh;overflow:hidden;}
-.hero-canvas{position:absolute;inset:0;z-index:0;}
-.hero-orbs{position:absolute;inset:0;pointer-events:none;z-index:1;}
-.orb{position:absolute;border-radius:50%;filter:blur(100px);animation:orbPulse ease-in-out infinite;}
-.orb-1{width:60vw;height:60vw;max-width:700px;max-height:700px;background:rgba(192,57,43,0.1);top:-10%;right:-10%;animation-duration:8s;}
-.orb-2{width:40vw;height:40vw;max-width:500px;max-height:500px;background:rgba(192,57,43,0.05);bottom:-5%;right:30%;animation-duration:10s;animation-delay:2s;}
-.orb-3{width:25vw;height:25vw;max-width:300px;max-height:300px;background:rgba(80,0,0,0.08);top:40%;right:5%;animation-duration:6s;animation-delay:1s;}
-@keyframes orbPulse{0%,100%{opacity:0.7;transform:scale(1);}50%{opacity:1;transform:scale(1.05);}}
-.hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,0.015) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.015) 1px,transparent 1px);background-size:60px 60px;z-index:1;mask-image:radial-gradient(ellipse at 50% 50%,black 20%,transparent 80%);}
-.hero-poster-zone{position:absolute;right:0;top:0;bottom:0;width:55%;overflow:hidden;z-index:2;}
-.hero-poster-zone::before{content:'';position:absolute;inset:0;background:linear-gradient(105deg,#030303 0%,rgba(3,3,3,0.6) 35%,transparent 65%);z-index:3;}
-.hero-poster-zone::after{content:'';position:absolute;bottom:0;left:0;right:0;height:55%;background:linear-gradient(to top,#030303,transparent);z-index:3;}
-.poster-frame{width:100%;height:100%;cursor:pointer;overflow:hidden;}
-.poster-frame img#poster-img{width:100%;height:100%;object-fit:cover;object-position:center top;display:none;filter:brightness(0.7) saturate(0.9);transition:all 0.8s cubic-bezier(0.16,1,0.3,1);}
-.poster-frame:hover img#poster-img{filter:brightness(0.85) saturate(1);transform:scale(1.03);}
-.poster-empty{width:100%;height:100%;background:#080808;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;}
-.poster-empty svg{opacity:0.06;}
-.poster-empty span{font-size:9px;color:#111;letter-spacing:5px;text-transform:uppercase;}
-.poster-upload-overlay{display:none;position:absolute;inset:0;background:rgba(0,0,0,0.75);align-items:center;justify-content:center;z-index:10;backdrop-filter:blur(8px);}
-body.admin-mode .poster-frame:hover .poster-upload-overlay{display:flex;}
-.poster-upload-overlay span{font-size:12px;color:#fff;background:var(--red);padding:10px 22px;border-radius:20px;font-weight:600;letter-spacing:0.5px;}
-#poster-upload-input{display:none;}
-.hero-content{position:relative;z-index:4;max-width:640px;padding:0 5vw;}
-.hero-eyebrow{display:flex;align-items:center;gap:12px;margin-bottom:32px;opacity:0;animation:slideInLeft 1.2s cubic-bezier(0.16,1,0.3,1) 1.8s forwards;}
-@keyframes slideInLeft{from{opacity:0;transform:translateX(-30px);}to{opacity:1;transform:translateX(0);}}
-.eyebrow-line{width:32px;height:1px;background:var(--red);flex-shrink:0;}
-.eyebrow-text{font-size:9px;letter-spacing:5px;color:var(--red);text-transform:uppercase;font-weight:500;}
-.hero-title-wrap{overflow:hidden;margin-bottom:28px;}
-.hero-title{font-size:clamp(72px,13vw,160px);font-weight:900;line-height:0.84;letter-spacing:-6px;}
-.t1{display:block;color:#fff;opacity:0;animation:titleReveal 1.2s cubic-bezier(0.16,1,0.3,1) 2s forwards;}
-.t2{display:block;background:linear-gradient(135deg,#ff5050 0%,#c0392b 45%,#7a1a1a 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;opacity:0;animation:titleReveal 1.2s cubic-bezier(0.16,1,0.3,1) 2.15s forwards;filter:drop-shadow(0 0 60px rgba(192,57,43,0.5));}
-@keyframes titleReveal{from{opacity:0;transform:translateY(40px);}to{opacity:1;transform:translateY(0);}}
-.hero-meta{display:flex;align-items:center;gap:10px;margin-bottom:24px;flex-wrap:wrap;opacity:0;animation:titleReveal 1s ease 2.4s forwards;}
-.hero-badge{font-size:9px;border:1px solid var(--border);color:#999;padding:5px 14px;border-radius:20px;letter-spacing:2px;backdrop-filter:blur(4px);transition:all 0.4s;}
-.hero-badge:hover{border-color:rgba(192,57,43,0.3);color:#fff;}
-.hero-dot{width:2px;height:2px;background:var(--text-faint);border-radius:50%;}
-.hero-desc{font-size:15px;color:var(--text-dim);line-height:2;max-width:480px;margin-bottom:48px;font-weight:300;opacity:0;animation:titleReveal 1s ease 2.5s forwards;}
-.hero-desc.ph{color:var(--text-faint);font-style:italic;}
-.hero-btns{display:flex;gap:14px;flex-wrap:wrap;opacity:0;animation:titleReveal 1s ease 2.6s forwards;}
-.hero-bottom-fade{position:absolute;bottom:0;left:0;right:0;height:35vh;background:linear-gradient(to top,#030303,transparent);z-index:3;pointer-events:none;}
-.scroll-indicator{position:absolute;bottom:8vh;left:5vw;z-index:5;display:flex;flex-direction:column;align-items:center;gap:10px;opacity:0;animation:fadeIn 1s ease 3.2s forwards;}
-@keyframes fadeIn{from{opacity:0;}to{opacity:1;}}
-.scroll-indicator span{font-size:8px;letter-spacing:4px;color:#1a1a1a;text-transform:uppercase;writing-mode:vertical-rl;}
-.scroll-line{width:1px;height:60px;background:rgba(255,255,255,0.04);position:relative;overflow:hidden;}
-.scroll-line::after{content:'';position:absolute;top:-100%;width:100%;height:50%;background:linear-gradient(to bottom,transparent,var(--red));animation:scrollDrop 2.5s ease-in-out infinite;}
-@keyframes scrollDrop{to{top:200%;}}
-
-/* ════════════════════════════════════
-   BUTTONS
-════════════════════════════════════ */
-.btn-primary{display:inline-flex;align-items:center;gap:10px;background:#fff;color:#000;padding:16px 36px;border-radius:100px;font-size:13px;font-weight:700;cursor:pointer;border:none;font-family:var(--font);letter-spacing:0.5px;position:relative;overflow:hidden;transition:transform 0.3s cubic-bezier(0.16,1,0.3,1),box-shadow 0.3s;}
-.btn-primary::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,transparent 40%,rgba(255,255,255,0.4));opacity:0;transition:opacity 0.4s;}
-.btn-primary:hover{transform:scale(1.04) translateY(-2px);box-shadow:0 24px 60px rgba(255,255,255,0.12),0 0 0 1px rgba(255,255,255,0.1);}
-.btn-primary:hover::before{opacity:1;}
-.btn-primary:active{transform:scale(0.97);}
-.btn-secondary{display:inline-flex;align-items:center;gap:10px;background:var(--glass);color:#fff;padding:16px 36px;border-radius:100px;font-size:13px;font-weight:600;cursor:pointer;border:1px solid var(--border);font-family:var(--font);letter-spacing:0.5px;backdrop-filter:blur(16px);position:relative;overflow:hidden;transition:transform 0.3s cubic-bezier(0.16,1,0.3,1),box-shadow 0.3s,border-color 0.3s,background 0.3s;}
-.btn-secondary::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,transparent,rgba(255,255,255,0.05));opacity:0;transition:opacity 0.4s;}
-.btn-secondary:hover{transform:scale(1.04) translateY(-2px);box-shadow:0 24px 60px rgba(0,0,0,0.5);border-color:rgba(255,255,255,0.15);background:rgba(255,255,255,0.07);}
-.btn-secondary:hover::before{opacity:1;}
-.btn-secondary:active{transform:scale(0.97);}
-
-/* ════════════════════════════════════
-   ABOUT — FIXED MOBILE TABLE
-════════════════════════════════════ */
-#about{min-height:100vh;display:flex;align-items:center;position:relative;overflow:hidden;padding:10vh 0;}
-.about-bg{position:absolute;inset:0;background:radial-gradient(ellipse at 80% 50%,rgba(192,57,43,0.03) 0%,transparent 60%);}
-.about-inner{width:100%;max-width:1100px;margin:0 auto;padding:40px 5vw;display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:start;}
-.section-eyebrow{font-size:8px;letter-spacing:5px;color:var(--red);text-transform:uppercase;margin-bottom:20px;display:flex;align-items:center;gap:12px;font-weight:500;flex-shrink:0;}
-.section-eyebrow::after{content:'';flex:1;height:1px;background:linear-gradient(to right,rgba(192,57,43,0.3),transparent);}
-.about-left h2{font-size:clamp(28px,4vw,50px);font-weight:800;line-height:1.05;letter-spacing:-2px;margin-bottom:22px;}
-.about-left p{font-size:14px;color:var(--text-dim);line-height:2;font-weight:300;}
-.about-left p.ph{color:var(--text-faint);font-style:italic;}
-.about-right{border:1px solid var(--border);border-radius:16px;overflow:hidden;background:rgba(255,255,255,0.01);backdrop-filter:blur(20px);min-width:0;width:100%;}
-.stat-row{padding:18px 22px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid rgba(255,255,255,0.03);transition:all 0.4s;position:relative;overflow:hidden;gap:12px;}
-.stat-row::before{content:'';position:absolute;left:0;top:0;bottom:0;width:0;background:linear-gradient(to right,rgba(192,57,43,0.06),transparent);transition:width 0.5s;}
-.stat-row:hover::before{width:100%;}
-.stat-row:last-child{border-bottom:none;}
-.stat-label{font-size:9px;color:var(--text-faint);letter-spacing:2px;text-transform:uppercase;font-weight:500;white-space:nowrap;flex-shrink:0;}
-.stat-value{font-size:12px;color:#ccc;font-weight:500;text-align:right;word-break:break-word;}
-.about-edit-btn{display:none;margin-top:20px;background:transparent;border:1px solid var(--border);color:var(--text-dim);padding:9px 20px;border-radius:20px;font-size:10px;cursor:pointer;font-family:var(--font);transition:all 0.3s;letter-spacing:0.5px;}
-.about-edit-btn:hover{border-color:var(--red);color:var(--red);}
-body.admin-mode .about-edit-btn{display:inline-block;}
-.about-textarea{display:none;width:100%;margin-top:14px;padding:14px;background:rgba(255,255,255,0.02);border:1px solid var(--border);border-radius:10px;color:#ccc;font-size:13px;line-height:1.7;min-height:120px;outline:none;resize:vertical;font-family:var(--font);}
-.about-textarea:focus{border-color:rgba(192,57,43,0.3);}
-.save-btn{display:none;margin-top:10px;padding:10px 22px;background:var(--red);border:none;border-radius:20px;color:#fff;font-weight:600;cursor:pointer;font-size:11px;font-family:var(--font);letter-spacing:0.5px;transition:opacity 0.2s;}
-.save-btn:hover{opacity:0.85;}
-
-/* ════════════════════════════════════
-   SEASONS
-════════════════════════════════════ */
-#seasons{min-height:100vh;padding:10vh 5vw;display:flex;flex-direction:column;position:relative;}
-.season-divider{position:absolute;top:0;left:5%;right:5%;height:1px;background:linear-gradient(to right,transparent,rgba(255,255,255,0.04),transparent);}
-.sec-header{margin-bottom:52px;}
-.sec-title{font-size:clamp(26px,4vw,46px);font-weight:800;letter-spacing:-2px;margin-top:14px;}
-.season-tabs{display:flex;gap:0;margin-bottom:40px;border-bottom:1px solid rgba(255,255,255,0.04);overflow-x:auto;-webkit-overflow-scrolling:touch;}
-.season-tabs::-webkit-scrollbar{height:0;}
-.s-tab{padding:12px 24px;background:transparent;border:none;color:var(--text-dim);font-size:11px;font-weight:500;cursor:pointer;font-family:var(--font);position:relative;transition:color 0.3s;letter-spacing:0.5px;white-space:nowrap;display:flex;align-items:center;gap:8px;flex-shrink:0;}
-.s-tab::after{content:'';position:absolute;bottom:-1px;left:0;right:0;height:1px;background:var(--red);transform:scaleX(0);transition:transform 0.4s cubic-bezier(0.16,1,0.3,1);transform-origin:left;}
-.s-tab.active{color:#fff;}
-.s-tab.active::after{transform:scaleX(1);}
-.s-tab:hover{color:#666;}
-.s-tab-del{background:none;border:none;color:#1a1a1a;cursor:pointer;font-size:14px;transition:color 0.2s;display:none;line-height:1;padding:0 2px;}
-body.admin-mode .s-tab-del{display:inline-block;}
-.s-tab-del:hover{color:#e44;}
-.episodes-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(280px,100%),1fr));gap:1px;background:rgba(255,255,255,0.03);border-radius:16px;overflow:hidden;}
-.ep-card{background:#080808;cursor:pointer;position:relative;transition:background 0.4s;overflow:hidden;}
-.ep-card::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(192,57,43,0.04),transparent);opacity:0;transition:opacity 0.4s;z-index:1;}
-.ep-card:hover{background:#0e0e0e;}
-.ep-card:hover::before{opacity:1;}
-.ep-thumb{width:100%;aspect-ratio:16/9;position:relative;overflow:hidden;background:#060606;}
-.ep-thumb img.ep-thumb-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:none;transition:transform 0.8s cubic-bezier(0.16,1,0.3,1);}
-.ep-card:hover .ep-thumb-img{transform:scale(1.08);}
-.ep-thumb-bg{width:100%;height:100%;display:flex;align-items:center;justify-content:center;}
-.ep-thumb-bg svg{opacity:0.05;}
-.ep-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,0.95) 0%,rgba(0,0,0,0.2) 50%,transparent 100%);opacity:0;transition:opacity 0.4s;z-index:2;}
-.ep-card:hover .ep-overlay{opacity:1;}
-.ep-play{position:absolute;bottom:14px;left:14px;width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,0.95);display:flex;align-items:center;justify-content:center;opacity:0;transform:scale(0.5) translateY(10px);transition:all 0.4s cubic-bezier(0.16,1,0.3,1);z-index:3;}
-.ep-card:hover .ep-play{opacity:1;transform:scale(1) translateY(0);}
-.ep-play svg{margin-left:3px;}
-.ep-del-btn{position:absolute;top:10px;right:10px;width:28px;height:28px;border-radius:50%;background:rgba(0,0,0,0.9);border:1px solid rgba(255,60,60,0.2);color:#a33;font-size:13px;cursor:pointer;display:none;align-items:center;justify-content:center;z-index:10;transition:all 0.2s;backdrop-filter:blur(4px);line-height:1;}
-body.admin-mode .ep-del-btn{display:flex;}
-.ep-del-btn:hover{background:rgba(180,30,30,0.2);color:#fff;}
-.ep-info{padding:16px 18px 18px;position:relative;z-index:2;}
-.ep-num{font-size:8px;color:var(--text-faint);letter-spacing:3px;text-transform:uppercase;margin-bottom:6px;font-weight:500;}
-.ep-title{font-size:13px;font-weight:600;color:#999;line-height:1.35;transition:color 0.3s;}
-.ep-card:hover .ep-title{color:#fff;}
-.ep-prog{height:1px;background:rgba(255,255,255,0.03);margin:12px 0 0;}
-.ep-prog-fill{height:100%;background:var(--red);width:0%;transition:width 0.5s;}
-.empty-state{grid-column:1/-1;text-align:center;padding:100px 20px;color:var(--text-faint);background:#070707;}
-.empty-state p{font-size:12px;margin-top:12px;color:var(--text-dim);font-weight:300;letter-spacing:0.3px;}
-
-/* ════════════════════════════════════
-   ADMIN FABS
-════════════════════════════════════ */
-.admin-bar{display:none;position:fixed;bottom:32px;right:32px;z-index:998;flex-direction:row;gap:10px;}
-body.admin-mode .admin-bar{display:flex;}
-.admin-fab{padding:13px 24px;border-radius:100px;border:none;cursor:pointer;font-size:11px;font-weight:700;font-family:var(--font);transition:all 0.3s cubic-bezier(0.16,1,0.3,1);letter-spacing:0.5px;}
-.admin-fab:hover{transform:scale(1.05) translateY(-2px);}
-.admin-fab:active{transform:scale(0.97);}
-.fab-season{background:#0e0e0e;color:#666;border:1px solid var(--border);box-shadow:0 4px 24px rgba(0,0,0,0.4);}
-.fab-episode{background:var(--red);color:#fff;box-shadow:0 4px 24px rgba(192,57,43,0.35);}
-
-/* ════════════════════════════════════
-   FOOTER
-════════════════════════════════════ */
-footer{background:#020202;border-top:1px solid var(--border);padding:80px 5vw 40px;position:relative;overflow:hidden;}
-footer::before{content:'';position:absolute;top:0;left:10%;right:10%;height:1px;background:linear-gradient(to right,transparent,rgba(192,57,43,0.25),transparent);}
-.footer-grid{display:grid;grid-template-columns:1.8fr 1fr 1fr 1fr;gap:50px;margin-bottom:60px;}
-.f-logo{font-size:20px;font-weight:900;letter-spacing:4px;color:var(--text-dim);margin-bottom:14px;}
-.footer-brand p{font-size:11px;color:var(--text-dim);line-height:1.9;max-width:220px;font-weight:300;}
-.footer-social{display:flex;gap:10px;margin-top:20px;}
-.social-btn{width:32px;height:32px;border-radius:50%;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all 0.3s;color:var(--text-faint);}
-.social-btn:hover{border-color:rgba(255,255,255,0.1);color:#999;}
-.footer-col h4{font-size:8px;letter-spacing:3px;color:var(--text-faint);text-transform:uppercase;margin-bottom:16px;font-weight:600;}
-.footer-col a{display:block;font-size:11px;color:var(--text-dim);margin-bottom:10px;cursor:pointer;transition:color 0.2s;font-weight:300;}
-.footer-col a:hover{color:#fff;}
-.footer-bottom{display:flex;align-items:flex-start;justify-content:space-between;padding-top:30px;border-top:1px solid rgba(255,255,255,0.03);gap:20px;flex-wrap:wrap;}
-.footer-credits{font-size:10px;color:var(--text-dim);line-height:2;font-weight:300;}
-.footer-credits strong{color:#bbb;font-weight:500;transition:color 0.2s;cursor:default;}
-.footer-credits strong:hover{color:#fff;}
-.footer-right{text-align:right;font-size:9px;color:var(--text-faint);letter-spacing:0.5px;line-height:1.8;}
-
-/* ════════════════════════════════════
-   MODALS
-════════════════════════════════════ */
-.modal-overlay,.add-modal,.vid-modal,.auth-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.94);z-index:9999;align-items:center;justify-content:center;backdrop-filter:blur(24px);}
-.modal-overlay.open,.add-modal.open,.vid-modal.open,.auth-modal.open{display:flex;}
-.modal-box,.add-box,.auth-box{background:rgba(8,8,8,0.98);border:1px solid var(--border);border-radius:20px;padding:40px;width:min(380px,90vw);position:relative;max-height:90vh;overflow-y:auto;animation:modalIn 0.4s cubic-bezier(0.16,1,0.3,1);}
-@keyframes modalIn{from{opacity:0;transform:scale(0.92) translateY(20px);}to{opacity:1;transform:scale(1) translateY(0);}}
-.modal-box h2{font-size:22px;font-weight:800;letter-spacing:1px;margin-bottom:6px;}
-.modal-box p,.add-box .sub,.auth-box .sub{font-size:11px;color:var(--text-dim);margin-bottom:24px;font-weight:300;}
-.field-label{display:block;font-size:8px;color:var(--text-dim);letter-spacing:2px;text-transform:uppercase;margin:16px 0 7px;font-weight:500;}
-.field-input{width:100%;padding:13px 16px;background:rgba(255,255,255,0.02);border:1px solid var(--border);border-radius:10px;color:#fff;font-size:13px;outline:none;font-family:var(--font);transition:border-color 0.3s;}
-.field-input:focus{border-color:rgba(192,57,43,0.35);}
-select.field-input option{background:#111;}
-.pw-input{letter-spacing:8px;text-align:center;font-size:20px;}
-.modal-submit,.add-save,.auth-submit{width:100%;padding:14px;background:var(--red);border:none;border-radius:100px;font-size:12px;font-weight:700;color:#fff;cursor:pointer;font-family:var(--font);margin-top:16px;transition:all 0.3s;letter-spacing:0.5px;}
-.modal-submit:hover,.add-save:hover,.auth-submit:hover{background:#a82c1f;box-shadow:0 8px 32px rgba(192,57,43,0.3);transform:scale(1.01);}
-.modal-err,.auth-err{font-size:10px;color:#c44;margin-top:10px;display:none;text-align:center;}
-.modal-close,.add-close,.auth-close{position:absolute;top:16px;right:16px;background:var(--glass);border:1px solid var(--border);border-radius:50%;color:#2a2a2a;font-size:14px;cursor:pointer;width:28px;height:28px;display:flex;align-items:center;justify-content:center;transition:all 0.2s;}
-.modal-close:hover,.add-close:hover,.auth-close:hover{color:#fff;border-color:rgba(255,255,255,0.15);}
-.add-box h3,.auth-box h3{font-size:17px;font-weight:800;margin-bottom:4px;letter-spacing:-0.5px;}
-.auth-tabs{display:flex;margin-bottom:24px;border-bottom:1px solid var(--border);}
-.auth-tab{flex:1;padding:11px;background:none;border:none;color:var(--text-dim);font-size:11px;font-weight:600;cursor:pointer;font-family:var(--font);position:relative;transition:color 0.3s;letter-spacing:0.5px;}
-.auth-tab::after{content:'';position:absolute;bottom:-1px;left:0;right:0;height:1px;background:var(--red);transform:scaleX(0);transition:transform 0.35s;}
-.auth-tab.active{color:#fff;}
-.auth-tab.active::after{transform:scaleX(1);}
-.auth-divider{display:flex;align-items:center;gap:10px;margin:12px 0;}
-.auth-divider::before,.auth-divider::after{content:'';flex:1;height:1px;background:var(--border);}
-.auth-divider span{font-size:8px;color:var(--text-faint);letter-spacing:2px;}
-.btn-google-auth{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;padding:13px;background:rgba(255,255,255,0.94);color:#111;border:none;border-radius:10px;font-size:12px;font-weight:600;cursor:pointer;font-family:var(--font);transition:all 0.25s;margin-top:6px;}
-.btn-google-auth:hover{background:#fff;transform:scale(1.01);}
-.upload-zone{border:1px dashed rgba(255,255,255,0.06);border-radius:10px;padding:22px 20px;text-align:center;cursor:pointer;transition:all 0.3s;position:relative;margin-top:6px;}
-.upload-zone:hover,.upload-zone.dragover{border-color:rgba(192,57,43,0.25);background:rgba(192,57,43,0.02);}
-.upload-zone input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;}
-.upload-zone svg{opacity:0.12;margin-bottom:8px;}
-.uz-title{font-size:11px;color:#999;font-weight:500;}
-.uz-sub{font-size:9px;color:var(--text-faint);margin-top:4px;}
-.upload-progress{display:none;margin-top:14px;}
-.up-name{font-size:9px;color:#999;margin-bottom:8px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.up-bar-wrap{background:#0e0e0e;border-radius:4px;height:2px;overflow:hidden;}
-.up-bar-fill{height:100%;background:var(--red);width:0%;transition:width 0.3s;}
-.up-pct{font-size:9px;color:var(--text-dim);margin-top:4px;text-align:right;}
-.up-ready{font-size:10px;color:#4caf50;margin-top:8px;display:none;}
-.up-err{font-size:10px;color:#e44;margin-top:8px;display:none;}
-.or-divider{display:flex;align-items:center;gap:10px;margin:12px 0 0;}
-.or-divider::before,.or-divider::after{content:'';flex:1;height:1px;background:var(--border);}
-.or-divider span{font-size:8px;color:var(--text-faint);letter-spacing:2px;}
-.vid-modal{flex-direction:column;}
-.vid-modal-inner{position:relative;width:min(980px,96vw);}
-.vid-modal video{width:100%;aspect-ratio:16/9;border-radius:16px;background:#000;display:block;box-shadow:0 0 0 1px var(--border),0 60px 120px rgba(0,0,0,0.9);}
-.vid-modal-bar{display:flex;align-items:center;justify-content:space-between;padding:16px 4px 0;}
-.vid-modal-title{font-size:13px;font-weight:600;color:#aaa;letter-spacing:0.3px;}
-.vid-modal-close{background:var(--glass);border:1px solid var(--border);color:#fff;padding:8px 20px;border-radius:100px;cursor:pointer;font-size:11px;font-family:var(--font);transition:all 0.2s;letter-spacing:0.5px;}
-.vid-modal-close:hover{background:rgba(255,255,255,0.08);}
-.watch-gate{position:fixed;inset:0;background:rgba(0,0,0,0.97);z-index:9990;display:none;align-items:center;justify-content:center;backdrop-filter:blur(24px);}
-.watch-gate.show{display:flex;}
-.gate-box{text-align:center;padding:64px 40px;max-width:380px;animation:modalIn 0.4s cubic-bezier(0.16,1,0.3,1);}
-.gate-icon{width:64px;height:64px;border-radius:50%;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;margin:0 auto 24px;background:var(--glass);}
-.gate-box h3{font-size:22px;font-weight:800;margin-bottom:12px;letter-spacing:-0.5px;}
-.gate-box p{font-size:13px;color:var(--text-dim);line-height:1.9;margin-bottom:36px;font-weight:300;}
-.gate-btns{display:flex;flex-direction:column;gap:10px;align-items:center;}
-.gate-skip{background:none;border:none;color:var(--text-faint);font-size:10px;cursor:pointer;padding:10px;font-family:var(--font);transition:color 0.2s;letter-spacing:0.5px;}
-.gate-skip:hover{color:#999;}
-
-/* ════════════════════════════════════
-   RESPONSIVE
-════════════════════════════════════ */
-@media(max-width:768px){
-  .about-inner{grid-template-columns:1fr;gap:40px;}
-  .about-right{width:100%;}
-  .stat-row{padding:14px 16px;}
-  .stat-label{font-size:8px;}
-  .stat-value{font-size:11px;}
-  .footer-grid{grid-template-columns:1fr 1fr;gap:32px;}
-  .hero-poster-zone{width:100%;opacity:0.2;}
-  .hero-content{max-width:100%;}
-  .hero-btns{flex-direction:column;align-items:flex-start;}
-  .btn-primary,.btn-secondary{width:100%;justify-content:center;}
-  .episodes-grid{grid-template-columns:1fr;}
-  .admin-bar{bottom:20px;right:16px;gap:8px;}
-  .admin-fab{padding:11px 18px;}
-  .side-menu{width:100%;right:-100%;}
-}
-@media(max-width:480px){
-  .footer-grid{grid-template-columns:1fr;}
-  .about-inner{padding:32px 5vw;}
-  .stat-row{padding:12px 14px;flex-wrap:wrap;gap:6px;}
-  .stat-value{text-align:left;}
-}
+  :root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+  html,body{margin:0}
+  img{max-width:100%}
+  [hidden]{display:none!important}
 </style>
 </head>
 <body>
-
-<!-- ─── LOADER ─── -->
-<div id="loader">
-  <div class="loader-logo"><span class="l0">ZERO </span><span class="l1">ELEVEN</span></div>
-  <div class="loader-bar-wrap"><div class="loader-bar" id="loader-bar"></div></div>
-  <div class="loader-text">Loading experience</div>
-</div>
-
-<!-- ─── NOISE ─── -->
-<div class="noise" aria-hidden="true"></div>
-
-<!-- ─── CUSTOM CURSOR ───
-     These two elements are what the "CURSOR" script further down actually
-     draws. body{cursor:none} (in the CSS reset) hides the real mouse
-     pointer everywhere on this page, so without these two divs present,
-     visitors get NO cursor at all — the pointer just vanishes. That was
-     happening before: the CSS and JS for a custom cursor were both here,
-     but the two target elements were missing from the HTML. -->
-<div id="cur" aria-hidden="true"></div>
-<div id="cur-ring" aria-hidden="true"></div>
-
-<!-- ─── MOUSE GLOW ─── -->
-<div id="mouse-glow" aria-hidden="true"></div>
-
-<!-- ─── SUPABASE ─── -->
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script>
-const SUPABASE_URL='https://hixsgyjveygtvzrzhvth.supabase.co';
-const SUPABASE_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhpeHNneWp2ZXlndHZ6cnpodnRoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk1ODg1OTgsImV4cCI6MjA5NTE2NDU5OH0.Lo7hkErf0ctk88Tas8PuOuO430-oibtX9ZNYGNVP6jg';
-const sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
-/* NOTE for later: ADMIN_PASS lives here in plain text, so anyone can open
-   dev tools → "View Page Source" and read it — this page has no real
-   secrets, since everything sent to a browser is visible to that browser.
-   Fine for a private class demo; before this is a real product, move admin
-   login to Supabase Auth (a real login + an `is_admin` column checked by a
-   Row Level Security policy on the server), so the check happens where the
-   visitor can't read the source. */
-let ADMIN_PASS='011011@@';
-const MAX_SIZE=1024*1024*1024;
-let data={seasons:[],desc:"",poster:""};
-let activeSeason=0,pendingVideoURL=null,pendingVideoName=null,pendingThumbURL=null,currentUser=null,isAdmin=false;
-function getUsers(){return JSON.parse(localStorage.getItem('ze_users')||'[]');}
-function saveUsers(u){localStorage.setItem('ze_users',JSON.stringify(u));}
-function getCurrentUser(){return JSON.parse(localStorage.getItem('ze_current_user')||'null');}
-function setCurrentUser(u){localStorage.setItem('ze_current_user',JSON.stringify(u));}
-function initUser(){currentUser=getCurrentUser();if(currentUser){isAdmin=currentUser.isAdmin;if(isAdmin)document.body.classList.add('admin-mode');updateMenuUser();}}
-async function loadData(){
-  const{data:d}=await sb.from('ze_series').select('*').eq('id',1).single();
-  if(d){data=d.content||{seasons:[],desc:"",poster:""};renderAll();}
-  else await sb.from('ze_series').insert([{id:1,content:data}]);
-  sb.channel('ze-live').on('postgres_changes',{event:'*',schema:'public',table:'ze_series',filter:'id=eq.1'},p=>{data=p.new.content||{seasons:[],desc:"",poster:""};renderAll();}).subscribe();
+<title>Hakim International School</title>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300..900&family=Archivo:wght@400..800&family=Vazirmatn:wght@300..900&display=swap">
+<style>
+:root{
+  --ink:#141017; --ink-2:#1E1824; --ink-3:#2A2233;
+  --plum:#7A3A8C; --plum-lift:#C07FD8; --plum-deep:#4A1F57;
+  --saffron:#E3A23C; --saffron-soft:#F2CE8E;
+  --paper:#F7F4F6; --paper-2:#EFEAF0; --paper-3:#E3DCE6;
+  --on-ink:#F4EFF6; --muted:#A296AC; --muted-2:#6E6276;
+  --on-paper:#241C2A; --on-paper-mute:#6B5F73;
+  --good:#3FA46A; --warn:#D98324; --crit:#C6453F;
+  --line-dark:rgba(244,239,246,.13); --line-light:rgba(36,28,42,.12);
+  --f-display:"Fraunces","Iowan Old Style",Georgia,serif;
+  --f-ui:"Archivo","Helvetica Neue",Arial,sans-serif;
+  --f-fa:"Vazirmatn","Archivo",Tahoma,sans-serif;
+  --shell:min(1240px,100%);
+  --ease:cubic-bezier(.22,1,.36,1);
 }
-async function save(){await sb.from('ze_series').upsert({id:1,content:data});}
-</script>
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;background:var(--ink);color:var(--on-ink);
+  font-family:var(--f-ui);font-size:16px;line-height:1.6;
+  -webkit-font-smoothing:antialiased;overflow-x:hidden;
+}
+body[dir="rtl"]{font-family:var(--f-fa)}
+body[dir="rtl"] .display{font-family:var(--f-fa);font-weight:800;letter-spacing:0}
+img{max-width:100%}
+h1,h2,h3,h4{margin:0;text-wrap:balance;font-weight:600}
+p{margin:0}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+:focus-visible{outline:2px solid var(--saffron);outline-offset:3px;border-radius:4px}
+.display{font-family:var(--f-display);font-optical-sizing:auto;font-variation-settings:"SOFT" 18,"WONK" 1;letter-spacing:-.022em;font-weight:500}
+.shell{width:var(--shell);margin-inline:auto;padding-inline:clamp(18px,4vw,44px)}
+.eyebrow{
+  font-family:var(--f-ui);font-size:11.5px;font-weight:600;letter-spacing:.18em;
+  text-transform:uppercase;color:var(--saffron);display:flex;align-items:center;gap:10px;
+}
+body[dir="rtl"] .eyebrow{font-family:var(--f-fa);letter-spacing:0;font-size:13px}
+.eyebrow::before{content:"";width:26px;height:1px;background:currentColor;opacity:.55;flex:none}
+.tnum{font-variant-numeric:tabular-nums}
 
-<input type="file" id="poster-upload-input" accept="image/*" onchange="handlePosterUpload(event)" aria-label="Upload poster image"/>
+/* ---------- fixed 3D ground ---------- */
+#bg{position:fixed;inset:0;z-index:0;background:
+  radial-gradient(120% 90% at 50% 8%,#2B1A33 0%,#1A1220 45%,var(--ink) 100%);}
+#vault{display:block;width:100%;height:100%}
+#veil{position:absolute;inset:0;pointer-events:none;
+  background:
+   radial-gradient(64% 78% at 20% 44%,rgba(18,13,22,.86) 0%,rgba(18,13,22,.52) 44%,rgba(18,13,22,0) 72%),
+   linear-gradient(180deg,rgba(20,16,23,.18) 0%,rgba(20,16,23,0) 34%,rgba(20,16,23,.74) 78%,var(--ink) 100%);}
+body[dir="rtl"] #veil{background:
+   radial-gradient(64% 78% at 80% 44%,rgba(18,13,22,.86) 0%,rgba(18,13,22,.52) 44%,rgba(18,13,22,0) 72%),
+   linear-gradient(180deg,rgba(20,16,23,.18) 0%,rgba(20,16,23,0) 34%,rgba(20,16,23,.74) 78%,var(--ink) 100%);}
+main{position:relative;z-index:1}
 
-<!-- ─── NAV ─── -->
-<nav id="main-nav">
-  <div class="nav-logo" onclick="refreshSite()" id="nav-logo-wrap">
-    <span class="nav-logo-fallback" id="nav-logo-text">011</span>
-  </div>
-  <div class="hamburger" id="hamburger" onclick="toggleMenu()" role="button" tabindex="0" aria-label="Open menu" aria-haspopup="true"><span></span><span></span><span></span></div>
-</nav>
+/* ---------- nav ---------- */
+.nav{
+  position:sticky;top:env(safe-area-inset-top,0px);z-index:60;
+  backdrop-filter:blur(18px) saturate(1.5);-webkit-backdrop-filter:blur(18px) saturate(1.5);
+  background:rgba(20,16,23,.58);border-bottom:1px solid var(--line-dark);
+  transition:background .5s var(--ease),border-color .5s var(--ease),color .5s var(--ease);
+}
+.nav.on-paper{background:rgba(247,244,246,.78);border-bottom-color:var(--line-light);color:var(--on-paper)}
+.nav-in{display:flex;align-items:center;gap:clamp(12px,2.4vw,30px);height:62px}
+.brand{display:flex;align-items:center;gap:11px;flex:none;min-width:0}
+.brand .mark{width:32px;height:32px;flex:none}
+.brand .wm{display:flex;flex-direction:column;line-height:1.05;min-width:0}
+.brand .wm b{font-family:var(--f-display);font-weight:600;font-size:15.5px;letter-spacing:-.01em;white-space:nowrap}
+body[dir="rtl"] .brand .wm b{font-family:var(--f-fa);font-weight:700}
+.brand .wm span{font-size:9.5px;letter-spacing:.17em;text-transform:uppercase;color:var(--muted);white-space:nowrap}
+.nav.on-paper .brand .wm span{color:var(--on-paper-mute)}
+body[dir="rtl"] .brand .wm span{letter-spacing:0;font-size:10.5px;text-transform:none}
+.navlinks{display:flex;gap:clamp(10px,1.7vw,24px);margin-inline-start:auto;align-items:center}
+.navlinks a{font-size:13.5px;color:var(--muted);transition:color .25s;white-space:nowrap}
+.navlinks a:hover{color:var(--on-ink)}
+.nav.on-paper .navlinks a{color:var(--on-paper-mute)}
+.nav.on-paper .navlinks a:hover{color:var(--on-paper)}
+.nav-tools{display:flex;align-items:center;gap:8px;flex:none;margin-inline-start:auto}
+.navlinks+.nav-tools{margin-inline-start:0}
+.chip{
+  display:inline-flex;align-items:center;gap:7px;height:32px;padding:0 12px;border-radius:999px;
+  border:1px solid var(--line-dark);font-size:12.5px;color:var(--muted);
+  transition:border-color .25s,color .25s,background .25s;white-space:nowrap;
+}
+.chip:hover{color:var(--on-ink);border-color:rgba(244,239,246,.32)}
+.nav.on-paper .chip{border-color:var(--line-light);color:var(--on-paper-mute)}
+.nav.on-paper .chip:hover{color:var(--on-paper);border-color:rgba(36,28,42,.34)}
+.chip kbd{font:inherit;font-size:10.5px;opacity:.68;border:1px solid currentColor;border-radius:4px;padding:0 4px;line-height:15px}
+.chip.concept{border-color:rgba(227,162,60,.42);color:var(--saffron-soft);background:rgba(227,162,60,.08)}
+.nav.on-paper .chip.concept{color:#8A5B12;border-color:rgba(227,162,60,.5);background:rgba(227,162,60,.14)}
+.lang{font-weight:600;letter-spacing:.02em}
+@media(max-width:940px){.navlinks{display:none}}
+@media(max-width:620px){
+  .nav-in{gap:8px}
+  .brand{flex:1 1 auto;min-width:0}
+  .brand .mark{width:28px;height:28px}
+  .brand .wm b{font-size:12.8px;line-height:1.14;white-space:normal}
+  .brand .wm span{display:none}
+  .nav-tools{flex:0 0 auto;gap:6px}
+  .chip{height:30px;padding:0 10px;font-size:12px}
+  .chip kbd{display:none}
+  #openPal span{display:none}
+  #openPal{padding:0 9px}
+}
 
-<!-- ─── MENU OVERLAY ─── -->
-<div class="menu-overlay" id="menu-overlay" onclick="closeMenu()"></div>
+/* ---------- hero ---------- */
+#hero{min-height:min(88vh,760px);display:flex;align-items:flex-end;padding-block:clamp(56px,11vh,120px) clamp(40px,7vh,74px)}
+.hero-grid{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,.85fr);gap:clamp(24px,5vw,64px);align-items:end;width:100%}
+h1.hero-h{font-size:clamp(42px,7.4vw,98px);line-height:.96;font-weight:400;margin-block:20px 22px}
+h1.hero-h em{font-style:normal;font-variation-settings:"SOFT" 40,"WONK" 1;font-weight:600;
+  background:linear-gradient(96deg,var(--saffron-soft),var(--saffron) 42%,var(--plum-lift));
+  -webkit-background-clip:text;background-clip:text;color:transparent;}
+.hero-sub{font-size:clamp(15px,1.7vw,19px);color:var(--muted);max-width:46ch;line-height:1.62}
+.hero-cta{display:flex;flex-wrap:wrap;gap:12px;margin-top:30px}
+.btn{display:inline-flex;align-items:center;gap:9px;height:46px;padding:0 22px;border-radius:999px;
+  font-size:14.5px;font-weight:600;transition:transform .3s var(--ease),box-shadow .3s var(--ease),background .3s}
+.btn:hover{transform:translateY(-2px)}
+.btn-primary{background:linear-gradient(180deg,#F0F0F2,#D9D2DE);color:#1A1220;box-shadow:0 10px 30px -12px rgba(192,127,216,.7)}
+.btn-primary:hover{box-shadow:0 18px 40px -14px rgba(192,127,216,.85)}
+.btn-ghost{border:1px solid var(--line-dark);color:var(--on-ink)}
+.btn-ghost:hover{border-color:rgba(244,239,246,.36);background:rgba(244,239,246,.05)}
+.hero-side{display:flex;flex-direction:column;gap:14px;padding-bottom:6px}
+.hero-card{
+  border:1px solid var(--line-dark);border-radius:16px;padding:16px 18px;
+  background:linear-gradient(180deg,rgba(32,24,38,.86),rgba(24,17,29,.78));
+}
+.hero-card .k{font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:var(--muted)}
+body[dir="rtl"] .hero-card .k{letter-spacing:0;text-transform:none;font-size:12.5px}
+.hero-card .v{font-family:var(--f-display);font-size:26px;font-weight:600;margin-top:3px;display:flex;align-items:baseline;gap:8px}
+.live-dot{width:7px;height:7px;border-radius:50%;background:var(--good);flex:none;
+  box-shadow:0 0 0 0 rgba(63,164,106,.65);animation:pulse 2.4s infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(63,164,106,.55)}70%{box-shadow:0 0 0 9px rgba(63,164,106,0)}100%{box-shadow:0 0 0 0 rgba(63,164,106,0)}}
+.scroll-cue{display:flex;align-items:center;gap:10px;font-size:11px;letter-spacing:.17em;text-transform:uppercase;color:var(--muted);margin-top:34px}
+body[dir="rtl"] .scroll-cue{letter-spacing:0;text-transform:none;font-size:12.5px}
+.scroll-cue i{display:block;width:1px;height:26px;background:linear-gradient(var(--saffron),transparent);animation:drop 2.2s var(--ease) infinite}
+@keyframes drop{0%{transform:scaleY(.2);transform-origin:top;opacity:0}40%{transform:scaleY(1);opacity:1}100%{transform:scaleY(.2);transform-origin:bottom;opacity:0}}
+@media(max-width:820px){.hero-grid{grid-template-columns:1fr;gap:34px}.hero-side{flex-direction:row;flex-wrap:wrap}.hero-card{flex:1 1 180px}}
+</style>
+<style>
+/* ---------- generic section ---------- */
+.sec{padding-block:clamp(60px,8.5vh,104px);position:relative}
+.sec-head{max-width:64ch;margin-bottom:clamp(34px,5vh,58px)}
+.sec-head h2{font-size:clamp(28px,4.4vw,54px);line-height:1.06;font-weight:400;margin-block:18px 16px}
+.sec-head p{color:var(--muted);font-size:clamp(14.5px,1.5vw,17.5px);max-width:52ch}
+.on-light .sec-head p{color:var(--on-paper-mute)}
 
-<!-- ─── SIDE MENU ─── -->
-<div class="side-menu" id="side-menu">
-  <div class="menu-header">
-    <div class="menu-logo-text">ZERO ELEVEN</div>
-    <button class="menu-close" onclick="closeMenu()" aria-label="Close menu">×</button>
-  </div>
-  <div class="menu-user" id="menu-user">
-    <div class="menu-avatar" id="menu-avatar">?</div>
-    <div class="menu-name" id="menu-name">Not logged in</div>
-    <div class="menu-email-text" id="menu-email-text">Sign in to watch episodes</div>
-    <div class="menu-badge badge-member" id="menu-badge" style="display:none"></div>
-  </div>
-  <div class="menu-nav" id="menu-nav">
-    <div class="menu-section-label">Navigate</div>
-    <div class="menu-item" onclick="menuGo('hero')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg>Home</div>
-    <div class="menu-item" onclick="menuGo('about')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>Series Info</div>
-    <div class="menu-item" onclick="menuGo('seasons')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>Watch Episodes</div>
-    <div class="menu-item" onclick="menuGo('footer')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>Credits</div>
-    <div class="menu-divider"></div>
-    <div class="menu-section-label">Account</div>
-    <div class="menu-item" id="menu-settings-btn" onclick="showSection('settings')" style="display:none"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93l-1.41 1.41M4.93 4.93l1.41 1.41M4.93 19.07l1.41-1.41M19.07 19.07l-1.41-1.41M1 12h2M21 12h2M12 1v2M12 21v2"/></svg>Settings</div>
-    <div class="menu-item" id="menu-admin-btn" onclick="showSection('admin')" style="display:none"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>Admin Panel</div>
-    <div class="menu-divider" id="auth-div"></div>
-    <div id="menu-auth-area"></div>
-  </div>
-  <div class="menu-section" id="menu-section-settings">
-    <div class="back-btn" onclick="showSection('main')"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#333" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg><span>Back</span></div>
-    <div class="settings-panel">
-      <div class="panel-label">Preferences</div>
-      <div class="setting-row"><div><div class="setting-label">Autoplay</div><div class="setting-desc">Play next episode</div></div><div class="toggle" onclick="this.classList.toggle('on')"></div></div>
-      <div class="setting-row"><div><div class="setting-label">HD Quality</div><div class="setting-desc">High definition</div></div><div class="toggle on" onclick="this.classList.toggle('on')"></div></div>
-      <div class="setting-row"><div><div class="setting-label">Notifications</div><div class="setting-desc">New episodes</div></div><div class="toggle" onclick="this.classList.toggle('on')"></div></div>
-      <div style="margin-top:24px;"><div class="panel-label">Account</div>
-        <div style="font-size:10px;color:var(--text-dim);margin-bottom:14px;" id="settings-email-display"></div>
-        <button onclick="changePassword()" class="menu-action-btn">Change Password</button>
-        <button onclick="doLogout()" class="btn-logout-menu">Log Out</button>
-      </div>
-    </div>
-  </div>
-  <div class="menu-section" id="menu-section-admin">
-    <div class="back-btn" onclick="showSection('main')"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#333" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg><span>Back</span></div>
-    <div class="admin-panel">
-      <div class="panel-label">Registered Users</div>
-      <div class="user-list" id="admin-user-list"></div>
-      <div style="margin-top:24px;"><div class="panel-label">Admin</div>
-        <button onclick="changeAdminPass()" class="menu-action-btn" style="border-color:rgba(192,57,43,0.15);color:#a33;">Change Admin Password</button>
-      </div>
-    </div>
-  </div>
-</div>
+/* reveal: visible at rest; JS opts in to motion */
+[data-anim="on"] .rv{opacity:0;transform:translateY(22px)}
+[data-anim="on"] .rv.in{opacity:1;transform:none;transition:opacity .85s var(--ease),transform .85s var(--ease)}
+[data-anim="on"] .rv.in.d1{transition-delay:.08s}
+[data-anim="on"] .rv.in.d2{transition-delay:.16s}
+[data-anim="on"] .rv.in.d3{transition-delay:.24s}
 
-<!-- ─── ADMIN LOGIN ─── -->
-<div class="modal-overlay" id="login-modal">
-  <div class="modal-box">
-    <button class="modal-close" onclick="closeModal('login-modal')" aria-label="Close">×</button>
-    <h2>ADMIN</h2><p>Enter your admin password</p>
-    <input class="field-input pw-input" type="password" id="pw-input" placeholder="• • • •" onkeydown="if(event.key==='Enter')tryAdminLogin()"/>
-    <button class="modal-submit" onclick="tryAdminLogin()">Access Dashboard</button>
-    <p class="modal-err" id="pw-err">Incorrect password.</p>
-  </div>
-</div>
+/* ---------- live pulse band ---------- */
+#pulse{border-block:1px solid var(--line-dark);padding-block:clamp(26px,4vh,40px);
+  background:linear-gradient(180deg,rgba(20,16,23,.55),rgba(20,16,23,.8))}
+.pulse-row{display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(14px,3vw,38px)}
+.pulse-row .cell{display:flex;flex-direction:column;gap:5px;min-width:0}
+.pulse-row .n{font-family:var(--f-display);font-size:clamp(28px,4.2vw,50px);font-weight:600;line-height:1;
+  font-variant-numeric:tabular-nums;letter-spacing:-.03em}
+.pulse-row .l{font-size:12.5px;color:var(--muted);line-height:1.35}
+@media(max-width:700px){.pulse-row{grid-template-columns:1fr 1fr;gap:26px 18px}}
 
-<!-- ─── AUTH ─── -->
-<div class="auth-modal" id="auth-modal">
-  <div class="auth-box">
-    <button class="auth-close" onclick="closeModal('auth-modal')" aria-label="Close">×</button>
-    <h3 id="auth-title">Welcome Back</h3><p class="sub" id="auth-sub">Sign in to watch Zero Eleven</p>
-    <div class="auth-tabs">
-      <button class="auth-tab active" id="tab-login" onclick="switchAuthTab('login')">Log In</button>
-      <button class="auth-tab" id="tab-register" onclick="switchAuthTab('register')">Register</button>
-    </div>
-    <div id="auth-login-form">
-      <button class="btn-google-auth" onclick="loginWithGoogle()">
-        <svg width="15" height="15" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
-        Continue with Google
-      </button>
-      <div class="auth-divider"><span>OR</span></div>
-      <label class="field-label">Email</label>
-      <input class="field-input" type="email" id="login-email" placeholder="you@example.com"/>
-      <label class="field-label">Password</label>
-      <input class="field-input" type="password" id="login-pass" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()"/>
-      <button class="auth-submit" onclick="doLogin()">Log In</button>
-      <p class="auth-err" id="login-err"></p>
-    </div>
-    <div id="auth-register-form" style="display:none">
-      <button class="btn-google-auth" onclick="loginWithGoogle()">
-        <svg width="15" height="15" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
-        Sign up with Google
-      </button>
-      <div class="auth-divider"><span>OR</span></div>
-      <label class="field-label">Name</label>
-      <input class="field-input" type="text" id="reg-name" placeholder="Your name"/>
-      <label class="field-label">Email</label>
-      <input class="field-input" type="email" id="reg-email" placeholder="you@example.com"/>
-      <label class="field-label">Password</label>
-      <input class="field-input" type="password" id="reg-pass" placeholder="Min 6 characters" onkeydown="if(event.key==='Enter')doRegister()"/>
-      <button class="auth-submit" onclick="doRegister()">Create Account</button>
-      <p class="auth-err" id="reg-err"></p>
-    </div>
-  </div>
-</div>
+/* ---------- programs: 3D tilt cards ---------- */
+.prog-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(12px,1.6vw,20px);perspective:1400px}
+@media(max-width:1000px){.prog-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:560px){.prog-grid{grid-template-columns:1fr}}
+.prog{
+  position:relative;border-radius:18px;padding:clamp(20px,2.2vw,28px);min-height:290px;
+  display:flex;flex-direction:column;justify-content:space-between;gap:26px;overflow:hidden;
+  border:1px solid var(--line-dark);background:linear-gradient(170deg,rgba(244,239,246,.075),rgba(244,239,246,.018));
+  transform-style:preserve-3d;transition:border-color .4s,box-shadow .5s var(--ease);
+}
+.prog:hover{border-color:rgba(192,127,216,.45);box-shadow:0 26px 60px -30px rgba(122,58,140,.9)}
+.prog .glow{position:absolute;width:280px;height:280px;border-radius:50%;pointer-events:none;opacity:0;
+  background:radial-gradient(circle,rgba(192,127,216,.4),transparent 66%);transition:opacity .45s;filter:blur(8px)}
+.prog:hover .glow{opacity:1}
+.prog .yrs{font-family:var(--f-display);font-size:13px;color:var(--saffron);letter-spacing:.02em}
+.prog h3{font-family:var(--f-display);font-size:clamp(20px,2vw,25px);font-weight:600;line-height:1.14;margin-top:10px}
+body[dir="rtl"] .prog h3{font-family:var(--f-fa);font-weight:700}
+.prog p{font-size:13.6px;color:var(--muted);margin-top:9px;line-height:1.55}
+.prog .tags{display:flex;flex-wrap:wrap;gap:6px}
+.prog .tags span{font-size:11px;padding:4px 9px;border-radius:999px;border:1px solid var(--line-dark);color:var(--muted)}
+.prog .idx{position:absolute;inset-inline-end:18px;top:14px;font-family:var(--f-display);font-size:52px;
+  font-weight:600;color:rgba(244,239,246,.055);line-height:1;pointer-events:none}
 
-<!-- ─── WATCH GATE ─── -->
-<div class="watch-gate" id="watch-gate">
-  <div class="gate-box">
-    <div class="gate-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#2a2a2a" stroke-width="1.5"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg></div>
-    <h3>Members Only</h3>
-    <p>Create a free account or sign in to watch Zero Eleven.</p>
-    <div class="gate-btns">
-      <button class="btn-primary" style="width:220px;justify-content:center;" onclick="closeGate();openAuth('register')"><svg width="13" height="13" viewBox="0 0 24 24" fill="black"><polygon points="5,3 19,12 5,21"/></svg>Create Free Account</button>
-      <button class="btn-secondary" style="width:220px;justify-content:center;" onclick="closeGate();openAuth('login')">Log In</button>
-      <button class="gate-skip" onclick="closeGate()">Maybe later</button>
-    </div>
-  </div>
-</div>
+/* ---------- academics strip ---------- */
+.acc{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(14px,2vw,26px)}
+@media(max-width:860px){.acc{grid-template-columns:1fr}}
+.acc-item{border-top:1px solid var(--line-dark);padding-top:20px;display:flex;flex-direction:column;gap:10px}
+.acc-item .ico{width:40px;height:40px;color:var(--saffron)}
+.acc-item h4{font-family:var(--f-display);font-size:19px;font-weight:600}
+body[dir="rtl"] .acc-item h4{font-family:var(--f-fa);font-weight:700}
+.acc-item p{font-size:14px;color:var(--muted);line-height:1.6}
 
-<!-- ─── ADD SEASON ─── -->
-<div class="add-modal" id="season-modal">
-  <div class="add-box">
-    <button class="add-close" onclick="closeModal('season-modal')" aria-label="Close">×</button>
-    <h3>New Season</h3><p class="sub">Add a season to Zero Eleven</p>
-    <label class="field-label">Season Name</label>
-    <input class="field-input" type="text" id="season-name-input" placeholder="e.g. Season 1" onkeydown="if(event.key==='Enter')addSeason()"/>
-    <button class="add-save" onclick="addSeason()">Create Season</button>
-  </div>
-</div>
+/* ---------- portal (light world) ---------- */
+#portal{background:var(--paper);color:var(--on-paper);
+  border-radius:clamp(26px,3.4vw,44px) clamp(26px,3.4vw,44px) 0 0;
+  box-shadow:0 -34px 90px -40px rgba(0,0,0,.85)}
+#portal .eyebrow{color:#8A5B12}
+.demo-pill{display:inline-flex;align-items:center;gap:6px;font-size:11.5px;font-weight:600;
+  padding:4px 11px;border-radius:999px;background:rgba(227,162,60,.16);color:#8A5B12;border:1px solid rgba(227,162,60,.4)}
+.before-after{display:grid;grid-template-columns:minmax(0,300px) minmax(0,1fr);gap:clamp(16px,2.4vw,30px);align-items:start;margin-bottom:clamp(30px,4vh,48px)}
+@media(max-width:900px){.before-after{grid-template-columns:1fr}}
+.panel-label{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--on-paper-mute);margin-bottom:10px;display:block}
+body[dir="rtl"] .panel-label{letter-spacing:0;text-transform:none;font-size:12.5px}
+.old-lms{border:1px solid var(--paper-3);border-radius:14px;background:#fff;padding:14px;opacity:.85}
+.old-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:7px}
+.old-grid i{display:block;aspect-ratio:1;border-radius:6px;background:var(--paper-2);border:1px solid var(--paper-3)}
+.old-note{font-size:12.5px;color:var(--on-paper-mute);margin-top:12px;line-height:1.55}
 
-<!-- ─── ADD EPISODE ─── -->
-<div class="add-modal" id="episode-modal">
-  <div class="add-box">
-    <button class="add-close" onclick="closeModal('episode-modal')" aria-label="Close">×</button>
-    <h3>New Episode</h3><p class="sub">Upload a video or paste a link</p>
-    <label class="field-label">Season</label>
-    <select class="field-input" id="ep-season-select"></select>
-    <label class="field-label">Title</label>
-    <input class="field-input" type="text" id="ep-title-input" placeholder="Episode title"/>
-    <label class="field-label">Thumbnail</label>
-    <div class="upload-zone" id="thumb-zone">
-      <input type="file" id="ep-thumb-file" accept="image/*" onchange="handleThumbSelect(event)" aria-label="Upload episode thumbnail"/>
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>
-      <div class="uz-title">Upload thumbnail</div>
-      <div style="font-size:9px;color:#4caf50;margin-top:4px;display:none;" id="thumb-ready">✓ Thumbnail ready</div>
-    </div>
-    <label class="field-label">Video</label>
-    <div class="upload-zone" id="upload-zone">
-      <input type="file" id="ep-video-file" accept="video/*" onchange="handleVideoSelect(event)" aria-label="Upload episode video"/>
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-      <div class="uz-title">Click or drag & drop</div>
-      <div class="uz-sub">MP4, MOV, MKV · Max 1 GB</div>
-    </div>
-    <div class="upload-progress" id="upload-progress">
-      <div class="up-name" id="up-name"></div>
-      <div class="up-bar-wrap"><div class="up-bar-fill" id="up-bar"></div></div>
-      <div class="up-pct" id="up-pct">0%</div>
-      <div class="up-ready" id="up-ready">✓ Video ready</div>
-      <div class="up-err" id="up-err"></div>
-    </div>
-    <div class="or-divider"><span>OR</span></div>
-    <label class="field-label">YouTube / Video URL</label>
-    <input class="field-input" type="text" id="ep-url-input" placeholder="https://..."/>
-    <button class="add-save" onclick="addEpisode()">Add Episode</button>
-  </div>
-</div>
+.app{container-type:inline-size;border:1px solid var(--paper-3);border-radius:18px;overflow:hidden;background:#fff;
+  box-shadow:0 30px 70px -42px rgba(36,28,42,.55)}
+.app-bar{display:flex;align-items:center;gap:10px;padding:11px 15px;border-bottom:1px solid var(--paper-2);background:var(--paper)}
+.app-bar .dots{display:flex;gap:5px}.app-bar .dots i{width:9px;height:9px;border-radius:50%;background:var(--paper-3)}
+.app-bar .who{font-size:12.5px;color:var(--on-paper-mute);margin-inline-start:auto;display:flex;align-items:center;gap:8px}
+.app-body{display:grid;grid-template-columns:168px minmax(0,1fr);min-height:400px}
+@container (max-width:470px){.app-body{grid-template-columns:1fr}.app-rail{display:none!important}}
+.app-rail{border-inline-end:1px solid var(--paper-2);padding:14px 10px;display:flex;flex-direction:column;gap:2px;background:var(--paper)}
+.app-rail button{display:flex;align-items:center;gap:10px;padding:8px 11px;border-radius:9px;font-size:13.2px;
+  color:var(--on-paper-mute);text-align:start;transition:background .2s,color .2s;width:100%}
+.app-rail button:hover{background:var(--paper-2);color:var(--on-paper)}
+.app-rail button[aria-selected="true"]{background:var(--plum);color:#fff;font-weight:600}
+.app-rail .badge{margin-inline-start:auto;font-size:10.5px;font-weight:700;background:var(--crit);color:#fff;
+  border-radius:999px;min-width:18px;height:18px;display:grid;place-items:center;padding:0 5px}
+.app-rail button[aria-selected="true"] .badge{background:rgba(255,255,255,.28)}
+.app-main{padding:clamp(16px,2.2vw,24px);display:flex;flex-direction:column;gap:18px;min-width:0}
+.app-h{display:flex;align-items:flex-end;justify-content:space-between;gap:14px;flex-wrap:wrap}
+.app-h h3{font-family:var(--f-display);font-size:23px;font-weight:600}
+body[dir="rtl"] .app-h h3{font-family:var(--f-fa);font-weight:700}
+.app-h .sub{font-size:13px;color:var(--on-paper-mute)}
+.tiles{display:grid;grid-template-columns:repeat(4,1fr);gap:11px}
+@container (max-width:700px){.tiles{grid-template-columns:repeat(2,1fr)}}
+@container (max-width:360px){.tiles{grid-template-columns:1fr}}
+.tile{border:1px solid var(--paper-2);border-radius:12px;padding:13px 14px;display:flex;flex-direction:column;gap:5px;background:#fff}
+.tile .t-l{font-size:11.5px;color:var(--on-paper-mute);display:flex;align-items:center;gap:6px}
+.tile .t-v{font-family:var(--f-display);font-size:26px;font-weight:600;font-variant-numeric:tabular-nums;line-height:1.08}
+.tile .t-d{font-size:11.5px;font-weight:600;display:flex;align-items:center;gap:4px}
+.up{color:var(--good)}.down{color:var(--crit)}.flat{color:var(--on-paper-mute)}
+.tile.accent{background:linear-gradient(165deg,var(--plum-deep),var(--plum));border-color:transparent;color:#fff}
+.tile.accent .t-l{color:rgba(255,255,255,.76)}
+.split{display:grid;grid-template-columns:1.25fr .75fr;gap:14px;align-items:start}
+@container (max-width:700px){.split{grid-template-columns:1fr}}
+.card{border:1px solid var(--paper-2);border-radius:13px;padding:15px;background:#fff;min-width:0}
+.card h4{font-size:13px;font-weight:700;letter-spacing:.01em;display:flex;align-items:center;gap:8px;margin-bottom:12px}
+.card h4 .r{margin-inline-start:auto;font-size:11.5px;font-weight:500;color:var(--on-paper-mute)}
+#chart{width:100%;height:170px;display:block;overflow:visible}
+.feed{display:flex;flex-direction:column;gap:0;max-height:212px;overflow-y:auto}
+.feed li{display:flex;gap:10px;padding:9px 0;border-bottom:1px solid var(--paper-2);font-size:12.8px;align-items:flex-start;animation:slideIn .5s var(--ease)}
+.feed li:last-child{border-bottom:0}
+@keyframes slideIn{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:none}}
+.feed .dot{width:7px;height:7px;border-radius:50%;margin-top:6px;flex:none}
+.feed .tm{margin-inline-start:auto;color:var(--on-paper-mute);font-size:11px;font-variant-numeric:tabular-nums;flex:none}
+.feed .tx{min-width:0;line-height:1.45}
+.sched{display:flex;flex-direction:column;gap:7px}
+.slot{display:flex;align-items:center;gap:11px;padding:9px 11px;border-radius:10px;border:1px solid var(--paper-2);font-size:13px}
+.slot .tm{font-variant-numeric:tabular-nums;color:var(--on-paper-mute);font-size:12px;flex:none}
+.slot .nm{font-weight:600;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.slot .st{margin-inline-start:auto;font-size:11px;font-weight:700;padding:3px 9px;border-radius:999px;flex:none}
+.slot.now{border-color:var(--good);background:rgba(63,164,106,.07)}
+.slot.now .st{background:var(--good);color:#fff}
+.slot.done{opacity:.52}.slot.done .st{background:var(--paper-2);color:var(--on-paper-mute)}
+.slot.next .st{background:rgba(122,58,140,.12);color:var(--plum)}
+.ul{list-style:none;margin:0;padding:0}
+@supports not (container-type:inline-size){
+  .tiles{grid-template-columns:repeat(2,1fr)}.split{grid-template-columns:1fr}
+  @media(max-width:760px){.app-body{grid-template-columns:1fr}.app-rail{display:none!important}}
+}
+</style>
+<style>
+/* ---------- admissions (real sequence -> numbering earns its place) ---------- */
+#admissions{background:var(--paper-2);color:var(--on-paper)}
+#admissions .eyebrow{color:#8A5B12}
+.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(12px,1.8vw,22px);counter-reset:s}
+@media(max-width:920px){.steps{grid-template-columns:1fr 1fr}}
+@media(max-width:540px){.steps{grid-template-columns:1fr}}
+.step{position:relative;padding-top:26px;border-top:2px solid var(--paper-3);display:flex;flex-direction:column;gap:8px}
+.step::before{counter-increment:s;content:counter(s,decimal-leading-zero);position:absolute;top:-2px;inset-inline-start:0;
+  transform:translateY(-100%);padding-bottom:9px;font-family:var(--f-display);font-size:12.5px;font-weight:700;
+  color:var(--plum);letter-spacing:.06em}
+body[dir="rtl"] .step::before{content:counter(s,persian)}
+.step.active{border-top-color:var(--plum)}
+.step h4{font-family:var(--f-display);font-size:17.5px;font-weight:600}
+body[dir="rtl"] .step h4{font-family:var(--f-fa);font-weight:700}
+.step p{font-size:13.6px;color:var(--on-paper-mute);line-height:1.58}
+.step .when{font-size:12px;font-weight:600;color:var(--plum)}
+.cta-band{margin-top:clamp(40px,6vh,64px);border-radius:20px;padding:clamp(26px,4vw,44px);
+  background:linear-gradient(140deg,var(--plum-deep),var(--plum) 58%,#8E4AA0);color:#fff;
+  display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap;
+  box-shadow:0 30px 70px -40px rgba(122,58,140,.95)}
+.cta-band h3{font-family:var(--f-display);font-size:clamp(22px,3vw,34px);font-weight:600;line-height:1.14;max-width:22ch}
+body[dir="rtl"] .cta-band h3{font-family:var(--f-fa);font-weight:700}
+.cta-band p{color:rgba(255,255,255,.82);font-size:14.5px;margin-top:8px;max-width:44ch}
+.btn-light{background:#fff;color:var(--plum-deep)}
 
-<!-- ─── VIDEO ─── -->
-<div class="vid-modal" id="vid-modal">
-  <div class="vid-modal-inner">
-    <video id="vid-player" controls playsinline></video>
-    <div class="vid-modal-bar">
-      <div class="vid-modal-title" id="vid-modal-title"></div>
-      <button class="vid-modal-close" onclick="closeVid()">✕ Close</button>
-    </div>
-  </div>
-</div>
+/* ---------- footer ---------- */
+footer{position:relative;z-index:1;background:var(--ink);color:var(--muted);padding-block:clamp(44px,6vh,70px) 30px;border-top:1px solid var(--line-dark)}
+.f-grid{display:grid;grid-template-columns:1.5fr repeat(3,1fr);gap:clamp(20px,3vw,40px)}
+@media(max-width:820px){.f-grid{grid-template-columns:1fr 1fr}}
+footer h5{font-size:11px;letter-spacing:.17em;text-transform:uppercase;color:var(--on-ink);margin-bottom:13px}
+body[dir="rtl"] footer h5{letter-spacing:0;text-transform:none;font-size:13px}
+footer ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px;font-size:13.5px}
+footer a:hover{color:var(--on-ink)}
+.f-note{margin-top:clamp(30px,5vh,50px);padding-top:20px;border-top:1px solid var(--line-dark);
+  font-size:12px;line-height:1.65;color:var(--muted-2);display:flex;gap:16px;justify-content:space-between;flex-wrap:wrap}
+.f-note p{max-width:74ch}
 
-<!-- ─── HERO ─── -->
-<section id="hero">
-  <div class="hero-orbs"><div class="orb orb-1"></div><div class="orb orb-2"></div><div class="orb orb-3"></div></div>
-  <div class="hero-grid"></div>
-  <div class="hero-poster-zone">
-    <div class="poster-frame" onclick="if(isAdmin)document.getElementById('poster-upload-input').click()">
-      <div class="poster-empty" id="poster-empty">
-        <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="0.4"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>
-        <span>Your Poster</span>
-      </div>
-      <img id="poster-img" alt="Zero Eleven"/>
-      <div class="poster-upload-overlay"><span>Change Poster</span></div>
-    </div>
+/* ---------- command palette ---------- */
+#pal{position:fixed;inset:0;z-index:100;display:grid;place-items:start center;padding:12vh 16px 16px;
+  background:rgba(12,9,15,.62);backdrop-filter:blur(7px);-webkit-backdrop-filter:blur(7px)}
+#pal[hidden]{display:none!important}
+.pal-box{width:min(620px,100%);background:var(--ink-2);border:1px solid rgba(244,239,246,.16);border-radius:16px;
+  overflow:hidden;box-shadow:0 40px 100px -30px #000;animation:palIn .3s var(--ease)}
+@keyframes palIn{from{opacity:0;transform:translateY(-14px) scale(.98)}to{opacity:1;transform:none}}
+.pal-in{display:flex;align-items:center;gap:11px;padding:15px 18px;border-bottom:1px solid var(--line-dark)}
+.pal-in input{flex:1;background:none;border:0;outline:0;color:var(--on-ink);font:inherit;font-size:16px;min-width:0}
+.pal-in input::placeholder{color:var(--muted-2)}
+.pal-res{max-height:min(46vh,380px);overflow-y:auto;padding:7px}
+.pal-res li{display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:10px;cursor:pointer;font-size:14px}
+.pal-res li[aria-selected="true"]{background:var(--plum);color:#fff}
+.pal-res li .cat{margin-inline-start:auto;font-size:11px;color:var(--muted);flex:none}
+.pal-res li[aria-selected="true"] .cat{color:rgba(255,255,255,.75)}
+.pal-res li .ic{width:16px;height:16px;flex:none;opacity:.8}
+.pal-res .none{padding:26px 14px;text-align:center;color:var(--muted);font-size:13.5px;display:block}
+.pal-foot{display:flex;gap:16px;padding:10px 18px;border-top:1px solid var(--line-dark);font-size:11.5px;color:var(--muted-2)}
+.pal-foot span{display:flex;align-items:center;gap:5px}
+.pal-foot kbd{border:1px solid var(--line-dark);border-radius:4px;padding:1px 5px;font:inherit;font-size:10.5px}
+
+/* ---------- rtl + motion ---------- */
+body[dir="rtl"] .display{letter-spacing:0}
+body[dir="rtl"] h1.hero-h{line-height:1.22;font-weight:800}
+body[dir="rtl"] .prog .idx{font-family:var(--f-ui)}
+body[dir="rtl"] .pulse-row .n{font-family:var(--f-fa);font-weight:800}
+body[dir="rtl"] .tile .t-v,body[dir="rtl"] .hero-card .v{font-family:var(--f-fa);font-weight:700}
+@media(prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{animation-duration:.001s!important;animation-iteration-count:1!important;transition-duration:.001s!important}
+  [data-anim="on"] .rv{opacity:1!important;transform:none!important}
+}
+</style>
+
+<!-- ============ 3D GROUND ============ -->
+<div id="bg" aria-hidden="true"><canvas id="vault"></canvas><div id="veil"></div></div>
+
+<!-- ============ NAV ============ -->
+<header class="nav" id="nav">
+ <div class="shell nav-in">
+  <a class="brand" href="#top">
+   <svg class="mark" viewBox="0 0 64 64" aria-hidden="true">
+    <defs><linearGradient id="mg" x1="0" y1="0" x2="1" y2="1">
+     <stop offset="0" stop-color="#C07FD8"/><stop offset="55%" stop-color="#7A3A8C"/><stop offset="100%" stop-color="#E3A23C"/>
+    </linearGradient></defs>
+    <circle cx="32" cy="32" r="29.5" fill="none" stroke="url(#mg)" stroke-width="1.6" opacity=".8"/>
+    <g fill="none" stroke="url(#mg)" stroke-width="1.7" stroke-linejoin="round">
+     <path d="M32 9 L45.3 16.5 L45.3 31.5 L32 39 L18.7 31.5 L18.7 16.5 Z"/>
+     <path d="M32 25 L45.3 32.5 L45.3 47.5 L32 55 L18.7 47.5 L18.7 32.5 Z"/>
+     <path d="M32 17 L38.9 21 L38.9 29 L32 33 L25.1 29 L25.1 21 Z" opacity=".55"/>
+    </g>
+    <circle cx="32" cy="32" r="3" fill="#E3A23C"/>
+   </svg>
+   <span class="wm"><b data-i18n="brand">Hakim International School</b><span data-i18n="brandSub">Tehran · Est. 1998</span></span>
+  </a>
+  <nav class="navlinks" aria-label="Main">
+   <a href="#programs" data-i18n="navPrograms">Programs</a>
+   <a href="#academics" data-i18n="navAcademics">Academics</a>
+   <a href="#portal" data-i18n="navPortal">The Portal</a>
+   <a href="#admissions" data-i18n="navAdmissions">Admissions</a>
+  </nav>
+  <div class="nav-tools">
+   <span class="chip concept" data-i18n="conceptChip">Concept</span>
+   <button class="chip" id="openPal" aria-label="Search">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+    <span data-i18n="search">Search</span><kbd>⌘K</kbd>
+   </button>
+   <button class="chip lang" id="langBtn" aria-label="Change language">فارسی</button>
   </div>
-  <div class="hero-content">
-    <div class="hero-eyebrow"><div class="eyebrow-line"></div><div class="eyebrow-text">Original Series · 2026</div></div>
-    <div class="hero-title-wrap">
-      <div class="hero-title"><span class="t1">ZERO</span><span class="t2">ELEVEN</span></div>
-    </div>
-    <div class="hero-meta">
-      <span class="hero-badge">2026</span><div class="hero-dot"></div>
-      <span class="hero-badge">5 Seasons</span><div class="hero-dot"></div>
-      <span class="hero-badge">HD</span><div class="hero-dot"></div>
-      <span class="hero-badge">Original</span>
-    </div>
-    <p class="hero-desc ph" id="hero-desc-text">Your series tagline goes here.</p>
-    <div class="hero-btns">
-      <button class="btn-primary" onclick="go('seasons')">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="black"><polygon points="5,3 19,12 5,21"/></svg>Watch Now
-      </button>
-      <button class="btn-secondary" onclick="go('about')">More Info</button>
-    </div>
+ </div>
+</header>
+<main id="top">
+
+<!-- ============ HERO ============ -->
+<section id="hero" class="sec" style="padding-block:clamp(40px,8vh,96px) clamp(34px,6vh,70px)">
+ <div class="shell hero-grid">
+  <div>
+   <span class="eyebrow" data-i18n="heroEyebrow">Tehran · International Curriculum</span>
+   <h1 class="hero-h display">
+    <span data-i18n="heroL1">A school built on</span><br>
+    <em data-i18n="heroL2">the mind of the sage</em>
+   </h1>
+   <p class="hero-sub" data-i18n="heroSub">Hakim — حکیم — is the Persian word for the scholar who refuses a single discipline. We teach the same way: mathematics beside metalwork, Farsi beside Cambridge English, and a vault of geometry overhead to remind everyone where this tradition began.</p>
+   <div class="hero-cta">
+    <a class="btn btn-primary" href="#admissions"><span data-i18n="ctaVisit">Book a campus visit</span>
+     <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M5 12h13m-5-6 6 6-6 6"/></svg></a>
+    <a class="btn btn-ghost" href="#portal" data-i18n="ctaPortal">See the student portal</a>
+   </div>
+   <div class="scroll-cue"><i></i><span data-i18n="scrollCue">Scroll to enter the vault</span></div>
   </div>
-  <div class="hero-bottom-fade"></div>
-  <div class="scroll-indicator"><span>Scroll</span><div class="scroll-line"></div></div>
+  <aside class="hero-side">
+   <div class="hero-card">
+    <div class="k" data-i18n="cardTimeK">Campus time · Tehran</div>
+    <div class="v"><span class="tnum" id="clock">—</span></div>
+   </div>
+   <div class="hero-card">
+    <div class="k" data-i18n="cardNowK">Right now on campus</div>
+    <div class="v" style="font-size:17px"><span class="live-dot" id="nowDot"></span><span id="nowText" data-i18n="loading">Loading…</span></div>
+   </div>
+  </aside>
+ </div>
 </section>
 
-<!-- ─── ABOUT ─── -->
-<section id="about">
-  <div class="about-bg"></div>
-  <div class="about-inner">
-    <div class="about-left reveal from-left">
-      <div class="section-eyebrow">Series Info</div>
-      <h2>Everything about<br>Zero Eleven</h2>
-      <p class="ph" id="about-text">Your series description goes here.</p>
-      <button class="about-edit-btn" onclick="openAboutEdit()">Edit Description</button>
-      <textarea class="about-textarea" id="about-textarea" placeholder="Write your series description..."></textarea>
-      <button class="save-btn" id="save-desc-btn" onclick="saveDesc()">Save</button>
-    </div>
-    <div class="about-right reveal rd2">
-      <div class="stat-row"><span class="stat-label">Series</span><span class="stat-value">Zero Eleven</span></div>
-      <div class="stat-row"><span class="stat-label">Status</span><span class="stat-value" style="color:var(--red);">● Coming Soon</span></div>
-      <div class="stat-row"><span class="stat-label">Seasons</span><span class="stat-value" id="about-season-count">5</span></div>
-      <div class="stat-row"><span class="stat-label">Episodes</span><span class="stat-value" id="about-ep-count">—</span></div>
-      <div class="stat-row"><span class="stat-label">Year</span><span class="stat-value">2026</span></div>
-    </div>
-  </div>
+<!-- ============ LIVE PULSE ============ -->
+<section id="pulse">
+ <div class="shell pulse-row">
+  <div class="cell rv"><span class="n tnum" data-count="1240">1,240</span><span class="l" data-i18n="statStudents">Students, Grades 1–12</span></div>
+  <div class="cell rv d1"><span class="n tnum" data-count="118">118</span><span class="l" data-i18n="statFaculty">Teaching faculty</span></div>
+  <div class="cell rv d2"><span class="n tnum" data-count="11">11</span><span class="l" data-i18n="statRatio">Students per teacher</span></div>
+  <div class="cell rv d3"><span class="n tnum" data-count="26">26</span><span class="l" data-i18n="statCountries">Nationalities on roll</span></div>
+ </div>
 </section>
 
-<!-- ─── SEASONS ─── -->
-<section id="seasons">
-  <div class="season-divider"></div>
-  <div class="sec-header reveal">
-    <div class="section-eyebrow" style="margin-bottom:14px;">Browse</div>
-    <h2 class="sec-title">Seasons & Episodes</h2>
+<!-- ============ PROGRAMS ============ -->
+<section id="programs" class="sec">
+ <div class="shell">
+  <div class="sec-head rv">
+   <span class="eyebrow" data-i18n="progEyebrow">Programs</span>
+   <h2 class="display" data-i18n="progH">Twelve years, four distinct worlds</h2>
+   <p data-i18n="progP">Each stage is designed around what that age actually needs — not a thinner version of the stage above it.</p>
   </div>
-  <div class="season-tabs reveal rd1" id="season-tabs"></div>
-  <div class="episodes-grid" id="episodes-grid">
-    <div class="empty-state">
-      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="1"><path d="M15 10l4.553-2.069A1 1 0 0121 8.87v6.26a1 1 0 01-1.447.899L15 14"/><rect x="3" y="6" width="12" height="12" rx="2"/></svg>
-      <p>No episodes yet. Log in as admin to add content.</p>
-    </div>
+  <div class="prog-grid" id="progGrid">
+   <article class="prog rv"><div class="glow"></div><span class="idx">01</span>
+    <div><span class="yrs" data-i18n="p1y">Grades 1–5 · Ages 6–11</span>
+     <h3 data-i18n="p1h">Primary</h3><p data-i18n="p1p">Reading, number sense and curiosity, taught bilingually from day one. Afternoons are workshop time — clay, circuits, choir.</p></div>
+    <div class="tags"><span data-i18n="p1t1">Bilingual literacy</span><span data-i18n="p1t2">Workshop afternoons</span></div></article>
+
+   <article class="prog rv d1"><div class="glow"></div><span class="idx">02</span>
+    <div><span class="yrs" data-i18n="p2y">Grades 6–8 · Ages 11–14</span>
+     <h3 data-i18n="p2h">Middle</h3><p data-i18n="p2p">The years students decide whether they like thinking. Project terms, first laboratory work, and a tutor who stays with them all three years.</p></div>
+    <div class="tags"><span data-i18n="p2t1">Project terms</span><span data-i18n="p2t2">Named tutor</span></div></article>
+
+   <article class="prog rv d2"><div class="glow"></div><span class="idx">03</span>
+    <div><span class="yrs" data-i18n="p3y">Grades 9–12 · Ages 14–18</span>
+     <h3 data-i18n="p3h">Senior</h3><p data-i18n="p3p">Konkur preparation running alongside Cambridge International AS &amp; A Levels, so a student can keep both doors open until they are ready to choose.</p></div>
+    <div class="tags"><span data-i18n="p3t1">AS &amp; A Level</span><span data-i18n="p3t2">Konkur track</span></div></article>
+
+   <article class="prog rv d3"><div class="glow"></div><span class="idx">04</span>
+    <div><span class="yrs" data-i18n="p4y">Grades 9–12 · By selection</span>
+     <h3 data-i18n="p4h">Olympiad &amp; Research</h3><p data-i18n="p4p">A parallel track for students who have outgrown the syllabus: competition mathematics, physics and informatics, plus a supervised research year.</p></div>
+    <div class="tags"><span data-i18n="p4t1">Informatics</span><span data-i18n="p4t2">Research year</span></div></article>
   </div>
+ </div>
 </section>
 
-<!-- ─── FOOTER ─── -->
-<footer id="footer">
-  <div class="footer-grid reveal">
-    <div class="footer-brand">
-      <div class="f-logo">011</div>
-      <p>Zero Eleven is an independent original series. All content is protected. Unauthorized reproduction or distribution is strictly prohibited.</p>
-      <div class="footer-social">
-        <!-- Placeholder icons (Instagram/X/YouTube-shaped) with no link behind them yet.
-             aria-hidden keeps screen readers from announcing a button that does nothing;
-             once these point somewhere, swap the outer <div> for a real <a href="..."> and
-             add an aria-label naming the platform (e.g. aria-label="Instagram"). -->
-        <div class="social-btn" aria-hidden="true"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.5" fill="currentColor"/></svg></div>
-        <div class="social-btn" aria-hidden="true"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4l16 16M4 20L20 4"/></svg></div>
-        <div class="social-btn" aria-hidden="true"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22.54 6.42a2.78 2.78 0 00-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46a2.78 2.78 0 00-1.95 1.96A29 29 0 001 12a29 29 0 00.46 5.58A2.78 2.78 0 003.41 19.6C5.12 20 12 20 12 20s6.88 0 8.59-.46a2.78 2.78 0 001.95-1.95A29 29 0 0023 12a29 29 0 00-.46-5.58z"/><polygon points="9.75 15.02 15.5 12 9.75 8.98" fill="currentColor" stroke="none"/></svg></div>
+<!-- ============ ACADEMICS ============ -->
+<section id="academics" class="sec">
+ <div class="shell">
+  <div class="sec-head rv">
+   <span class="eyebrow" data-i18n="acEyebrow">What we build</span>
+   <h2 class="display" data-i18n="acH">Everything a hakim was supposed to know</h2>
+   <p data-i18n="acP">The classical Persian polymath moved freely between geometry, medicine, poetry and astronomy. Six departments keep that range alive here.</p>
+  </div>
+  <div class="acc">
+   <div class="acc-item rv"><svg class="ico" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="24" cy="24" r="16"/><path d="M24 8v32M8 24h32M12.7 12.7l22.6 22.6M35.3 12.7 12.7 35.3"/></svg>
+    <h4 data-i18n="a1h">Geometry &amp; Mathematics</h4><p data-i18n="a1p">From girih construction with compass and straightedge in Grade 4 to multivariable calculus in Grade 12.</p></div>
+   <div class="acc-item rv d1"><svg class="ico" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M19 6v14L9 38a4 4 0 0 0 3.5 6h23A4 4 0 0 0 39 38L29 20V6"/><path d="M16 6h16M14.5 29h19"/></svg>
+    <h4 data-i18n="a2h">Laboratory Sciences</h4><p data-i18n="a2p">Four wet labs and an electronics bench. Every senior designs, runs and defends one original experiment.</p></div>
+   <div class="acc-item rv d2"><svg class="ico" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 10h14a6 6 0 0 1 6 6v24a5 5 0 0 0-5-5H6zM42 10H28a6 6 0 0 0-6 6v24a5 5 0 0 1 5-5h15z"/></svg>
+    <h4 data-i18n="a3h">Languages &amp; Literature</h4><p data-i18n="a3p">Farsi and English carried at full weight to Grade 12, with Arabic from Grade 6 and French or German by election.</p></div>
+   <div class="acc-item rv"><svg class="ico" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M24 4 6 14v20l18 10 18-10V14z"/><path d="m6 14 18 10 18-10M24 24v20"/></svg>
+    <h4 data-i18n="a4h">Design &amp; Making</h4><p data-i18n="a4p">A workshop with kilns, a laser cutter and looms. Persian tilework and CAD are taught in the same room, deliberately.</p></div>
+   <div class="acc-item rv d1"><svg class="ico" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="24" cy="15" r="8"/><path d="M8 42c0-8.8 7.2-16 16-16s16 7.2 16 16"/></svg>
+    <h4 data-i18n="a5h">Counselling</h4><p data-i18n="a5p">One counsellor per 160 students, plus university guidance that starts in Grade 9 rather than the final term.</p></div>
+   <div class="acc-item rv d2"><svg class="ico" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M24 44s16-10.6 16-23A16 16 0 0 0 8 21c0 12.4 16 23 16 23z"/><circle cx="24" cy="20" r="6"/></svg>
+    <h4 data-i18n="a6h">Sport &amp; Wellbeing</h4><p data-i18n="a6p">Two gymnasiums, a 25m pool and compulsory daily movement — including for Grade 12, especially for Grade 12.</p></div>
+  </div>
+ </div>
+</section>
+<!-- ============ PORTAL ============ -->
+<section id="portal" class="sec on-light">
+ <div class="shell">
+  <div class="sec-head rv">
+   <span class="eyebrow" data-i18n="poEyebrow">The Portal</span>
+   <h2 class="display" data-i18n="poH">The part students actually open every day</h2>
+   <p data-i18n="poP">The current system shows sixteen identical squares and makes you click to find out if anything happened. This one answers that before you touch it.</p>
+  </div>
+
+  <div class="before-after">
+   <div class="rv">
+    <span class="panel-label" data-i18n="beforeL">Today — lms.hakim.school</span>
+    <div class="old-lms"><div class="old-grid">
+     <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+    </div></div>
+    <p class="old-note" data-i18n="beforeP">Sixteen tiles of equal weight. No grades, no deadlines, no unread count until you open each one. Nothing tells a parent whether today went well.</p>
+   </div>
+
+   <div class="rv d1">
+    <span class="panel-label" style="display:flex;align-items:center;gap:10px"><span data-i18n="afterL">Proposed</span>
+     <span class="demo-pill"><span class="live-dot" style="background:#8A5B12;animation:none"></span><span data-i18n="demoData">Sample data</span></span></span>
+    <div class="app">
+     <div class="app-bar">
+      <div class="dots"><i></i><i></i><i></i></div>
+      <span style="font-size:12px;color:var(--on-paper-mute)">hakim.school/portal</span>
+      <span class="who"><span data-i18n="whoName">Mahan M. · Grade 11</span></span>
+     </div>
+     <div class="app-body">
+      <nav class="app-rail" aria-label="Portal">
+       <button aria-selected="true" data-i18n="rDash">Dashboard</button>
+       <button data-i18n="rScores">Scores</button>
+       <button data-i18n="rHw">Homework<span class="badge">3</span></button>
+       <button data-i18n="rMsg">Messages<span class="badge" id="msgBadge">6</span></button>
+       <button data-i18n="rSched">Schedule</button>
+       <button data-i18n="rClass">Online class</button>
+       <button data-i18n="rBuffet">e-Buffet</button>
+       <button data-i18n="rReports">Reports</button>
+      </nav>
+      <div class="app-main">
+       <div class="app-h">
+        <div><h3 data-i18n="goodDay">Good afternoon, Mahan</h3>
+         <span class="sub" id="portalSub" data-i18n="loading">Loading…</span></div>
+       </div>
+
+       <div class="tiles">
+        <div class="tile accent"><span class="t-l" data-i18n="tAvg">Term average</span>
+         <span class="t-v" id="tAvg">18.4</span><span class="t-d" style="color:#F2CE8E">▲ <span data-i18n="tAvgD">0.6 since Mehr</span></span></div>
+        <div class="tile"><span class="t-l" data-i18n="tAtt">Attendance</span>
+         <span class="t-v tnum" id="tAtt">97%</span><span class="t-d flat" data-i18n="tAttD">1 late this month</span></div>
+        <div class="tile"><span class="t-l" data-i18n="tDue">Due in 48 hours</span>
+         <span class="t-v tnum">3</span><span class="t-d down" data-i18n="tDueD">Physics set closes tonight</span></div>
+        <div class="tile"><span class="t-l" data-i18n="tRank">Class standing</span>
+         <span class="t-v tnum">4<span style="font-size:14px">/31</span></span><span class="t-d up" data-i18n="tRankD">▲ 2 places</span></div>
+       </div>
+
+       <div class="split">
+        <div class="card">
+         <h4><span data-i18n="chartT">Subject averages, this term</span><span class="r" data-i18n="chartR">out of 20</span></h4>
+         <svg id="chart" viewBox="0 0 520 170" role="img" aria-label="Subject averages this term, out of 20"></svg>
+        </div>
+        <div class="card">
+         <h4><span class="live-dot"></span><span data-i18n="feedT">Live activity</span></h4>
+         <ul class="ul feed" id="feed"></ul>
+        </div>
+       </div>
+
+       <div class="card">
+        <h4><span data-i18n="schedT">Today's schedule</span><span class="r" id="schedR"></span></h4>
+        <div class="sched" id="sched"></div>
+       </div>
       </div>
+     </div>
     </div>
-    <div class="footer-col">
-      <h4>Series</h4>
-      <a onclick="go('hero')">Home</a><a onclick="go('about')">About</a><a onclick="go('seasons')">Episodes</a><a onclick="openAuth('register')">Join Now</a>
-    </div>
-    <div class="footer-col">
-      <h4>Account</h4>
-      <a onclick="openAuth('login')">Log In</a><a onclick="openAuth('register')">Register</a><a onclick="toggleMenu()">Settings</a>
-    </div>
-    <div class="footer-col">
-      <h4>Legal</h4>
-      <a>Privacy Policy</a><a>Terms of Use</a><a>Cookie Policy</a><a>Contact Us</a>
-    </div>
+   </div>
   </div>
-  <div class="footer-bottom">
-    <div class="footer-credits">
-      <div>Director — <strong>Mani Reason</strong> &nbsp;·&nbsp; Developer — <strong>Mahan Majdi</strong></div>
-      <div style="margin-top:4px;">Executive Producer · Zero Eleven Studios · Sound Design · Post Production</div>
-      <div style="margin-top:4px;font-size:9px;color:var(--text-faint);">© 2026 Zero Eleven. All Rights Reserved.</div>
-    </div>
-    <div style="width:1px;height:36px;background:var(--border);"></div>
-    <div class="footer-right">
-      <div style="font-size:14px;font-weight:900;letter-spacing:4px;color:var(--text-dim);margin-bottom:4px;">ZERO ELEVEN</div>
-      <div>Original Series · 2026</div>
-    </div>
+ </div>
+</section>
+
+<!-- ============ ADMISSIONS ============ -->
+<section id="admissions" class="sec on-light">
+ <div class="shell">
+  <div class="sec-head rv">
+   <span class="eyebrow" data-i18n="adEyebrow">Admissions · 1405–06</span>
+   <h2 class="display" data-i18n="adH">Four steps, eight weeks</h2>
+   <p data-i18n="adP">We assess every applicant in person. No family is asked to commit before they have spent a morning in the building.</p>
   </div>
+  <div class="steps">
+   <div class="step active rv"><span class="when" data-i18n="s1w">Open now</span><h4 data-i18n="s1h">Enquiry</h4><p data-i18n="s1p">A short form and a phone call. We will tell you honestly if a place is unlikely before you go further.</p></div>
+   <div class="step rv d1"><span class="when" data-i18n="s2w">Within 2 weeks</span><h4 data-i18n="s2h">Assessment morning</h4><p data-i18n="s2p">Mathematics and language, written on campus. Grades 1–3 come for a play-based session instead.</p></div>
+   <div class="step rv d2"><span class="when" data-i18n="s3w">Within 4 weeks</span><h4 data-i18n="s3h">Family interview</h4><p data-i18n="s3p">Student and parents, with the head of the relevant school. Forty minutes, and you ask most of the questions.</p></div>
+   <div class="step rv d3"><span class="when" data-i18n="s4w">Within 8 weeks</span><h4 data-i18n="s4h">Offer &amp; enrolment</h4><p data-i18n="s4p">A written offer, a fee schedule with no later additions, and a two-week window to decide.</p></div>
+  </div>
+
+  <div class="cta-band rv">
+   <div><h3 data-i18n="ctaH">Come and see the vault for yourself</h3>
+    <p data-i18n="ctaP">Campus mornings run every Wednesday through Esfand. Bring your child — they will be given something to build.</p></div>
+   <a class="btn btn-light" href="#top" data-i18n="ctaBtn">Request a visit</a>
+  </div>
+ </div>
+</section>
+</main>
+
+<footer>
+ <div class="shell">
+  <div class="f-grid">
+   <div><div class="brand" style="margin-bottom:12px">
+     <svg class="mark" viewBox="0 0 64 64" aria-hidden="true">
+      <circle cx="32" cy="32" r="29.5" fill="none" stroke="#7A3A8C" stroke-width="1.6" opacity=".9"/>
+      <g fill="none" stroke="#7A3A8C" stroke-width="1.7" stroke-linejoin="round">
+       <path d="M32 9 L45.3 16.5 L45.3 31.5 L32 39 L18.7 31.5 L18.7 16.5 Z"/>
+       <path d="M32 25 L45.3 32.5 L45.3 47.5 L32 55 L18.7 47.5 L18.7 32.5 Z"/></g>
+      <circle cx="32" cy="32" r="3" fill="#E3A23C"/></svg>
+     <span class="wm"><b style="color:var(--on-ink)" data-i18n="brand">Hakim International School</b></span></div>
+    <p style="font-size:13.5px;max-width:34ch;line-height:1.6" data-i18n="fTag">A school named for the Persian scholar who refused to pick one subject.</p></div>
+   <div><h5 data-i18n="fSchool">School</h5><ul>
+    <li><a href="#programs" data-i18n="navPrograms">Programs</a></li>
+    <li><a href="#academics" data-i18n="navAcademics">Academics</a></li>
+    <li><a href="#admissions" data-i18n="navAdmissions">Admissions</a></li></ul></div>
+   <div><h5 data-i18n="fFamilies">Families</h5><ul>
+    <li><a href="#portal" data-i18n="navPortal">The Portal</a></li>
+    <li><a href="#portal" data-i18n="fCalendar">Calendar</a></li>
+    <li><a href="#portal" data-i18n="fBuffet">e-Buffet</a></li></ul></div>
+   <div><h5 data-i18n="fContact">Contact</h5><ul>
+    <li data-i18n="fAddr">Tehran, Iran</li>
+    <li>hakim.school</li></ul></div>
+  </div>
+  <div class="f-note">
+   <p data-i18n="disclaimer">Independent design concept. This is an unofficial proposal for a website redesign, not an official Hakim International School site, and it is not affiliated with or endorsed by the school. All figures, names and portal activity shown are sample content for demonstration.</p>
+   <span data-i18n="fYear">Concept · 2026</span>
+  </div>
+ </div>
 </footer>
 
-<!-- ─── ADMIN FABS ─── -->
-<div class="admin-bar">
-  <button class="admin-fab fab-season" onclick="openAddSeason()">+ Season</button>
-  <button class="admin-fab fab-episode" onclick="openAddEpisode()">+ Episode</button>
+<!-- ============ COMMAND PALETTE ============ -->
+<div id="pal" hidden role="dialog" aria-modal="true" aria-label="Search">
+ <div class="pal-box">
+  <div class="pal-in">
+   <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="2.2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+   <input id="palInput" type="search" autocomplete="off" spellcheck="false" placeholder="Search the school, the portal, anything…">
+   <kbd class="chip" style="height:24px;padding:0 8px;font-size:11px" id="palEsc">ESC</kbd>
+  </div>
+  <ul class="ul pal-res" id="palRes" role="listbox" aria-label="Results"></ul>
+  <div class="pal-foot">
+   <span><kbd>↑</kbd><kbd>↓</kbd> <span data-i18n="palNav">navigate</span></span>
+   <span><kbd>↵</kbd> <span data-i18n="palOpen">open</span></span>
+   <span><kbd>⌘K</kbd> <span data-i18n="palToggle">toggle</span></span>
+  </div>
+ </div>
 </div>
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script>
-gsap.registerPlugin(ScrollTrigger);
-
-/* ─── LOADER ─── */
-(function(){
-  const bar=document.getElementById('loader-bar');
-  const logo=document.querySelector('.loader-logo');
-  gsap.to(logo,{opacity:1,y:0,duration:0.8,ease:'power3.out',delay:0.2});
-  let p=0;
-  const iv=setInterval(()=>{
-    p+=Math.random()*4+1;
-    if(p>=100){p=100;clearInterval(iv);}
-    bar.style.width=p+'%';
-    if(p>=100){
-      setTimeout(()=>{
-        gsap.to('#loader',{opacity:0,duration:0.8,ease:'power2.inOut',onComplete:()=>{
-          document.getElementById('loader').style.display='none';
-          document.body.style.cursor='none';
-        }});
-      },400);
-    }
-  },40);
-})();
-
-/* ─── CURSOR ─── */
-(function(){
-  const cur=document.getElementById('cur'),ring=document.getElementById('cur-ring');
-  if(!cur||!ring)return;
-  let mx=0,my=0,rx=0,ry=0;
-  document.addEventListener('mousemove',e=>{
-    mx=e.clientX;my=e.clientY;
-    cur.style.left=mx+'px';cur.style.top=my+'px';
-  });
-  (function animRing(){
-    rx+=(mx-rx)*0.1;ry+=(my-ry)*0.1;
-    ring.style.left=rx+'px';ring.style.top=ry+'px';
-    requestAnimationFrame(animRing);
-  })();
-  document.querySelectorAll('button,a,[onclick]').forEach(el=>{
-    el.addEventListener('mouseenter',()=>document.body.classList.add('cursor-hover'));
-    el.addEventListener('mouseleave',()=>document.body.classList.remove('cursor-hover'));
-  });
-})();
-
-/* ─── MOUSE GLOW ─── */
-(function(){
-  const glow=document.getElementById('mouse-glow');
-  let tx=0,ty=0,cx=0,cy=0;
-  document.addEventListener('mousemove',e=>{tx=e.clientX;ty=e.clientY;});
-  (function anim(){
-    cx+=(tx-cx)*0.06;cy+=(ty-cy)*0.06;
-    glow.style.left=cx+'px';glow.style.top=cy+'px';
-    requestAnimationFrame(anim);
-  })();
-})();
-
-/* ─── KEYBOARD ACCESSIBILITY ───
-   A lot of the clickable things on this page (menu items, episode cards,
-   footer links) are <div>/<a> tags with an onclick, not real <button>
-   elements — so a mouse can click them, but the Tab key skips right past
-   them and Enter/Space does nothing. This finds anything clickable that
-   isn't already keyboard-friendly and makes it act like a button: focusable
-   with Tab, and activatable with Enter or Space. Elements can opt out with
-   data-no-kbd (used for the decorative social icons, which have no onclick
-   at all and don't need this). */
-function makeKeyboardAccessible(root){
-  (root||document).querySelectorAll('[onclick]').forEach(el=>{
-    if(el.matches('button,a[href],input,select,textarea,[data-no-kbd]'))return;
-    if(el.dataset.kbdReady)return; // don't double-bind the same element
-    el.dataset.kbdReady='1';
-    if(!el.hasAttribute('tabindex'))el.setAttribute('tabindex','0');
-    if(!el.hasAttribute('role'))el.setAttribute('role','button');
-    el.addEventListener('keydown',e=>{
-      if(e.key==='Enter'||e.key===' '){e.preventDefault();el.click();}
-    });
-  });
-}
-makeKeyboardAccessible();
-
-/* ─── NAV SCROLL ─── */
-window.addEventListener('scroll',()=>{document.getElementById('main-nav').classList.toggle('scrolled',scrollY>60);},{ passive:true });
-
-/* ─── GSAP SCROLL ANIMATIONS ───
-   Skip the moving stuff entirely for visitors whose OS has "reduce motion"
-   turned on (an accessibility setting, usually for motion sensitivity) —
-   just show everything in its final, settled position instead. */
-const reduceMotion=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-gsap.utils.toArray('.reveal').forEach(el=>{
-  if(reduceMotion){gsap.set(el,{opacity:1,y:0,x:0});return;}
-  gsap.fromTo(el,
-    {opacity:0,y:el.classList.contains('from-left')?0:50,x:el.classList.contains('from-left')?-50:el.classList.contains('from-right')?50:0},
-    {opacity:1,y:0,x:0,duration:1.2,ease:'power3.out',
-     scrollTrigger:{trigger:el,start:'top 85%',end:'bottom 15%',toggleActions:'play reverse play reverse'}}
-  );
-});
-
-/* ─── PARALLAX ─── */
-if(!reduceMotion){
-  gsap.to('.hero-poster-zone',{yPercent:-12,ease:'none',scrollTrigger:{trigger:'#hero',start:'top top',end:'bottom top',scrub:true}});
-  gsap.to('.hero-content',{yPercent:-6,ease:'none',scrollTrigger:{trigger:'#hero',start:'top top',end:'bottom top',scrub:true}});
-  gsap.to('.orb-1',{y:-80,ease:'none',scrollTrigger:{trigger:'#hero',start:'top top',end:'bottom top',scrub:true}});
-}
-
-/* ─── NAVIGATION ─── */
-function go(id){const el=document.getElementById(id);if(el)el.scrollIntoView({behavior:'smooth',block:'start'});}
-function menuGo(id){closeMenu();setTimeout(()=>go(id),420);}
-function refreshSite(){window.scrollTo({top:0,behavior:'smooth'});setTimeout(()=>location.reload(),500);}
-
-/* ─── MENU ─── */
-function toggleMenu(){
-  const h=document.getElementById('hamburger'),m=document.getElementById('side-menu'),o=document.getElementById('menu-overlay');
-  h.classList.toggle('open');m.classList.toggle('open');o.classList.toggle('open');
-  if(m.classList.contains('open')){showSection('main');refreshMenuAuth();}
-}
-function closeMenu(){['hamburger','side-menu','menu-overlay'].forEach(id=>document.getElementById(id).classList.remove('open'));}
-function showSection(s){
-  document.getElementById('menu-nav').style.display=s==='main'?'block':'none';
-  ['settings','admin'].forEach(n=>{
-    const el=document.getElementById('menu-section-'+n);
-    if(el)el.style.display=s===n?'flex':'none';
-  });
-  if(s==='admin')loadAdminUsers();
-}
-
-/* ─── AUTH ─── */
-function refreshMenuAuth(){
-  const area=document.getElementById('menu-auth-area'),sb_btn=document.getElementById('menu-settings-btn'),ab=document.getElementById('menu-admin-btn'),badge=document.getElementById('menu-badge');
-  if(currentUser){
-    sb_btn.style.display='flex';ab.style.display=isAdmin?'flex':'none';
-    badge.style.display='inline-block';badge.textContent=isAdmin?'Admin':'Member';
-    badge.className='menu-badge '+(isAdmin?'badge-admin':'badge-member');
-    document.getElementById('settings-email-display').textContent=currentUser.email;
-    area.innerHTML=`<div class="menu-item" onclick="doLogout()" style="color:#a33;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>Log Out</div>`;
-  }else{
-    sb_btn.style.display='none';ab.style.display='none';badge.style.display='none';
-    area.innerHTML=`
-      <div class="menu-item" onclick="closeMenu();openAuth('login')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h4a2 2 0 012 2v14a2 2 0 01-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>Log In</div>
-      <div class="menu-item" onclick="closeMenu();openAuth('register')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Register</div>
-      <div class="menu-item" onclick="closeMenu();document.getElementById('login-modal').classList.add('open');setTimeout(()=>document.getElementById('pw-input').focus(),100)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>Admin Login</div>`;
-  }
-}
-function updateMenuUser(){
-  if(currentUser){
-    document.getElementById('menu-avatar').textContent=(currentUser.name||currentUser.email||'?')[0].toUpperCase();
-    document.getElementById('menu-name').textContent=currentUser.name||'User';
-    document.getElementById('menu-email-text').textContent=currentUser.email||'';
-  }else{
-    document.getElementById('menu-avatar').textContent='?';
-    document.getElementById('menu-name').textContent='Not logged in';
-    document.getElementById('menu-email-text').textContent='Sign in to watch episodes';
-  }
-}
-function openAuth(tab){document.getElementById('auth-modal').classList.add('open');switchAuthTab(tab||'login');}
-function switchAuthTab(tab){
-  document.getElementById('auth-login-form').style.display=tab==='login'?'block':'none';
-  document.getElementById('auth-register-form').style.display=tab==='register'?'block':'none';
-  document.getElementById('tab-login').classList.toggle('active',tab==='login');
-  document.getElementById('tab-register').classList.toggle('active',tab==='register');
-  document.getElementById('auth-title').textContent=tab==='login'?'Welcome Back':'Create Account';
-  document.getElementById('auth-sub').textContent=tab==='login'?'Sign in to watch Zero Eleven':'Join to start watching';
-}
-function doRegister(){
-  const name=document.getElementById('reg-name').value.trim(),email=document.getElementById('reg-email').value.trim(),pass=document.getElementById('reg-pass').value;
-  const err=document.getElementById('reg-err');err.style.display='none';
-  if(!name||!email||!pass){err.textContent='Please fill all fields.';err.style.display='block';return;}
-  if(pass.length<6){err.textContent='Password must be 6+ characters.';err.style.display='block';return;}
-  const us=getUsers();if(us.find(u=>u.email===email)){err.textContent='Email already registered.';err.style.display='block';return;}
-  const u={id:Date.now(),name,email,pass,isAdmin:false,joinedAt:new Date().toISOString(),lastLogin:new Date().toISOString()};
-  us.push(u);saveUsers(us);loginUser(u);closeModal('auth-modal');
-}
-function doLogin(){
-  const email=document.getElementById('login-email').value.trim(),pass=document.getElementById('login-pass').value;
-  const err=document.getElementById('login-err');err.style.display='none';
-  const us=getUsers(),user=us.find(u=>u.email===email&&u.pass===pass);
-  if(!user){err.textContent='Incorrect email or password.';err.style.display='block';return;}
-  user.lastLogin=new Date().toISOString();saveUsers(us);loginUser(user);closeModal('auth-modal');
-}
-async function loginWithGoogle(){
-  const{error}=await sb.auth.signInWithOAuth({provider:'google',options:{redirectTo:window.location.href}});
-  if(error){
-    const name=prompt('Google OAuth needs setup in Supabase.\nEnter your name:');if(!name)return;
-    const email=prompt('Enter your Gmail:');if(!email)return;
-    const us=getUsers();let user=us.find(u=>u.email===email);
-    if(!user){user={id:Date.now(),name,email,pass:'google',isAdmin:false,joinedAt:new Date().toISOString(),lastLogin:new Date().toISOString()};us.push(user);}
-    else user.lastLogin=new Date().toISOString();
-    saveUsers(us);loginUser(user);closeModal('auth-modal');
-  }
-}
-function loginUser(u){currentUser=u;isAdmin=u.isAdmin;setCurrentUser(u);if(isAdmin)document.body.classList.add('admin-mode');updateMenuUser();refreshMenuAuth();}
-function doLogout(){currentUser=null;isAdmin=false;document.body.classList.remove('admin-mode');setCurrentUser(null);updateMenuUser();refreshMenuAuth();closeMenu();}
-function tryAdminLogin(){
-  if(document.getElementById('pw-input').value===ADMIN_PASS){
-    const u={id:0,name:'Admin',email:'admin@zeroelevne.com',pass:ADMIN_PASS,isAdmin:true,joinedAt:new Date().toISOString(),lastLogin:new Date().toISOString()};
-    loginUser(u);closeModal('login-modal');document.getElementById('pw-input').value='';renderAll();
-  }else document.getElementById('pw-err').style.display='block';
-}
-function loadAdminUsers(){
-  const us=getUsers(),list=document.getElementById('admin-user-list');
-  if(!us.length){list.innerHTML='<p style="font-size:10px;color:#1a1a1a;padding:8px 0;font-weight:300;">No users yet.</p>';return;}
-  list.innerHTML=us.map(u=>`
-    <div class="user-row">
-      <div class="user-row-name">${u.name||'Unknown'} ${u.isAdmin?'<span style="font-size:8px;color:var(--red);background:rgba(192,57,43,0.08);padding:1px 6px;border-radius:3px;border:1px solid rgba(192,57,43,0.15);letter-spacing:1px;">ADMIN</span>':''}</div>
-      <div class="user-row-email">${u.email}</div>
-      <div class="user-row-meta">Joined ${new Date(u.joinedAt).toLocaleDateString()} · Last seen ${new Date(u.lastLogin).toLocaleDateString()}</div>
-      <div style="display:flex;gap:6px;margin-top:10px;flex-wrap:wrap;">
-        ${!u.isAdmin?`<button onclick="makeAdmin('${u.email}')" class="u-btn u-btn-admin">Make Admin</button>`:''}
-        <button onclick="resetUserPass('${u.email}')" class="u-btn u-btn-reset">Reset Pass</button>
-        <button onclick="deleteUser('${u.email}')" class="u-btn u-btn-del">Remove</button>
-      </div>
-    </div>`).join('');
-}
-function makeAdmin(e){if(!confirm(`Make ${e} admin?`))return;const us=getUsers(),u=us.find(x=>x.email===e);if(u){u.isAdmin=true;saveUsers(us);loadAdminUsers();}}
-function resetUserPass(e){const np=prompt('New password for '+e+':');if(!np)return;const us=getUsers(),u=us.find(x=>x.email===e);if(u){u.pass=np;saveUsers(us);alert('Done!');}}
-function deleteUser(e){if(!confirm('Remove '+e+'?'))return;saveUsers(getUsers().filter(u=>u.email!==e));loadAdminUsers();}
-function changeAdminPass(){const np=prompt('New admin password:');if(!np||np.length<4)return;ADMIN_PASS=np;alert('Changed! Update in code to make permanent.');}
-function changePassword(){const np=prompt('New password:');if(!np||np.length<6){alert('Min 6 chars.');return;}const us=getUsers(),u=us.find(x=>x.email===currentUser.email);if(u){u.pass=np;saveUsers(us);currentUser.pass=np;setCurrentUser(currentUser);alert('Done!');}}
-function showGate(){document.getElementById('watch-gate').classList.add('show');}
-function closeGate(){document.getElementById('watch-gate').classList.remove('show');}
-function closeModal(id){document.getElementById(id).classList.remove('open');}
-
-/* ─── POSTER ─── */
-async function handlePosterUpload(e){
-  const f=e.target.files[0];if(!f)return;
-  const{data:ud,error}=await sb.storage.from('posters').upload(`${Date.now()}_${f.name}`,f);
-  if(error){const r=new FileReader();r.onload=ev=>{data.poster=ev.target.result;save();showPoster(data.poster);};r.readAsDataURL(f);return;}
-  const{data:urlD}=sb.storage.from('posters').getPublicUrl(ud.path);
-  data.poster=urlD.publicUrl;save();showPoster(data.poster);
-}
-function showPoster(src){document.getElementById('poster-img').src=src;document.getElementById('poster-img').style.display='block';document.getElementById('poster-empty').style.display='none';}
-
-/* ─── THUMBNAIL ─── */
-function handleThumbSelect(e){const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=ev=>{pendingThumbURL=ev.target.result;document.getElementById('thumb-ready').style.display='block';};r.readAsDataURL(f);}
-function handleVideoSelect(e){const f=e.target.files[0];if(!f)return;processVideoFile(f);}
-async function processVideoFile(f){
-  const prog=document.getElementById('upload-progress'),bar=document.getElementById('up-bar'),pct=document.getElementById('up-pct'),ready=document.getElementById('up-ready'),err=document.getElementById('up-err'),nm=document.getElementById('up-name');
-  ready.style.display='none';err.style.display='none';
-  if(f.size>MAX_SIZE){err.textContent='File too large. Max 1 GB.';err.style.display='block';prog.style.display='block';return;}
-  prog.style.display='block';nm.textContent=f.name;pendingVideoURL=null;pendingVideoName=f.name;bar.style.width='5%';pct.textContent='5%';
-  const{data:ud,error}=await sb.storage.from('videos').upload(`${Date.now()}_${f.name}`,f);
-  if(error){const r=new FileReader();r.onload=ev=>{bar.style.width='100%';pct.textContent='100%';pendingVideoURL=ev.target.result;ready.style.display='block';};r.readAsDataURL(f);return;}
-  bar.style.width='100%';pct.textContent='100%';
-  const{data:urlD}=sb.storage.from('videos').getPublicUrl(ud.path);
-  pendingVideoURL=urlD.publicUrl;ready.style.display='block';
-}
-['upload-zone','thumb-zone'].forEach(id=>{
-  const z=document.getElementById(id);if(!z)return;
-  z.addEventListener('dragover',e=>{e.preventDefault();z.classList.add('dragover');});
-  z.addEventListener('dragleave',()=>z.classList.remove('dragover'));
-  z.addEventListener('drop',e=>{
-    e.preventDefault();z.classList.remove('dragover');const f=e.dataTransfer.files[0];if(!f)return;
-    if(id==='thumb-zone'&&f.type.startsWith('image/')){const r=new FileReader();r.onload=ev=>{pendingThumbURL=ev.target.result;document.getElementById('thumb-ready').style.display='block';};r.readAsDataURL(f);}
-    else if(id==='upload-zone'&&f.type.startsWith('video/'))processVideoFile(f);
-  });
-});
-
-/* ─── ABOUT ─── */
-function openAboutEdit(){const ta=document.getElementById('about-textarea'),sb2=document.getElementById('save-desc-btn');ta.style.display='block';sb2.style.display='inline-block';ta.value=data.desc||'';ta.focus();}
-function saveDesc(){data.desc=document.getElementById('about-textarea').value;save();renderAbout();document.getElementById('about-textarea').style.display='none';document.getElementById('save-desc-btn').style.display='none';}
-function renderAbout(){
-  ['about-text','hero-desc-text'].forEach(id=>{
-    const el=document.getElementById(id);
-    if(data.desc){el.textContent=data.desc;el.classList.remove('ph');}
-    else{el.textContent='Your series description goes here.';el.classList.add('ph');}
-  });
-}
-
-/* ─── SEASONS ─── */
-function openAddSeason(){document.getElementById('season-modal').classList.add('open');setTimeout(()=>document.getElementById('season-name-input').focus(),100);}
-function addSeason(){
-  const n=document.getElementById('season-name-input').value.trim();if(!n)return;
-  if(!data.seasons)data.seasons=[];
-  data.seasons.push({name:n,episodes:[]});save();
-  document.getElementById('season-name-input').value='';closeModal('season-modal');activeSeason=data.seasons.length-1;renderAll();
-}
-function deleteSeason(i,e){
-  e.stopPropagation();if(!confirm(`Delete "${data.seasons[i].name}"?`))return;
-  data.seasons.splice(i,1);if(activeSeason>=data.seasons.length)activeSeason=Math.max(0,data.seasons.length-1);
-  save();renderAll();
-}
-function openAddEpisode(){
-  if(!data.seasons||!data.seasons.length){alert('Create a season first!');return;}
-  pendingVideoURL=null;pendingVideoName=null;pendingThumbURL=null;
-  document.getElementById('upload-progress').style.display='none';
-  document.getElementById('up-bar').style.width='0%';document.getElementById('up-pct').textContent='0%';
-  document.getElementById('up-ready').style.display='none';document.getElementById('up-err').style.display='none';
-  document.getElementById('thumb-ready').style.display='none';
-  const vf=document.getElementById('ep-video-file');if(vf)vf.value='';
-  document.getElementById('ep-url-input').value='';document.getElementById('ep-title-input').value='';
-  document.getElementById('ep-season-select').innerHTML=(data.seasons||[]).map((s,i)=>`<option value="${i}">${s.name}</option>`).join('');
-  document.getElementById('episode-modal').classList.add('open');
-}
-function addEpisode(){
-  const si=+document.getElementById('ep-season-select').value,t=document.getElementById('ep-title-input').value.trim(),url=document.getElementById('ep-url-input').value.trim();
-  if(!t){alert('Enter a title.');return;}
-  const finalURL=pendingVideoURL||url;if(!finalURL){alert('Upload a video or paste a URL.');return;}
-  if(!data.seasons[si].episodes)data.seasons[si].episodes=[];
-  data.seasons[si].episodes.push({title:t,url:finalURL,thumb:pendingThumbURL||''});
-  save();closeModal('episode-modal');activeSeason=si;renderAll();
-}
-function deleteEpisode(si,ei,e){
-  e.stopPropagation();if(!confirm(`Delete this episode?`))return;
-  data.seasons[si].episodes.splice(ei,1);save();renderAll();
-}
-function renderSeasons(){
-  const tabs=document.getElementById('season-tabs'),grid=document.getElementById('episodes-grid'),seasons=data.seasons||[];
-  document.getElementById('about-season-count').textContent=seasons.length||'5';
-  document.getElementById('about-ep-count').textContent=seasons.reduce((a,s)=>a+(s.episodes||[]).length,0)||'—';
-  if(!seasons.length){
-    tabs.innerHTML='';
-    grid.innerHTML='<div class="empty-state"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="1"><path d="M15 10l4.553-2.069A1 1 0 0121 8.87v6.26a1 1 0 01-1.447.899L15 14"/><rect x="3" y="6" width="12" height="12" rx="2"/></svg><p>No episodes yet.</p></div>';
-    return;
-  }
-  tabs.innerHTML=seasons.map((s,i)=>`
-    <button class="s-tab${i===activeSeason?' active':''}" onclick="switchSeason(${i})">
-      ${s.name}<span class="s-tab-del" onclick="deleteSeason(${i},event)" role="button" tabindex="0" aria-label="Delete season ${s.name}">×</span>
-    </button>`).join('');
-  const eps=(seasons[activeSeason]||{}).episodes||[];
-  if(!eps.length){grid.innerHTML='<div class="empty-state"><p>No episodes in this season yet.</p></div>';return;}
-  grid.innerHTML=eps.map((ep,i)=>`
-    <div class="ep-card" onclick="playVideo(${activeSeason},${i})">
-      <button class="ep-del-btn" onclick="deleteEpisode(${activeSeason},${i},event)" aria-label="Delete episode ${ep.title}">×</button>
-      <div class="ep-thumb">
-        <div class="ep-thumb-bg"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="0.8"><path d="M15 10l4.553-2.069A1 1 0 0121 8.87v6.26a1 1 0 01-1.447.899L15 14"/><rect x="3" y="6" width="12" height="12" rx="2"/></svg></div>
-        ${ep.thumb?`<img class="ep-thumb-img" src="${ep.thumb}" alt="${ep.title} thumbnail" loading="lazy" style="display:block;"/>`:''}
-        <div class="ep-overlay"></div>
-        <div class="ep-play"><svg width="14" height="14" viewBox="0 0 24 24" fill="black"><polygon points="5,3 19,12 5,21"/></svg></div>
-      </div>
-      <div class="ep-info">
-        <div class="ep-num">Episode ${i+1}</div>
-        <div class="ep-title">${ep.title}</div>
-      </div>
-      <div class="ep-prog"><div class="ep-prog-fill"></div></div>
-    </div>`).join('');
-
-  /* micro-animation on ep cards */
-  document.querySelectorAll('.ep-card').forEach((card,i)=>{
-    if(reduceMotion){gsap.set(card,{opacity:1,y:0});return;}
-    gsap.fromTo(card,{opacity:0,y:30},{opacity:1,y:0,duration:0.7,delay:i*0.05,ease:'power3.out',
-      scrollTrigger:{trigger:card,start:'top 90%',toggleActions:'play none none reverse'}});
-  });
-  makeKeyboardAccessible(grid);
-  makeKeyboardAccessible(tabs);
-}
-function switchSeason(i){activeSeason=i;renderSeasons();}
-function playVideo(si,ei){
-  if(!currentUser){showGate();return;}
-  const ep=(data.seasons[si].episodes||[])[ei];
-  const player=document.getElementById('vid-player');
-  document.getElementById('vid-modal-title').textContent=ep.title;
-  const yt=ep.url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&\s]+)/);
-  if(yt){
-    const iframe=document.createElement('iframe');
-    iframe.src=`https://www.youtube.com/embed/${yt[1]}?autoplay=1`;
-    iframe.style.cssText='width:100%;aspect-ratio:16/9;border:none;border-radius:16px;';
-    iframe.allowFullscreen=true;iframe.allow='autoplay; fullscreen';
-    player.replaceWith(iframe);iframe.id='yt-iframe';
-  }else{player.src=ep.url;player.load();player.play().catch(()=>{});}
-  document.getElementById('vid-modal').classList.add('open');
-}
-function closeVid(){
-  document.getElementById('vid-modal').classList.remove('open');
-  const player=document.getElementById('vid-player'),iframe=document.getElementById('yt-iframe');
-  if(iframe){iframe.replaceWith(player);player.id='vid-player';}
-  player.pause();player.src='';
-}
-
-/* ─── RENDER ─── */
-function renderAll(){
-  renderAbout();renderSeasons();
-  if(data.poster)showPoster(data.poster);
-}
-
-/* ─── INIT ─── */
-initUser();loadData();renderAll();
+/* ============================================================
+   Hakim International School — concept site
+   ============================================================ */
+const I18N = {
+en:{
+ brand:"Hakim International School", brandSub:"Tehran · Est. 1998",
+ navPrograms:"Programs", navAcademics:"Academics", navPortal:"The Portal", navAdmissions:"Admissions",
+ conceptChip:"Concept", search:"Search", loading:"Loading…",
+ heroEyebrow:"Tehran · International Curriculum",
+ heroL1:"A school built on", heroL2:"the mind of the sage",
+ heroSub:"Hakim — حکیم — is the Persian word for the scholar who refuses a single discipline. We teach the same way: mathematics beside metalwork, Farsi beside Cambridge English, and a vault of geometry overhead to remind everyone where this tradition began.",
+ ctaVisit:"Book a campus visit", ctaPortal:"See the student portal", scrollCue:"Scroll to enter the vault",
+ cardTimeK:"Campus time · Tehran", cardNowK:"Right now on campus",
+ statStudents:"Students, Grades 1–12", statFaculty:"Teaching faculty",
+ statRatio:"Students per teacher", statCountries:"Nationalities on roll",
+ progEyebrow:"Programs", progH:"Twelve years, four distinct worlds",
+ progP:"Each stage is designed around what that age actually needs — not a thinner version of the stage above it.",
+ p1y:"Grades 1–5 · Ages 6–11", p1h:"Primary", p1p:"Reading, number sense and curiosity, taught bilingually from day one. Afternoons are workshop time — clay, circuits, choir.", p1t1:"Bilingual literacy", p1t2:"Workshop afternoons",
+ p2y:"Grades 6–8 · Ages 11–14", p2h:"Middle", p2p:"The years students decide whether they like thinking. Project terms, first laboratory work, and a tutor who stays with them all three years.", p2t1:"Project terms", p2t2:"Named tutor",
+ p3y:"Grades 9–12 · Ages 14–18", p3h:"Senior", p3p:"Konkur preparation running alongside Cambridge International AS & A Levels, so a student can keep both doors open until they are ready to choose.", p3t1:"AS & A Level", p3t2:"Konkur track",
+ p4y:"Grades 9–12 · By selection", p4h:"Olympiad & Research", p4p:"A parallel track for students who have outgrown the syllabus: competition mathematics, physics and informatics, plus a supervised research year.", p4t1:"Informatics", p4t2:"Research year",
+ acEyebrow:"What we build", acH:"Everything a hakim was supposed to know",
+ acP:"The classical Persian polymath moved freely between geometry, medicine, poetry and astronomy. Six departments keep that range alive here.",
+ a1h:"Geometry & Mathematics", a1p:"From girih construction with compass and straightedge in Grade 4 to multivariable calculus in Grade 12.",
+ a2h:"Laboratory Sciences", a2p:"Four wet labs and an electronics bench. Every senior designs, runs and defends one original experiment.",
+ a3h:"Languages & Literature", a3p:"Farsi and English carried at full weight to Grade 12, with Arabic from Grade 6 and French or German by election.",
+ a4h:"Design & Making", a4p:"A workshop with kilns, a laser cutter and looms. Persian tilework and CAD are taught in the same room, deliberately.",
+ a5h:"Counselling", a5p:"One counsellor per 160 students, plus university guidance that starts in Grade 9 rather than the final term.",
+ a6h:"Sport & Wellbeing", a6p:"Two gymnasiums, a 25m pool and compulsory daily movement — including for Grade 12, especially for Grade 12.",
+ poEyebrow:"The Portal", poH:"The part students actually open every day",
+ poP:"The current system shows sixteen identical squares and makes you click to find out if anything happened. This one answers that before you touch it.",
+ beforeL:"Today — lms.hakim.school", afterL:"Proposed", demoData:"Sample data",
+ beforeP:"Sixteen tiles of equal weight. No grades, no deadlines, no unread count until you open each one. Nothing tells a parent whether today went well.",
+ whoName:"Mahan M. · Grade 11",
+ rDash:"Dashboard", rScores:"Scores", rHw:"Homework", rMsg:"Messages", rSched:"Schedule",
+ rClass:"Online class", rBuffet:"e-Buffet", rReports:"Reports",
+ goodDay:"Good afternoon, Mahan",
+ tAvg:"Term average", tAvgD:"0.6 since Mehr", tAtt:"Attendance", tAttD:"1 late this month",
+ tDue:"Due in 48 hours", tDueD:"Physics set closes tonight", tRank:"Class standing", tRankD:"▲ 2 places",
+ chartT:"Subject averages, this term", chartR:"out of 20", feedT:"Live activity", schedT:"Today's schedule",
+ adEyebrow:"Admissions · 1405–06", adH:"Four steps, eight weeks",
+ adP:"We assess every applicant in person. No family is asked to commit before they have spent a morning in the building.",
+ s1w:"Open now", s1h:"Enquiry", s1p:"A short form and a phone call. We will tell you honestly if a place is unlikely before you go further.",
+ s2w:"Within 2 weeks", s2h:"Assessment morning", s2p:"Mathematics and language, written on campus. Grades 1–3 come for a play-based session instead.",
+ s3w:"Within 4 weeks", s3h:"Family interview", s3p:"Student and parents, with the head of the relevant school. Forty minutes, and you ask most of the questions.",
+ s4w:"Within 8 weeks", s4h:"Offer & enrolment", s4p:"A written offer, a fee schedule with no later additions, and a two-week window to decide.",
+ ctaH:"Come and see the vault for yourself", ctaP:"Campus mornings run every Wednesday through Esfand. Bring your child — they will be given something to build.", ctaBtn:"Request a visit",
+ fTag:"A school named for the Persian scholar who refused to pick one subject.",
+ fSchool:"School", fFamilies:"Families", fContact:"Contact", fCalendar:"Calendar", fBuffet:"e-Buffet", fAddr:"Tehran, Iran",
+ disclaimer:"Independent design concept. This is an unofficial proposal for a website redesign, not an official Hakim International School site, and it is not affiliated with or endorsed by the school. All figures, names and portal activity shown are sample content for demonstration.",
+ fYear:"Concept · 2026",
+ palNav:"navigate", palOpen:"open", palToggle:"toggle",
+ palPlaceholder:"Search the school, the portal, anything…", palNone:"Nothing matches that.",
+ inSession:"in session", freePeriod:"No class — free period", dayDone:"Classes finished for today",
+ beforeSchool:"Campus opens at 07:30", weekend:"Weekend — campus closed",
+ now:"Now", next:"Next", done:"Done", room:"Room"
+},
+fa:{
+ brand:"مجتمع آموزشی بین‌المللی حکیم", brandSub:"تهران · تأسیس ۱۳۷۷",
+ navPrograms:"دوره‌ها", navAcademics:"آموزش", navPortal:"پورتال", navAdmissions:"ثبت‌نام",
+ conceptChip:"طرح پیشنهادی", search:"جست‌وجو", loading:"در حال بارگذاری…",
+ heroEyebrow:"تهران · برنامهٔ آموزشی بین‌المللی",
+ heroL1:"مدرسه‌ای بر پایهٔ", heroL2:"اندیشهٔ حکیم",
+ heroSub:"حکیم، واژه‌ای پارسی برای دانشمندی است که به یک رشته بسنده نمی‌کند. ما نیز چنین می‌آموزیم: ریاضی در کنار هنر، ادبیات فارسی در کنار انگلیسی کمبریج، و طاق مقرنسی از هندسه بر فراز سر، تا یادمان بماند این سنت از کجا آغاز شد.",
+ ctaVisit:"رزرو بازدید از مجتمع", ctaPortal:"مشاهدهٔ پورتال دانش‌آموز", scrollCue:"برای ورود به طاق، اسکرول کنید",
+ cardTimeK:"ساعت مجتمع · تهران", cardNowK:"هم‌اکنون در مجتمع",
+ statStudents:"دانش‌آموز، پایهٔ ۱ تا ۱۲", statFaculty:"عضو هیئت آموزشی",
+ statRatio:"دانش‌آموز به ازای هر معلم", statCountries:"ملیت در میان دانش‌آموزان",
+ progEyebrow:"دوره‌ها", progH:"دوازده سال، چهار جهان متفاوت",
+ progP:"هر دوره بر پایهٔ نیاز واقعی همان سن طراحی شده است، نه نسخه‌ای رقیق‌شده از دورهٔ بالاتر.",
+ p1y:"پایهٔ ۱ تا ۵ · ۶ تا ۱۱ سال", p1h:"دبستان", p1p:"خواندن، درک عدد و کنجکاوی، از روز نخست به‌صورت دوزبانه. بعدازظهرها وقت کارگاه است؛ سفال، مدار، هم‌سرایی.", p1t1:"سوادآموزی دوزبانه", p1t2:"کارگاه بعدازظهر",
+ p2y:"پایهٔ ۶ تا ۸ · ۱۱ تا ۱۴ سال", p2h:"متوسطهٔ اول", p2p:"سال‌هایی که دانش‌آموز تصمیم می‌گیرد اندیشیدن را دوست دارد یا نه. ترم‌های پروژه‌محور، نخستین کار آزمایشگاهی، و مربی‌ای که هر سه سال همراه اوست.", p2t1:"ترم پروژه‌محور", p2t2:"مربی اختصاصی",
+ p3y:"پایهٔ ۹ تا ۱۲ · ۱۴ تا ۱۸ سال", p3h:"متوسطهٔ دوم", p3p:"آمادگی کنکور هم‌زمان با مدارک AS و A Level کمبریج، تا دانش‌آموز تا لحظهٔ انتخاب، هر دو در را باز نگه دارد.", p3t1:"AS و A Level", p3t2:"مسیر کنکور",
+ p4y:"پایهٔ ۹ تا ۱۲ · با گزینش", p4h:"المپیاد و پژوهش", p4p:"مسیری موازی برای دانش‌آموزانی که از سرفصل جلو زده‌اند: ریاضی، فیزیک و کامپیوتر المپیاد، به‌همراه یک سال پژوهش با استاد راهنما.", p4t1:"کامپیوتر", p4t2:"سال پژوهش",
+ acEyebrow:"آنچه می‌سازیم", acH:"هر آنچه یک حکیم باید می‌دانست",
+ acP:"حکیم کلاسیک ایرانی آزادانه میان هندسه، پزشکی، شعر و نجوم حرکت می‌کرد. شش گروه آموزشی این گستره را اینجا زنده نگه داشته‌اند.",
+ a1h:"هندسه و ریاضیات", a1p:"از ترسیم گره با پرگار و خط‌کش در پایهٔ چهارم تا حساب دیفرانسیل چندمتغیره در پایهٔ دوازدهم.",
+ a2h:"علوم آزمایشگاهی", a2p:"چهار آزمایشگاه و یک میز الکترونیک. هر دانش‌آموز دورهٔ دوم یک آزمایش اصیل را طراحی، اجرا و دفاع می‌کند.",
+ a3h:"زبان و ادبیات", a3p:"فارسی و انگلیسی با وزن کامل تا پایهٔ دوازدهم، عربی از پایهٔ ششم، و فرانسه یا آلمانی به انتخاب دانش‌آموز.",
+ a4h:"طراحی و ساخت", a4p:"کارگاهی با کورهٔ سفال، برش لیزری و دار قالی. کاشی‌کاری ایرانی و نرم‌افزار CAD عامدانه در یک اتاق آموزش داده می‌شوند.",
+ a5h:"مشاوره", a5p:"یک مشاور به ازای هر ۱۶۰ دانش‌آموز، و هدایت دانشگاهی که از پایهٔ نهم آغاز می‌شود، نه در ترم آخر.",
+ a6h:"ورزش و سلامت", a6p:"دو سالن ورزشی، استخر ۲۵ متری و تحرک روزانهٔ اجباری؛ برای پایهٔ دوازدهم هم، و به‌ویژه برای پایهٔ دوازدهم.",
+ poEyebrow:"پورتال", poH:"بخشی که دانش‌آموز هر روز واقعاً باز می‌کند",
+ poP:"سامانهٔ فعلی شانزده مربع یکسان نشان می‌دهد و باید کلیک کنید تا بفهمید اصلاً اتفاقی افتاده یا نه. این یکی، پیش از آنکه دست بزنید پاسخ می‌دهد.",
+ beforeL:"امروز — lms.hakim.school", afterL:"طرح پیشنهادی", demoData:"دادهٔ نمونه",
+ beforeP:"شانزده کاشی با وزن یکسان. نه نمره‌ای، نه مهلتی، نه شمار پیام خوانده‌نشده‌ای، تا وقتی تک‌تک را باز نکنید. هیچ‌چیز به والدین نمی‌گوید امروز خوب گذشته یا نه.",
+ whoName:"ماهان م. · پایهٔ یازدهم",
+ rDash:"میزکار", rScores:"نمرات", rHw:"تکالیف", rMsg:"پیام‌ها", rSched:"برنامه",
+ rClass:"کلاس آنلاین", rBuffet:"بوفه", rReports:"کارنامه",
+ goodDay:"بعدازظهر بخیر، ماهان",
+ tAvg:"معدل ترم", tAvgD:"۰.۶ از مهر", tAtt:"حضور", tAttD:"یک تأخیر در این ماه",
+ tDue:"مهلت تا ۴۸ ساعت", tDueD:"تکلیف فیزیک امشب بسته می‌شود", tRank:"رتبهٔ کلاس", tRankD:"▲ ۲ پله",
+ chartT:"میانگین دروس، این ترم", chartR:"از ۲۰", feedT:"فعالیت زنده", schedT:"برنامهٔ امروز",
+ adEyebrow:"ثبت‌نام · ۱۴۰۵–۰۶", adH:"چهار گام، هشت هفته",
+ adP:"هر داوطلب را حضوری می‌سنجیم. از هیچ خانواده‌ای خواسته نمی‌شود پیش از گذراندن یک صبح در ساختمان، تعهدی بدهد.",
+ s1w:"هم‌اکنون باز است", s1h:"درخواست اولیه", s1p:"یک فرم کوتاه و یک تماس تلفنی. اگر احتمال پذیرش کم باشد، صادقانه پیش از ادامه به شما می‌گوییم.",
+ s2w:"تا ۲ هفته", s2h:"صبح ارزیابی", s2p:"ریاضی و زبان، به‌صورت کتبی در مجتمع. پایهٔ ۱ تا ۳ به‌جای آن در جلسه‌ای بازی‌محور شرکت می‌کنند.",
+ s3w:"تا ۴ هفته", s3h:"مصاحبهٔ خانوادگی", s3p:"دانش‌آموز و والدین، با مدیر دورهٔ مربوطه. چهل دقیقه، و بیشتر پرسش‌ها را شما می‌پرسید.",
+ s4w:"تا ۸ هفته", s4h:"پذیرش و ثبت‌نام", s4p:"پیشنهاد کتبی، جدول شهریه بدون افزوده‌های بعدی، و دو هفته فرصت تصمیم‌گیری.",
+ ctaH:"بیایید و طاق را از نزدیک ببینید", ctaP:"صبح‌های بازدید، هر چهارشنبه تا پایان اسفند. فرزندتان را بیاورید؛ چیزی برای ساختن به او می‌دهیم.", ctaBtn:"درخواست بازدید",
+ fTag:"مدرسه‌ای به نام دانشمند ایرانی که حاضر نشد تنها یک رشته را برگزیند.",
+ fSchool:"مدرسه", fFamilies:"خانواده‌ها", fContact:"تماس", fCalendar:"تقویم", fBuffet:"بوفه", fAddr:"تهران، ایران",
+ disclaimer:"طرح طراحی مستقل. این یک پیشنهاد غیررسمی برای بازطراحی وب‌سایت است، نه وب‌سایت رسمی مجتمع آموزشی بین‌المللی حکیم، و هیچ وابستگی یا تأییدی از سوی مدرسه ندارد. تمام اعداد، نام‌ها و فعالیت‌های پورتال، محتوای نمونه برای نمایش هستند.",
+ fYear:"طرح پیشنهادی · ۲۰۲۶",
+ palNav:"حرکت", palOpen:"باز کردن", palToggle:"باز/بسته",
+ palPlaceholder:"جست‌وجو در مدرسه، پورتال، هر چیزی…", palNone:"چیزی مطابقت ندارد.",
+ inSession:"در حال برگزاری", freePeriod:"بدون کلاس — زنگ آزاد", dayDone:"کلاس‌های امروز پایان یافت",
+ beforeSchool:"مجتمع از ساعت ۰۷:۳۰ باز است", weekend:"تعطیل آخر هفته — مجتمع بسته است",
+ now:"اکنون", next:"بعدی", done:"پایان", room:"کلاس"
+}};
 </script>
+<script>
+(function(){
+"use strict";
+const $=(s,r)=>(r||document).querySelector(s), $$=(s,r)=>[...(r||document).querySelectorAll(s)];
+const REDUCED = matchMedia("(prefers-reduced-motion: reduce)").matches;
+const FA_D=["۰","۱","۲","۳","۴","۵","۶","۷","۸","۹"];
+let lang = "en";
+const t = k => (I18N[lang][k] ?? I18N.en[k] ?? k);
+const nd = s => lang==="fa" ? String(s).replace(/[0-9]/g,d=>FA_D[+d]) : String(s);
+
+/* ---------- Tehran time ---------- */
+const TZ="Asia/Tehran";
+const tfmt=new Intl.DateTimeFormat("en-GB",{timeZone:TZ,hour:"2-digit",minute:"2-digit",second:"2-digit",weekday:"short",hour12:false});
+function tehran(){
+  const p=tfmt.formatToParts(new Date()), g=k=>p.find(x=>x.type===k).value;
+  const h=+g("hour"), m=+g("minute");
+  return {h,m,s:+g("second"),wd:g("weekday"),mins:h*60+m};
+}
+const pad=n=>String(n).padStart(2,"0");
+
+/* ---------- schedule (sample) ---------- */
+const SCHED=[
+ {a:"07:45",b:"08:35",en:"Geometry",fa:"هندسه",r:"B‑204"},
+ {a:"08:45",b:"09:35",en:"Physics",fa:"فیزیک",r:"Lab 2"},
+ {a:"09:45",b:"10:35",en:"English · Cambridge",fa:"انگلیسی · کمبریج",r:"A‑110"},
+ {a:"10:45",b:"11:35",en:"Chemistry",fa:"شیمی",r:"Lab 1"},
+ {a:"12:30",b:"13:20",en:"Persian Literature",fa:"ادبیات فارسی",r:"A‑115"},
+ {a:"13:30",b:"14:20",en:"Design Workshop",fa:"کارگاه طراحی",r:"Workshop"}
+].map(s=>{const p=x=>{const[h,m]=x.split(":").map(Number);return h*60+m};return{...s,A:p(s.a),B:p(s.b)}});
+
+const SUBJ=[
+ {en:"Mathematics",fa:"ریاضی",v:19.2},{en:"Physics",fa:"فیزیک",v:17.6},
+ {en:"Chemistry",fa:"شیمی",v:18.5},{en:"Literature",fa:"ادبیات",v:18.9},
+ {en:"English",fa:"انگلیسی",v:19.5},{en:"Geometry",fa:"هندسه",v:18.2}
+];
+
+/* =========================================================
+   1 · WEBGL MUQARNAS VAULT
+   ========================================================= */
+let three=null;
+function initVault(){
+  if(!window.THREE) return false;
+  const cv=$("#vault"), host=$("#bg");
+  let W=host.clientWidth, H=host.clientHeight;
+  const renderer=new THREE.WebGLRenderer({canvas:cv,antialias:true,alpha:true,powerPreference:"high-performance"});
+  renderer.setPixelRatio(Math.min(devicePixelRatio||1,1.75));
+  renderer.setSize(W,H,false);
+  const scene=new THREE.Scene();
+  scene.fog=new THREE.FogExp2(0x160F1C,0.0075);
+  const cam=new THREE.PerspectiveCamera(46,W/H,0.1,400);
+
+  const group=new THREE.Group(); scene.add(group);
+
+  /* --- muqarnas cells: tiers of niches on a dome --- */
+  const R=34, TIERS=7;
+  const cell=new THREE.ConeGeometry(1,1.55,4,1,true); cell.rotateX(Math.PI/2);
+  const matPlum=new THREE.MeshStandardMaterial({color:0x6B3080,metalness:.38,roughness:.44,side:THREE.DoubleSide,flatShading:true});
+  const matGold=new THREE.MeshStandardMaterial({color:0xE3A23C,metalness:.72,roughness:.26,emissive:0x2E1B05,side:THREE.DoubleSide,flatShading:true});
+
+  const plumM=[],goldM=[],dummy=new THREE.Object3D(),up=new THREE.Vector3(0,1,0);
+  for(let ti=0;ti<TIERS;ti++){
+    const phi=0.16+(ti/(TIERS-1))*1.06;
+    const n=6+ti*6, y=Math.cos(phi)*R, rad=Math.sin(phi)*R;
+    const w=(2*Math.PI*rad)/n*0.40;
+    for(let i=0;i<n;i++){
+      const th=(i/n)*Math.PI*2 + (ti%2? Math.PI/n : 0);
+      const px=Math.cos(th)*rad, pz=Math.sin(th)*rad;
+      dummy.position.set(px,y,pz);
+      dummy.up.copy(up);
+      dummy.lookAt(px*2,y*2,pz*2);          /* niche opens toward the centre */
+      dummy.rotateZ(ti%2?Math.PI/4:0);
+      dummy.scale.set(w,w,w*1.45);
+      dummy.updateMatrix();
+      ((ti+i)%5===0?goldM:plumM).push(dummy.matrix.clone());
+    }
+  }
+  const mk=(mats,mat)=>{const m=new THREE.InstancedMesh(cell,mat,mats.length);
+    mats.forEach((mx,i)=>m.setMatrixAt(i,mx)); m.instanceMatrix.needsUpdate=true; group.add(m); return m;};
+  mk(plumM,matPlum); mk(goldM,matGold);
+
+  /* --- girih star ring at the rim --- */
+  (function(){
+    const N=32, rr=R*Math.sin(1.30), yy=R*Math.cos(1.30), pts=[];
+    const P=i=>new THREE.Vector3(Math.cos(i/N*Math.PI*2)*rr,yy,Math.sin(i/N*Math.PI*2)*rr);
+    for(let i=0;i<N;i++){ pts.push(P(i),P(i+9)); pts.push(P(i),P(i+11)); }
+    const g=new THREE.BufferGeometry().setFromPoints(pts);
+    group.add(new THREE.LineSegments(g,new THREE.LineBasicMaterial({color:0xE3A23C,transparent:true,opacity:.17})));
+  })();
+
+  /* --- gold dust --- */
+  const dust=(function(){
+    const N=520, pos=new Float32Array(N*3);
+    for(let i=0;i<N;i++){const r=8+Math.random()*34,a=Math.random()*Math.PI*2;
+      pos[i*3]=Math.cos(a)*r; pos[i*3+1]=-14+Math.random()*46; pos[i*3+2]=Math.sin(a)*r;}
+    const g=new THREE.BufferGeometry(); g.setAttribute("position",new THREE.BufferAttribute(pos,3));
+    const p=new THREE.Points(g,new THREE.PointsMaterial({color:0xF2CE8E,size:.17,transparent:true,opacity:.5,depthWrite:false}));
+    scene.add(p); return p;
+  })();
+
+  scene.add(new THREE.AmbientLight(0x3E2C4A,1.15));
+  const l1=new THREE.PointLight(0xC07FD8,2.3,160); l1.position.set(0,-7,12); scene.add(l1);
+  const l2=new THREE.PointLight(0xE3A23C,1.5,130); l2.position.set(16,16,-10); scene.add(l2);
+  const l3=new THREE.DirectionalLight(0xF4EFF6,.45); l3.position.set(0,34,22); scene.add(l3);
+
+  let mx=0,my=0,tx=0,ty=0;
+  if(!REDUCED) addEventListener("pointermove",e=>{
+    tx=(e.clientX/innerWidth-.5)*2; ty=(e.clientY/innerHeight-.5)*2;
+  },{passive:true});
+
+  function resize(){ W=host.clientWidth; H=host.clientHeight;
+    cam.aspect=W/H; cam.updateProjectionMatrix(); renderer.setSize(W,H,false); }
+  addEventListener("resize",resize,{passive:true});
+
+  three={renderer,scene,cam,group,dust,resize,mxy:()=>{mx+=(tx-mx)*.045;my+=(ty-my)*.045;return[mx,my]}};
+  return true;
+}
+
+/* =========================================================
+   2 · SCROLL ENGINE
+   ========================================================= */
+let darkEnd=99999, prog=0, clock=0;
+function measure(){ const p=$("#portal"); darkEnd = p ? p.offsetTop : 99999; }
+
+function frame(){
+  requestAnimationFrame(frame);
+  const y=scrollY;
+  prog += (Math.min(y/(innerHeight*1.55),1) - prog)*0.09;
+  if(!three) return;
+  if(y > darkEnd + innerHeight*0.4) return;      /* vault off-screen: skip work */
+  if(!REDUCED) clock += 0.0009;
+  const [mx,my]=three.mxy();
+  const g=three.group, c=three.cam;
+  g.rotation.y = clock + prog*1.15;
+  g.rotation.x = prog*0.22;
+  c.position.set(mx*3, -14 + prog*26 + my*1.6, 39 - prog*11);
+  c.lookAt(0, 15 - prog*9, 0);
+  if(!REDUCED) three.dust.rotation.y = -clock*1.8;
+  three.renderer.render(three.scene,three.cam);
+}
+
+/* nav turns light over the paper sections */
+function navWatch(){
+  const nav=$("#nav"), portal=$("#portal");
+  const sync=()=>nav.classList.toggle("on-paper", portal.getBoundingClientRect().top < 70);
+  addEventListener("scroll",sync,{passive:true});
+  addEventListener("resize",sync,{passive:true});
+  sync();
+}
+
+/* reveals — opt in to motion only once JS is alive */
+function reveals(){
+  document.documentElement.setAttribute("data-anim","on");
+  const io=new IntersectionObserver((es,o)=>es.forEach(e=>{
+    if(e.isIntersecting){ e.target.classList.add("in"); o.unobserve(e.target); countUp(e.target); }
+  }),{rootMargin:"0px 0px -8% 0px",threshold:.08});
+  $$(".rv").forEach(el=>io.observe(el));
+  setTimeout(()=>$$(".rv").forEach(el=>el.classList.add("in")),1400);  /* failsafe */
+}
+function countUp(scope){
+  const els = scope.matches("[data-count]") ? [scope] : $$("[data-count]",scope);
+  els.forEach(el=>{
+    if(el.dataset.done) return; el.dataset.done="1";
+    const to=+el.dataset.count, dur=REDUCED?0:1100, t0=performance.now();
+    (function step(now){
+      const k=dur?Math.min((now-t0)/dur,1):1, e=1-Math.pow(1-k,3);
+      el.textContent=nd(Math.round(to*e).toLocaleString("en-US"));
+      if(k<1) requestAnimationFrame(step);
+    })(t0);
+  });
+}
+window.__reflowCounts=()=>$$("[data-count]").forEach(el=>{
+  if(el.dataset.done) el.textContent=nd((+el.dataset.count).toLocaleString("en-US"));
+});
+window.__hakim={measure,reveals,navWatch,frame,initVault,t,nd,tehran,pad,SCHED,SUBJ,$,$$,REDUCED,
+  getLang:()=>lang,setLang:v=>{lang=v}};
+})();
+</script>
+<script>
+(function(){
+"use strict";
+const H=window.__hakim, {$,$$,pad,tehran,SCHED,SUBJ,REDUCED}=H;
+const t=H.t, nd=H.nd;
+const L=()=>H.getLang();
+
+/* ---------- i18n ---------- */
+function setText(el,v){
+  const n=[...el.childNodes].find(x=>x.nodeType===3 && x.textContent.trim());
+  if(n) n.textContent=v; else el.textContent=v;
+}
+function applyLang(l){
+  H.setLang(l);
+  document.body.dir = l==="fa" ? "rtl" : "ltr";
+  document.body.lang = l==="fa" ? "fa" : "en";
+  document.documentElement.lang = l==="fa" ? "fa" : "en";
+  document.documentElement.dir  = l==="fa" ? "rtl" : "ltr";
+  $$("[data-i18n]").forEach(el=>{ const v=I18N[l][el.dataset.i18n]; if(v!=null) setText(el,v); });
+  $("#langBtn").textContent = l==="fa" ? "English" : "فارسی";
+  $("#palInput").placeholder = t("palPlaceholder");
+  $("#tAvg").textContent = nd("18.4");
+  $("#tAtt").textContent = nd("97") + "%";
+  $$(".tile .t-v.tnum, .slot .tm").forEach(el=>{
+    if(el.id) return;
+    const w=document.createTreeWalker(el,NodeFilter.SHOW_TEXT);
+    let n; while((n=w.nextNode())) n.textContent = nd(n.textContent.replace(/[۰-۹]/g,d=>"۰۱۲۳۴۵۶۷۸۹".indexOf(d)));
+  });
+  window.__reflowCounts();
+  buildIndex(); tick(); renderFeed(); drawChart(1);
+}
+
+/* ---------- live clock + status ---------- */
+function tick(){
+  const n=tehran(), l=L();
+  $("#clock").textContent = nd(pad(n.h)+":"+pad(n.m)+":"+pad(n.s));
+  const weekend = n.wd==="Thu" || n.wd==="Fri";
+  const cur = SCHED.find(s=>n.mins>=s.A && n.mins<s.B);
+  const nxt = SCHED.find(s=>n.mins<s.A);
+  const dot=$("#nowDot"), txt=$("#nowText");
+  let msg, col;
+  if(weekend){ msg=t("weekend"); col="#6E6276"; }
+  else if(cur){ msg=(l==="fa"?cur.fa:cur.en)+" · "+t("inSession"); col="#3FA46A"; }
+  else if(n.mins<SCHED[0].A){ msg=t("beforeSchool"); col="#D98324"; }
+  else if(nxt){ msg=t("freePeriod")+" · "+(l==="fa"?nxt.fa:nxt.en)+" "+nd(nxt.a); col="#D98324"; }
+  else { msg=t("dayDone"); col="#6E6276"; }
+  txt.textContent=msg; dot.style.background=col;
+  dot.style.animation = col==="#3FA46A" && !REDUCED ? "" : "none";
+  const done=SCHED.filter(s=>n.mins>=s.B).length;
+  $("#portalSub").textContent = weekend ? t("weekend")
+    : nd(done)+"/"+nd(SCHED.length)+" "+(l==="fa"?"کلاس برگزار شد":"classes done")+" · "+nd(pad(n.h)+":"+pad(n.m));
+  $("#schedR").textContent = nd(pad(n.h)+":"+pad(n.m));
+  renderSched(n,weekend);
+}
+function renderSched(n,weekend){
+  const l=L(), box=$("#sched"); box.innerHTML="";
+  SCHED.forEach(s=>{
+    const now = !weekend && n.mins>=s.A && n.mins<s.B;
+    const done = weekend || n.mins>=s.B;
+    const d=document.createElement("div");
+    d.className="slot"+(now?" now":done?" done":" next");
+    d.innerHTML='<span class="tm">'+nd(s.a)+"–"+nd(s.b)+'</span>'+
+      '<span class="nm">'+(l==="fa"?s.fa:s.en)+'</span>'+
+      '<span class="st">'+(now?t("now"):done?t("done"):t("next"))+'</span>';
+    box.appendChild(d);
+  });
+}
+
+/* ---------- live activity feed ---------- */
+const POOL=[
+ {k:"good",en:"Chemistry quiz graded — 19.0 / 20",fa:"آزمون شیمی تصحیح شد — ۱۹٫۰ از ۲۰"},
+ {k:"crit",en:"Physics problem set closes in 4 hours",fa:"مهلت تکلیف فیزیک تا ۴ ساعت دیگر"},
+ {k:"info",en:"Ms. Rahimi posted notes for Geometry",fa:"خانم رحیمی جزوهٔ هندسه را بارگذاری کرد"},
+ {k:"good",en:"Attendance confirmed for period 3",fa:"حضور زنگ سوم ثبت شد"},
+ {k:"info",en:"Library hold ready: Al‑Biruni, Chronology",fa:"امانت کتابخانه آماده است: آثار الباقیه، بیرونی"},
+ {k:"warn",en:"Workshop moved to the ceramics room",fa:"کارگاه به اتاق سفال منتقل شد"},
+ {k:"good",en:"Olympiad round 2 result published",fa:"نتیجهٔ مرحلهٔ دوم المپیاد منتشر شد"},
+ {k:"info",en:"e‑Buffet balance topped up",fa:"موجودی بوفه شارژ شد"},
+ {k:"warn",en:"Bus route 4 running 10 minutes late",fa:"سرویس شمارهٔ ۴ ده دقیقه تأخیر دارد"}
+];
+const COL={good:"#3FA46A",warn:"#D98324",crit:"#C6453F",info:"#7A3A8C"};
+let feed=[], seed=0;
+function pushFeed(){
+  const n=tehran();
+  feed.unshift({...POOL[seed++%POOL.length], tm:pad(n.h)+":"+pad(n.m)});
+  feed=feed.slice(0,6); renderFeed();
+  const b=$("#msgBadge"); if(b) b.textContent=nd(Math.min(9,6+Math.floor(seed/3)));
+}
+function renderFeed(){
+  const l=L(), ul=$("#feed"); ul.innerHTML="";
+  feed.forEach(f=>{
+    const li=document.createElement("li");
+    li.innerHTML='<span class="dot" style="background:'+COL[f.k]+'"></span>'+
+      '<span class="tx">'+(l==="fa"?f.fa:f.en)+'</span><span class="tm">'+nd(f.tm)+"</span>";
+    ul.appendChild(li);
+  });
+}
+
+/* ---------- chart: lollipop on a labelled 14–20 axis ---------- */
+const MIN=14, MAX=20, X0=100, X1=462;
+function drawChart(p){
+  const svg=$("#chart"), flip=L()==="fa";
+  const M=x=>flip?520-x:x;
+  const X=v=>X0+(Math.max(MIN,v)-MIN)/(MAX-MIN)*(X1-X0);
+  const best=Math.max(...SUBJ.map(s=>s.v));
+  let o="";
+  [14,16,18,20].forEach(v=>{
+    o+='<line x1="'+M(X(v))+'" y1="12" x2="'+M(X(v))+'" y2="132" stroke="#EFEAF0" stroke-width="1" fill="none"/>';
+    o+='<text x="'+M(X(v))+'" y="150" fill="#6B5F73" font-size="10.5" text-anchor="middle" font-family="Archivo,sans-serif">'+nd(v)+"</text>";
+  });
+  o+='<line x1="'+M(X0)+'" y1="136" x2="'+M(X1)+'" y2="136" stroke="#E3DCE6" stroke-width="1" fill="none"/>';
+  SUBJ.forEach((s,i)=>{
+    const y=18+ (120/SUBJ.length)*(i+.5);
+    const vx=X(MIN+(s.v-MIN)*p), gold=s.v===best;
+    o+='<text x="'+M(88)+'" y="'+(y+3.5)+'" fill="#6B5F73" font-size="11" text-anchor="'+(flip?"start":"end")+'" font-family="'+(flip?"Vazirmatn":"Archivo")+',sans-serif">'+(flip?s.fa:s.en)+"</text>";
+    o+='<line x1="'+M(X0)+'" y1="'+y+'" x2="'+M(X1)+'" y2="'+y+'" stroke="#F3EEF4" stroke-width="2" stroke-linecap="round" fill="none"/>';
+    o+='<line x1="'+M(X0)+'" y1="'+y+'" x2="'+M(vx)+'" y2="'+y+'" stroke="'+(gold?"#E3A23C":"#7A3A8C")+'" stroke-width="3" stroke-linecap="round" fill="none" opacity=".55"/>';
+    o+='<circle cx="'+M(vx)+'" cy="'+y+'" r="4.6" fill="'+(gold?"#E3A23C":"#7A3A8C")+'"/>';
+    o+='<text x="'+M(X1+12)+'" y="'+(y+3.8)+'" fill="#241C2A" font-size="11.5" font-weight="700" text-anchor="'+(flip?"end":"start")+'" font-family="'+(flip?"Vazirmatn":"Archivo")+',sans-serif">'+nd((MIN+(s.v-MIN)*p).toFixed(1))+"</text>";
+  });
+  svg.innerHTML=o;
+}
+function animChart(){
+  if(REDUCED) return drawChart(1);
+  const t0=performance.now();
+  (function s(n){const k=Math.min((n-t0)/850,1);drawChart(1-Math.pow(1-k,3));if(k<1)requestAnimationFrame(s);})(t0);
+}
+
+/* ---------- ⌘K search ---------- */
+let INDEX=[], sel=0, results=[];
+function buildIndex(){
+  const l=L(), g=(k)=>I18N[l][k]||I18N.en[k];
+  INDEX=[
+   {id:"programs",c:g("navPrograms"),n:g("progH")},
+   {id:"programs",c:g("navPrograms"),n:g("p1h")+" · "+g("p1y")},
+   {id:"programs",c:g("navPrograms"),n:g("p2h")+" · "+g("p2y")},
+   {id:"programs",c:g("navPrograms"),n:g("p3h")+" · "+g("p3y")},
+   {id:"programs",c:g("navPrograms"),n:g("p4h")},
+   {id:"academics",c:g("navAcademics"),n:g("a1h")},
+   {id:"academics",c:g("navAcademics"),n:g("a2h")},
+   {id:"academics",c:g("navAcademics"),n:g("a3h")},
+   {id:"academics",c:g("navAcademics"),n:g("a4h")},
+   {id:"academics",c:g("navAcademics"),n:g("a5h")},
+   {id:"academics",c:g("navAcademics"),n:g("a6h")},
+   {id:"portal",c:g("navPortal"),n:g("rDash")},
+   {id:"portal",c:g("navPortal"),n:g("rScores")},
+   {id:"portal",c:g("navPortal"),n:g("rHw")},
+   {id:"portal",c:g("navPortal"),n:g("rMsg")},
+   {id:"portal",c:g("navPortal"),n:g("rSched")},
+   {id:"portal",c:g("navPortal"),n:g("rClass")},
+   {id:"portal",c:g("navPortal"),n:g("rBuffet")},
+   {id:"portal",c:g("navPortal"),n:g("rReports")},
+   {id:"admissions",c:g("navAdmissions"),n:g("s1h")+" · "+g("s1w")},
+   {id:"admissions",c:g("navAdmissions"),n:g("s2h")+" · "+g("s2w")},
+   {id:"admissions",c:g("navAdmissions"),n:g("s3h")+" · "+g("s3w")},
+   {id:"admissions",c:g("navAdmissions"),n:g("s4h")+" · "+g("s4w")},
+   ...SCHED.map(s=>({id:"portal",c:g("schedT"),n:(l==="fa"?s.fa:s.en)+" · "+nd(s.a)})),
+   ...SUBJ.map(s=>({id:"portal",c:g("chartT"),n:(l==="fa"?s.fa:s.en)+" · "+nd(s.v.toFixed(1))}))
+  ];
+}
+function score(q,s){
+  q=q.toLowerCase().trim(); s=s.toLowerCase();
+  if(!q) return 1;
+  const i=s.indexOf(q); if(i===0) return 100; if(i>0) return 70-i*0.4;
+  let j=0,hit=0; for(const ch of q){ const k=s.indexOf(ch,j); if(k<0) return 0; if(k===j)hit++; j=k+1; }
+  return 26+hit;
+}
+function runSearch(){
+  const q=$("#palInput").value, box=$("#palRes");
+  results = INDEX.map(e=>({e,s:Math.max(score(q,e.n),score(q,e.c)*0.6)}))
+                 .filter(r=>r.s>0).sort((a,b)=>b.s-a.s).slice(0,9).map(r=>r.e);
+  sel=0; box.innerHTML="";
+  if(!results.length){ box.innerHTML='<span class="none">'+t("palNone")+"</span>"; return; }
+  results.forEach((r,i)=>{
+    const li=document.createElement("li");
+    li.setAttribute("role","option"); li.setAttribute("aria-selected", i===0?"true":"false");
+    li.innerHTML='<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12h13m-5-6 6 6-6 6"/></svg><span>'+r.n+'</span><span class="cat">'+r.c+"</span>";
+    li.addEventListener("click",()=>go(r));
+    box.appendChild(li);
+  });
+}
+function mark(){ $$("#palRes li").forEach((li,i)=>li.setAttribute("aria-selected", i===sel?"true":"false"));
+  const a=$$("#palRes li")[sel]; if(a) a.scrollIntoView({block:"nearest"}); }
+function openPal(){ $("#pal").hidden=false; $("#palInput").value=""; runSearch(); $("#palInput").focus(); }
+function closePal(){ $("#pal").hidden=true; }
+function go(r){ closePal(); const el=document.getElementById(r.id);
+  if(el) el.scrollIntoView({behavior:REDUCED?"auto":"smooth",block:"start"}); }
+
+/* ---------- 3D tilt on program cards ---------- */
+function tilt(){
+  if(REDUCED || matchMedia("(pointer:coarse)").matches) return;
+  $$(".prog").forEach(card=>{
+    const glow=$(".glow",card);
+    card.addEventListener("pointermove",e=>{
+      const r=card.getBoundingClientRect(), x=(e.clientX-r.left)/r.width, y=(e.clientY-r.top)/r.height;
+      card.style.transform="rotateY("+(x-.5)*9+"deg) rotateX("+(.5-y)*9+"deg) translateZ(14px)";
+      glow.style.left=(e.clientX-r.left-140)+"px"; glow.style.top=(e.clientY-r.top-140)+"px";
+    });
+    card.addEventListener("pointerleave",()=>{ card.style.transform=""; });
+  });
+}
+
+/* ---------- boot ---------- */
+function boot(){
+  applyLang("en");
+  H.measure(); H.reveals(); H.navWatch(); tilt();
+  if(H.initVault()) H.frame(); else $("#vault").style.display="none";
+  for(let i=0;i<4;i++) pushFeed();
+  setInterval(tick,1000);
+  setInterval(pushFeed, REDUCED?20000:6500);
+  addEventListener("resize",H.measure,{passive:true});
+
+  new IntersectionObserver((es,o)=>es.forEach(e=>{ if(e.isIntersecting){ animChart(); o.disconnect(); }}),
+    {threshold:.25}).observe($("#chart"));
+
+  $("#langBtn").addEventListener("click",()=>applyLang(L()==="fa"?"en":"fa"));
+  $("#openPal").addEventListener("click",openPal);
+  $("#palEsc").addEventListener("click",closePal);
+  $("#pal").addEventListener("click",e=>{ if(e.target.id==="pal") closePal(); });
+  $("#palInput").addEventListener("input",runSearch);
+  addEventListener("keydown",e=>{
+    if((e.metaKey||e.ctrlKey) && e.key.toLowerCase()==="k"){ e.preventDefault(); $("#pal").hidden?openPal():closePal(); return; }
+    if($("#pal").hidden){
+      if(e.key==="/" && !/^(INPUT|TEXTAREA)$/.test(document.activeElement.tagName)){ e.preventDefault(); openPal(); }
+      return;
+    }
+    if(e.key==="Escape"){ closePal(); }
+    else if(e.key==="ArrowDown"){ e.preventDefault(); sel=(sel+1)%Math.max(results.length,1); mark(); }
+    else if(e.key==="ArrowUp"){ e.preventDefault(); sel=(sel-1+results.length)%Math.max(results.length,1); mark(); }
+    else if(e.key==="Enter" && results[sel]){ e.preventDefault(); go(results[sel]); }
+  });
+  $$(".app-rail button").forEach(b=>b.addEventListener("click",()=>{
+    $$(".app-rail button").forEach(x=>x.setAttribute("aria-selected","false"));
+    b.setAttribute("aria-selected","true");
+  }));
+}
+document.readyState==="loading" ? addEventListener("DOMContentLoaded",boot) : boot();
+})();
+</script>
+
 </body>
 </html>
