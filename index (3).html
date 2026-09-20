@@ -1,0 +1,1374 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#141017">
+<meta name="description" content="A design concept for Hakim International School, Tehran: a bilingual English/Persian site built around a scroll-driven WebGL muqarnas vault, with a redesigned student portal. Unofficial proposal.">
+<!-- Kept out of search results so this concept is not mistaken for the school's official
+     site. Delete the next line if you want it indexed by Google. -->
+<meta name="robots" content="noindex, nofollow">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Hakim International School — design concept">
+<meta property="og:description" content="Bilingual EN/فارسی site concept with a scroll-driven 3D muqarnas vault and a redesigned student portal. An unofficial proposal.">
+<meta property="og:image" content="https://mahanmajdi.github.io/hakim-international-school/og.png">
+<meta property="og:url" content="https://mahanmajdi.github.io/hakim-international-school/">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2064%2064%22%3E%3Ccircle%20cx%3D%2232%22%20cy%3D%2232%22%20r%3D%2229.5%22%20fill%3D%22none%22%20stroke%3D%22%237A3A8C%22%20stroke-width%3D%223%22/%3E%3Cg%20fill%3D%22none%22%20stroke%3D%22%237A3A8C%22%20stroke-width%3D%223%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22M32%209%20L45.3%2016.5%20L45.3%2031.5%20L32%2039%20L18.7%2031.5%20L18.7%2016.5%20Z%22/%3E%3Cpath%20d%3D%22M32%2025%20L45.3%2032.5%20L45.3%2047.5%20L32%2055%20L18.7%2047.5%20L18.7%2032.5%20Z%22/%3E%3C/g%3E%3Ccircle%20cx%3D%2232%22%20cy%3D%2232%22%20r%3D%224%22%20fill%3D%22%23E3A23C%22/%3E%3C/svg%3E">
+<style>
+  :root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+  html,body{margin:0}
+  img{max-width:100%}
+  [hidden]{display:none!important}
+</style>
+</head>
+<body>
+<title>Hakim International School</title>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300..900&family=Archivo:wght@400..800&family=Vazirmatn:wght@300..900&display=swap">
+<style>
+:root{
+  --ink:#141017; --ink-2:#1E1824; --ink-3:#2A2233;
+  --plum:#7A3A8C; --plum-lift:#C07FD8; --plum-deep:#4A1F57;
+  --saffron:#E3A23C; --saffron-soft:#F2CE8E;
+  --paper:#F7F4F6; --paper-2:#EFEAF0; --paper-3:#E3DCE6;
+  --on-ink:#F4EFF6; --muted:#A296AC; --muted-2:#6E6276;
+  --on-paper:#241C2A; --on-paper-mute:#6B5F73;
+  --good:#3FA46A; --warn:#D98324; --crit:#C6453F;
+  --line-dark:rgba(244,239,246,.13); --line-light:rgba(36,28,42,.12);
+  --f-display:"Fraunces","Iowan Old Style",Georgia,serif;
+  --f-ui:"Archivo","Helvetica Neue",Arial,sans-serif;
+  --f-fa:"Vazirmatn","Archivo",Tahoma,sans-serif;
+  --shell:min(1240px,100%);
+  --ease:cubic-bezier(.22,1,.36,1);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;background:var(--ink);color:var(--on-ink);
+  font-family:var(--f-ui);font-size:16px;line-height:1.6;
+  -webkit-font-smoothing:antialiased;overflow-x:hidden;
+}
+body[dir="rtl"]{font-family:var(--f-fa)}
+body[dir="rtl"] .display{font-family:var(--f-fa);font-weight:800;letter-spacing:0}
+img{max-width:100%}
+h1,h2,h3,h4{margin:0;text-wrap:balance;font-weight:600}
+p{margin:0}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+:focus-visible{outline:2px solid var(--saffron);outline-offset:3px;border-radius:4px}
+.display{font-family:var(--f-display);font-optical-sizing:auto;font-variation-settings:"SOFT" 18,"WONK" 1;letter-spacing:-.022em;font-weight:500}
+.shell{width:var(--shell);margin-inline:auto;padding-inline:clamp(18px,4vw,44px)}
+.eyebrow{
+  font-family:var(--f-ui);font-size:11.5px;font-weight:600;letter-spacing:.18em;
+  text-transform:uppercase;color:var(--saffron);display:flex;align-items:center;gap:10px;
+}
+body[dir="rtl"] .eyebrow{font-family:var(--f-fa);letter-spacing:0;font-size:13px}
+.eyebrow::before{content:"";width:26px;height:1px;background:currentColor;opacity:.55;flex:none}
+.tnum{font-variant-numeric:tabular-nums}
+
+/* ---------- fixed 3D ground ---------- */
+#bg{position:fixed;inset:0;z-index:0;background:
+  radial-gradient(120% 90% at 50% 8%,#2B1A33 0%,#1A1220 45%,var(--ink) 100%);}
+#vault{display:block;width:100%;height:100%}
+#veil{position:absolute;inset:0;pointer-events:none;
+  background:
+   radial-gradient(64% 78% at 20% 44%,rgba(18,13,22,.86) 0%,rgba(18,13,22,.52) 44%,rgba(18,13,22,0) 72%),
+   linear-gradient(180deg,rgba(20,16,23,.18) 0%,rgba(20,16,23,0) 34%,rgba(20,16,23,.74) 78%,var(--ink) 100%);}
+body[dir="rtl"] #veil{background:
+   radial-gradient(64% 78% at 80% 44%,rgba(18,13,22,.86) 0%,rgba(18,13,22,.52) 44%,rgba(18,13,22,0) 72%),
+   linear-gradient(180deg,rgba(20,16,23,.18) 0%,rgba(20,16,23,0) 34%,rgba(20,16,23,.74) 78%,var(--ink) 100%);}
+main{position:relative;z-index:1}
+
+/* ---------- nav ---------- */
+.nav{
+  position:sticky;top:env(safe-area-inset-top,0px);z-index:60;
+  backdrop-filter:blur(18px) saturate(1.5);-webkit-backdrop-filter:blur(18px) saturate(1.5);
+  background:rgba(20,16,23,.58);border-bottom:1px solid var(--line-dark);
+  transition:background .5s var(--ease),border-color .5s var(--ease),color .5s var(--ease);
+}
+.nav.on-paper{background:rgba(247,244,246,.78);border-bottom-color:var(--line-light);color:var(--on-paper)}
+.nav-in{display:flex;align-items:center;gap:clamp(12px,2.4vw,30px);height:62px}
+.brand{display:flex;align-items:center;gap:11px;flex:none;min-width:0}
+.brand .mark{width:32px;height:32px;flex:none}
+.brand .wm{display:flex;flex-direction:column;line-height:1.05;min-width:0}
+.brand .wm b{font-family:var(--f-display);font-weight:600;font-size:15.5px;letter-spacing:-.01em;white-space:nowrap}
+body[dir="rtl"] .brand .wm b{font-family:var(--f-fa);font-weight:700}
+.brand .wm span{font-size:9.5px;letter-spacing:.17em;text-transform:uppercase;color:var(--muted);white-space:nowrap}
+.nav.on-paper .brand .wm span{color:var(--on-paper-mute)}
+body[dir="rtl"] .brand .wm span{letter-spacing:0;font-size:10.5px;text-transform:none}
+.navlinks{display:flex;gap:clamp(10px,1.7vw,24px);margin-inline-start:auto;align-items:center}
+.navlinks a{font-size:13.5px;color:var(--muted);transition:color .25s;white-space:nowrap}
+.navlinks a:hover{color:var(--on-ink)}
+.nav.on-paper .navlinks a{color:var(--on-paper-mute)}
+.nav.on-paper .navlinks a:hover{color:var(--on-paper)}
+.nav-tools{display:flex;align-items:center;gap:8px;flex:none;margin-inline-start:auto}
+.navlinks+.nav-tools{margin-inline-start:0}
+.chip{
+  display:inline-flex;align-items:center;gap:7px;height:32px;padding:0 12px;border-radius:999px;
+  border:1px solid var(--line-dark);font-size:12.5px;color:var(--muted);
+  transition:border-color .25s,color .25s,background .25s;white-space:nowrap;
+}
+.chip:hover{color:var(--on-ink);border-color:rgba(244,239,246,.32)}
+.nav.on-paper .chip{border-color:var(--line-light);color:var(--on-paper-mute)}
+.nav.on-paper .chip:hover{color:var(--on-paper);border-color:rgba(36,28,42,.34)}
+.chip kbd{font:inherit;font-size:10.5px;opacity:.68;border:1px solid currentColor;border-radius:4px;padding:0 4px;line-height:15px}
+.chip.concept{border-color:rgba(227,162,60,.42);color:var(--saffron-soft);background:rgba(227,162,60,.08)}
+.nav.on-paper .chip.concept{color:#8A5B12;border-color:rgba(227,162,60,.5);background:rgba(227,162,60,.14)}
+.lang{font-weight:600;letter-spacing:.02em}
+@media(max-width:940px){.navlinks{display:none}}
+@media(max-width:620px){
+  .nav-in{gap:8px}
+  .brand{flex:1 1 auto;min-width:0}
+  .brand .mark{width:28px;height:28px}
+  .brand .wm b{font-size:12.8px;line-height:1.14;white-space:normal}
+  .brand .wm span{display:none}
+  .nav-tools{flex:0 0 auto;gap:6px}
+  .chip{height:30px;padding:0 10px;font-size:12px}
+  .chip kbd{display:none}
+  #openPal span{display:none}
+  #openPal{padding:0 9px}
+}
+
+/* ---------- hero ---------- */
+#hero{min-height:min(88vh,760px);display:flex;align-items:flex-end;padding-block:clamp(56px,11vh,120px) clamp(40px,7vh,74px)}
+.hero-grid{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,.85fr);gap:clamp(24px,5vw,64px);align-items:end;width:100%}
+h1.hero-h{font-size:clamp(42px,7.4vw,98px);line-height:.96;font-weight:400;margin-block:20px 22px}
+h1.hero-h em{font-style:normal;font-variation-settings:"SOFT" 40,"WONK" 1;font-weight:600;
+  background:linear-gradient(96deg,var(--saffron-soft),var(--saffron) 42%,var(--plum-lift));
+  -webkit-background-clip:text;background-clip:text;color:transparent;}
+.hero-sub{font-size:clamp(15px,1.7vw,19px);color:var(--muted);max-width:46ch;line-height:1.62}
+.hero-cta{display:flex;flex-wrap:wrap;gap:12px;margin-top:30px}
+.btn{display:inline-flex;align-items:center;gap:9px;height:46px;padding:0 22px;border-radius:999px;
+  font-size:14.5px;font-weight:600;transition:transform .3s var(--ease),box-shadow .3s var(--ease),background .3s}
+.btn:hover{transform:translateY(-2px)}
+.btn-primary{background:linear-gradient(180deg,#F0F0F2,#D9D2DE);color:#1A1220;box-shadow:0 10px 30px -12px rgba(192,127,216,.7)}
+.btn-primary:hover{box-shadow:0 18px 40px -14px rgba(192,127,216,.85)}
+.btn-ghost{border:1px solid var(--line-dark);color:var(--on-ink)}
+.btn-ghost:hover{border-color:rgba(244,239,246,.36);background:rgba(244,239,246,.05)}
+.hero-side{display:flex;flex-direction:column;gap:14px;padding-bottom:6px}
+.hero-card{
+  border:1px solid var(--line-dark);border-radius:16px;padding:16px 18px;
+  background:linear-gradient(180deg,rgba(32,24,38,.86),rgba(24,17,29,.78));
+}
+.hero-card .k{font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:var(--muted)}
+body[dir="rtl"] .hero-card .k{letter-spacing:0;text-transform:none;font-size:12.5px}
+.hero-card .v{font-family:var(--f-display);font-size:26px;font-weight:600;margin-top:3px;display:flex;align-items:baseline;gap:8px}
+.live-dot{width:7px;height:7px;border-radius:50%;background:var(--good);flex:none;
+  box-shadow:0 0 0 0 rgba(63,164,106,.65);animation:pulse 2.4s infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(63,164,106,.55)}70%{box-shadow:0 0 0 9px rgba(63,164,106,0)}100%{box-shadow:0 0 0 0 rgba(63,164,106,0)}}
+.scroll-cue{display:flex;align-items:center;gap:10px;font-size:11px;letter-spacing:.17em;text-transform:uppercase;color:var(--muted);margin-top:34px}
+body[dir="rtl"] .scroll-cue{letter-spacing:0;text-transform:none;font-size:12.5px}
+.scroll-cue i{display:block;width:1px;height:26px;background:linear-gradient(var(--saffron),transparent);animation:drop 2.2s var(--ease) infinite}
+@keyframes drop{0%{transform:scaleY(.2);transform-origin:top;opacity:0}40%{transform:scaleY(1);opacity:1}100%{transform:scaleY(.2);transform-origin:bottom;opacity:0}}
+@media(max-width:820px){.hero-grid{grid-template-columns:1fr;gap:34px}.hero-side{flex-direction:row;flex-wrap:wrap}.hero-card{flex:1 1 180px}}
+</style>
+<style>
+/* ---------- generic section ---------- */
+.sec{padding-block:clamp(60px,8.5vh,104px);position:relative}
+.sec-head{max-width:64ch;margin-bottom:clamp(34px,5vh,58px)}
+.sec-head h2{font-size:clamp(28px,4.4vw,54px);line-height:1.06;font-weight:400;margin-block:18px 16px}
+.sec-head p{color:var(--muted);font-size:clamp(14.5px,1.5vw,17.5px);max-width:52ch}
+.on-light .sec-head p{color:var(--on-paper-mute)}
+
+/* Reveals are scroll-scrubbed from JS (see fxTick). Nothing is parked invisible in
+   CSS, so with JS disabled every element renders in its final, readable state. */
+[data-fx]{will-change:transform,opacity}
+
+/* ---------- live pulse band ---------- */
+#pulse{border-block:1px solid var(--line-dark);padding-block:clamp(26px,4vh,40px);
+  background:linear-gradient(180deg,rgba(20,16,23,.55),rgba(20,16,23,.8))}
+.pulse-row{display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(14px,3vw,38px)}
+.pulse-row .cell{display:flex;flex-direction:column;gap:5px;min-width:0}
+.pulse-row .n{font-family:var(--f-display);font-size:clamp(28px,4.2vw,50px);font-weight:600;line-height:1;
+  font-variant-numeric:tabular-nums;letter-spacing:-.03em}
+.pulse-row .l{font-size:12.5px;color:var(--muted);line-height:1.35}
+@media(max-width:700px){.pulse-row{grid-template-columns:1fr 1fr;gap:26px 18px}}
+
+/* ---------- programs: 3D tilt cards ---------- */
+.prog-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(12px,1.6vw,20px);perspective:1400px}
+@media(max-width:1000px){.prog-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:560px){.prog-grid{grid-template-columns:1fr}}
+.prog{
+  position:relative;border-radius:18px;padding:clamp(20px,2.2vw,28px);min-height:290px;
+  display:flex;flex-direction:column;justify-content:space-between;gap:26px;overflow:hidden;
+  border:1px solid var(--line-dark);background:linear-gradient(170deg,rgba(244,239,246,.075),rgba(244,239,246,.018));
+  transform-style:preserve-3d;transition:border-color .4s,box-shadow .5s var(--ease);
+}
+.prog:hover{border-color:rgba(192,127,216,.45);box-shadow:0 26px 60px -30px rgba(122,58,140,.9)}
+.prog .glow{position:absolute;width:280px;height:280px;border-radius:50%;pointer-events:none;opacity:0;
+  background:radial-gradient(circle,rgba(192,127,216,.4),transparent 66%);transition:opacity .45s;filter:blur(8px)}
+.prog:hover .glow{opacity:1}
+.prog .yrs{font-family:var(--f-display);font-size:13px;color:var(--saffron);letter-spacing:.02em}
+.prog h3{font-family:var(--f-display);font-size:clamp(20px,2vw,25px);font-weight:600;line-height:1.14;margin-top:10px}
+body[dir="rtl"] .prog h3{font-family:var(--f-fa);font-weight:700}
+.prog p{font-size:13.6px;color:var(--muted);margin-top:9px;line-height:1.55}
+.prog .tags{display:flex;flex-wrap:wrap;gap:6px}
+.prog .tags span{font-size:11px;padding:4px 9px;border-radius:999px;border:1px solid var(--line-dark);color:var(--muted)}
+.prog .idx{position:absolute;inset-inline-end:18px;top:14px;font-family:var(--f-display);font-size:52px;
+  font-weight:600;color:rgba(244,239,246,.055);line-height:1;pointer-events:none}
+
+/* ---------- academics strip ---------- */
+.acc{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(14px,2vw,26px)}
+@media(max-width:860px){.acc{grid-template-columns:1fr}}
+.acc-item{border-top:1px solid var(--line-dark);padding-top:20px;display:flex;flex-direction:column;gap:10px}
+.acc-item .ico{width:40px;height:40px;color:var(--saffron)}
+.acc-item h4{font-family:var(--f-display);font-size:19px;font-weight:600}
+body[dir="rtl"] .acc-item h4{font-family:var(--f-fa);font-weight:700}
+.acc-item p{font-size:14px;color:var(--muted);line-height:1.6}
+
+/* ---------- portal (light world) ---------- */
+#portal{background:var(--paper);color:var(--on-paper);
+  border-radius:clamp(26px,3.4vw,44px) clamp(26px,3.4vw,44px) 0 0;
+  box-shadow:0 -34px 90px -40px rgba(0,0,0,.85)}
+#portal .eyebrow{color:#8A5B12}
+.demo-pill{display:inline-flex;align-items:center;gap:6px;font-size:11.5px;font-weight:600;
+  padding:4px 11px;border-radius:999px;background:rgba(227,162,60,.16);color:#8A5B12;border:1px solid rgba(227,162,60,.4)}
+.before-after{display:grid;grid-template-columns:minmax(0,300px) minmax(0,1fr);gap:clamp(16px,2.4vw,30px);align-items:start;margin-bottom:clamp(30px,4vh,48px)}
+@media(max-width:900px){.before-after{grid-template-columns:1fr}}
+.panel-label{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--on-paper-mute);margin-bottom:10px;display:block}
+body[dir="rtl"] .panel-label{letter-spacing:0;text-transform:none;font-size:12.5px}
+.old-lms{border:1px solid var(--paper-3);border-radius:14px;background:#fff;padding:14px;opacity:.85}
+.old-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:7px}
+.old-grid i{display:block;aspect-ratio:1;border-radius:6px;background:var(--paper-2);border:1px solid var(--paper-3)}
+.old-note{font-size:12.5px;color:var(--on-paper-mute);margin-top:12px;line-height:1.55}
+
+.app{container-type:inline-size;border:1px solid var(--paper-3);border-radius:18px;overflow:hidden;background:#fff;
+  box-shadow:0 30px 70px -42px rgba(36,28,42,.55)}
+.app-bar{display:flex;align-items:center;gap:10px;padding:11px 15px;border-bottom:1px solid var(--paper-2);background:var(--paper)}
+.app-bar .dots{display:flex;gap:5px}.app-bar .dots i{width:9px;height:9px;border-radius:50%;background:var(--paper-3)}
+.app-bar .who{font-size:12.5px;color:var(--on-paper-mute);margin-inline-start:auto;display:flex;align-items:center;gap:8px}
+.app-body{display:grid;grid-template-columns:168px minmax(0,1fr);min-height:400px}
+@container (max-width:470px){.app-body{grid-template-columns:1fr}.app-rail{display:none!important}}
+.app-rail{border-inline-end:1px solid var(--paper-2);padding:14px 10px;display:flex;flex-direction:column;gap:2px;background:var(--paper)}
+.app-rail button{display:flex;align-items:center;gap:10px;padding:8px 11px;border-radius:9px;font-size:13.2px;
+  color:var(--on-paper-mute);text-align:start;transition:background .2s,color .2s;width:100%}
+.app-rail button:hover{background:var(--paper-2);color:var(--on-paper)}
+.app-rail button[aria-selected="true"]{background:var(--plum);color:#fff;font-weight:600}
+.app-rail .badge{margin-inline-start:auto;font-size:10.5px;font-weight:700;background:var(--crit);color:#fff;
+  border-radius:999px;min-width:18px;height:18px;display:grid;place-items:center;padding:0 5px}
+.app-rail button[aria-selected="true"] .badge{background:rgba(255,255,255,.28)}
+.app-main{padding:clamp(16px,2.2vw,24px);display:flex;flex-direction:column;gap:18px;min-width:0}
+.app-h{display:flex;align-items:flex-end;justify-content:space-between;gap:14px;flex-wrap:wrap}
+.app-h h3{font-family:var(--f-display);font-size:23px;font-weight:600}
+body[dir="rtl"] .app-h h3{font-family:var(--f-fa);font-weight:700}
+.app-h .sub{font-size:13px;color:var(--on-paper-mute)}
+.tiles{display:grid;grid-template-columns:repeat(4,1fr);gap:11px}
+@container (max-width:700px){.tiles{grid-template-columns:repeat(2,1fr)}}
+@container (max-width:360px){.tiles{grid-template-columns:1fr}}
+.tile{border:1px solid var(--paper-2);border-radius:12px;padding:13px 14px;display:flex;flex-direction:column;gap:5px;background:#fff}
+.tile .t-l{font-size:11.5px;color:var(--on-paper-mute);display:flex;align-items:center;gap:6px}
+.tile .t-v{font-family:var(--f-display);font-size:26px;font-weight:600;font-variant-numeric:tabular-nums;line-height:1.08}
+.tile .t-d{font-size:11.5px;font-weight:600;display:flex;align-items:center;gap:4px}
+.up{color:var(--good)}.down{color:var(--crit)}.flat{color:var(--on-paper-mute)}
+.tile.accent{background:linear-gradient(165deg,var(--plum-deep),var(--plum));border-color:transparent;color:#fff}
+.tile.accent .t-l{color:rgba(255,255,255,.76)}
+.split{display:grid;grid-template-columns:1.25fr .75fr;gap:14px;align-items:start}
+@container (max-width:700px){.split{grid-template-columns:1fr}}
+.card{border:1px solid var(--paper-2);border-radius:13px;padding:15px;background:#fff;min-width:0}
+.card h4{font-size:13px;font-weight:700;letter-spacing:.01em;display:flex;align-items:center;gap:8px;margin-bottom:12px}
+.card h4 .r{margin-inline-start:auto;font-size:11.5px;font-weight:500;color:var(--on-paper-mute)}
+#chart{width:100%;height:170px;display:block;overflow:visible}
+.feed{display:flex;flex-direction:column;gap:0;max-height:212px;overflow-y:auto}
+.feed li{display:flex;gap:10px;padding:9px 0;border-bottom:1px solid var(--paper-2);font-size:12.8px;align-items:flex-start;animation:slideIn .5s var(--ease)}
+.feed li:last-child{border-bottom:0}
+@keyframes slideIn{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:none}}
+.feed .dot{width:7px;height:7px;border-radius:50%;margin-top:6px;flex:none}
+.feed .tm{margin-inline-start:auto;color:var(--on-paper-mute);font-size:11px;font-variant-numeric:tabular-nums;flex:none}
+.feed .tx{min-width:0;line-height:1.45}
+.sched{display:flex;flex-direction:column;gap:7px}
+.slot{display:flex;align-items:center;gap:11px;padding:9px 11px;border-radius:10px;border:1px solid var(--paper-2);font-size:13px}
+.slot .tm{font-variant-numeric:tabular-nums;color:var(--on-paper-mute);font-size:12px;flex:none}
+.slot .nm{font-weight:600;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.slot .st{margin-inline-start:auto;font-size:11px;font-weight:700;padding:3px 9px;border-radius:999px;flex:none}
+.slot.now{border-color:var(--good);background:rgba(63,164,106,.07)}
+.slot.now .st{background:var(--good);color:#fff}
+.slot.done{opacity:.52}.slot.done .st{background:var(--paper-2);color:var(--on-paper-mute)}
+.slot.next .st{background:rgba(122,58,140,.12);color:var(--plum)}
+.ul{list-style:none;margin:0;padding:0}
+@supports not (container-type:inline-size){
+  .tiles{grid-template-columns:repeat(2,1fr)}.split{grid-template-columns:1fr}
+  @media(max-width:760px){.app-body{grid-template-columns:1fr}.app-rail{display:none!important}}
+}
+</style>
+<style>
+/* ---------- admissions (real sequence -> numbering earns its place) ---------- */
+#admissions{background:var(--paper-2);color:var(--on-paper)}
+#admissions .eyebrow{color:#8A5B12}
+.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(12px,1.8vw,22px);counter-reset:s}
+@media(max-width:920px){.steps{grid-template-columns:1fr 1fr}}
+@media(max-width:540px){.steps{grid-template-columns:1fr}}
+.step{position:relative;padding-top:26px;border-top:2px solid var(--paper-3);display:flex;flex-direction:column;gap:8px}
+.step::before{counter-increment:s;content:counter(s,decimal-leading-zero);position:absolute;top:-2px;inset-inline-start:0;
+  transform:translateY(-100%);padding-bottom:9px;font-family:var(--f-display);font-size:12.5px;font-weight:700;
+  color:var(--plum);letter-spacing:.06em}
+body[dir="rtl"] .step::before{content:counter(s,persian)}
+.step.active{border-top-color:var(--plum)}
+.step h4{font-family:var(--f-display);font-size:17.5px;font-weight:600}
+body[dir="rtl"] .step h4{font-family:var(--f-fa);font-weight:700}
+.step p{font-size:13.6px;color:var(--on-paper-mute);line-height:1.58}
+.step .when{font-size:12px;font-weight:600;color:var(--plum)}
+.cta-band{margin-top:clamp(40px,6vh,64px);border-radius:20px;padding:clamp(26px,4vw,44px);
+  background:linear-gradient(140deg,var(--plum-deep),var(--plum) 58%,#8E4AA0);color:#fff;
+  display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap;
+  box-shadow:0 30px 70px -40px rgba(122,58,140,.95)}
+.cta-band h3{font-family:var(--f-display);font-size:clamp(22px,3vw,34px);font-weight:600;line-height:1.14;max-width:22ch}
+body[dir="rtl"] .cta-band h3{font-family:var(--f-fa);font-weight:700}
+.cta-band p{color:rgba(255,255,255,.82);font-size:14.5px;margin-top:8px;max-width:44ch}
+.btn-light{background:#fff;color:var(--plum-deep)}
+
+/* ---------- footer ---------- */
+footer{position:relative;z-index:1;background:var(--ink);color:var(--muted);padding-block:clamp(44px,6vh,70px) 30px;border-top:1px solid var(--line-dark)}
+.f-grid{display:grid;grid-template-columns:1.5fr repeat(3,1fr);gap:clamp(20px,3vw,40px)}
+@media(max-width:820px){.f-grid{grid-template-columns:1fr 1fr}}
+footer h5{font-size:11px;letter-spacing:.17em;text-transform:uppercase;color:var(--on-ink);margin-bottom:13px}
+body[dir="rtl"] footer h5{letter-spacing:0;text-transform:none;font-size:13px}
+footer ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px;font-size:13.5px}
+footer a:hover{color:var(--on-ink)}
+.f-note{margin-top:clamp(30px,5vh,50px);padding-top:20px;border-top:1px solid var(--line-dark);
+  font-size:12px;line-height:1.65;color:var(--muted-2);display:flex;gap:16px;justify-content:space-between;flex-wrap:wrap}
+.f-note p{max-width:74ch}
+
+/* ---------- command palette ---------- */
+#pal{position:fixed;inset:0;z-index:100;display:grid;place-items:start center;padding:12vh 16px 16px;
+  background:rgba(12,9,15,.62);backdrop-filter:blur(7px);-webkit-backdrop-filter:blur(7px)}
+#pal[hidden]{display:none!important}
+.pal-box{width:min(620px,100%);background:var(--ink-2);border:1px solid rgba(244,239,246,.16);border-radius:16px;
+  overflow:hidden;box-shadow:0 40px 100px -30px #000;animation:palIn .3s var(--ease)}
+@keyframes palIn{from{opacity:0;transform:translateY(-14px) scale(.98)}to{opacity:1;transform:none}}
+.pal-in{display:flex;align-items:center;gap:11px;padding:15px 18px;border-bottom:1px solid var(--line-dark)}
+.pal-in input{flex:1;background:none;border:0;outline:0;color:var(--on-ink);font:inherit;font-size:16px;min-width:0}
+.pal-in input::placeholder{color:var(--muted-2)}
+.pal-res{max-height:min(46vh,380px);overflow-y:auto;padding:7px}
+.pal-res li{display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:10px;cursor:pointer;font-size:14px}
+.pal-res li[aria-selected="true"]{background:var(--plum);color:#fff}
+.pal-res li .cat{margin-inline-start:auto;font-size:11px;color:var(--muted);flex:none}
+.pal-res li[aria-selected="true"] .cat{color:rgba(255,255,255,.75)}
+.pal-res li .ic{width:16px;height:16px;flex:none;opacity:.8}
+.pal-res .none{padding:26px 14px;text-align:center;color:var(--muted);font-size:13.5px;display:block}
+.pal-foot{display:flex;gap:16px;padding:10px 18px;border-top:1px solid var(--line-dark);font-size:11.5px;color:var(--muted-2)}
+.pal-foot span{display:flex;align-items:center;gap:5px}
+.pal-foot kbd{border:1px solid var(--line-dark);border-radius:4px;padding:1px 5px;font:inherit;font-size:10.5px}
+
+/* ---------- rtl + motion ---------- */
+body[dir="rtl"] .display{letter-spacing:0}
+body[dir="rtl"] h1.hero-h{line-height:1.22;font-weight:800}
+body[dir="rtl"] .prog .idx{font-family:var(--f-ui)}
+body[dir="rtl"] .pulse-row .n{font-family:var(--f-fa);font-weight:800}
+body[dir="rtl"] .tile .t-v,body[dir="rtl"] .hero-card .v{font-family:var(--f-fa);font-weight:700}
+@media(prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{animation-duration:.001s!important;animation-iteration-count:1!important;transition-duration:.001s!important}
+  [data-anim="on"] .rv{opacity:1!important;transform:none!important}
+}
+</style>
+
+
+<style>
+/* ---------- marquee ---------- */
+.mq{overflow:hidden;border-block:1px solid var(--line-dark);padding-block:15px;
+  background:linear-gradient(180deg,rgba(20,16,23,.4),rgba(20,16,23,.66));
+  -webkit-mask-image:linear-gradient(90deg,transparent,#000 9%,#000 91%,transparent);
+          mask-image:linear-gradient(90deg,transparent,#000 9%,#000 91%,transparent);}
+.mq-row{display:flex;width:max-content;gap:0;animation:mq 46s linear infinite}
+.mq:hover .mq-row{animation-play-state:paused}
+.mq span{display:inline-flex;align-items:center;gap:26px;padding-inline:26px;
+  font-family:var(--f-display);font-size:clamp(17px,2.1vw,25px);font-weight:500;
+  color:var(--muted);white-space:nowrap;letter-spacing:-.01em}
+body[dir="rtl"] .mq span{font-family:var(--f-fa);font-weight:600}
+.mq span::after{content:"";width:5px;height:5px;border-radius:50%;background:var(--saffron);opacity:.7;flex:none}
+.mq span:nth-child(3n+2){color:var(--plum-lift)}
+.mq span:nth-child(4n+3){color:var(--saffron-soft)}
+@keyframes mq{to{transform:translateX(-50%)}}
+
+/* ---------- academics: pinned sequence ---------- */
+.acad-track{position:relative;height:300vh}
+.acad-sticky{position:sticky;top:0;height:100vh;display:flex;align-items:center;overflow:hidden}
+.acad-stage{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,.82fr);gap:clamp(24px,5vw,70px);
+  align-items:center;width:var(--shell);margin-inline:auto;padding-inline:clamp(18px,4vw,44px)}
+.acad-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:clamp(4px,1.1vh,12px)}
+.acad-item{display:grid;grid-template-columns:28px minmax(0,1fr);gap:16px;align-items:start;
+  padding-block:clamp(7px,1.3vh,14px);border-top:1px solid var(--line-dark);
+  opacity:.3;transition:opacity .55s var(--ease)}
+.acad-item .no{font-family:var(--f-display);font-size:12px;font-weight:700;color:var(--saffron);
+  padding-top:5px;font-variant-numeric:tabular-nums;transition:color .5s}
+.acad-item h4{font-family:var(--f-display);font-size:clamp(17px,2.3vw,27px);font-weight:600;line-height:1.16;
+  transition:color .5s var(--ease)}
+body[dir="rtl"] .acad-item h4{font-family:var(--f-fa);font-weight:700}
+.acad-item p{font-size:14px;color:var(--muted);line-height:1.58;max-width:46ch;
+  max-height:0;overflow:hidden;opacity:0;
+  transition:max-height .34s var(--ease),opacity .28s var(--ease),margin-top .34s var(--ease)}
+.acad-item.on{opacity:1}
+.acad-item.on h4{color:var(--on-ink)}
+.acad-item.on p{max-height:9em;opacity:1;margin-top:8px}
+.acad-visual{position:relative;aspect-ratio:1;max-width:100%;display:grid;place-items:center}
+.acad-visual svg{width:100%;height:auto;max-width:100%;overflow:visible}
+.acad-visual .gp{fill:none;stroke:var(--plum-lift);stroke-width:.9;opacity:.85;stroke-linejoin:round}
+.acad-visual .gp.g2{stroke:var(--saffron);opacity:.75}
+.acad-prog{height:2px;background:var(--line-dark);margin-top:clamp(16px,3vh,30px);position:relative;overflow:hidden}
+.acad-prog i{position:absolute;inset:0;transform-origin:left;transform:scaleX(0);
+  background:linear-gradient(90deg,var(--plum-lift),var(--saffron))}
+body[dir="rtl"] .acad-prog i{transform-origin:right}
+@media(max-width:900px){
+  .acad-track{height:auto}
+  .acad-sticky{position:static;height:auto;padding-block:10px}
+  .acad-stage{grid-template-columns:1fr;gap:30px}
+  .acad-visual{display:none}
+  .acad-item{opacity:1}
+  .acad-item h4{color:var(--on-ink)}
+  .acad-item p{max-height:none;opacity:1;margin-top:8px;overflow:visible}
+}
+
+/* ---------- portal device reveal ---------- */
+.device-wrap{perspective:1600px}
+.device{transform-origin:50% 100%;will-change:transform,opacity}
+
+/* ---------- admissions progress rail ---------- */
+.steps{position:relative}
+.step{overflow:visible}
+.step .rail{position:absolute;inset-inline-start:0;top:-2px;height:2px;width:100%;
+  transform-origin:left;transform:scaleX(0);background:var(--plum)}
+body[dir="rtl"] .step .rail{transform-origin:right}
+
+/* ---------- footer parallax ---------- */
+.f-grid>div{will-change:transform}
+
+/* ---------- nav condense ---------- */
+.nav.small .nav-in{height:52px}
+.nav-in{transition:height .4s var(--ease)}
+
+@media(prefers-reduced-motion:reduce){
+  .mq-row{animation:none}
+  .acad-track{height:auto}
+  .acad-sticky{position:static;height:auto}
+  .acad-item{opacity:1}
+  .acad-item p{max-height:none;opacity:1;overflow:visible}
+  .acad-visual{display:none}
+}
+</style>
+
+<!-- ============ 3D GROUND ============ -->
+<div id="bg" aria-hidden="true"><canvas id="vault"></canvas><div id="veil"></div></div>
+
+<!-- ============ NAV ============ -->
+<header class="nav" id="nav">
+ <div class="shell nav-in">
+  <a class="brand" href="#top">
+   <svg class="mark" viewBox="0 0 64 64" aria-hidden="true">
+    <defs><linearGradient id="mg" x1="0" y1="0" x2="1" y2="1">
+     <stop offset="0" stop-color="#C07FD8"/><stop offset="55%" stop-color="#7A3A8C"/><stop offset="100%" stop-color="#E3A23C"/>
+    </linearGradient></defs>
+    <circle cx="32" cy="32" r="29.5" fill="none" stroke="url(#mg)" stroke-width="1.6" opacity=".8"/>
+    <g fill="none" stroke="url(#mg)" stroke-width="1.7" stroke-linejoin="round">
+     <path d="M32 9 L45.3 16.5 L45.3 31.5 L32 39 L18.7 31.5 L18.7 16.5 Z"/>
+     <path d="M32 25 L45.3 32.5 L45.3 47.5 L32 55 L18.7 47.5 L18.7 32.5 Z"/>
+     <path d="M32 17 L38.9 21 L38.9 29 L32 33 L25.1 29 L25.1 21 Z" opacity=".55"/>
+    </g>
+    <circle cx="32" cy="32" r="3" fill="#E3A23C"/>
+   </svg>
+   <span class="wm"><b data-i18n="brand">Hakim International School</b><span data-i18n="brandSub">Tehran · Est. 1998</span></span>
+  </a>
+  <nav class="navlinks" aria-label="Main">
+   <a href="#programs" data-i18n="navPrograms">Programs</a>
+   <a href="#academics" data-i18n="navAcademics">Academics</a>
+   <a href="#portal" data-i18n="navPortal">The Portal</a>
+   <a href="#admissions" data-i18n="navAdmissions">Admissions</a>
+  </nav>
+  <div class="nav-tools">
+   <span class="chip concept" data-i18n="conceptChip">Concept</span>
+   <button class="chip" id="openPal" aria-label="Search">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+    <span data-i18n="search">Search</span><kbd>⌘K</kbd>
+   </button>
+   <button class="chip lang" id="langBtn" aria-label="Change language">فارسی</button>
+  </div>
+ </div>
+</header>
+<main id="top">
+
+<!-- ============ HERO ============ -->
+<section id="hero" class="sec" style="padding-block:clamp(40px,8vh,96px) clamp(34px,6vh,70px)">
+ <div class="shell hero-grid">
+  <div>
+   <span class="eyebrow" data-i18n="heroEyebrow">Tehran · International Curriculum</span>
+   <h1 class="hero-h display">
+    <span data-i18n="heroL1">A school built on</span><br>
+    <em data-i18n="heroL2">the mind of the sage</em>
+   </h1>
+   <p class="hero-sub" data-i18n="heroSub">Hakim — حکیم — is the Persian word for the scholar who refuses a single discipline. We teach the same way: mathematics beside metalwork, Farsi beside Cambridge English, and a vault of geometry overhead to remind everyone where this tradition began.</p>
+   <div class="hero-cta">
+    <a class="btn btn-primary" href="#admissions"><span data-i18n="ctaVisit">Book a campus visit</span>
+     <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M5 12h13m-5-6 6 6-6 6"/></svg></a>
+    <a class="btn btn-ghost" href="#portal" data-i18n="ctaPortal">See the student portal</a>
+   </div>
+   <div class="scroll-cue"><i></i><span data-i18n="scrollCue">Scroll to enter the vault</span></div>
+  </div>
+  <aside class="hero-side">
+   <div class="hero-card">
+    <div class="k" data-i18n="cardTimeK">Campus time · Tehran</div>
+    <div class="v"><span class="tnum" id="clock">—</span></div>
+   </div>
+   <div class="hero-card">
+    <div class="k" data-i18n="cardNowK">Right now on campus</div>
+    <div class="v" style="font-size:17px"><span class="live-dot" id="nowDot"></span><span id="nowText" data-i18n="loading">Loading…</span></div>
+   </div>
+  </aside>
+ </div>
+</section>
+
+<!-- ============ LIVE PULSE ============ -->
+<section id="pulse">
+ <div class="shell pulse-row">
+  <div class="cell rv" data-fx="rise"><span class="n tnum" data-count="1240">1,240</span><span class="l" data-i18n="statStudents">Students, Grades 1–12</span></div>
+  <div class="cell rv" data-fx="rise" data-fxs="1.25"><span class="n tnum" data-count="118">118</span><span class="l" data-i18n="statFaculty">Teaching faculty</span></div>
+  <div class="cell rv" data-fx="rise" data-fxs="1.5"><span class="n tnum" data-count="11">11</span><span class="l" data-i18n="statRatio">Students per teacher</span></div>
+  <div class="cell rv" data-fx="rise" data-fxs="1.75"><span class="n tnum" data-count="26">26</span><span class="l" data-i18n="statCountries">Nationalities on roll</span></div>
+ </div>
+</section>
+
+<!-- ============ MARQUEE ============ -->
+<div class="mq" aria-hidden="true"><div class="mq-row" id="mqRow"></div></div>
+
+<!-- ============ PROGRAMS ============ -->
+<section id="programs" class="sec">
+ <div class="shell">
+  <div class="sec-head rv" data-fx="rise">
+   <span class="eyebrow" data-i18n="progEyebrow">Programs</span>
+   <h2 class="display" data-i18n="progH">Twelve years, four distinct worlds</h2>
+   <p data-i18n="progP">Each stage is designed around what that age actually needs — not a thinner version of the stage above it.</p>
+  </div>
+  <div class="prog-grid" id="progGrid">
+   <article class="prog rv" data-fx="rise"><div class="glow"></div><span class="idx">01</span>
+    <div><span class="yrs" data-i18n="p1y">Grades 1–5 · Ages 6–11</span>
+     <h3 data-i18n="p1h">Primary</h3><p data-i18n="p1p">Reading, number sense and curiosity, taught bilingually from day one. Afternoons are workshop time — clay, circuits, choir.</p></div>
+    <div class="tags"><span data-i18n="p1t1">Bilingual literacy</span><span data-i18n="p1t2">Workshop afternoons</span></div></article>
+
+   <article class="prog rv" data-fx="rise" data-fxs="1.25"><div class="glow"></div><span class="idx">02</span>
+    <div><span class="yrs" data-i18n="p2y">Grades 6–8 · Ages 11–14</span>
+     <h3 data-i18n="p2h">Middle</h3><p data-i18n="p2p">The years students decide whether they like thinking. Project terms, first laboratory work, and a tutor who stays with them all three years.</p></div>
+    <div class="tags"><span data-i18n="p2t1">Project terms</span><span data-i18n="p2t2">Named tutor</span></div></article>
+
+   <article class="prog rv" data-fx="rise" data-fxs="1.5"><div class="glow"></div><span class="idx">03</span>
+    <div><span class="yrs" data-i18n="p3y">Grades 9–12 · Ages 14–18</span>
+     <h3 data-i18n="p3h">Senior</h3><p data-i18n="p3p">Konkur preparation running alongside Cambridge International AS &amp; A Levels, so a student can keep both doors open until they are ready to choose.</p></div>
+    <div class="tags"><span data-i18n="p3t1">AS &amp; A Level</span><span data-i18n="p3t2">Konkur track</span></div></article>
+
+   <article class="prog rv" data-fx="rise" data-fxs="1.75"><div class="glow"></div><span class="idx">04</span>
+    <div><span class="yrs" data-i18n="p4y">Grades 9–12 · By selection</span>
+     <h3 data-i18n="p4h">Olympiad &amp; Research</h3><p data-i18n="p4p">A parallel track for students who have outgrown the syllabus: competition mathematics, physics and informatics, plus a supervised research year.</p></div>
+    <div class="tags"><span data-i18n="p4t1">Informatics</span><span data-i18n="p4t2">Research year</span></div></article>
+  </div>
+ </div>
+</section>
+
+<!-- ============ ACADEMICS (pinned sequence) ============ -->
+<section id="academics" class="sec" style="padding-block:0">
+ <div class="shell" style="padding-block:clamp(60px,8.5vh,104px) 0">
+  <div class="sec-head rv" data-fx="rise">
+   <span class="eyebrow" data-i18n="acEyebrow">What we build</span>
+   <h2 class="display" data-i18n="acH">Everything a hakim was supposed to know</h2>
+   <p data-i18n="acP">The classical Persian polymath moved freely between geometry, medicine, poetry and astronomy. Six departments keep that range alive here.</p>
+  </div>
+ </div>
+ <div class="acad-track">
+  <div class="acad-sticky">
+   <div class="acad-stage">
+    <div>
+     <ol class="acad-list" id="acadList">
+      <li class="acad-item on"><span class="no">01</span><div><h4 data-i18n="a1h">Geometry &amp; Mathematics</h4><p data-i18n="a1p">From girih construction with compass and straightedge in Grade 4 to multivariable calculus in Grade 12.</p></div></li>
+      <li class="acad-item"><span class="no">02</span><div><h4 data-i18n="a2h">Laboratory Sciences</h4><p data-i18n="a2p">Four wet labs and an electronics bench. Every senior designs, runs and defends one original experiment.</p></div></li>
+      <li class="acad-item"><span class="no">03</span><div><h4 data-i18n="a3h">Languages &amp; Literature</h4><p data-i18n="a3p">Farsi and English carried at full weight to Grade 12, with Arabic from Grade 6 and French or German by election.</p></div></li>
+      <li class="acad-item"><span class="no">04</span><div><h4 data-i18n="a4h">Design &amp; Making</h4><p data-i18n="a4p">A workshop with kilns, a laser cutter and looms. Persian tilework and CAD are taught in the same room, deliberately.</p></div></li>
+      <li class="acad-item"><span class="no">05</span><div><h4 data-i18n="a5h">Counselling</h4><p data-i18n="a5p">One counsellor per 160 students, plus university guidance that starts in Grade 9 rather than the final term.</p></div></li>
+      <li class="acad-item"><span class="no">06</span><div><h4 data-i18n="a6h">Sport &amp; Wellbeing</h4><p data-i18n="a6p">Two gymnasiums, a 25m pool and compulsory daily movement — including for Grade 12, especially for Grade 12.</p></div></li>
+     </ol>
+     <div class="acad-prog"><i id="acadProg"></i></div>
+    </div>
+    <div class="acad-visual" id="acadVisual"><svg viewBox="0 0 220 220" aria-hidden="true"><path class="gp" d="M206.00 110.00L26.86 158.00L158.00 26.86L110.00 206.00L62.00 26.86L193.14 158.00L14.00 110.00L193.14 62.00L62.00 193.14L110.00 14.00L158.00 193.14L26.86 62.00Z"/><path class="gp g2" d="M202.73 134.85L17.27 134.85L177.88 42.12L85.15 202.73L85.15 17.27L177.88 177.88L17.27 85.15L202.73 85.15L42.12 177.88L134.85 17.27L134.85 202.73L42.12 42.12Z"/><path class="gp" d="M175.68 127.60L61.92 158.08L92.40 44.32Z"/><path class="gp g2" d="M152.00 110.00L89.00 146.37L89.00 73.63Z"/><circle class="gp" cx="110" cy="110" r="96"/><circle class="gp g2" cx="110" cy="110" r="21"/></svg></div>
+   </div>
+  </div>
+ </div>
+</section>
+
+<!-- ============ PORTAL ============ -->
+<section id="portal" class="sec on-light">
+ <div class="shell">
+  <div class="sec-head rv" data-fx="rise">
+   <span class="eyebrow" data-i18n="poEyebrow">The Portal</span>
+   <h2 class="display" data-i18n="poH">The part students actually open every day</h2>
+   <p data-i18n="poP">The current system shows sixteen identical squares and makes you click to find out if anything happened. This one answers that before you touch it.</p>
+  </div>
+
+  <div class="before-after">
+   <div class="rv" data-fx="rise">
+    <span class="panel-label" data-i18n="beforeL">Today — lms.hakim.school</span>
+    <div class="old-lms"><div class="old-grid">
+     <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+    </div></div>
+    <p class="old-note" data-i18n="beforeP">Sixteen tiles of equal weight. No grades, no deadlines, no unread count until you open each one. Nothing tells a parent whether today went well.</p>
+   </div>
+
+   <div class="rv" data-fx="rise" data-fxs="1.25">
+    <span class="panel-label" style="display:flex;align-items:center;gap:10px"><span data-i18n="afterL">Proposed</span>
+     <span class="demo-pill"><span class="live-dot" style="background:#8A5B12;animation:none"></span><span data-i18n="demoData">Sample data</span></span></span>
+    <div class="device-wrap"><div class="app device" data-fx="device">
+     <div class="app-bar">
+      <div class="dots"><i></i><i></i><i></i></div>
+      <span style="font-size:12px;color:var(--on-paper-mute)">hakim.school/portal</span>
+      <span class="who"><span data-i18n="whoName">Mahan M. · Grade 11</span></span>
+     </div>
+     <div class="app-body">
+      <nav class="app-rail" aria-label="Portal">
+       <button aria-selected="true" data-i18n="rDash">Dashboard</button>
+       <button data-i18n="rScores">Scores</button>
+       <button data-i18n="rHw">Homework<span class="badge">3</span></button>
+       <button data-i18n="rMsg">Messages<span class="badge" id="msgBadge">6</span></button>
+       <button data-i18n="rSched">Schedule</button>
+       <button data-i18n="rClass">Online class</button>
+       <button data-i18n="rBuffet">e-Buffet</button>
+       <button data-i18n="rReports">Reports</button>
+      </nav>
+      <div class="app-main">
+       <div class="app-h">
+        <div><h3 data-i18n="goodDay">Good afternoon, Mahan</h3>
+         <span class="sub" id="portalSub" data-i18n="loading">Loading…</span></div>
+       </div>
+
+       <div class="tiles">
+        <div class="tile accent"><span class="t-l" data-i18n="tAvg">Term average</span>
+         <span class="t-v" id="tAvg">18.4</span><span class="t-d" style="color:#F2CE8E">▲ <span data-i18n="tAvgD">0.6 since Mehr</span></span></div>
+        <div class="tile"><span class="t-l" data-i18n="tAtt">Attendance</span>
+         <span class="t-v tnum" id="tAtt">97%</span><span class="t-d flat" data-i18n="tAttD">1 late this month</span></div>
+        <div class="tile"><span class="t-l" data-i18n="tDue">Due in 48 hours</span>
+         <span class="t-v tnum">3</span><span class="t-d down" data-i18n="tDueD">Physics set closes tonight</span></div>
+        <div class="tile"><span class="t-l" data-i18n="tRank">Class standing</span>
+         <span class="t-v tnum">4<span style="font-size:14px">/31</span></span><span class="t-d up" data-i18n="tRankD">▲ 2 places</span></div>
+       </div>
+
+       <div class="split">
+        <div class="card">
+         <h4><span data-i18n="chartT">Subject averages, this term</span><span class="r" data-i18n="chartR">out of 20</span></h4>
+         <svg id="chart" viewBox="0 0 520 170" role="img" aria-label="Subject averages this term, out of 20"></svg>
+        </div>
+        <div class="card">
+         <h4><span class="live-dot"></span><span data-i18n="feedT">Live activity</span></h4>
+         <ul class="ul feed" id="feed"></ul>
+        </div>
+       </div>
+
+       <div class="card">
+        <h4><span data-i18n="schedT">Today's schedule</span><span class="r" id="schedR"></span></h4>
+        <div class="sched" id="sched"></div>
+       </div>
+      </div>
+     </div>
+    </div></div>
+   </div>
+  </div>
+ </div>
+</section>
+
+<!-- ============ ADMISSIONS ============ -->
+<section id="admissions" class="sec on-light">
+ <div class="shell">
+  <div class="sec-head rv" data-fx="rise">
+   <span class="eyebrow" data-i18n="adEyebrow">Admissions · 1405–06</span>
+   <h2 class="display" data-i18n="adH">Four steps, eight weeks</h2>
+   <p data-i18n="adP">We assess every applicant in person. No family is asked to commit before they have spent a morning in the building.</p>
+  </div>
+  <div class="steps">
+   <div class="step active rv" data-fx="rise"><span class="rail"></span><span class="when" data-i18n="s1w">Open now</span><h4 data-i18n="s1h">Enquiry</h4><p data-i18n="s1p">A short form and a phone call. We will tell you honestly if a place is unlikely before you go further.</p></div>
+   <div class="step rv" data-fx="rise" data-fxs="1.25"><span class="rail"></span><span class="when" data-i18n="s2w">Within 2 weeks</span><h4 data-i18n="s2h">Assessment morning</h4><p data-i18n="s2p">Mathematics and language, written on campus. Grades 1–3 come for a play-based session instead.</p></div>
+   <div class="step rv" data-fx="rise" data-fxs="1.5"><span class="rail"></span><span class="when" data-i18n="s3w">Within 4 weeks</span><h4 data-i18n="s3h">Family interview</h4><p data-i18n="s3p">Student and parents, with the head of the relevant school. Forty minutes, and you ask most of the questions.</p></div>
+   <div class="step rv" data-fx="rise" data-fxs="1.75"><span class="rail"></span><span class="when" data-i18n="s4w">Within 8 weeks</span><h4 data-i18n="s4h">Offer &amp; enrolment</h4><p data-i18n="s4p">A written offer, a fee schedule with no later additions, and a two-week window to decide.</p></div>
+  </div>
+
+  <div class="cta-band rv" data-fx="rise">
+   <div><h3 data-i18n="ctaH">Come and see the vault for yourself</h3>
+    <p data-i18n="ctaP">Campus mornings run every Wednesday through Esfand. Bring your child — they will be given something to build.</p></div>
+   <a class="btn btn-light" href="#top" data-i18n="ctaBtn">Request a visit</a>
+  </div>
+ </div>
+</section>
+</main>
+
+<footer>
+ <div class="shell">
+  <div class="f-grid">
+   <div><div class="brand" style="margin-bottom:12px">
+     <svg class="mark" viewBox="0 0 64 64" aria-hidden="true">
+      <circle cx="32" cy="32" r="29.5" fill="none" stroke="#7A3A8C" stroke-width="1.6" opacity=".9"/>
+      <g fill="none" stroke="#7A3A8C" stroke-width="1.7" stroke-linejoin="round">
+       <path d="M32 9 L45.3 16.5 L45.3 31.5 L32 39 L18.7 31.5 L18.7 16.5 Z"/>
+       <path d="M32 25 L45.3 32.5 L45.3 47.5 L32 55 L18.7 47.5 L18.7 32.5 Z"/></g>
+      <circle cx="32" cy="32" r="3" fill="#E3A23C"/></svg>
+     <span class="wm"><b style="color:var(--on-ink)" data-i18n="brand">Hakim International School</b></span></div>
+    <p style="font-size:13.5px;max-width:34ch;line-height:1.6" data-i18n="fTag">A school named for the Persian scholar who refused to pick one subject.</p></div>
+   <div data-fx="para" data-fxs="0.5"><h5 data-i18n="fSchool">School</h5><ul>
+    <li><a href="#programs" data-i18n="navPrograms">Programs</a></li>
+    <li><a href="#academics" data-i18n="navAcademics">Academics</a></li>
+    <li><a href="#admissions" data-i18n="navAdmissions">Admissions</a></li></ul></div>
+   <div data-fx="para" data-fxs="0.8"><h5 data-i18n="fFamilies">Families</h5><ul>
+    <li><a href="#portal" data-i18n="navPortal">The Portal</a></li>
+    <li><a href="#portal" data-i18n="fCalendar">Calendar</a></li>
+    <li><a href="#portal" data-i18n="fBuffet">e-Buffet</a></li></ul></div>
+   <div data-fx="para" data-fxs="1.1"><h5 data-i18n="fContact">Contact</h5><ul>
+    <li data-i18n="fAddr">Tehran, Iran</li>
+    <li>hakim.school</li></ul></div>
+  </div>
+  <div class="f-note">
+   <p data-i18n="disclaimer">Independent design concept. This is an unofficial proposal for a website redesign, not an official Hakim International School site, and it is not affiliated with or endorsed by the school. All figures, names and portal activity shown are sample content for demonstration.</p>
+   <span data-i18n="fYear">Concept · 2026</span>
+  </div>
+ </div>
+</footer>
+
+<!-- ============ COMMAND PALETTE ============ -->
+<div id="pal" hidden role="dialog" aria-modal="true" aria-label="Search">
+ <div class="pal-box">
+  <div class="pal-in">
+   <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="2.2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+   <input id="palInput" type="search" autocomplete="off" spellcheck="false" placeholder="Search the school, the portal, anything…">
+   <kbd class="chip" style="height:24px;padding:0 8px;font-size:11px" id="palEsc">ESC</kbd>
+  </div>
+  <ul class="ul pal-res" id="palRes" role="listbox" aria-label="Results"></ul>
+  <div class="pal-foot">
+   <span><kbd>↑</kbd><kbd>↓</kbd> <span data-i18n="palNav">navigate</span></span>
+   <span><kbd>↵</kbd> <span data-i18n="palOpen">open</span></span>
+   <span><kbd>⌘K</kbd> <span data-i18n="palToggle">toggle</span></span>
+  </div>
+ </div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+/* ============================================================
+   Hakim International School — concept site
+   ============================================================ */
+const I18N = {
+en:{
+ brand:"Hakim International School", brandSub:"Tehran · Est. 1998",
+ navPrograms:"Programs", navAcademics:"Academics", navPortal:"The Portal", navAdmissions:"Admissions",
+ conceptChip:"Concept", search:"Search", loading:"Loading…",
+ heroEyebrow:"Tehran · International Curriculum",
+ heroL1:"A school built on", heroL2:"the mind of the sage",
+ heroSub:"Hakim — حکیم — is the Persian word for the scholar who refuses a single discipline. We teach the same way: mathematics beside metalwork, Farsi beside Cambridge English, and a vault of geometry overhead to remind everyone where this tradition began.",
+ ctaVisit:"Book a campus visit", ctaPortal:"See the student portal", scrollCue:"Scroll to enter the vault",
+ cardTimeK:"Campus time · Tehran", cardNowK:"Right now on campus",
+ statStudents:"Students, Grades 1–12", statFaculty:"Teaching faculty",
+ statRatio:"Students per teacher", statCountries:"Nationalities on roll",
+ progEyebrow:"Programs", progH:"Twelve years, four distinct worlds",
+ progP:"Each stage is designed around what that age actually needs — not a thinner version of the stage above it.",
+ p1y:"Grades 1–5 · Ages 6–11", p1h:"Primary", p1p:"Reading, number sense and curiosity, taught bilingually from day one. Afternoons are workshop time — clay, circuits, choir.", p1t1:"Bilingual literacy", p1t2:"Workshop afternoons",
+ p2y:"Grades 6–8 · Ages 11–14", p2h:"Middle", p2p:"The years students decide whether they like thinking. Project terms, first laboratory work, and a tutor who stays with them all three years.", p2t1:"Project terms", p2t2:"Named tutor",
+ p3y:"Grades 9–12 · Ages 14–18", p3h:"Senior", p3p:"Konkur preparation running alongside Cambridge International AS & A Levels, so a student can keep both doors open until they are ready to choose.", p3t1:"AS & A Level", p3t2:"Konkur track",
+ p4y:"Grades 9–12 · By selection", p4h:"Olympiad & Research", p4p:"A parallel track for students who have outgrown the syllabus: competition mathematics, physics and informatics, plus a supervised research year.", p4t1:"Informatics", p4t2:"Research year",
+ acEyebrow:"What we build", acH:"Everything a hakim was supposed to know",
+ acP:"The classical Persian polymath moved freely between geometry, medicine, poetry and astronomy. Six departments keep that range alive here.",
+ a1h:"Geometry & Mathematics", a1p:"From girih construction with compass and straightedge in Grade 4 to multivariable calculus in Grade 12.",
+ a2h:"Laboratory Sciences", a2p:"Four wet labs and an electronics bench. Every senior designs, runs and defends one original experiment.",
+ a3h:"Languages & Literature", a3p:"Farsi and English carried at full weight to Grade 12, with Arabic from Grade 6 and French or German by election.",
+ a4h:"Design & Making", a4p:"A workshop with kilns, a laser cutter and looms. Persian tilework and CAD are taught in the same room, deliberately.",
+ a5h:"Counselling", a5p:"One counsellor per 160 students, plus university guidance that starts in Grade 9 rather than the final term.",
+ a6h:"Sport & Wellbeing", a6p:"Two gymnasiums, a 25m pool and compulsory daily movement — including for Grade 12, especially for Grade 12.",
+ poEyebrow:"The Portal", poH:"The part students actually open every day",
+ poP:"The current system shows sixteen identical squares and makes you click to find out if anything happened. This one answers that before you touch it.",
+ beforeL:"Today — lms.hakim.school", afterL:"Proposed", demoData:"Sample data",
+ beforeP:"Sixteen tiles of equal weight. No grades, no deadlines, no unread count until you open each one. Nothing tells a parent whether today went well.",
+ whoName:"Mahan M. · Grade 11",
+ rDash:"Dashboard", rScores:"Scores", rHw:"Homework", rMsg:"Messages", rSched:"Schedule",
+ rClass:"Online class", rBuffet:"e-Buffet", rReports:"Reports",
+ goodDay:"Good afternoon, Mahan",
+ tAvg:"Term average", tAvgD:"0.6 since Mehr", tAtt:"Attendance", tAttD:"1 late this month",
+ tDue:"Due in 48 hours", tDueD:"Physics set closes tonight", tRank:"Class standing", tRankD:"▲ 2 places",
+ chartT:"Subject averages, this term", chartR:"out of 20", feedT:"Live activity", schedT:"Today's schedule",
+ adEyebrow:"Admissions · 1405–06", adH:"Four steps, eight weeks",
+ adP:"We assess every applicant in person. No family is asked to commit before they have spent a morning in the building.",
+ s1w:"Open now", s1h:"Enquiry", s1p:"A short form and a phone call. We will tell you honestly if a place is unlikely before you go further.",
+ s2w:"Within 2 weeks", s2h:"Assessment morning", s2p:"Mathematics and language, written on campus. Grades 1–3 come for a play-based session instead.",
+ s3w:"Within 4 weeks", s3h:"Family interview", s3p:"Student and parents, with the head of the relevant school. Forty minutes, and you ask most of the questions.",
+ s4w:"Within 8 weeks", s4h:"Offer & enrolment", s4p:"A written offer, a fee schedule with no later additions, and a two-week window to decide.",
+ ctaH:"Come and see the vault for yourself", ctaP:"Campus mornings run every Wednesday through Esfand. Bring your child — they will be given something to build.", ctaBtn:"Request a visit",
+ fTag:"A school named for the Persian scholar who refused to pick one subject.",
+ fSchool:"School", fFamilies:"Families", fContact:"Contact", fCalendar:"Calendar", fBuffet:"e-Buffet", fAddr:"Tehran, Iran",
+ disclaimer:"Independent design concept. This is an unofficial proposal for a website redesign, not an official Hakim International School site, and it is not affiliated with or endorsed by the school. All figures, names and portal activity shown are sample content for demonstration.",
+ fYear:"Concept · 2026",
+ palNav:"navigate", palOpen:"open", palToggle:"toggle",
+ palPlaceholder:"Search the school, the portal, anything…", palNone:"Nothing matches that.",
+ inSession:"in session", freePeriod:"No class — free period", dayDone:"Classes finished for today",
+ beforeSchool:"Campus opens at 07:30", weekend:"Weekend — campus closed",
+ now:"Now", next:"Next", done:"Done", room:"Room"
+},
+fa:{
+ brand:"مجتمع آموزشی بین‌المللی حکیم", brandSub:"تهران · تأسیس ۱۳۷۷",
+ navPrograms:"دوره‌ها", navAcademics:"آموزش", navPortal:"پورتال", navAdmissions:"ثبت‌نام",
+ conceptChip:"طرح پیشنهادی", search:"جست‌وجو", loading:"در حال بارگذاری…",
+ heroEyebrow:"تهران · برنامهٔ آموزشی بین‌المللی",
+ heroL1:"مدرسه‌ای بر پایهٔ", heroL2:"اندیشهٔ حکیم",
+ heroSub:"حکیم، واژه‌ای پارسی برای دانشمندی است که به یک رشته بسنده نمی‌کند. ما نیز چنین می‌آموزیم: ریاضی در کنار هنر، ادبیات فارسی در کنار انگلیسی کمبریج، و طاق مقرنسی از هندسه بر فراز سر، تا یادمان بماند این سنت از کجا آغاز شد.",
+ ctaVisit:"رزرو بازدید از مجتمع", ctaPortal:"مشاهدهٔ پورتال دانش‌آموز", scrollCue:"برای ورود به طاق، اسکرول کنید",
+ cardTimeK:"ساعت مجتمع · تهران", cardNowK:"هم‌اکنون در مجتمع",
+ statStudents:"دانش‌آموز، پایهٔ ۱ تا ۱۲", statFaculty:"عضو هیئت آموزشی",
+ statRatio:"دانش‌آموز به ازای هر معلم", statCountries:"ملیت در میان دانش‌آموزان",
+ progEyebrow:"دوره‌ها", progH:"دوازده سال، چهار جهان متفاوت",
+ progP:"هر دوره بر پایهٔ نیاز واقعی همان سن طراحی شده است، نه نسخه‌ای رقیق‌شده از دورهٔ بالاتر.",
+ p1y:"پایهٔ ۱ تا ۵ · ۶ تا ۱۱ سال", p1h:"دبستان", p1p:"خواندن، درک عدد و کنجکاوی، از روز نخست به‌صورت دوزبانه. بعدازظهرها وقت کارگاه است؛ سفال، مدار، هم‌سرایی.", p1t1:"سوادآموزی دوزبانه", p1t2:"کارگاه بعدازظهر",
+ p2y:"پایهٔ ۶ تا ۸ · ۱۱ تا ۱۴ سال", p2h:"متوسطهٔ اول", p2p:"سال‌هایی که دانش‌آموز تصمیم می‌گیرد اندیشیدن را دوست دارد یا نه. ترم‌های پروژه‌محور، نخستین کار آزمایشگاهی، و مربی‌ای که هر سه سال همراه اوست.", p2t1:"ترم پروژه‌محور", p2t2:"مربی اختصاصی",
+ p3y:"پایهٔ ۹ تا ۱۲ · ۱۴ تا ۱۸ سال", p3h:"متوسطهٔ دوم", p3p:"آمادگی کنکور هم‌زمان با مدارک AS و A Level کمبریج، تا دانش‌آموز تا لحظهٔ انتخاب، هر دو در را باز نگه دارد.", p3t1:"AS و A Level", p3t2:"مسیر کنکور",
+ p4y:"پایهٔ ۹ تا ۱۲ · با گزینش", p4h:"المپیاد و پژوهش", p4p:"مسیری موازی برای دانش‌آموزانی که از سرفصل جلو زده‌اند: ریاضی، فیزیک و کامپیوتر المپیاد، به‌همراه یک سال پژوهش با استاد راهنما.", p4t1:"کامپیوتر", p4t2:"سال پژوهش",
+ acEyebrow:"آنچه می‌سازیم", acH:"هر آنچه یک حکیم باید می‌دانست",
+ acP:"حکیم کلاسیک ایرانی آزادانه میان هندسه، پزشکی، شعر و نجوم حرکت می‌کرد. شش گروه آموزشی این گستره را اینجا زنده نگه داشته‌اند.",
+ a1h:"هندسه و ریاضیات", a1p:"از ترسیم گره با پرگار و خط‌کش در پایهٔ چهارم تا حساب دیفرانسیل چندمتغیره در پایهٔ دوازدهم.",
+ a2h:"علوم آزمایشگاهی", a2p:"چهار آزمایشگاه و یک میز الکترونیک. هر دانش‌آموز دورهٔ دوم یک آزمایش اصیل را طراحی، اجرا و دفاع می‌کند.",
+ a3h:"زبان و ادبیات", a3p:"فارسی و انگلیسی با وزن کامل تا پایهٔ دوازدهم، عربی از پایهٔ ششم، و فرانسه یا آلمانی به انتخاب دانش‌آموز.",
+ a4h:"طراحی و ساخت", a4p:"کارگاهی با کورهٔ سفال، برش لیزری و دار قالی. کاشی‌کاری ایرانی و نرم‌افزار CAD عامدانه در یک اتاق آموزش داده می‌شوند.",
+ a5h:"مشاوره", a5p:"یک مشاور به ازای هر ۱۶۰ دانش‌آموز، و هدایت دانشگاهی که از پایهٔ نهم آغاز می‌شود، نه در ترم آخر.",
+ a6h:"ورزش و سلامت", a6p:"دو سالن ورزشی، استخر ۲۵ متری و تحرک روزانهٔ اجباری؛ برای پایهٔ دوازدهم هم، و به‌ویژه برای پایهٔ دوازدهم.",
+ poEyebrow:"پورتال", poH:"بخشی که دانش‌آموز هر روز واقعاً باز می‌کند",
+ poP:"سامانهٔ فعلی شانزده مربع یکسان نشان می‌دهد و باید کلیک کنید تا بفهمید اصلاً اتفاقی افتاده یا نه. این یکی، پیش از آنکه دست بزنید پاسخ می‌دهد.",
+ beforeL:"امروز — lms.hakim.school", afterL:"طرح پیشنهادی", demoData:"دادهٔ نمونه",
+ beforeP:"شانزده کاشی با وزن یکسان. نه نمره‌ای، نه مهلتی، نه شمار پیام خوانده‌نشده‌ای، تا وقتی تک‌تک را باز نکنید. هیچ‌چیز به والدین نمی‌گوید امروز خوب گذشته یا نه.",
+ whoName:"ماهان م. · پایهٔ یازدهم",
+ rDash:"میزکار", rScores:"نمرات", rHw:"تکالیف", rMsg:"پیام‌ها", rSched:"برنامه",
+ rClass:"کلاس آنلاین", rBuffet:"بوفه", rReports:"کارنامه",
+ goodDay:"بعدازظهر بخیر، ماهان",
+ tAvg:"معدل ترم", tAvgD:"۰.۶ از مهر", tAtt:"حضور", tAttD:"یک تأخیر در این ماه",
+ tDue:"مهلت تا ۴۸ ساعت", tDueD:"تکلیف فیزیک امشب بسته می‌شود", tRank:"رتبهٔ کلاس", tRankD:"▲ ۲ پله",
+ chartT:"میانگین دروس، این ترم", chartR:"از ۲۰", feedT:"فعالیت زنده", schedT:"برنامهٔ امروز",
+ adEyebrow:"ثبت‌نام · ۱۴۰۵–۰۶", adH:"چهار گام، هشت هفته",
+ adP:"هر داوطلب را حضوری می‌سنجیم. از هیچ خانواده‌ای خواسته نمی‌شود پیش از گذراندن یک صبح در ساختمان، تعهدی بدهد.",
+ s1w:"هم‌اکنون باز است", s1h:"درخواست اولیه", s1p:"یک فرم کوتاه و یک تماس تلفنی. اگر احتمال پذیرش کم باشد، صادقانه پیش از ادامه به شما می‌گوییم.",
+ s2w:"تا ۲ هفته", s2h:"صبح ارزیابی", s2p:"ریاضی و زبان، به‌صورت کتبی در مجتمع. پایهٔ ۱ تا ۳ به‌جای آن در جلسه‌ای بازی‌محور شرکت می‌کنند.",
+ s3w:"تا ۴ هفته", s3h:"مصاحبهٔ خانوادگی", s3p:"دانش‌آموز و والدین، با مدیر دورهٔ مربوطه. چهل دقیقه، و بیشتر پرسش‌ها را شما می‌پرسید.",
+ s4w:"تا ۸ هفته", s4h:"پذیرش و ثبت‌نام", s4p:"پیشنهاد کتبی، جدول شهریه بدون افزوده‌های بعدی، و دو هفته فرصت تصمیم‌گیری.",
+ ctaH:"بیایید و طاق را از نزدیک ببینید", ctaP:"صبح‌های بازدید، هر چهارشنبه تا پایان اسفند. فرزندتان را بیاورید؛ چیزی برای ساختن به او می‌دهیم.", ctaBtn:"درخواست بازدید",
+ fTag:"مدرسه‌ای به نام دانشمند ایرانی که حاضر نشد تنها یک رشته را برگزیند.",
+ fSchool:"مدرسه", fFamilies:"خانواده‌ها", fContact:"تماس", fCalendar:"تقویم", fBuffet:"بوفه", fAddr:"تهران، ایران",
+ disclaimer:"طرح طراحی مستقل. این یک پیشنهاد غیررسمی برای بازطراحی وب‌سایت است، نه وب‌سایت رسمی مجتمع آموزشی بین‌المللی حکیم، و هیچ وابستگی یا تأییدی از سوی مدرسه ندارد. تمام اعداد، نام‌ها و فعالیت‌های پورتال، محتوای نمونه برای نمایش هستند.",
+ fYear:"طرح پیشنهادی · ۲۰۲۶",
+ palNav:"حرکت", palOpen:"باز کردن", palToggle:"باز/بسته",
+ palPlaceholder:"جست‌وجو در مدرسه، پورتال، هر چیزی…", palNone:"چیزی مطابقت ندارد.",
+ inSession:"در حال برگزاری", freePeriod:"بدون کلاس — زنگ آزاد", dayDone:"کلاس‌های امروز پایان یافت",
+ beforeSchool:"مجتمع از ساعت ۰۷:۳۰ باز است", weekend:"تعطیل آخر هفته — مجتمع بسته است",
+ now:"اکنون", next:"بعدی", done:"پایان", room:"کلاس"
+}};
+</script>
+<script>
+(function(){
+"use strict";
+const $=(s,r)=>(r||document).querySelector(s), $$=(s,r)=>[...(r||document).querySelectorAll(s)];
+const REDUCED = matchMedia("(prefers-reduced-motion: reduce)").matches;
+const FA_D=["۰","۱","۲","۳","۴","۵","۶","۷","۸","۹"];
+let lang = "en";
+const t = k => (I18N[lang][k] ?? I18N.en[k] ?? k);
+const nd = s => lang==="fa" ? String(s).replace(/[0-9]/g,d=>FA_D[+d]) : String(s);
+
+/* ---------- Tehran time ---------- */
+const TZ="Asia/Tehran";
+const tfmt=new Intl.DateTimeFormat("en-GB",{timeZone:TZ,hour:"2-digit",minute:"2-digit",second:"2-digit",weekday:"short",hour12:false});
+function tehran(){
+  const p=tfmt.formatToParts(new Date()), g=k=>p.find(x=>x.type===k).value;
+  const h=+g("hour"), m=+g("minute");
+  return {h,m,s:+g("second"),wd:g("weekday"),mins:h*60+m};
+}
+const pad=n=>String(n).padStart(2,"0");
+
+/* ---------- schedule (sample) ---------- */
+const SCHED=[
+ {a:"07:45",b:"08:35",en:"Geometry",fa:"هندسه",r:"B‑204"},
+ {a:"08:45",b:"09:35",en:"Physics",fa:"فیزیک",r:"Lab 2"},
+ {a:"09:45",b:"10:35",en:"English · Cambridge",fa:"انگلیسی · کمبریج",r:"A‑110"},
+ {a:"10:45",b:"11:35",en:"Chemistry",fa:"شیمی",r:"Lab 1"},
+ {a:"12:30",b:"13:20",en:"Persian Literature",fa:"ادبیات فارسی",r:"A‑115"},
+ {a:"13:30",b:"14:20",en:"Design Workshop",fa:"کارگاه طراحی",r:"Workshop"}
+].map(s=>{const p=x=>{const[h,m]=x.split(":").map(Number);return h*60+m};return{...s,A:p(s.a),B:p(s.b)}});
+
+const SUBJ=[
+ {en:"Mathematics",fa:"ریاضی",v:19.2},{en:"Physics",fa:"فیزیک",v:17.6},
+ {en:"Chemistry",fa:"شیمی",v:18.5},{en:"Literature",fa:"ادبیات",v:18.9},
+ {en:"English",fa:"انگلیسی",v:19.5},{en:"Geometry",fa:"هندسه",v:18.2}
+];
+
+/* =========================================================
+   1 · WEBGL MUQARNAS VAULT
+   ========================================================= */
+let three=null;
+function initVault(){
+  if(!window.THREE) return false;
+  const cv=$("#vault"), host=$("#bg");
+  let W=host.clientWidth, H=host.clientHeight;
+  const renderer=new THREE.WebGLRenderer({canvas:cv,antialias:true,alpha:true,powerPreference:"high-performance"});
+  renderer.setPixelRatio(Math.min(devicePixelRatio||1,1.75));
+  renderer.setSize(W,H,false);
+  const scene=new THREE.Scene();
+  scene.fog=new THREE.FogExp2(0x160F1C,0.0075);
+  const cam=new THREE.PerspectiveCamera(46,W/H,0.1,400);
+
+  const group=new THREE.Group(); scene.add(group);
+
+  /* --- muqarnas cells: tiers of niches on a dome --- */
+  const R=34, TIERS=7;
+  const cell=new THREE.ConeGeometry(1,1.55,4,1,true); cell.rotateX(Math.PI/2);
+  const matPlum=new THREE.MeshStandardMaterial({color:0x6B3080,metalness:.38,roughness:.44,side:THREE.DoubleSide,flatShading:true});
+  const matGold=new THREE.MeshStandardMaterial({color:0xE3A23C,metalness:.72,roughness:.26,emissive:0x2E1B05,side:THREE.DoubleSide,flatShading:true});
+
+  const plumM=[],goldM=[],dummy=new THREE.Object3D(),up=new THREE.Vector3(0,1,0);
+  for(let ti=0;ti<TIERS;ti++){
+    const phi=0.16+(ti/(TIERS-1))*1.06;
+    const n=6+ti*6, y=Math.cos(phi)*R, rad=Math.sin(phi)*R;
+    const w=(2*Math.PI*rad)/n*0.40;
+    for(let i=0;i<n;i++){
+      const th=(i/n)*Math.PI*2 + (ti%2? Math.PI/n : 0);
+      const px=Math.cos(th)*rad, pz=Math.sin(th)*rad;
+      dummy.position.set(px,y,pz);
+      dummy.up.copy(up);
+      dummy.lookAt(px*2,y*2,pz*2);          /* niche opens toward the centre */
+      dummy.rotateZ(ti%2?Math.PI/4:0);
+      dummy.scale.set(w,w,w*1.45);
+      dummy.updateMatrix();
+      ((ti+i)%5===0?goldM:plumM).push(dummy.matrix.clone());
+    }
+  }
+  const mk=(mats,mat)=>{const m=new THREE.InstancedMesh(cell,mat,mats.length);
+    mats.forEach((mx,i)=>m.setMatrixAt(i,mx)); m.instanceMatrix.needsUpdate=true; group.add(m); return m;};
+  mk(plumM,matPlum); mk(goldM,matGold);
+
+  /* --- girih star ring at the rim --- */
+  (function(){
+    const N=32, rr=R*Math.sin(1.30), yy=R*Math.cos(1.30), pts=[];
+    const P=i=>new THREE.Vector3(Math.cos(i/N*Math.PI*2)*rr,yy,Math.sin(i/N*Math.PI*2)*rr);
+    for(let i=0;i<N;i++){ pts.push(P(i),P(i+9)); pts.push(P(i),P(i+11)); }
+    const g=new THREE.BufferGeometry().setFromPoints(pts);
+    group.add(new THREE.LineSegments(g,new THREE.LineBasicMaterial({color:0xE3A23C,transparent:true,opacity:.17})));
+  })();
+
+  /* --- gold dust --- */
+  const dust=(function(){
+    const N=520, pos=new Float32Array(N*3);
+    for(let i=0;i<N;i++){const r=8+Math.random()*34,a=Math.random()*Math.PI*2;
+      pos[i*3]=Math.cos(a)*r; pos[i*3+1]=-14+Math.random()*46; pos[i*3+2]=Math.sin(a)*r;}
+    const g=new THREE.BufferGeometry(); g.setAttribute("position",new THREE.BufferAttribute(pos,3));
+    const p=new THREE.Points(g,new THREE.PointsMaterial({color:0xF2CE8E,size:.17,transparent:true,opacity:.5,depthWrite:false}));
+    scene.add(p); return p;
+  })();
+
+  scene.add(new THREE.AmbientLight(0x3E2C4A,1.15));
+  const l1=new THREE.PointLight(0xC07FD8,2.3,160); l1.position.set(0,-7,12); scene.add(l1);
+  const l2=new THREE.PointLight(0xE3A23C,1.5,130); l2.position.set(16,16,-10); scene.add(l2);
+  const l3=new THREE.DirectionalLight(0xF4EFF6,.45); l3.position.set(0,34,22); scene.add(l3);
+
+  let mx=0,my=0,tx=0,ty=0;
+  if(!REDUCED) addEventListener("pointermove",e=>{
+    tx=(e.clientX/innerWidth-.5)*2; ty=(e.clientY/innerHeight-.5)*2;
+  },{passive:true});
+
+  function resize(){ W=host.clientWidth; H=host.clientHeight;
+    cam.aspect=W/H; cam.updateProjectionMatrix(); renderer.setSize(W,H,false); }
+  addEventListener("resize",resize,{passive:true});
+
+  three={renderer,scene,cam,group,dust,resize,mxy:()=>{mx+=(tx-mx)*.045;my+=(ty-my)*.045;return[mx,my]}};
+  return true;
+}
+
+/* =========================================================
+   2 · SCROLL ENGINE
+   ========================================================= */
+let darkEnd=99999, prog=0, clock=0;
+function measure(){ const p=$("#portal"); darkEnd = p ? p.offsetTop : 99999; }
+
+function frame(){
+  requestAnimationFrame(frame);
+  fxTick(); acadTick(); navTick();
+  const y=scrollY;
+  const span=Math.max(darkEnd*0.8,innerHeight);
+  prog += (Math.min(y/span,1) - prog)*0.075;
+  if(!three) return;
+  if(y > darkEnd + innerHeight*0.4) return;      /* vault off-screen: skip work */
+  if(!REDUCED) clock += 0.0009;
+  const [mx,my]=three.mxy();
+  const g=three.group, c=three.cam;
+  g.rotation.y = clock + prog*1.15;
+  g.rotation.x = prog*0.22;
+  c.position.set(mx*3, -14 + prog*26 + my*1.6, 39 - prog*11);
+  c.lookAt(0, 15 - prog*9, 0);
+  if(!REDUCED) three.dust.rotation.y = -clock*1.8;
+  three.renderer.render(three.scene,three.cam);
+}
+
+/* nav turns light over the paper sections */
+function navWatch(){
+  const nav=$("#nav"), portal=$("#portal");
+  const sync=()=>nav.classList.toggle("on-paper", portal.getBoundingClientRect().top < 70);
+  addEventListener("scroll",sync,{passive:true});
+  addEventListener("resize",sync,{passive:true});
+  sync();
+}
+
+/* ---------- scroll-scrubbed effects ----------
+   Every effect reads scroll position continuously rather than firing once on
+   entry, so motion continues the whole way down the page instead of stopping
+   after the hero. Nothing is hidden in CSS: without JS the page renders final. */
+const clamp=(v,a,b)=>v<a?a:v>b?b:v;
+const easeOut=p=>1-Math.pow(1-p,3);
+let FX=[];
+
+function fxInit(){
+  FX=$$("[data-fx]").map(el=>({el,k:el.dataset.fx,s:parseFloat(el.dataset.fxs||"1")}));
+  const io=new IntersectionObserver((es,o)=>es.forEach(e=>{
+    if(e.isIntersecting){ countUp(e.target); o.unobserve(e.target); }
+  }),{threshold:.12});
+  $$(".rv").forEach(el=>io.observe(el));
+  if(REDUCED){ FX.forEach(f=>{ f.el.style.opacity="1"; f.el.style.transform="none"; }); FX=[]; }
+}
+
+function fxTick(){
+  const vh=innerHeight;
+  for(const f of FX){
+    const r=f.el.getBoundingClientRect();
+    if(r.top>vh+140 || r.bottom<-140) continue;
+    const raw=(vh-r.top)/(vh*0.58+r.height*0.12);
+    const e=easeOut(clamp(raw/f.s,0,1));
+    const st=f.el.style;
+    if(f.k==="rise"){
+      st.opacity=(0.05+0.95*e).toFixed(3);
+      st.transform="translate3d(0,"+((1-e)*44).toFixed(1)+"px,0)";
+    }else if(f.k==="device"){
+      /* A gentler quadratic over a longer run, so the tilt is actually visible
+         while the mockup is on screen instead of snapping flat immediately. */
+      const d=clamp((vh-r.top)/(vh*0.95),0,1), q=1-Math.pow(1-d,2);
+      st.opacity=(0.3+0.7*q).toFixed(3);
+      st.transform="rotateX("+((1-q)*17).toFixed(2)+"deg) scale("+(0.88+0.12*q).toFixed(4)
+        +") translate3d(0,"+((1-q)*40).toFixed(1)+"px,0)";
+    }else if(f.k==="fill"){
+      st.transform="scaleX("+e.toFixed(3)+")";
+    }else if(f.k==="para"){
+      const q=clamp((vh-r.top)/(vh+r.height),0,1);
+      st.transform="translate3d(0,"+((0.5-q)*64*f.s).toFixed(1)+"px,0)";
+    }
+  }
+}
+
+/* the six departments advance while the section is pinned */
+let acadEls=null;
+function acadTick(){
+  if(REDUCED) return;
+  if(!acadEls){
+    const track=$(".acad-track"); if(!track) return;
+    acadEls={track,items:$$(".acad-item"),prog:$("#acadProg"),
+             paths:$$("#acadVisual .gp")};
+    /* The girih is display:none at phone width, where getTotalLength() throws
+       on a non-rendered element. Measure only when it is actually laid out. */
+    acadEls.paths.forEach(p=>{
+      let L=400;
+      try{ if(p.getClientRects().length && p.getTotalLength) L=p.getTotalLength()||400; }
+      catch(_){}
+      p.dataset.len=L; p.style.strokeDasharray=L;
+    });
+    if(!acadEls.paths.some(p=>p.getClientRects().length)) acadEls.pending=true;
+  }
+  const {track,items,prog,paths}=acadEls;
+  if(getComputedStyle($(".acad-sticky")).position!=="sticky"){
+    items.forEach(i=>i.classList.add("on"));
+    if(prog) prog.style.transform="scaleX(1)";
+    paths.forEach(p=>p.style.strokeDashoffset=0);
+    return;
+  }
+  const r=track.getBoundingClientRect();
+  const span=r.height-innerHeight;
+  if(span<=0) return;
+  const p=clamp(-r.top/span,0,1);
+  const idx=clamp(Math.floor(p*items.length*0.999),0,items.length-1);
+  items.forEach((it,i)=>it.classList.toggle("on",i===idx));
+  if(prog) prog.style.transform="scaleX("+p.toFixed(4)+")";
+  paths.forEach((pa,i)=>{
+    const L=+pa.dataset.len;
+    const local=clamp(p*paths.length-i*0.55,0,1);
+    pa.style.strokeDashoffset=(L*(1-easeOut(local))).toFixed(1);
+  });
+}
+
+function countUp(scope){
+  const els = scope.matches("[data-count]") ? [scope] : $$("[data-count]",scope);
+  els.forEach(el=>{
+    if(el.dataset.done) return; el.dataset.done="1";
+    const to=+el.dataset.count, dur=REDUCED?0:1100, t0=performance.now();
+    (function step(now){
+      const k=dur?Math.min((now-t0)/dur,1):1, e=1-Math.pow(1-k,3);
+      el.textContent=nd(Math.round(to*e).toLocaleString("en-US"));
+      if(k<1) requestAnimationFrame(step);
+    })(t0);
+  });
+}
+
+function navTick(){ $("#nav").classList.toggle("small", scrollY>90); }
+
+window.__reflowCounts=()=>$$("[data-count]").forEach(el=>{
+  if(el.dataset.done) el.textContent=nd((+el.dataset.count).toLocaleString("en-US"));
+});
+window.__hakim={measure,fxInit,navWatch,frame,initVault,resetAcad:()=>{acadEls=null},t,nd,tehran,pad,SCHED,SUBJ,$,$$,REDUCED,
+  getLang:()=>lang,setLang:v=>{lang=v}};
+})();
+</script>
+<script>
+(function(){
+"use strict";
+const H=window.__hakim, {$,$$,pad,tehran,SCHED,SUBJ,REDUCED}=H;
+const t=H.t, nd=H.nd;
+const L=()=>H.getLang();
+
+/* ---------- i18n ---------- */
+function setText(el,v){
+  const n=[...el.childNodes].find(x=>x.nodeType===3 && x.textContent.trim());
+  if(n) n.textContent=v; else el.textContent=v;
+}
+function applyLang(l){
+  H.setLang(l);
+  document.body.dir = l==="fa" ? "rtl" : "ltr";
+  document.body.lang = l==="fa" ? "fa" : "en";
+  document.documentElement.lang = l==="fa" ? "fa" : "en";
+  document.documentElement.dir  = l==="fa" ? "rtl" : "ltr";
+  $$("[data-i18n]").forEach(el=>{ const v=I18N[l][el.dataset.i18n]; if(v!=null) setText(el,v); });
+  $("#langBtn").textContent = l==="fa" ? "English" : "فارسی";
+  $("#palInput").placeholder = t("palPlaceholder");
+  $("#tAvg").textContent = nd("18.4");
+  $("#tAtt").textContent = nd("97") + "%";
+  $$(".tile .t-v.tnum, .slot .tm").forEach(el=>{
+    if(el.id) return;
+    const w=document.createTreeWalker(el,NodeFilter.SHOW_TEXT);
+    let n; while((n=w.nextNode())) n.textContent = nd(n.textContent.replace(/[۰-۹]/g,d=>"۰۱۲۳۴۵۶۷۸۹".indexOf(d)));
+  });
+  window.__reflowCounts();
+  buildIndex(); buildMarquee(); tick(); renderFeed(); drawChart(1);
+}
+
+/* ---------- live clock + status ---------- */
+function tick(){
+  const n=tehran(), l=L();
+  $("#clock").textContent = nd(pad(n.h)+":"+pad(n.m)+":"+pad(n.s));
+  const weekend = n.wd==="Thu" || n.wd==="Fri";
+  const cur = SCHED.find(s=>n.mins>=s.A && n.mins<s.B);
+  const nxt = SCHED.find(s=>n.mins<s.A);
+  const dot=$("#nowDot"), txt=$("#nowText");
+  let msg, col;
+  if(weekend){ msg=t("weekend"); col="#6E6276"; }
+  else if(cur){ msg=(l==="fa"?cur.fa:cur.en)+" · "+t("inSession"); col="#3FA46A"; }
+  else if(n.mins<SCHED[0].A){ msg=t("beforeSchool"); col="#D98324"; }
+  else if(nxt){ msg=t("freePeriod")+" · "+(l==="fa"?nxt.fa:nxt.en)+" "+nd(nxt.a); col="#D98324"; }
+  else { msg=t("dayDone"); col="#6E6276"; }
+  txt.textContent=msg; dot.style.background=col;
+  dot.style.animation = col==="#3FA46A" && !REDUCED ? "" : "none";
+  const done=SCHED.filter(s=>n.mins>=s.B).length;
+  $("#portalSub").textContent = weekend ? t("weekend")
+    : nd(done)+"/"+nd(SCHED.length)+" "+(l==="fa"?"کلاس برگزار شد":"classes done")+" · "+nd(pad(n.h)+":"+pad(n.m));
+  $("#schedR").textContent = nd(pad(n.h)+":"+pad(n.m));
+  renderSched(n,weekend);
+}
+function renderSched(n,weekend){
+  const l=L(), box=$("#sched"); box.innerHTML="";
+  SCHED.forEach(s=>{
+    const now = !weekend && n.mins>=s.A && n.mins<s.B;
+    const done = weekend || n.mins>=s.B;
+    const d=document.createElement("div");
+    d.className="slot"+(now?" now":done?" done":" next");
+    d.innerHTML='<span class="tm">'+nd(s.a)+"–"+nd(s.b)+'</span>'+
+      '<span class="nm">'+(l==="fa"?s.fa:s.en)+'</span>'+
+      '<span class="st">'+(now?t("now"):done?t("done"):t("next"))+'</span>';
+    box.appendChild(d);
+  });
+}
+
+/* ---------- live activity feed ---------- */
+const POOL=[
+ {k:"good",en:"Chemistry quiz graded — 19.0 / 20",fa:"آزمون شیمی تصحیح شد — ۱۹٫۰ از ۲۰"},
+ {k:"crit",en:"Physics problem set closes in 4 hours",fa:"مهلت تکلیف فیزیک تا ۴ ساعت دیگر"},
+ {k:"info",en:"Ms. Rahimi posted notes for Geometry",fa:"خانم رحیمی جزوهٔ هندسه را بارگذاری کرد"},
+ {k:"good",en:"Attendance confirmed for period 3",fa:"حضور زنگ سوم ثبت شد"},
+ {k:"info",en:"Library hold ready: Al‑Biruni, Chronology",fa:"امانت کتابخانه آماده است: آثار الباقیه، بیرونی"},
+ {k:"warn",en:"Workshop moved to the ceramics room",fa:"کارگاه به اتاق سفال منتقل شد"},
+ {k:"good",en:"Olympiad round 2 result published",fa:"نتیجهٔ مرحلهٔ دوم المپیاد منتشر شد"},
+ {k:"info",en:"e‑Buffet balance topped up",fa:"موجودی بوفه شارژ شد"},
+ {k:"warn",en:"Bus route 4 running 10 minutes late",fa:"سرویس شمارهٔ ۴ ده دقیقه تأخیر دارد"}
+];
+const COL={good:"#3FA46A",warn:"#D98324",crit:"#C6453F",info:"#7A3A8C"};
+let feed=[], seed=0;
+function pushFeed(){
+  const n=tehran();
+  feed.unshift({...POOL[seed++%POOL.length], tm:pad(n.h)+":"+pad(n.m)});
+  feed=feed.slice(0,6); renderFeed();
+  const b=$("#msgBadge"); if(b) b.textContent=nd(Math.min(9,6+Math.floor(seed/3)));
+}
+function renderFeed(){
+  const l=L(), ul=$("#feed"); ul.innerHTML="";
+  feed.forEach(f=>{
+    const li=document.createElement("li");
+    li.innerHTML='<span class="dot" style="background:'+COL[f.k]+'"></span>'+
+      '<span class="tx">'+(l==="fa"?f.fa:f.en)+'</span><span class="tm">'+nd(f.tm)+"</span>";
+    ul.appendChild(li);
+  });
+}
+
+/* ---------- chart: lollipop on a labelled 14–20 axis ---------- */
+const MIN=14, MAX=20, X0=100, X1=462;
+function drawChart(p){
+  const svg=$("#chart"), flip=L()==="fa";
+  const M=x=>flip?520-x:x;
+  const X=v=>X0+(Math.max(MIN,v)-MIN)/(MAX-MIN)*(X1-X0);
+  const best=Math.max(...SUBJ.map(s=>s.v));
+  let o="";
+  [14,16,18,20].forEach(v=>{
+    o+='<line x1="'+M(X(v))+'" y1="12" x2="'+M(X(v))+'" y2="132" stroke="#EFEAF0" stroke-width="1" fill="none"/>';
+    o+='<text x="'+M(X(v))+'" y="150" fill="#6B5F73" font-size="10.5" text-anchor="middle" font-family="Archivo,sans-serif">'+nd(v)+"</text>";
+  });
+  o+='<line x1="'+M(X0)+'" y1="136" x2="'+M(X1)+'" y2="136" stroke="#E3DCE6" stroke-width="1" fill="none"/>';
+  SUBJ.forEach((s,i)=>{
+    const y=18+ (120/SUBJ.length)*(i+.5);
+    const vx=X(MIN+(s.v-MIN)*p), gold=s.v===best;
+    o+='<text x="'+M(88)+'" y="'+(y+3.5)+'" fill="#6B5F73" font-size="11" text-anchor="'+(flip?"start":"end")+'" font-family="'+(flip?"Vazirmatn":"Archivo")+',sans-serif">'+(flip?s.fa:s.en)+"</text>";
+    o+='<line x1="'+M(X0)+'" y1="'+y+'" x2="'+M(X1)+'" y2="'+y+'" stroke="#F3EEF4" stroke-width="2" stroke-linecap="round" fill="none"/>';
+    o+='<line x1="'+M(X0)+'" y1="'+y+'" x2="'+M(vx)+'" y2="'+y+'" stroke="'+(gold?"#E3A23C":"#7A3A8C")+'" stroke-width="3" stroke-linecap="round" fill="none" opacity=".55"/>';
+    o+='<circle cx="'+M(vx)+'" cy="'+y+'" r="4.6" fill="'+(gold?"#E3A23C":"#7A3A8C")+'"/>';
+    o+='<text x="'+M(X1+12)+'" y="'+(y+3.8)+'" fill="#241C2A" font-size="11.5" font-weight="700" text-anchor="'+(flip?"end":"start")+'" font-family="'+(flip?"Vazirmatn":"Archivo")+',sans-serif">'+nd((MIN+(s.v-MIN)*p).toFixed(1))+"</text>";
+  });
+  svg.innerHTML=o;
+}
+function animChart(){
+  if(REDUCED) return drawChart(1);
+  const t0=performance.now();
+  (function s(n){const k=Math.min((n-t0)/850,1);drawChart(1-Math.pow(1-k,3));if(k<1)requestAnimationFrame(s);})(t0);
+}
+
+/* ---------- ⌘K search ---------- */
+let INDEX=[], sel=0, results=[];
+function buildIndex(){
+  const l=L(), g=(k)=>I18N[l][k]||I18N.en[k];
+  INDEX=[
+   {id:"programs",c:g("navPrograms"),n:g("progH")},
+   {id:"programs",c:g("navPrograms"),n:g("p1h")+" · "+g("p1y")},
+   {id:"programs",c:g("navPrograms"),n:g("p2h")+" · "+g("p2y")},
+   {id:"programs",c:g("navPrograms"),n:g("p3h")+" · "+g("p3y")},
+   {id:"programs",c:g("navPrograms"),n:g("p4h")},
+   {id:"academics",c:g("navAcademics"),n:g("a1h")},
+   {id:"academics",c:g("navAcademics"),n:g("a2h")},
+   {id:"academics",c:g("navAcademics"),n:g("a3h")},
+   {id:"academics",c:g("navAcademics"),n:g("a4h")},
+   {id:"academics",c:g("navAcademics"),n:g("a5h")},
+   {id:"academics",c:g("navAcademics"),n:g("a6h")},
+   {id:"portal",c:g("navPortal"),n:g("rDash")},
+   {id:"portal",c:g("navPortal"),n:g("rScores")},
+   {id:"portal",c:g("navPortal"),n:g("rHw")},
+   {id:"portal",c:g("navPortal"),n:g("rMsg")},
+   {id:"portal",c:g("navPortal"),n:g("rSched")},
+   {id:"portal",c:g("navPortal"),n:g("rClass")},
+   {id:"portal",c:g("navPortal"),n:g("rBuffet")},
+   {id:"portal",c:g("navPortal"),n:g("rReports")},
+   {id:"admissions",c:g("navAdmissions"),n:g("s1h")+" · "+g("s1w")},
+   {id:"admissions",c:g("navAdmissions"),n:g("s2h")+" · "+g("s2w")},
+   {id:"admissions",c:g("navAdmissions"),n:g("s3h")+" · "+g("s3w")},
+   {id:"admissions",c:g("navAdmissions"),n:g("s4h")+" · "+g("s4w")},
+   ...SCHED.map(s=>({id:"portal",c:g("schedT"),n:(l==="fa"?s.fa:s.en)+" · "+nd(s.a)})),
+   ...SUBJ.map(s=>({id:"portal",c:g("chartT"),n:(l==="fa"?s.fa:s.en)+" · "+nd(s.v.toFixed(1))}))
+  ];
+}
+function score(q,s){
+  q=q.toLowerCase().trim(); s=s.toLowerCase();
+  if(!q) return 1;
+  const i=s.indexOf(q); if(i===0) return 100; if(i>0) return 70-i*0.4;
+  let j=0,hit=0; for(const ch of q){ const k=s.indexOf(ch,j); if(k<0) return 0; if(k===j)hit++; j=k+1; }
+  return 26+hit;
+}
+function runSearch(){
+  const q=$("#palInput").value, box=$("#palRes");
+  results = INDEX.map(e=>({e,s:Math.max(score(q,e.n),score(q,e.c)*0.6)}))
+                 .filter(r=>r.s>0).sort((a,b)=>b.s-a.s).slice(0,9).map(r=>r.e);
+  sel=0; box.innerHTML="";
+  if(!results.length){ box.innerHTML='<span class="none">'+t("palNone")+"</span>"; return; }
+  results.forEach((r,i)=>{
+    const li=document.createElement("li");
+    li.setAttribute("role","option"); li.setAttribute("aria-selected", i===0?"true":"false");
+    li.innerHTML='<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12h13m-5-6 6 6-6 6"/></svg><span>'+r.n+'</span><span class="cat">'+r.c+"</span>";
+    li.addEventListener("click",()=>go(r));
+    box.appendChild(li);
+  });
+}
+function mark(){ $$("#palRes li").forEach((li,i)=>li.setAttribute("aria-selected", i===sel?"true":"false"));
+  const a=$$("#palRes li")[sel]; if(a) a.scrollIntoView({block:"nearest"}); }
+function openPal(){ $("#pal").hidden=false; $("#palInput").value=""; runSearch(); $("#palInput").focus(); }
+function closePal(){ $("#pal").hidden=true; }
+function go(r){ closePal(); const el=document.getElementById(r.id);
+  if(el) el.scrollIntoView({behavior:REDUCED?"auto":"smooth",block:"start"}); }
+
+/* ---------- 3D tilt on program cards ---------- */
+function tilt(){
+  if(REDUCED || matchMedia("(pointer:coarse)").matches) return;
+  $$(".prog").forEach(card=>{
+    const glow=$(".glow",card);
+    card.addEventListener("pointermove",e=>{
+      const r=card.getBoundingClientRect(), x=(e.clientX-r.left)/r.width, y=(e.clientY-r.top)/r.height;
+      card.style.transform="rotateY("+(x-.5)*9+"deg) rotateX("+(.5-y)*9+"deg) translateZ(14px)";
+      glow.style.left=(e.clientX-r.left-140)+"px"; glow.style.top=(e.clientY-r.top-140)+"px";
+    });
+    card.addEventListener("pointerleave",()=>{ card.style.transform=""; });
+  });
+}
+
+/* ---------- marquee ---------- */
+const MQ=[
+ {en:"Girih geometry",fa:"هندسهٔ گره"},
+ {en:"Cambridge A Level",fa:"ای‌لول کمبریج"},
+ {en:"Olympiad informatics",fa:"کامپیوتر المپیاد"},
+ {en:"Four wet labs",fa:"چهار آزمایشگاه"},
+ {en:"Persian literature",fa:"ادبیات فارسی"},
+ {en:"Ceramics & CAD",fa:"سفال و CAD"},
+ {en:"A 25-metre pool",fa:"استخر ۲۵ متری"},
+ {en:"Arabic from Grade 6",fa:"عربی از پایهٔ ششم"},
+ {en:"Astronomy",fa:"نجوم"},
+ {en:"A supervised research year",fa:"یک سال پژوهش"}
+];
+function buildMarquee(){
+  const row=$("#mqRow"); if(!row) return;
+  const l=L(), one=MQ.map(m=>"<span>"+(l==="fa"?m.fa:m.en)+"</span>").join("");
+  row.innerHTML=one+one;   /* duplicated so translateX(-50%) loops seamlessly */
+}
+
+/* ---------- boot ---------- */
+function boot(){
+  applyLang("en");
+  H.measure(); H.fxInit(); H.navWatch(); tilt(); buildMarquee();
+  /* The scroll engine must run whether or not WebGL is available, so the loop
+     starts unconditionally and frame() skips only the vault render. */
+  if(!H.initVault()) $("#vault").style.display="none";
+  H.frame();
+  for(let i=0;i<4;i++) pushFeed();
+  setInterval(tick,1000);
+  setInterval(pushFeed, REDUCED?20000:6500);
+  addEventListener("resize",()=>{H.measure();H.resetAcad();},{passive:true});
+
+  new IntersectionObserver((es,o)=>es.forEach(e=>{ if(e.isIntersecting){ animChart(); o.disconnect(); }}),
+    {threshold:.25}).observe($("#chart"));
+
+  $("#langBtn").addEventListener("click",()=>applyLang(L()==="fa"?"en":"fa"));
+  $("#openPal").addEventListener("click",openPal);
+  $("#palEsc").addEventListener("click",closePal);
+  $("#pal").addEventListener("click",e=>{ if(e.target.id==="pal") closePal(); });
+  $("#palInput").addEventListener("input",runSearch);
+  addEventListener("keydown",e=>{
+    if((e.metaKey||e.ctrlKey) && e.key.toLowerCase()==="k"){ e.preventDefault(); $("#pal").hidden?openPal():closePal(); return; }
+    if($("#pal").hidden){
+      if(e.key==="/" && !/^(INPUT|TEXTAREA)$/.test(document.activeElement.tagName)){ e.preventDefault(); openPal(); }
+      return;
+    }
+    if(e.key==="Escape"){ closePal(); }
+    else if(e.key==="ArrowDown"){ e.preventDefault(); sel=(sel+1)%Math.max(results.length,1); mark(); }
+    else if(e.key==="ArrowUp"){ e.preventDefault(); sel=(sel-1+results.length)%Math.max(results.length,1); mark(); }
+    else if(e.key==="Enter" && results[sel]){ e.preventDefault(); go(results[sel]); }
+  });
+  $$(".app-rail button").forEach(b=>b.addEventListener("click",()=>{
+    $$(".app-rail button").forEach(x=>x.setAttribute("aria-selected","false"));
+    b.setAttribute("aria-selected","true");
+  }));
+}
+document.readyState==="loading" ? addEventListener("DOMContentLoaded",boot) : boot();
+})();
+</script>
+
+</body>
+</html>
