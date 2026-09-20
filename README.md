@@ -3,7 +3,7 @@
 A design concept for the website of **Hakim International School**
 (مجتمع آموزشی بین‌المللی حکیم), Tehran.
 
-**Live:** https://mahanmajdi.github.io/zero_eleven/
+**Live:** https://mahanmajdi.github.io/hakim-international-school/
 
 > Unofficial. This is a design proposal, not an official school site, and is
 > not affiliated with or endorsed by the school. All figures, names and portal
