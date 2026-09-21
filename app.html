@@ -5,8 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Your log · Macro</title>
 <meta name="description" content="Your Macro food log: calories and macros for every day, saved to your account and synced across your devices.">
-<meta name="theme-color" content="#080C0A" media="(prefers-color-scheme: dark)">
-<meta name="theme-color" content="#F2F1E9" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#080C0A">
 <meta name="robots" content="noindex">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -18,11 +17,12 @@
   --bg:#F2F1E9;--surf:#FFFFFF;--ink:#0F1613;--sub:#5C6962;--line:rgba(15,32,24,.13);
   --glass:255,255,255;--ga:.78;
   --accent:#126B49;--accent-soft:#63E5AB;--accent-ink:#FFFFFF;--over:#C13F2B;
-  --azure:#4273F8;--saffron:#E3A017;--rose:#E4416D;--mint:#63E5AB;
   --shadow:0 1px 2px rgba(10,30,20,.06),0 18px 44px -20px rgba(10,30,20,.28);
+  --void:#080C0A;--mint:#63E5AB;--azure:#4273F8;--saffron:#E3A017;--rose:#E4416D;
   --head:'Familjen Grotesk','Trebuchet MS',system-ui,sans-serif;
   --body:'Instrument Sans',system-ui,-apple-system,'Segoe UI',sans-serif;
   --mono:'IBM Plex Mono',ui-monospace,'SF Mono',Menlo,monospace;
+  --ease:cubic-bezier(.16,.84,.26,1);
 }
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
   --bg:#080C0A;--surf:#101714;--ink:#EDF2EE;--sub:#8D9B93;--line:rgba(178,222,201,.16);
@@ -36,27 +36,43 @@
   --accent:#63E5AB;--accent-soft:#0F6B48;--accent-ink:#04120B;--over:#F07A64;
   --shadow:0 1px 2px rgba(0,0,0,.45),0 22px 50px -22px rgba(0,0,0,.8);
 }
+/* the sign-in and first-run screens keep one cinematic look in either theme */
+body.cine{
+  --bg:#080C0A;--surf:#101714;--ink:#EDF2EE;--sub:#9DAEA5;--line:rgba(178,222,201,.17);
+  --glass:15,23,19;--ga:.58;
+  --accent:#63E5AB;--accent-soft:#0F6B48;--accent-ink:#04120B;--over:#F28B75;
+  --shadow:0 40px 90px -40px rgba(0,0,0,.95),0 0 0 1px rgba(255,255,255,.03);
+}
 *{box-sizing:border-box;}
 html{-webkit-text-size-adjust:100%;}
 body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.55;
-  min-height:100vh;overflow-x:clip;-webkit-font-smoothing:antialiased;
-  padding-bottom:env(safe-area-inset-bottom,0px);}
+  min-height:100vh;overflow-x:clip;-webkit-font-smoothing:antialiased;padding-bottom:env(safe-area-inset-bottom,0px);
+  transition:background-color .9s ease,color .9s ease;}
 [hidden]{display:none!important;}
 button{font:inherit;color:inherit;cursor:pointer;}
 a{color:inherit;}
-:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:6px;}
-#glow{position:fixed;inset:-25%;z-index:-1;pointer-events:none;filter:blur(80px);opacity:.5;}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:8px;}
+
+/* ---------- backdrops ---------- */
+#stage3d{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none;opacity:0;transition:opacity .9s ease;}
+#vig{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:0;transition:opacity .9s ease;
+  background:radial-gradient(120% 90% at 50% 45%,rgba(8,12,10,0) 32%,rgba(8,12,10,.62) 74%,rgba(8,12,10,.96) 100%);}
+body.cine #stage3d,body.cine #vig{opacity:1;}
+#glow{position:fixed;inset:-25%;z-index:0;pointer-events:none;filter:blur(80px);opacity:.5;transition:opacity .9s ease;}
+body.cine #glow{opacity:0;}
 #glow i{position:absolute;border-radius:50%;display:block;}
 #glow i:nth-child(1){width:46vmax;height:46vmax;left:-8vmax;top:-10vmax;background:var(--accent-soft);opacity:.55;animation:d1 28s ease-in-out infinite;}
 #glow i:nth-child(2){width:40vmax;height:40vmax;right:-10vmax;top:22vmax;background:#4F8FE8;opacity:.28;animation:d2 34s ease-in-out infinite;}
 @keyframes d1{50%{transform:translate3d(7vmax,5vmax,0) scale(1.1);}}
 @keyframes d2{50%{transform:translate3d(-8vmax,6vmax,0) scale(.92);}}
+main{position:relative;z-index:1;}
 
-/* bar */
-.bar{position:sticky;top:0;z-index:20;display:flex;align-items:center;gap:14px;
+/* ---------- top bar ---------- */
+.bar{position:sticky;top:0;z-index:30;display:flex;align-items:center;gap:14px;
   padding:10px 20px;padding-top:calc(10px + env(safe-area-inset-top,0px));
   background:rgba(var(--glass),.72);backdrop-filter:blur(16px) saturate(150%);-webkit-backdrop-filter:blur(16px) saturate(150%);
-  border-bottom:1px solid var(--line);}
+  border-bottom:1px solid var(--line);transition:background-color .9s ease,border-color .9s ease;}
+body.cine .bar{background:transparent;border-bottom-color:transparent;backdrop-filter:none;-webkit-backdrop-filter:none;}
 .brand{display:flex;align-items:center;gap:9px;font-family:var(--head);font-weight:700;font-size:18px;letter-spacing:-.03em;text-decoration:none;}
 .brand svg{width:22px;height:22px;flex:none;}
 .sync{font-family:var(--mono);font-size:11px;letter-spacing:.08em;color:var(--sub);margin-left:auto;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0;}
@@ -67,6 +83,7 @@ a{color:inherit;}
 .sync:empty{display:none;}
 @keyframes pulse{50%{opacity:.25;}}
 .me{display:flex;align-items:center;gap:9px;min-width:0;}
+.sync:empty+.me{margin-left:auto;}
 .av{width:30px;height:30px;border-radius:50%;flex:none;display:grid;place-items:center;overflow:hidden;
   font-family:var(--head);font-weight:600;font-size:12px;background:linear-gradient(155deg,var(--accent-soft),var(--accent));color:var(--accent-ink);}
 .av img{width:100%;height:100%;object-fit:cover;display:block;}
@@ -75,53 +92,166 @@ a{color:inherit;}
 .link{background:none;border:0;padding:4px 2px;color:var(--sub);text-decoration:underline;text-underline-offset:3px;font-size:13.5px;}
 .link:hover{color:var(--ink);}
 
-/* layout */
+/* ---------- shared type ---------- */
+h1,h2,h3{font-family:var(--head);letter-spacing:-.03em;margin:0;}
+.eyebrow{font-family:var(--mono);font-size:11px;font-weight:500;letter-spacing:.2em;text-transform:uppercase;color:var(--sub);margin:0 0 14px;display:flex;align-items:center;gap:9px;}
+.eyebrow i{width:6px;height:6px;border-radius:50%;background:var(--mint);box-shadow:0 0 12px 2px rgba(99,229,171,.75);flex:none;}
+.p{color:var(--sub);margin:12px 0 0;max-width:52ch;}
+.fine{font-size:12.5px;color:var(--sub);margin:16px 0 0;line-height:1.5;}
+.st{font-size:13.5px;color:var(--sub);min-height:20px;margin:12px 0 0;}
+.st.err{color:var(--over);}
+.st.ok{color:var(--accent);}
+label{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--sub);display:block;margin-bottom:6px;}
+input[type=text],input[type=email],input[type=number]{font:inherit;color:var(--ink);background:rgba(var(--glass),.6);
+  border:1px solid var(--line);border-radius:12px;padding:11px 13px;width:100%;min-width:0;transition:border-color .2s,box-shadow .2s;}
+input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 4px color-mix(in srgb,var(--accent) 22%,transparent);}
+input::placeholder{color:var(--sub);opacity:.7;}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;}
+
+/* ---------- cinematic screens ---------- */
+.screen{min-height:calc(100vh - 64px);min-height:calc(100svh - 64px);display:grid;place-items:center;padding:20px 16px 56px;}
+.glass{position:relative;width:100%;border-radius:28px;border:1px solid var(--line);background:rgba(var(--glass),var(--ga));
+  backdrop-filter:blur(24px) saturate(160%);-webkit-backdrop-filter:blur(24px) saturate(160%);box-shadow:var(--shadow);}
+.glass::before{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;
+  background:linear-gradient(150deg,rgba(255,255,255,.13),rgba(255,255,255,0) 40%);}
+.authcard{max-width:470px;padding:34px 30px 28px;}
+.qcard{max-width:600px;padding:28px 30px 26px;}
+.qcard.wide{max-width:720px;--ga:.76;}
+.authcard h1{font-size:clamp(30px,6.4vw,40px);line-height:1.02;}
+.bigin{font-size:17px;padding:14px 16px;border-radius:14px;}
+.cta{display:inline-flex;align-items:center;justify-content:center;gap:9px;height:52px;padding:0 26px;border:0;border-radius:999px;
+  background:var(--mint);color:#052014;font-weight:500;font-size:16px;white-space:nowrap;
+  box-shadow:0 12px 34px -12px rgba(99,229,171,.85);transition:transform .25s var(--ease),box-shadow .25s,opacity .2s;}
+.cta:hover{transform:translateY(-2px);box-shadow:0 18px 44px -14px rgba(99,229,171,.95);}
+.cta:active{transform:translateY(1px);}
+.cta[disabled]{opacity:.45;cursor:default;transform:none;box-shadow:none;}
+.cta.full{width:100%;}
+.ghost{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:44px;padding:0 18px;border-radius:999px;
+  border:1px solid var(--line);background:rgba(255,255,255,.04);color:var(--ink);transition:border-color .2s,transform .2s,background .2s;}
+.ghost:hover{border-color:var(--ink);transform:translateY(-1px);}
+.ghost[disabled]{opacity:.45;cursor:default;transform:none;}
+.textbtn{background:none;border:0;padding:6px 4px;color:var(--sub);font-size:14px;text-decoration:underline;text-underline-offset:3px;}
+.textbtn:hover{color:var(--ink);}
+.gbtn{width:100%;display:flex;align-items:center;justify-content:center;gap:11px;margin-top:24px;height:52px;border-radius:999px;
+  border:1px solid rgba(15,32,24,.18);background:#fff;color:#1F1F1F;font-weight:500;font-size:15.5px;
+  box-shadow:0 12px 30px -14px rgba(0,0,0,.6);transition:transform .25s var(--ease),box-shadow .25s;}
+.gbtn:hover{transform:translateY(-2px);}
+.gbtn svg{width:19px;height:19px;flex:none;}
+.gbtn[disabled]{opacity:.55;cursor:default;transform:none;}
+.or{display:flex;align-items:center;gap:12px;margin:20px 0 16px;color:var(--sub);font-size:12.5px;}
+.or::before,.or::after{content:"";flex:1;height:1px;background:var(--line);}
+#emailform{margin-top:24px;}
+#or:not([hidden])+#emailform{margin-top:0;}
+.stack{display:flex;flex-direction:column;gap:12px;}
+
+/* step transitions */
+.enter{animation:enter .7s var(--ease) both;}
+.enter.fromleft{animation-name:enterL;}
+@keyframes enter{from{opacity:0;transform:translate3d(30px,0,0);filter:blur(8px);}}
+@keyframes enterL{from{opacity:0;transform:translate3d(-30px,0,0);filter:blur(8px);}}
+.rise{animation:rise .9s var(--ease) both;}
+@keyframes rise{from{opacity:0;transform:translate3d(0,28px,0) scale(.97);filter:blur(10px);}}
+.lift{animation:lift .55s ease both;}
+@keyframes lift{to{opacity:0;transform:translate3d(0,-22px,0) scale(.96);filter:blur(10px);}}
+.shake{animation:shake .45s ease;}
+@keyframes shake{20%,60%{transform:translateX(-7px);}40%,80%{transform:translateX(7px);}}
+.stagger>*{animation:rise .8s var(--ease) both;}
+.stagger>*:nth-child(2){animation-delay:.06s}.stagger>*:nth-child(3){animation-delay:.12s}
+.stagger>*:nth-child(4){animation-delay:.18s}.stagger>*:nth-child(5){animation-delay:.24s}
+.stagger>*:nth-child(6){animation-delay:.3s}.stagger>*:nth-child(7){animation-delay:.36s}
+.stagger>*:nth-child(8){animation-delay:.42s}.stagger>*:nth-child(9){animation-delay:.48s}
+
+/* waiting for the link */
+.mailwrap{width:92px;height:92px;margin:4px 0 22px;position:relative;display:grid;place-items:center;}
+.mailwrap::before,.mailwrap::after{content:"";position:absolute;inset:0;border-radius:50%;border:1px solid rgba(99,229,171,.45);animation:ping 2.4s ease-out infinite;}
+.mailwrap::after{animation-delay:1.2s;}
+@keyframes ping{from{transform:scale(.7);opacity:1;}to{transform:scale(1.5);opacity:0;}}
+.mailwrap svg{width:54px;height:54px;position:relative;filter:drop-shadow(0 8px 20px rgba(99,229,171,.35));animation:bob 3s ease-in-out infinite;}
+@keyframes bob{50%{transform:translateY(-4px);}}
+.waitbar{height:3px;border-radius:99px;background:var(--line);overflow:hidden;margin:22px 0 4px;}
+.waitbar i{display:block;height:100%;width:34%;border-radius:99px;background:linear-gradient(90deg,transparent,var(--mint),transparent);animation:sweep 1.6s ease-in-out infinite;}
+@keyframes sweep{from{transform:translateX(-110%);}to{transform:translateX(310%);}}
+.wemail{color:var(--ink);font-weight:500;overflow-wrap:anywhere;}
+
+/* check mark */
+.check{width:96px;height:96px;margin:0 0 20px;}
+.check circle{fill:none;stroke:var(--mint);stroke-width:3.2;stroke-dasharray:283;stroke-dashoffset:283;animation:draw .9s var(--ease) forwards;}
+.check path{fill:none;stroke:var(--mint);stroke-width:4.4;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:60;stroke-dashoffset:60;animation:draw .5s .65s var(--ease) forwards;}
+.check{filter:drop-shadow(0 0 24px rgba(99,229,171,.45));}
+@keyframes draw{to{stroke-dashoffset:0;}}
+
+/* onboarding */
+.qtop{display:flex;align-items:center;gap:14px;margin-bottom:26px;}
+.qprog{flex:1;height:4px;border-radius:99px;background:var(--line);overflow:hidden;}
+.qprog i{display:block;height:100%;width:0;border-radius:99px;background:linear-gradient(90deg,#0F6B48,var(--mint));transition:width .6s var(--ease);}
+.qcount{font-family:var(--mono);font-size:11px;letter-spacing:.12em;color:var(--sub);white-space:nowrap;}
+.qtitle{font-size:clamp(26px,5.2vw,36px);line-height:1.06;text-wrap:balance;}
+.qhelp{color:var(--sub);margin:10px 0 0;font-size:15px;}
+.opts{display:flex;flex-direction:column;gap:10px;margin-top:24px;}
+.opt{display:flex;align-items:center;gap:14px;width:100%;text-align:left;padding:15px 16px;border-radius:16px;border:1px solid var(--line);
+  background:rgba(255,255,255,.035);transition:border-color .2s,background .2s,transform .2s var(--ease),box-shadow .2s;}
+.opt:hover{border-color:rgba(237,242,238,.45);transform:translateY(-1px);}
+.opt .dot{width:20px;height:20px;border-radius:50%;border:1.5px solid var(--sub);flex:none;display:grid;place-items:center;transition:border-color .2s;}
+.opt .dot::after{content:"";width:10px;height:10px;border-radius:50%;background:var(--mint);transform:scale(0);transition:transform .25s var(--ease);}
+.opt b{display:block;font-family:var(--head);font-weight:600;font-size:17px;letter-spacing:-.01em;}
+.opt span{display:block;color:var(--sub);font-size:14px;margin-top:1px;}
+.opt[aria-pressed="true"]{border-color:var(--mint);background:rgba(99,229,171,.08);box-shadow:0 0 0 1px var(--mint) inset,0 12px 30px -18px rgba(99,229,171,.6);}
+.opt[aria-pressed="true"] .dot{border-color:var(--mint);}
+.opt[aria-pressed="true"] .dot::after{transform:scale(1);}
+.optgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:24px;}
+.optgrid .opt{justify-content:center;text-align:center;}
+.optgrid .opt .dot{display:none;}
+.numrow{display:flex;align-items:flex-end;gap:12px;margin-top:26px;flex-wrap:wrap;}
+.numbox{display:flex;align-items:baseline;gap:10px;border-bottom:2px solid var(--line);padding-bottom:6px;transition:border-color .2s;}
+.numbox:focus-within{border-color:var(--mint);}
+.numbox input{border:0;background:transparent;box-shadow:none;padding:0;font-family:var(--head);font-weight:700;font-size:clamp(44px,10vw,64px);
+  letter-spacing:-.04em;line-height:1;width:3.4ch;color:var(--ink);font-variant-numeric:tabular-nums;}
+.numbox input:focus{box-shadow:none;}
+.numbox input::-webkit-outer-spin-button,.numbox input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0;}
+.numbox input[type=number]{-moz-appearance:textfield;}
+.numbox em{font-style:normal;font-family:var(--mono);font-size:13px;letter-spacing:.1em;color:var(--sub);text-transform:uppercase;}
+.units{display:inline-flex;border:1px solid var(--line);border-radius:999px;padding:3px;margin-left:auto;}
+.units button{border:0;background:none;border-radius:999px;padding:6px 12px;font-family:var(--mono);font-size:12px;color:var(--sub);}
+.units button[aria-pressed="true"]{background:rgba(237,242,238,.12);color:var(--ink);}
+.qnav{display:flex;align-items:center;gap:12px;margin-top:30px;}
+.qnav .cta{margin-left:auto;}
+.qerr{color:var(--over);font-size:14px;min-height:21px;margin:14px 0 0;}
+
+/* plan */
+.plan h2{font-size:clamp(28px,5.6vw,42px);line-height:1.02;text-wrap:balance;}
+.tiles{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-top:24px;}
+@media (max-width:620px){.tiles{grid-template-columns:repeat(2,minmax(0,1fr));}}
+.tile{border-radius:16px;border:1px solid var(--line);padding:14px 14px 12px;background:rgba(255,255,255,.035);}
+.tile b{display:block;font-family:var(--head);font-weight:700;font-size:clamp(24px,4vw,30px);letter-spacing:-.03em;line-height:1;font-variant-numeric:tabular-nums;}
+.tile span{display:block;font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--sub);margin-top:8px;}
+.tile.t-kcal b{color:var(--mint);}
+.tile.t-p b{color:#8FB0FF;}
+.tile.t-c b{color:#F2C35A;}
+.tile.t-f b{color:#F58AA6;}
+.pace{margin-top:18px;color:var(--sub);font-size:15.5px;}
+.pace b{color:var(--ink);font-weight:500;}
+.notes{margin-top:16px;border-radius:14px;border:1px solid rgba(242,139,117,.4);background:rgba(242,139,117,.07);padding:12px 14px;font-size:14.5px;display:flex;flex-direction:column;gap:6px;}
+.tips{margin-top:22px;display:flex;flex-direction:column;gap:2px;counter-reset:tip;}
+.tips h3{font-size:18px;margin-bottom:8px;}
+.tip{display:flex;gap:14px;padding:12px 0;border-top:1px solid var(--line);}
+.tip:first-of-type{border-top:0;}
+.tip::before{counter-increment:tip;content:counter(tip);flex:none;width:26px;height:26px;border-radius:50%;display:grid;place-items:center;
+  font-family:var(--mono);font-size:12px;background:rgba(99,229,171,.12);color:var(--mint);margin-top:1px;}
+.tip b{display:block;font-weight:500;}
+.tip span{display:block;color:var(--sub);font-size:14.5px;margin-top:2px;}
+
+/* ---------- app (theme-aware) ---------- */
 .wrap{max-width:760px;margin:0 auto;padding:26px 16px 60px;}
-h1{font-family:var(--head);font-weight:700;letter-spacing:-.03em;margin:0;}
-h2{font-family:var(--head);font-weight:600;font-size:16px;letter-spacing:-.01em;margin:0 0 13px;display:flex;align-items:center;gap:8px;}
-h2 em{font-family:var(--mono);font-style:normal;font-weight:400;font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--sub);margin-left:auto;}
-.eyebrow{font-family:var(--mono);font-size:11px;font-weight:500;letter-spacing:.2em;text-transform:uppercase;color:var(--sub);margin:0 0 12px;}
-.p{color:var(--sub);margin:10px 0 0;max-width:52ch;}
-.fine{font-size:12.5px;color:var(--sub);margin:14px 0 0;}
 .card{position:relative;border-radius:20px;border:1px solid var(--line);background:rgba(var(--glass),var(--ga));
   backdrop-filter:blur(18px) saturate(150%);-webkit-backdrop-filter:blur(18px) saturate(150%);
   box-shadow:var(--shadow);padding:18px;margin-bottom:14px;}
-
-/* boot */
-.boot{display:grid;place-items:center;gap:14px;padding:18vh 0;color:var(--sub);}
-.spin{width:34px;height:34px;border-radius:50%;border:3px solid var(--line);border-top-color:var(--accent);animation:sp .9s linear infinite;}
-@keyframes sp{to{transform:rotate(360deg);}}
-
-/* sign in */
-.signin{display:grid;place-items:center;padding:6vh 0;}
-.signcard{max-width:440px;width:100%;padding:28px;}
-.signcard h1{font-size:clamp(28px,6vw,36px);line-height:1.05;}
-.gbtn{width:100%;display:flex;align-items:center;justify-content:center;gap:11px;margin-top:22px;height:48px;border-radius:12px;
-  border:1px solid rgba(15,32,24,.18);background:#fff;color:#1F1F1F;font-weight:500;font-size:15.5px;
-  box-shadow:0 1px 2px rgba(0,0,0,.08);transition:transform .2s cubic-bezier(.2,.9,.2,1),box-shadow .2s;}
-.gbtn:hover{transform:translateY(-1px);box-shadow:0 8px 20px -10px rgba(0,0,0,.35);}
-.gbtn svg{width:19px;height:19px;flex:none;}
-.gbtn[disabled]{opacity:.55;cursor:default;transform:none;}
-.or{display:flex;align-items:center;gap:12px;margin:18px 0 14px;color:var(--sub);font-size:12.5px;}
-#emailform{margin-top:20px;}
-#or:not([hidden])+#emailform{margin-top:0;}
-.or::before,.or::after{content:"";flex:1;height:1px;background:var(--line);}
-label{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--sub);display:block;margin-bottom:6px;}
-input[type=text],input[type=email],input[type=number]{font:inherit;color:var(--ink);background:rgba(var(--glass),.6);
-  border:1px solid var(--line);border-radius:12px;padding:11px 13px;width:100%;min-width:0;}
-input::placeholder{color:var(--sub);opacity:.75;}
-.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;}
-.row input{flex:1 1 200px;}
+.card h2{font-weight:600;font-size:16px;letter-spacing:-.01em;margin:0 0 13px;display:flex;align-items:center;gap:8px;}
+.card h2 em{font-family:var(--mono);font-style:normal;font-weight:400;font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--sub);margin-left:auto;}
 .pbtn{background:linear-gradient(155deg,var(--accent-soft),var(--accent));color:var(--accent-ink);border:0;border-radius:12px;height:46px;padding:0 20px;
-  font-weight:500;white-space:nowrap;box-shadow:0 10px 26px -12px var(--accent);transition:transform .2s cubic-bezier(.2,.9,.2,1),box-shadow .2s;}
+  font-weight:500;white-space:nowrap;box-shadow:0 10px 26px -12px var(--accent);transition:transform .2s var(--ease),box-shadow .2s;}
 .pbtn:hover{transform:translateY(-2px);box-shadow:0 16px 32px -14px var(--accent);}
 .pbtn:active{transform:translateY(1px);}
 .pbtn[disabled]{opacity:.55;cursor:default;transform:none;box-shadow:none;}
-.st{font-size:13.5px;color:var(--sub);min-height:20px;margin:10px 0 0;}
-.st.err{color:var(--over);}
-.st.ok{color:var(--accent);}
-
-/* app */
 .top{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:16px;}
 .top h1{font-size:clamp(26px,5vw,32px);}
 .daynav{display:flex;align-items:center;gap:6px;}
@@ -129,6 +259,15 @@ input::placeholder{color:var(--sub);opacity:.75;}
   transition:border-color .2s,transform .2s;}
 .daynav button:hover{border-color:var(--accent);transform:translateY(-1px);}
 #dlabel{font-family:var(--head);font-weight:600;font-size:14.5px;min-width:112px;text-align:center;}
+.planbar{display:flex;align-items:center;gap:14px;flex-wrap:wrap;}
+.planbar .pl{flex:1;min-width:200px;}
+.planbar .pl b{display:block;font-family:var(--head);font-weight:600;font-size:17px;letter-spacing:-.015em;}
+.planbar .pl span{display:block;color:var(--sub);font-size:14px;margin-top:2px;font-variant-numeric:tabular-nums;}
+.planbtns{display:flex;gap:8px;flex-wrap:wrap;}
+.chipbtn{background:rgba(var(--glass),.55);border:1px solid var(--line);border-radius:999px;padding:8px 14px;font-size:13.5px;transition:border-color .2s,transform .2s;}
+.chipbtn:hover{border-color:var(--accent);transform:translateY(-1px);}
+.plantips{margin-top:14px;border-top:1px solid var(--line);padding-top:6px;}
+.plantips .tip::before{background:color-mix(in srgb,var(--accent) 16%,transparent);color:var(--accent);}
 .sum{display:flex;gap:22px;align-items:center;flex-wrap:wrap;}
 .ringwrap{position:relative;width:148px;height:148px;flex:none;}
 .ringtxt{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;}
@@ -139,7 +278,7 @@ input::placeholder{color:var(--sub);opacity:.75;}
 .mlab b{font-family:var(--head);font-weight:600;}
 .mlab span{font-family:var(--mono);font-size:12px;color:var(--sub);font-variant-numeric:tabular-nums;}
 .mtrack{height:8px;border-radius:99px;background:var(--line);overflow:hidden;}
-.mfill{height:100%;width:0;border-radius:99px;transition:width .55s cubic-bezier(.2,.9,.2,1);}
+.mfill{height:100%;width:0;border-radius:99px;transition:width .55s var(--ease);}
 .nums{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-top:12px;}
 @media (max-width:560px){.nums{grid-template-columns:repeat(2,minmax(0,1fr));}}
 .recent{margin-top:16px;border-top:1px solid var(--line);padding-top:14px;}
@@ -150,7 +289,7 @@ input::placeholder{color:var(--sub);opacity:.75;}
 .chip:hover{border-color:var(--accent);transform:translateY(-1px);}
 .chip span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:26ch;}
 .chip small{font-family:var(--mono);font-size:11px;color:var(--sub);}
-.item{display:flex;align-items:flex-start;gap:12px;padding:13px 0;border-top:1px solid var(--line);animation:pop .45s cubic-bezier(.16,.9,.24,1) both;}
+.item{display:flex;align-items:flex-start;gap:12px;padding:13px 0;border-top:1px solid var(--line);animation:pop .45s var(--ease) both;}
 .item:first-child{border-top:0;padding-top:0;}
 @keyframes pop{from{opacity:0;transform:translateY(-6px);}}
 .item .nm{flex:1;min-width:0;}
@@ -165,16 +304,25 @@ input::placeholder{color:var(--sub);opacity:.75;}
 .empty{color:var(--sub);margin:0;font-size:15px;}
 .wk{display:flex;align-items:flex-end;gap:8px;height:124px;position:relative;}
 .wcol{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;background:none;border:0;padding:0;}
-.wbar{width:100%;border-radius:7px 7px 0 0;background:var(--line);min-height:2px;transition:height .5s cubic-bezier(.2,.9,.2,1);}
+.wbar{width:100%;border-radius:7px 7px 0 0;background:var(--line);min-height:2px;transition:height .5s var(--ease);}
 .wcol.sel .wbar{background:linear-gradient(180deg,var(--accent-soft),var(--accent));}
 .wcol span{font-family:var(--mono);font-size:10.5px;color:var(--sub);margin-top:6px;}
 .wg{position:absolute;left:0;right:0;border-top:1px dashed var(--sub);pointer-events:none;opacity:.8;}
 .goals{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;}
 .disc{font-size:12px;color:var(--sub);text-align:center;margin:18px 0 0;}
-@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important;}}
+.boot{display:grid;place-items:center;gap:14px;padding:22vh 0;color:var(--sub);}
+.spin{width:34px;height:34px;border-radius:50%;border:3px solid var(--line);border-top-color:var(--accent);animation:sp .9s linear infinite;}
+@keyframes sp{to{transform:rotate(360deg);}}
+
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.001s!important;animation-iteration-count:1!important;transition-duration:.001s!important;}
+}
 </style>
 </head>
 <body>
+<script>try{if(!localStorage.getItem('macro.session.v1')||location.hash.indexOf('access_token')>-1)document.body.className='cine';}catch(e){document.body.className='cine';}</script>
+<canvas id="stage3d" aria-hidden="true"></canvas>
+<div id="vig" aria-hidden="true"></div>
 <div id="glow" aria-hidden="true"><i></i><i></i></div>
 
 <header class="bar">
@@ -191,36 +339,89 @@ input::placeholder{color:var(--sub);opacity:.75;}
   <div class="me" id="me" hidden>
     <span class="av" id="av"></span>
     <span class="who" id="who"></span>
-    <button class="link" id="out">Sign out</button>
+    <button class="link" id="out" type="button">Sign out</button>
   </div>
 </header>
 
-<main class="wrap">
+<main>
   <section class="boot" id="boot"><div class="spin"></div><p>Opening your log…</p></section>
 
-  <section class="signin" id="signin" hidden>
-    <div class="card signcard">
-      <p class="eyebrow">Your log, on every device</p>
-      <h1>Sign in to Macro</h1>
-      <p class="p">Everything you log is saved to your account. Sign in on your phone or another computer with the same email and it's all there.</p>
-      <button class="gbtn" id="google" type="button" hidden>
-        <svg viewBox="0 0 48 48" aria-hidden="true"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
-        Continue with Google
-      </button>
-      <div class="or" id="or" hidden><span>or</span></div>
-      <form id="emailform" novalidate>
-        <label for="email">Email</label>
-        <div class="row">
-          <input type="email" id="email" autocomplete="email" inputmode="email" placeholder="you@gmail.com" required>
-          <button class="pbtn" type="submit" id="sendlink">Email me a link</button>
+  <!-- ============ sign in ============ -->
+  <section class="screen" id="auth" hidden>
+    <div class="glass authcard" id="authcard">
+
+      <div id="s-email">
+        <p class="eyebrow"><i></i>Your log, on every device</p>
+        <h1>Sign in to Macro</h1>
+        <p class="p">Everything you log is saved to your account. Sign in on your phone or another computer with the same email and it's all there.</p>
+        <button class="gbtn" id="google" type="button" hidden>
+          <svg viewBox="0 0 48 48" aria-hidden="true"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
+          Continue with Google
+        </button>
+        <div class="or" id="or" hidden><span>or</span></div>
+        <form id="emailform" novalidate>
+          <label for="email">Email</label>
+          <div class="stack">
+            <input class="bigin" type="email" id="email" autocomplete="email" inputmode="email" placeholder="you@gmail.com" required>
+            <button class="cta full" type="submit" id="sendlink">Send me a sign-in link</button>
+          </div>
+        </form>
+        <p class="st" id="sst" role="status"></p>
+        <p class="fine">We'll email you a link. Open it anywhere — your phone is fine — and this page signs you in by itself.</p>
+      </div>
+
+      <div id="s-wait" hidden>
+        <div class="mailwrap" aria-hidden="true">
+          <svg viewBox="0 0 64 64" fill="none"><rect x="6" y="14" width="52" height="38" rx="7" fill="#0F1A15" stroke="#63E5AB" stroke-width="2.6"/><path d="M9 19l23 17 23-17" stroke="#63E5AB" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </div>
-      </form>
-      <p class="st" id="sst" role="status"></p>
-      <p class="fine">Your email is only used to sign you in. Your food log is private to your account — nobody else can read it.</p>
+        <p class="eyebrow"><i></i>Waiting for you</p>
+        <h1>Check your inbox</h1>
+        <p class="p">We sent a sign-in link to <span class="wemail" id="wemail"></span>. Open it on any device. Keep this page open — it signs you in the moment you tap the link.</p>
+        <div class="waitbar" aria-hidden="true"><i></i></div>
+        <div class="row" style="margin-top:20px">
+          <button class="ghost" id="resend" type="button">Resend link</button>
+          <button class="textbtn" id="changeemail" type="button">Use a different email</button>
+        </div>
+        <p class="st" id="wst" role="status"></p>
+        <p class="fine">Can't find it? Check spam, and look for an email from Supabase Auth — that's the service that sends it.</p>
+      </div>
+
+      <div id="s-done" hidden>
+        <svg class="check" viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="45"/><path d="M31 51l13 13 26-28"/></svg>
+        <p class="eyebrow"><i></i>Verified</p>
+        <h1 id="donetitle">You're in</h1>
+        <p class="p" id="donetext">Opening your log…</p>
+      </div>
     </div>
   </section>
 
-  <section id="app" hidden>
+  <!-- ============ shown in the tab the email link opens ============ -->
+  <section class="screen" id="verified" hidden>
+    <div class="glass authcard" style="text-align:left">
+      <div id="v-working">
+        <div class="spin" style="margin:6px 0 22px"></div>
+        <h1>Verifying your email…</h1>
+      </div>
+      <div id="v-done" hidden>
+        <svg class="check" viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="45"/><path d="M31 51l13 13 26-28"/></svg>
+        <p class="eyebrow"><i></i>All set</p>
+        <h1>Email verification complete</h1>
+        <p class="p">Go back to the Macro tab where you typed your email — it's signing you in right now. You can close this tab.</p>
+        <div class="row" style="margin-top:24px">
+          <button class="ghost" id="herebtn" type="button">Continue in this tab instead</button>
+        </div>
+        <p class="st" id="vst" role="status"></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ first-time questions and the plan ============ -->
+  <section class="screen" id="onboard" hidden>
+    <div class="glass qcard" id="qcard"></div>
+  </section>
+
+  <!-- ============ the log ============ -->
+  <section class="wrap" id="app" hidden>
     <div class="top">
       <h1>Food log</h1>
       <div class="daynav">
@@ -229,6 +430,17 @@ input::placeholder{color:var(--sub);opacity:.75;}
         <button id="next" type="button" aria-label="Next day">&rsaquo;</button>
       </div>
     </div>
+
+    <section class="card" id="plancard" aria-label="Your plan" hidden>
+      <div class="planbar">
+        <div class="pl"><b id="plhead"></b><span id="plsub"></span></div>
+        <div class="planbtns">
+          <button class="chipbtn" id="pltoggle" type="button" aria-expanded="false">What to do</button>
+          <button class="chipbtn" id="plredo" type="button">Update answers</button>
+        </div>
+      </div>
+      <div class="plantips" id="pltips" hidden></div>
+    </section>
 
     <section class="card" aria-label="Daily summary">
       <div class="sum">
@@ -240,13 +452,13 @@ input::placeholder{color:var(--sub);opacity:.75;}
             <circle cx="74" cy="74" r="61" fill="none" stroke="var(--line)" stroke-width="13"></circle>
             <circle id="ring" cx="74" cy="74" r="61" fill="none" stroke="url(#rg)" stroke-width="13" stroke-linecap="round"
               stroke-dasharray="383.27" stroke-dashoffset="383.27" transform="rotate(-90 74 74)"
-              style="transition:stroke-dashoffset .6s cubic-bezier(.2,.9,.2,1)"></circle>
+              style="transition:stroke-dashoffset .7s cubic-bezier(.16,.84,.26,1)"></circle>
           </svg>
           <div class="ringtxt"><b id="kcal">0</b><span id="kleft">2,500 left</span></div>
         </div>
         <div class="macros">
           <div><div class="mlab"><b>Protein</b><span id="ptxt">0 / 150 g</span></div><div class="mtrack"><div class="mfill" id="pbar" style="background:var(--azure)"></div></div></div>
-          <div><div class="mlab"><b>Carbs</b><span id="ctxt">0 / 281 g</span></div><div class="mtrack"><div class="mfill" id="cbar" style="background:var(--saffron)"></div></div></div>
+          <div><div class="mlab"><b>Carbs</b><span id="ctxt">0 / 300 g</span></div><div class="mtrack"><div class="mfill" id="cbar" style="background:var(--saffron)"></div></div></div>
           <div><div class="mlab"><b>Fat</b><span id="ftxt">0 / 78 g</span></div><div class="mtrack"><div class="mfill" id="fbar" style="background:var(--rose)"></div></div></div>
         </div>
       </div>
@@ -264,9 +476,7 @@ input::placeholder{color:var(--sub);opacity:.75;}
           <div><label for="fc">Carbs g</label><input type="number" id="fc" min="0" max="2000" inputmode="numeric" placeholder="58"></div>
           <div><label for="ff">Fat g</label><input type="number" id="ff" min="0" max="2000" inputmode="numeric" placeholder="24"></div>
         </div>
-        <div class="row" style="margin-top:14px">
-          <button class="pbtn" type="submit" id="addbtn">Add</button>
-        </div>
+        <div class="row" style="margin-top:14px"><button class="pbtn" type="submit" id="addbtn">Add to today</button></div>
         <p class="st" id="ast" role="status"></p>
       </form>
       <div class="recent" id="recentwrap" hidden>
@@ -291,339 +501,714 @@ input::placeholder{color:var(--sub);opacity:.75;}
         <div><label for="gk">Calories</label><input type="number" id="gk" min="500" max="10000" step="50" inputmode="numeric"></div>
         <div><label for="gp">Protein g</label><input type="number" id="gp" min="10" max="1000" step="5" inputmode="numeric"></div>
       </div>
-      <p class="fine">Carbs and fat targets follow from calories, at 45% and 28%.</p>
+      <p class="fine">Set from your answers; change them any time. Fat is 28% of your calories, and carbs fill whatever's left after protein.</p>
     </section>
 
-    <p class="disc">Calorie counts are estimates, not medical advice.</p>
+    <p class="disc">Calorie counts and targets are estimates, not medical advice.</p>
   </section>
 </main>
-
 <script>
 (function(){
 'use strict';
 var SB_URL='https://ankbtgrxztdvtrrvocca.supabase.co';
-var SB_KEY='sb_publishable_lRr3KZd92Sqi8odS6BP-7Q_8sxgL4A3'; // publishable: safe in the browser, data is protected by row-level security
-var SKEY='macro.session.v1';
+var SB_KEY='sb_publishable_lRr3KZd92Sqi8odS6BP-7Q_8sxgL4A3'; // publishable key: made for browsers; row-level security protects every row
+var SKEY='macro.session.v1', PKEY='macro.pending.v1', UKEY='macro.units.v1';
 var APP_URL=location.origin+location.pathname;
 var $=function(id){return document.getElementById(id);};
-
-/* ---------------- session ---------------- */
-var session=null, refreshing=null, user=null;
+var calm=matchMedia('(prefers-reduced-motion:reduce)').matches;
+var finePtr=matchMedia('(hover:hover) and (pointer:fine)').matches;
+var bc=null; try{if('BroadcastChannel' in window)bc=new BroadcastChannel('macro-auth');}catch(e){}
+function wait(ms){return new Promise(function(r){setTimeout(r,calm?0:ms);});}
+function clamp(v,a,b){return v<a?a:v>b?b:v;}
+function fmt(n){return Math.round(n).toLocaleString();}
 function now(){return Math.floor(Date.now()/1000);}
+
+/* =====================================================
+   The ring — the same hand-built 3D renderer as the
+   landing page, driven by the sign-in and setup steps.
+   ===================================================== */
+var Ring=(function(){
+  var cv=$('stage3d'), ctx=cv.getContext('2d');
+  var bl=document.createElement('canvas'), blx=bl.getContext('2d');
+  var W=0,H=0,dpr=1,mobile=innerWidth<760,NU=mobile?52:84,NV=mobile?9:13,running=false,raf=0;
+  var canFilter=(function(){try{blx.filter='blur(2px)';return !!blx.filter&&blx.filter!=='none';}catch(e){return false;}})();
+  var st={prog:.32,split:0,D:3.1,a:.62,x:0,y:0,breathe:0,spin:1};
+  var seg=[{end:.25,col:[66,115,248]},{end:.66,col:[227,160,23]},{end:1,col:[228,65,109]}];
+  var MINT=[99,229,171],STEEL=[38,48,44];
+  function nrm(v){var m=Math.hypot(v[0],v[1],v[2]);return [v[0]/m,v[1]/m,v[2]/m];}
+  var L1=nrm([-.42,.78,.86]),L2=nrm([.82,-.28,-.42]),HV=nrm([L1[0],L1[1],L1[2]+1]);
+  var tw=[],px=0,py=0,tpx=0,tpy=0,parts=[];
+  for(var i=0;i<(mobile?60:130);i++){var th=Math.random()*6.2832,ph=Math.acos(2*Math.random()-1),rr=2+Math.random()*4.2;
+    parts.push({x:rr*Math.sin(ph)*Math.cos(th),y:rr*Math.cos(ph),z:rr*Math.sin(ph)*Math.sin(th),s:.5+Math.random()*1.5,h:Math.random()});}
+  if(finePtr&&!calm)addEventListener('pointermove',function(e){tpx=e.clientX/innerWidth-.5;tpy=e.clientY/innerHeight-.5;},{passive:true});
+  function size(){dpr=Math.min(devicePixelRatio||1,mobile?1.5:2);W=innerWidth;H=innerHeight;
+    cv.width=Math.round(W*dpr);cv.height=Math.round(H*dpr);bl.width=Math.max(1,Math.round(W*dpr/7));bl.height=Math.max(1,Math.round(H*dpr/7));}
+  addEventListener('resize',function(){mobile=innerWidth<760;size();if(!running)draw(performance.now());});
+  size();
+  function ease(t){return t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2;}
+  function lerp(a,b,t){return a+(b-a)*t;}
+  function to(target,ms){
+    if(calm||!ms){for(var k in target)st[k]=target[k];if(!running)draw(performance.now());return;}
+    var from={},t2={};for(var k2 in target){from[k2]=st[k2];t2[k2]=target[k2];}
+    tw.forEach(function(t){for(var k in t2){delete t.target[k];}});
+    tw=tw.filter(function(t){return Object.keys(t.target).length;});
+    tw.push({from:from,target:t2,t0:performance.now(),ms:ms});
+  }
+  function setShares(p,c,f){var tot=p*4+c*4+f*9;if(!tot)return;var a=p*4/tot,b=a+c*4/tot;seg[0].end=a;seg[1].end=b;seg[2].end=1;}
+  function step(t){tw=tw.filter(function(w){var k=Math.min(1,(t-w.t0)/w.ms),e=ease(k);for(var key in w.target)st[key]=w.from[key]+(w.target[key]-w.from[key])*e;return k<1;});}
+  function draw(time){
+    var sx=mobile?0:st.x, sy=mobile?st.y-.26:st.y, DD=mobile?st.D*1.18:st.D, alpha=clamp(st.a,0,1);
+    var cx=W*(.5+sx), cy=H*(.5+sy), f=Math.min(W,H)*(mobile?.86:.9);
+    px+=(tpx-px)*.06; py+=(tpy-py)*.06;
+    var prog=clamp(st.prog+(st.breathe?Math.sin(time*.0026)*.07*st.breathe:0),0,1);
+    var rx=.5+py*.3, ry=time*.00016*st.spin+px*.42, rz=-.14;
+    var cxr=Math.cos(rx),sxr=Math.sin(rx),cyr=Math.cos(ry),syr=Math.sin(ry),czr=Math.cos(rz),szr=Math.sin(rz);
+    function tr(x,y,z){var y1=y*cxr-z*sxr,z1=y*sxr+z*cxr,x2=x*cyr+z1*syr,z2=-x*syr+z1*cyr;return [x2*czr-y1*szr,x2*szr+y1*czr,z2];}
+    ctx.setTransform(dpr,0,0,dpr,0,0); ctx.clearRect(0,0,W,H); ctx.globalAlpha=1;
+    var g0=ctx.createRadialGradient(cx,cy,0,cx,cy,Math.min(W,H)*.65);
+    g0.addColorStop(0,'rgba(99,229,171,'+(.14*alpha).toFixed(3)+')');g0.addColorStop(.55,'rgba(28,80,120,'+(.07*alpha).toFixed(3)+')');g0.addColorStop(1,'rgba(8,12,10,0)');
+    ctx.fillStyle=g0;ctx.fillRect(0,0,W,H);
+    var bx=cx+Math.sin(time*.00021)*W*.2,by=cy+Math.cos(time*.00017)*H*.22,g1=ctx.createRadialGradient(bx,by,0,bx,by,Math.min(W,H)*.46);
+    g1.addColorStop(0,'rgba(66,115,248,'+(.1*alpha).toFixed(3)+')');g1.addColorStop(1,'rgba(66,115,248,0)');ctx.fillStyle=g1;ctx.fillRect(0,0,W,H);
+    var R=1,r=.3,du=6.28318/NU,dv=6.28318/NV,i,j,buf=[];
+    var cu=[],su=[],cvv=[],svv=[],cuh=[],suh=[],cvh=[],svh=[];
+    for(i=0;i<=NU;i++){cu[i]=Math.cos(i*du);su[i]=Math.sin(i*du);cuh[i]=Math.cos((i+.5)*du);suh[i]=Math.sin((i+.5)*du);}
+    for(j=0;j<=NV;j++){cvv[j]=Math.cos(j*dv);svv[j]=Math.sin(j*dv);cvh[j]=Math.cos((j+.5)*dv);svh[j]=Math.sin((j+.5)*dv);}
+    var vert=[];
+    for(i=0;i<=NU;i++){var row=[];for(j=0;j<=NV;j++){var rad=R+r*cvv[j],p=tr(rad*cu[i],rad*su[i],r*svv[j]),pz=DD-p[2];if(pz<.25)pz=.25;var s=f/pz;row.push([cx+p[0]*s,cy-p[1]*s,pz]);}vert.push(row);}
+    for(i=0;i<NU;i++){
+      var frac=i/NU, lit=frac<=prog, base;
+      if(!lit)base=STEEL;
+      else if(st.split<=.001)base=MINT;
+      else{var sc=seg[0].col;for(var q=0;q<seg.length;q++){if(frac<=seg[q].end){sc=seg[q].col;break;}}
+        base=[lerp(MINT[0],sc[0],st.split),lerp(MINT[1],sc[1],st.split),lerp(MINT[2],sc[2],st.split)];}
+      for(j=0;j<NV;j++){
+        var n=tr(cvh[j]*cuh[i],cvh[j]*suh[i],svh[j]); if(n[2]<=.02)continue;
+        var d1=Math.max(0,n[0]*L1[0]+n[1]*L1[1]+n[2]*L1[2]),d2=Math.max(0,n[0]*L2[0]+n[1]*L2[1]+n[2]*L2[2]),hs=Math.max(0,n[0]*HV[0]+n[1]*HV[1]+n[2]*HV[2]);
+        var spec=Math.pow(hs,42)*(lit?235:120),k=.15+d1*.95+d2*.3;
+        var A=vert[i][j],B=vert[i+1][j],C=vert[i+1][j+1],E=vert[i][j+1];
+        buf.push({t:0,a:A,b:B,c:C,d:E,z:(A[2]+C[2])*.5,col:'rgb('+(clamp(base[0]*k+spec,0,255)|0)+','+(clamp(base[1]*k+spec*1.02,0,255)|0)+','+(clamp(base[2]*k+spec*.96,0,255)|0)+')'});
+      }
+    }
+    for(var pi=0;pi<parts.length;pi++){var pt=parts[pi],p3=tr(pt.x,pt.y,pt.z),pz3=DD-p3[2];if(pz3<.3)continue;var s3=f/pz3;
+      buf.push({t:2,x:cx+p3[0]*s3,y:cy-p3[1]*s3,rad:Math.max(.35,pt.s*s3*.0022),z:pz3,h:pt.h});}
+    buf.sort(function(a,b){return b.z-a.z;});
+    ctx.globalAlpha=alpha;
+    for(var m=0;m<buf.length;m++){var o=buf[m];
+      if(o.t===0){ctx.beginPath();ctx.moveTo(o.a[0],o.a[1]);ctx.lineTo(o.b[0],o.b[1]);ctx.lineTo(o.c[0],o.c[1]);ctx.lineTo(o.d[0],o.d[1]);ctx.closePath();
+        ctx.fillStyle=o.col;ctx.fill();ctx.strokeStyle=o.col;ctx.lineWidth=1.05;ctx.stroke();}
+      else{ctx.fillStyle=o.h>.72?'rgba(99,229,171,.5)':(o.h>.45?'rgba(160,190,255,.36)':'rgba(230,240,235,.26)');ctx.beginPath();ctx.arc(o.x,o.y,o.rad,0,6.2832);ctx.fill();}}
+    ctx.globalAlpha=1;
+    if(bl.width>2){blx.setTransform(1,0,0,1,0,0);blx.clearRect(0,0,bl.width,bl.height);blx.drawImage(cv,0,0,bl.width,bl.height);
+      ctx.save();ctx.globalCompositeOperation='lighter';ctx.globalAlpha=.5*alpha;if(canFilter)ctx.filter='blur(5px)';ctx.drawImage(bl,0,0,W,H);ctx.restore();}
+  }
+  function loop(t){step(t);draw(t);if(running)raf=requestAnimationFrame(loop);}
+  return {st:st,to:to,setShares:setShares,
+    start:function(){if(running)return;if(calm){draw(performance.now());return;}running=true;raf=requestAnimationFrame(loop);},
+    stop:function(){running=false;cancelAnimationFrame(raf);}};
+})();
+var RING={
+  auth:{prog:.32,split:0,D:3.15,a:.62,x:0,y:0,breathe:0,spin:1},
+  wait:{prog:.46,split:0,D:2.95,a:.82,breathe:1,spin:2.2},
+  done:{prog:1,split:0,D:2.55,a:1,breathe:0,spin:1.5},
+  onboard:{split:0,D:3.35,a:.64,breathe:0,spin:1},
+  plan:{prog:1,split:1,D:3.05,a:.7,breathe:0,spin:1}
+};
+if(document.body.classList.contains('cine')){Ring.to(RING.auth,0);Ring.start();}
+
+/* ===================== session ===================== */
+var session=null, refreshing=null, user=null, profile=null, googleOn=false;
 function loadSession(){try{session=JSON.parse(localStorage.getItem(SKEY));}catch(e){session=null;}}
 function saveSession(s){session=s;try{if(s)localStorage.setItem(SKEY,JSON.stringify(s));else localStorage.removeItem(SKEY);}catch(e){}}
 function readHash(){
   var h=location.hash; if(!h||h.length<2)return null;
   var p=new URLSearchParams(h.slice(1));
   if(p.get('error')||p.get('error_description'))return {error:(p.get('error_description')||p.get('error')||'').replace(/\+/g,' ')};
-  var at=p.get('access_token'), rt=p.get('refresh_token');
-  if(!at||!rt)return null;
+  var at=p.get('access_token'),rt=p.get('refresh_token'); if(!at||!rt)return null;
   return {access_token:at,refresh_token:rt,expires_at:Number(p.get('expires_at'))||(now()+Number(p.get('expires_in')||3600))};
+}
+async function exchange(rt){
+  var r=await fetch(SB_URL+'/auth/v1/token?grant_type=refresh_token',{method:'POST',headers:{apikey:SB_KEY,'Content-Type':'application/json'},body:JSON.stringify({refresh_token:rt})});
+  if(!r.ok)throw {status:401};
+  var j=await r.json();
+  saveSession({access_token:j.access_token,refresh_token:j.refresh_token,expires_at:j.expires_at||(now()+(j.expires_in||3600)),user:j.user||(session&&session.user)});
 }
 function doRefresh(){
   if(refreshing)return refreshing;
-  refreshing=fetch(SB_URL+'/auth/v1/token?grant_type=refresh_token',{method:'POST',
-      headers:{apikey:SB_KEY,'Content-Type':'application/json'},
-      body:JSON.stringify({refresh_token:session&&session.refresh_token})})
-    .then(function(r){if(!r.ok)throw {status:401};return r.json();})
-    .then(function(j){saveSession({access_token:j.access_token,refresh_token:j.refresh_token,
-      expires_at:j.expires_at||(now()+(j.expires_in||3600)),user:j.user||(session&&session.user)});})
-    .then(function(){refreshing=null;},function(e){refreshing=null;throw e;});
+  refreshing=exchange(session&&session.refresh_token).then(function(){refreshing=null;},function(e){refreshing=null;throw e;});
   return refreshing;
 }
-async function token(){
-  if(!session)throw {status:401};
-  if((session.expires_at||0)-now()<90)await doRefresh();
-  return session.access_token;
-}
+async function token(){if(!session)throw {status:401};if((session.expires_at||0)-now()<90)await doRefresh();return session.access_token;}
 async function authed(url,init){
-  init=init||{};
-  var h=init.headers||(init.headers={});
-  h.apikey=SB_KEY; h.Authorization='Bearer '+(await token());
+  init=init||{};var h=init.headers||(init.headers={});
+  h.apikey=SB_KEY;h.Authorization='Bearer '+(await token());
   var r=await fetch(url,init);
   if(r.status===401){await doRefresh();h.Authorization='Bearer '+session.access_token;r=await fetch(url,init);}
   return r;
 }
 async function api(path,opt){
-  opt=opt||{};
-  var init={method:opt.method||'GET',headers:{}};
+  opt=opt||{};var init={method:opt.method||'GET',headers:{}};
   if(opt.body!==undefined){init.headers['Content-Type']='application/json';init.body=JSON.stringify(opt.body);}
   if(opt.prefer)init.headers.Prefer=opt.prefer;
   var r=await authed(SB_URL+'/rest/v1/'+path,init);
   if(!r.ok){var t='';try{t=await r.text();}catch(e){}throw {status:r.status,body:t};}
-  var txt=await r.text();
-  return txt?JSON.parse(txt):null;
+  var txt=await r.text();return txt?JSON.parse(txt):null;
+}
+async function claim(id){
+  var r=await fetch(SB_URL+'/rest/v1/rpc/claim_login_handoff',{method:'POST',headers:{apikey:SB_KEY,'Content-Type':'application/json'},body:JSON.stringify({p_id:id})});
+  if(!r.ok)return null; return await r.json();
 }
 
-/* ---------------- state ---------------- */
+/* ===================== views ===================== */
+var VIEWS=['boot','auth','verified','onboard','app'];
+function showView(id){
+  VIEWS.forEach(function(v){$(v).hidden=(v!==id);});
+  var cine=(id==='auth'||id==='verified'||id==='onboard');
+  document.body.classList.toggle('cine',cine);
+  if(cine)Ring.start(); else setTimeout(function(){if(!document.body.classList.contains('cine'))Ring.stop();},1000);
+  $('me').hidden=(id!=='app');
+}
+function animate(el,cls){if(!el)return;el.classList.remove('enter','fromleft','rise','lift','shake','stagger');void el.offsetWidth;cls.split(' ').forEach(function(c){el.classList.add(c);});}
+function authStep(id,fromLeft){
+  ['s-email','s-wait','s-done'].forEach(function(s){$(s).hidden=(s!==id);});
+  animate($(id),fromLeft?'enter fromleft':'enter');
+}
+function setMsg(id,msg,kind){var s=$(id);s.textContent=msg||'';s.className='st'+(kind?' '+kind:'');}
+var syncT=null;
+function setSync(msg,kind){var s=$('sync');s.textContent=msg||'';s.className='sync'+(kind==='err'?' err':kind==='busy'?' busy':'');
+  clearTimeout(syncT);if(msg==='Saved')syncT=setTimeout(function(){if(s.textContent==='Saved')s.textContent='Synced';},1800);}
+function initials(n){n=(n||'').trim();if(!n)return '·';var p=n.split(/[\s@.]+/).filter(Boolean);return ((p[0]||'')[0]+((p[1]||'')[0]||'')).toUpperCase();}
+function showMe(){
+  var md=(user&&user.user_metadata)||{}, name=md.full_name||md.name||(user&&user.email)||'';
+  $('who').textContent=name; var av=$('av'); av.textContent='';
+  if(md.avatar_url){var img=new Image();img.alt='';img.referrerPolicy='no-referrer';img.src=md.avatar_url;img.onerror=function(){av.textContent=initials(name);};av.appendChild(img);}
+  else av.textContent=initials(name);
+}
+function showAuth(){
+  showView('auth'); $('google').hidden=!googleOn; $('or').hidden=!googleOn;
+  Ring.to(RING.auth,900);
+}
+
+/* ===================== sign in with a link ===================== */
+var pend=null, pollT=null, claiming=false, resendT=null;
+function loadPend(){try{var p=JSON.parse(sessionStorage.getItem(PKEY));if(p&&p.until>Date.now())return p;}catch(e){}return null;}
+function savePend(p){pend=p;try{if(p)sessionStorage.setItem(PKEY,JSON.stringify(p));else sessionStorage.removeItem(PKEY);}catch(e){}}
+function randId(){var a=new Uint8Array(32);crypto.getRandomValues(a);var s='';for(var i=0;i<a.length;i++)s+=String.fromCharCode(a[i]);
+  return btoa(s).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');}
+async function requestLink(email){
+  var id=randId();
+  var r=await fetch(SB_URL+'/auth/v1/otp?redirect_to='+encodeURIComponent(APP_URL+'?handoff='+id),{method:'POST',
+    headers:{apikey:SB_KEY,'Content-Type':'application/json'},body:JSON.stringify({email:email,create_user:true})});
+  if(!r.ok){var j={};try{j=await r.json();}catch(e){}throw {status:r.status,code:j.error_code||j.code||'',msg:j.msg||j.error_description||j.message||''};}
+  var ids=((pend&&pend.email===email)?pend.ids:[]).concat(id).slice(-4);
+  savePend({email:email,ids:ids,until:Date.now()+65*60*1000,sentAt:Date.now()});
+}
+function linkError(e){
+  if(e&&e.status===429){
+    if(/email/i.test(e.code)||/email rate limit/i.test(e.msg))return 'The free email service has hit its hourly limit. Try again a bit later'+(googleOn?', or use Continue with Google.':'.');
+    var m=/(\d+)\s*second/.exec(e.msg);return 'Wait '+(m?m[1]+' seconds':'a minute')+' before asking for another link.';
+  }
+  if(e&&(e.status===400||e.status===422))return e.msg||'That email address doesn’t look right.';
+  return 'The link couldn’t be sent. Check your connection and try again.';
+}
+function cooldown(){
+  var b=$('resend'), left=60; b.disabled=true; clearInterval(resendT);
+  b.textContent='Resend in '+left+'s';
+  resendT=setInterval(function(){left--;if(left<=0){clearInterval(resendT);b.disabled=false;b.textContent='Resend link';}else b.textContent='Resend in '+left+'s';},1000);
+}
+function startWaiting(){
+  $('wemail').textContent=pend.email; authStep('s-wait'); setMsg('wst','');
+  Ring.to(RING.wait,1000); cooldown(); startPolling();
+}
+function startPolling(){stopPolling();pollT=setInterval(tryClaim,2500);tryClaim();}
+function stopPolling(){clearInterval(pollT);pollT=null;}
+async function tryClaim(){
+  if(!pend||claiming)return;
+  if(Date.now()>pend.until){stopPolling();setMsg('wst','That link has expired. Send a new one.','err');return;}
+  claiming=true;
+  try{
+    for(var i=pend.ids.length-1;i>=0;i--){
+      var tok=await claim(pend.ids[i]);
+      if(tok){stopPolling();savePend(null);clearInterval(resendT);await exchange(tok);await signedIn(true);return;}
+    }
+  }catch(e){if(e&&e.status===401){setMsg('wst','That sign-in didn’t go through. Send a new link.','err');stopPolling();}}
+  finally{claiming=false;}
+}
+if(bc)bc.onmessage=function(ev){if(ev.data&&ev.data.type==='handoff')tryClaim();};
+$('emailform').onsubmit=async function(ev){
+  ev.preventDefault();
+  var email=$('email').value.trim();
+  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){setMsg('sst','Enter the email address you want to sign in with.','err');animate($('authcard'),'shake');return;}
+  var b=$('sendlink');b.disabled=true;b.textContent='Sending…';setMsg('sst','');
+  try{await requestLink(email);startWaiting();}
+  catch(e){setMsg('sst',linkError(e),'err');animate($('authcard'),'shake');}
+  finally{b.disabled=false;b.textContent='Send me a sign-in link';}
+};
+$('resend').onclick=async function(){
+  if(!pend)return; var b=$('resend'); b.disabled=true; setMsg('wst','Sending another link…');
+  try{await requestLink(pend.email);setMsg('wst','New link sent. Use the newest email.','ok');cooldown();startPolling();}
+  catch(e){setMsg('wst',linkError(e),'err');b.disabled=false;}
+};
+$('changeemail').onclick=function(){stopPolling();savePend(null);clearInterval(resendT);authStep('s-email',true);Ring.to(RING.auth,900);setTimeout(function(){$('email').focus();},60);};
+async function checkProviders(){
+  try{var r=await fetch(SB_URL+'/auth/v1/settings',{headers:{apikey:SB_KEY}});if(r.ok){var j=await r.json();googleOn=!!(j.external&&j.external.google);}}catch(e){googleOn=false;}
+}
+function startGoogle(){location.href=SB_URL+'/auth/v1/authorize?provider=google&redirect_to='+encodeURIComponent(APP_URL);}
+$('google').onclick=function(){$('google').disabled=true;startGoogle();};
+
+/* ============ the tab the email link opens ============ */
+var linkId=null;
+async function handleLinkTab(tokens,id){
+  showView('verified'); Ring.to(RING.wait,700);
+  $('v-working').hidden=false; $('v-done').hidden=true;
+  try{
+    var r=await fetch(SB_URL+'/rest/v1/login_handoffs',{method:'POST',headers:{apikey:SB_KEY,Authorization:'Bearer '+tokens.access_token,
+      'Content-Type':'application/json',Prefer:'return=minimal'},body:JSON.stringify({id:id,refresh_token:tokens.refresh_token})});
+    if(!r.ok&&r.status!==409)throw {status:r.status};
+    linkId=id; if(bc)bc.postMessage({type:'handoff'});
+    await wait(500);
+    $('v-working').hidden=true; $('v-done').hidden=false; animate($('v-done'),'enter');
+    Ring.to({prog:1,split:0,D:2.85,a:.8,breathe:0,spin:1.4},1200);
+  }catch(e){
+    saveSession(tokens);
+    try{await signedIn(true);}catch(err){showAuth();setMsg('sst','Sign-in didn’t finish. Send a new link.','err');}
+  }
+}
+$('herebtn').onclick=async function(){
+  var b=$('herebtn');b.disabled=true;setMsg('vst','Signing you in here…');
+  try{
+    var tok=linkId?await claim(linkId):null;
+    if(!tok){setMsg('vst','Your other tab has already signed you in. You can close this one.','ok');return;}
+    await exchange(tok); await signedIn(true);
+  }catch(e){setMsg('vst','That didn’t work. Close this tab and use the other one.','err');b.disabled=false;}
+};
+
+/* ===================== after sign-in ===================== */
+async function fetchUser(){
+  var r=await authed(SB_URL+'/auth/v1/user',{});
+  if(!r.ok)throw {status:(r.status===403||r.status===404)?401:r.status};
+  return r.json();
+}
+async function loadProfile(){var got=await api('profiles?select=*');return (got&&got[0])||null;}
+async function signedIn(anim){
+  user=await fetchUser(); session.user=user; saveSession(session);
+  profile=await loadProfile();
+  if(anim){
+    if(!$('auth').hidden){
+      $('donetitle').textContent='You’re in';
+      $('donetext').textContent=(profile&&profile.onboarded_at)?'Opening your log…':'Let’s set up your targets.';
+      authStep('s-done');
+    }
+    Ring.to(RING.done,1200);
+    await wait(1500);
+  }
+  if(!profile||!profile.onboarded_at)await startOnboarding(anim,null);
+  else await enterApp(anim);
+}
+async function leaveCard(){var c=document.querySelector('.screen:not([hidden]) .glass');if(c){animate(c,'lift');await wait(480);}}
+async function enterApp(anim){
+  if(anim)await leaveCard();
+  showView('app'); showMe();
+  var app=$('app'); if(anim)animate(app,'stagger');
+  renderPlanCard(); render(); setSync('Loading…','busy');
+  try{await Promise.all([loadGoals(),loadWindow(),loadRecent()]);render();renderPlanCard();setSync('Synced');}
+  catch(e){handle(e,'Can’t reach your log right now.');}
+}
+
+/* ===================== first-time questions ===================== */
+var answers={}, qi=0, qlist=[], editing=false;
+var units=(function(){try{return JSON.parse(localStorage.getItem(UKEY))||{h:'cm',w:'kg'};}catch(e){return {h:'cm',w:'kg'};}})();
+function saveUnits(){try{localStorage.setItem(UKEY,JSON.stringify(units));}catch(e){}}
+function paceOptions(a){
+  var lose=a.goal==='lose', w=a.weight_kg||75;
+  var d=lose?{gentle:-300,steady:-500,fast:-750}:{gentle:200,steady:300,fast:450};
+  function kg(delta){var v=Math.abs(delta*7/7700);return units.w==='lb'?(v*2.2046).toFixed(1)+' lb':v.toFixed(2).replace(/0$/,'')+' kg';}
+  return [
+    {v:'gentle',t:'Gentle',d:'About '+kg(d.gentle)+' a week. Easiest to stick with.'},
+    {v:'steady',t:'Steady — recommended',d:'About '+kg(d.steady)+' a week.'},
+    {v:'fast',t:'Fast',d:'About '+kg(d.fast)+' a week. Harder, '+(lose?'hungrier':'more fat gain')+'.'}
+  ];
+}
+var QUESTIONS=[
+  {id:'goal',type:'choice',title:'What are you here to do?',help:'Your targets are built around this. You can change it any time.',options:[
+    {v:'lose',t:'Lose fat',d:'Get leaner and keep my strength'},
+    {v:'maintain',t:'Stay where I am',d:'Hold my weight and eat well'},
+    {v:'gain',t:'Build muscle',d:'Gain size and strength'}]},
+  {id:'sex',type:'choice',title:'What’s your sex?',help:'Only used to estimate how much energy your body burns.',options:[
+    {v:'male',t:'Male'},{v:'female',t:'Female'},{v:'unspecified',t:'Prefer not to say',d:'We’ll use an average'}]},
+  {id:'age',type:'number',title:'How old are you?',unit:'years',min:13,max:100,ph:'25'},
+  {id:'height_cm',type:'height',title:'How tall are you?'},
+  {id:'weight_kg',type:'weight',title:'What do you weigh right now?',help:'A rough number is fine — you can update it later.'},
+  {id:'goal_weight_kg',type:'weight',optional:true,title:function(a){return a.goal==='lose'?'What weight are you aiming for?':'What weight would you like to reach?';},
+    help:'Optional — skip it if you’re not sure yet.',when:function(a){return a.goal!=='maintain';}},
+  {id:'activity',type:'choice',title:'What does a normal day look like?',help:'Not counting workouts — we ask about those next.',options:[
+    {v:'sedentary',t:'Mostly sitting',d:'Desk work, not much walking'},
+    {v:'light',t:'On my feet some',d:'Some walking, errands, light chores'},
+    {v:'active',t:'On my feet most of the day',d:'Retail, teaching, lots of walking'},
+    {v:'very',t:'Physical work',d:'Construction, labour, a very active job'}]},
+  {id:'training_days',type:'grid',title:'How many days a week do you work out?',options:[
+    {v:0,t:'None yet'},{v:2,t:'1–2 days'},{v:4,t:'3–4 days'},{v:6,t:'5 or more'}]},
+  {id:'pace',type:'choice',title:function(a){return a.goal==='lose'?'How fast do you want to lose it?':'How fast do you want to gain?';},
+    when:function(a){return a.goal!=='maintain';},options:paceOptions}
+];
+function activeQs(){return QUESTIONS.filter(function(q){return !q.when||q.when(answers);});}
+async function startOnboarding(anim,prefill){
+  editing=!!prefill; answers=prefill?Object.assign({},prefill):{}; qi=0;
+  if(anim)await leaveCard();
+  showView('onboard'); Ring.setShares(150,281,78);
+  Ring.to(Object.assign({},RING.onboard,{prog:.05}),1000);
+  renderQ(false);
+}
+function el(tag,cls,text){var e=document.createElement(tag);if(cls)e.className=cls;if(text!=null)e.textContent=text;return e;}
+function renderQ(back){
+  qlist=activeQs(); if(qi>=qlist.length)qi=qlist.length-1;
+  var q=qlist[qi], total=qlist.length, card=$('qcard');
+  card.classList.remove('wide'); card.textContent='';
+  var body=el('div'); card.appendChild(body);
+  var top=el('div','qtop'), prog=el('div','qprog'), bar=el('i'); prog.appendChild(bar); top.appendChild(prog);
+  top.appendChild(el('span','qcount',(qi+1)+' of '+total)); body.appendChild(top);
+  requestAnimationFrame(function(){bar.style.width=Math.round((qi+1)/total*100)+'%';});
+  var inner=el('div'); body.appendChild(inner);
+  inner.appendChild(el('h2','qtitle',typeof q.title==='function'?q.title(answers):q.title));
+  if(q.help)inner.appendChild(el('p','qhelp',q.help));
+  var err=el('p','qerr'); err.setAttribute('role','status');
+  var getVal=null;
+
+  if(q.type==='choice'||q.type==='grid'){
+    var opts=typeof q.options==='function'?q.options(answers):q.options;
+    var wrap=el('div',q.type==='grid'?'optgrid':'opts');
+    opts.forEach(function(o){
+      var b=el('button','opt');b.type='button';b.setAttribute('aria-pressed',String(answers[q.id]===o.v));
+      b.appendChild(el('span','dot'));var tx=el('div');tx.appendChild(el('b',null,o.t));if(o.d)tx.appendChild(el('span',null,o.d));b.appendChild(tx);
+      b.onclick=function(){answers[q.id]=o.v;[].forEach.call(wrap.children,function(c){c.setAttribute('aria-pressed',String(c===b));});setTimeout(next,calm?0:340);};
+      wrap.appendChild(b);
+    });
+    inner.appendChild(wrap);
+    getVal=function(){return answers[q.id]!=null?{ok:true}:{ok:false,msg:'Pick one to continue.'};};
+  }
+  else if(q.type==='number'){
+    var nr=el('div','numrow'), box=el('label','numbox'), inp=el('input');
+    inp.type='number';inp.inputMode='numeric';inp.min=q.min;inp.max=q.max;inp.placeholder=q.ph||'';inp.id='qin';
+    if(answers[q.id]!=null)inp.value=answers[q.id];
+    box.appendChild(inp);box.appendChild(el('em',null,q.unit));nr.appendChild(box);inner.appendChild(nr);
+    getVal=function(){var v=Math.round(Number(inp.value));
+      if(!inp.value||!isFinite(v))return {ok:false,msg:'Type your age to continue.'};
+      if(v<13)return {ok:false,msg:'Macro is made for people 13 and older.'};
+      if(v>100)return {ok:false,msg:'That looks too high — check the number.'};
+      answers[q.id]=v;return {ok:true};};
+    setTimeout(function(){inp.focus();},calm?0:420);
+  }
+  else if(q.type==='height'){
+    var hr=el('div','numrow'), hbox=el('div'); hbox.style.display='flex';hbox.style.gap='16px';hbox.style.flexWrap='wrap';
+    var ut=unitToggle(['cm','ft'],units.h,function(u){units.h=u;saveUnits();renderQ(false);});
+    var cur=answers.height_cm;
+    if(units.h==='cm'){
+      var b1=el('label','numbox'),i1=el('input');i1.type='number';i1.inputMode='decimal';i1.placeholder='178';i1.id='qin';
+      if(cur)i1.value=Math.round(cur);b1.appendChild(i1);b1.appendChild(el('em',null,'cm'));hbox.appendChild(b1);
+      getVal=function(){var v=Number(i1.value);if(!i1.value||!isFinite(v))return {ok:false,msg:'Type your height to continue.'};
+        if(v<120||v>230)return {ok:false,msg:'Enter a height between 120 and 230 cm.'};answers.height_cm=Math.round(v*10)/10;return {ok:true};};
+      setTimeout(function(){i1.focus();},calm?0:420);
+    }else{
+      var tot=cur?cur/2.54:null, ft=tot?Math.floor(tot/12):'', inch=tot?Math.round(tot-ft*12):'';
+      if(inch===12){ft+=1;inch=0;}
+      var bf=el('label','numbox'),iF=el('input');iF.type='number';iF.inputMode='numeric';iF.placeholder='5';iF.id='qin';iF.value=ft;iF.style.width='1.6ch';
+      bf.appendChild(iF);bf.appendChild(el('em',null,'ft'));
+      var bi=el('label','numbox'),iI=el('input');iI.type='number';iI.inputMode='numeric';iI.placeholder='10';iI.value=inch;iI.style.width='2.3ch';
+      bi.appendChild(iI);bi.appendChild(el('em',null,'in'));hbox.appendChild(bf);hbox.appendChild(bi);
+      getVal=function(){var f2=Number(iF.value),i2=Number(iI.value||0);if(!iF.value||!isFinite(f2)||!isFinite(i2))return {ok:false,msg:'Type your height to continue.'};
+        var cm=(f2*12+i2)*2.54;if(cm<120||cm>230)return {ok:false,msg:'Enter a height between 4 ft 0 in and 7 ft 6 in.'};answers.height_cm=Math.round(cm*10)/10;return {ok:true};};
+      setTimeout(function(){iF.focus();},calm?0:420);
+    }
+    hr.appendChild(hbox);hr.appendChild(ut);inner.appendChild(hr);
+  }
+  else if(q.type==='weight'){
+    var wr=el('div','numrow'), wb=el('label','numbox'), wi=el('input');
+    wi.type='number';wi.inputMode='decimal';wi.id='qin';wi.placeholder=units.w==='kg'?'75':'165';
+    var wv=answers[q.id]; if(wv)wi.value=units.w==='kg'?Math.round(wv*10)/10:Math.round(wv*2.2046);
+    wb.appendChild(wi);wb.appendChild(el('em',null,units.w));wr.appendChild(wb);
+    wr.appendChild(unitToggle(['kg','lb'],units.w,function(u){var v=Number(wi.value);if(wi.value&&isFinite(v))answers[q.id]=units.w==='kg'?v:v/2.2046;units.w=u;saveUnits();renderQ(false);}));
+    inner.appendChild(wr);
+    getVal=function(){
+      if(!wi.value){if(q.optional){answers[q.id]=null;return {ok:true};}return {ok:false,msg:'Type your weight to continue.'};}
+      var v=Number(wi.value);if(!isFinite(v))return {ok:false,msg:'That doesn’t look like a number.'};
+      var kg=units.w==='kg'?v:v/2.2046;
+      if(kg<30||kg>300)return {ok:false,msg:'Enter a weight between '+(units.w==='kg'?'30 and 300 kg':'66 and 660 lb')+'.'};
+      if(q.id==='goal_weight_kg'&&answers.weight_kg){
+        if(answers.goal==='lose'&&kg>=answers.weight_kg)return {ok:false,msg:'To lose fat, aim below your current weight — or skip this.'};
+        if(answers.goal==='gain'&&kg<=answers.weight_kg)return {ok:false,msg:'To build muscle, aim above your current weight — or skip this.'};
+      }
+      answers[q.id]=Math.round(kg*10)/10;return {ok:true};};
+    setTimeout(function(){wi.focus();},calm?0:420);
+  }
+  inner.appendChild(err);
+
+  var nav=el('div','qnav');
+  if(qi>0||editing){var bk=el('button','textbtn',qi>0?'Back':'Cancel');bk.type='button';
+    bk.onclick=function(){if(qi>0){qi--;renderQ(true);}else{enterApp(true);}};nav.appendChild(bk);}
+  if(q.optional){var sk=el('button','textbtn','Skip');sk.type='button';sk.onclick=function(){answers[q.id]=null;advance();};nav.appendChild(sk);}
+  var go=el('button','cta',qi===qlist.length-1?'See my plan':'Continue');go.type='button';nav.appendChild(go);
+  body.appendChild(nav);
+
+  function next(){var r=getVal();if(!r.ok){err.textContent=r.msg;animate(card,'shake');return;}advance();}
+  go.onclick=next;
+  body.addEventListener('keydown',function(e){if(e.key==='Enter'&&e.target.tagName==='INPUT'){e.preventDefault();next();}});
+  animate(inner,back?'enter fromleft':'enter');
+  Ring.to({prog:.05+(qi/total)*.85},700);
+}
+function advance(){qlist=activeQs();if(qi<qlist.length-1){qi++;renderQ(false);}else showPlan();}
+function unitToggle(list,cur,onPick){
+  var w=el('div','units');list.forEach(function(u){var b=el('button',null,u);b.type='button';b.setAttribute('aria-pressed',String(u===cur));
+    b.onclick=function(){if(u!==cur)onPick(u);};w.appendChild(b);});return w;
+}
+
+/* ===================== the plan ===================== */
+function computePlan(a){
+  var w=Number(a.weight_kg),h=Number(a.height_cm),age=Number(a.age),hm=h/100,notes=[];
+  var s=a.sex==='male'?5:a.sex==='female'?-161:-78;
+  var bmr=10*w+6.25*h-5*age+s;
+  var base={sedentary:1.2,light:1.375,active:1.5,very:1.65}[a.activity]||1.375;
+  var train={0:0,2:.075,4:.15,6:.225}[a.training_days]||0;
+  var tdee=Math.round(bmr*(base+train)/10)*10;
+  var goal=a.goal||'maintain', bmi=w/(hm*hm);
+  if(age<18&&goal!=='maintain'){notes.push('You’re under 18, so Macro doesn’t set a calorie deficit or surplus — your targets are what a growing body needs. If you want to change your weight, talk to a doctor first.');goal='maintain';}
+  if(goal==='lose'&&bmi<18.5){notes.push('Your weight is already at the low end for your height, so your plan holds your weight steady instead of cutting. If you still want to lose weight, check with a doctor first.');goal='maintain';}
+  var deltas={lose:{gentle:-300,steady:-500,fast:-750},gain:{gentle:200,steady:300,fast:450}};
+  var delta=goal==='maintain'?0:deltas[goal][a.pace||'steady'];
+  var kcal=tdee+delta, floor=a.sex==='male'?1500:a.sex==='female'?1200:1350;
+  if(kcal<floor){notes.push('Your numbers pointed lower, but we stopped at '+fmt(floor)+' kcal. Going below that isn’t a good idea without a professional’s help.');kcal=floor;delta=kcal-tdee;}
+  kcal=Math.round(kcal/10)*10;
+  var ref=bmi>30?27*hm*hm:w;
+  var perKg=goal==='lose'?2.0:goal==='gain'?(a.training_days>=4?2.0:1.8):1.6;
+  var protein=clamp(Math.round(ref*perKg/5)*5,60,250);
+  var fat=Math.max(1,Math.round(kcal*.28/9)), carbs=Math.max(0,Math.round((kcal-protein*4-fat*9)/4));
+  var rate=delta*7/7700, target=a.goal_weight_kg?Number(a.goal_weight_kg):null, minHealthy=18.5*hm*hm;
+  if(target&&goal==='lose'&&target<minHealthy){notes.push('That goal is below the healthy range for your height, so the time estimate aims for '+(Math.round(minHealthy*10)/10)+' kg instead.');target=Math.round(minHealthy*10)/10;}
+  var weeks=null;
+  if(target&&rate!==0&&((target<w&&rate<0)||(target>w&&rate>0)))weeks=Math.ceil(Math.abs(target-w)/Math.abs(rate));
+  return {bmr:bmr,tdee:tdee,kcal:kcal,protein:protein,carbs:carbs,fat:fat,delta:delta,rate:rate,target:target,weeks:weeks,goal:goal,notes:notes};
+}
+function wkg(v){return units.w==='lb'?(Math.abs(v)*2.2046).toFixed(1)+' lb':Math.abs(v).toFixed(2).replace(/0$/,'')+' kg';}
+function planWords(p,a){
+  var head=p.goal==='lose'?'Lose fat on '+fmt(p.kcal)+' kcal a day':p.goal==='gain'?'Build muscle on '+fmt(p.kcal)+' kcal a day':'Hold steady on '+fmt(p.kcal)+' kcal a day';
+  var tgt=p.target?(units.w==='lb'?Math.round(p.target*2.2046)+' lb':p.target+' kg'):'';
+  var pace=p.goal==='maintain'?'Eating that much keeps your weight about where it is.':
+    'That’s '+fmt(Math.abs(p.delta))+' kcal '+(p.delta<0?'under':'over')+' what you burn — about '+wkg(p.rate)+' a week'+(p.weeks?', or roughly '+p.weeks+' weeks to '+tgt:'')+'.';
+  var trains=Number(a.training_days)||0, meal=Math.round(p.protein/4/5)*5, tips=[];
+  function tip(t,d){tips.push({t:t,d:d});}
+  if(p.goal==='lose'){
+    tip('Protein first: '+p.protein+' g a day','About '+meal+' g at each of four meals. It keeps you full and protects your muscle while the fat comes off.');
+    if(trains===0)tip('Lift 2–3 times a week','Short full-body sessions are enough. Muscle you use is muscle you keep.');
+    else tip('Keep training hard','A deficit isn’t the time to go light — keep the weights heavy so your body keeps the muscle.');
+    tip('Walk 7,000–10,000 steps','The easiest extra burn there is, and it won’t leave you starving the way hard cardio can.');
+    tip('Judge by the weekly average','Weigh in 3–4 mornings a week. Single days jump with water and salt; the average tells the truth.');
+    tip('Adjust after two weeks','Losing nothing? Take 150 kcal off. Losing more than 1% of your weight a week? Add 150 back.');
+  }else if(p.goal==='gain'){
+    tip('Eat '+fmt(p.kcal)+' kcal every day','Missed days are the most common reason gains stall. Liquid calories — milk, smoothies — help when you’re full.');
+    tip('Protein: '+p.protein+' g a day','Split across four meals of about '+meal+' g. Muscle grows best from steady doses.');
+    if(trains===0)tip('Start lifting 3 days a week','Full-body sessions. Without a reason to grow, extra food mostly turns into fat.');
+    else tip('Train each muscle twice a week','Add a rep or a little weight each session — that progress is the signal to grow.');
+    tip('Sleep 7–9 hours','That’s when the rebuilding actually happens.');
+    tip('Check the scale every two weeks','Gaining nothing? Add 150 kcal. Gaining faster than about 0.5 kg a week? Take 100 away.');
+  }else{
+    tip('Eat around '+fmt(p.kcal)+' kcal','Some days higher, some lower is fine — it’s the weekly total that counts.');
+    tip('Protein: '+p.protein+' g a day','About '+meal+' g at each of four meals keeps you strong and full.');
+    if(trains===0)tip('Add 2–3 strength sessions a week','It’s the best thing you can do for how you look and feel at the same weight.');
+    else tip('Keep your training steady','You’re already doing the hard part. Consistency beats intensity.');
+    tip('Watch the drift','If your weekly average moves 1 kg either way, shift your calories 150 in the other direction.');
+  }
+  return {head:head,pace:pace,tips:tips};
+}
+async function showPlan(){
+  var card=$('qcard'); card.textContent='';
+  var load=el('div'); load.appendChild(el('div','spin')); load.appendChild(el('h2','qtitle','Building your plan…'));
+  load.firstChild.style.margin='4px 0 20px'; card.appendChild(load); animate(load,'enter');
+  Ring.to({prog:.98,spin:3},900);
+  var p=computePlan(answers), w=planWords(p,answers);
+  Ring.setShares(p.protein,p.carbs,p.fat);
+  await wait(1100);
+  Ring.to(RING.plan,1300);
+  card.textContent=''; card.classList.add('wide');
+  var body=el('div','plan stagger');
+  body.appendChild(el('p','eyebrow',editing?'Your updated plan':'Your plan'));
+  body.firstChild.insertBefore(el('i'),body.firstChild.firstChild);
+  body.appendChild(el('h2',null,w.head));
+  var tiles=el('div','tiles');
+  [['t-kcal',fmt(p.kcal),'kcal a day'],['t-p',p.protein+' g','protein'],['t-c',p.carbs+' g','carbs'],['t-f',p.fat+' g','fat']].forEach(function(t){
+    var d=el('div','tile '+t[0]);d.appendChild(el('b',null,t[1]));d.appendChild(el('span',null,t[2]));tiles.appendChild(d);});
+  body.appendChild(tiles);
+  var pace=el('p','pace');pace.appendChild(el('b',null,'Your body burns about '+fmt(p.tdee)+' kcal a day. '));pace.appendChild(document.createTextNode(w.pace));body.appendChild(pace);
+  if(p.notes.length){var nb=el('div','notes');p.notes.forEach(function(n){nb.appendChild(el('div',null,n));});body.appendChild(nb);}
+  var tips=el('div','tips');tips.appendChild(el('h3',null,'What to do'));
+  w.tips.forEach(function(t){var d=el('div','tip'),x=el('div');x.appendChild(el('b',null,t.t));x.appendChild(el('span',null,t.d));d.appendChild(x);tips.appendChild(d);});
+  body.appendChild(tips);
+  body.appendChild(el('p','fine','Estimated with the Mifflin–St Jeor formula and standard activity levels. Not medical advice — if you’re pregnant, breastfeeding, or managing a health condition, check these numbers with a professional.'));
+  var nav=el('div','qnav'),chg=el('button','textbtn','Change answers');chg.type='button';
+  chg.onclick=function(){qi=0;Ring.to(Object.assign({},RING.onboard,{prog:.05}),900);renderQ(true);};
+  var go=el('button','cta',editing?'Save my plan':'Start logging');go.type='button';
+  var er=el('p','qerr');er.setAttribute('role','status');
+  go.onclick=async function(){
+    go.disabled=true;go.textContent='Saving…';er.textContent='';
+    try{await savePlan(p);await enterApp(true);}
+    catch(e){go.disabled=false;go.textContent=editing?'Save my plan':'Start logging';
+      if(e&&e.status===401){saveSession(null);showAuth();authStep('s-email');setMsg('sst','Your session ended. Sign in again.','err');}
+      else er.textContent='Your plan didn’t save. Check your connection and try again.';}
+  };
+  nav.appendChild(chg);nav.appendChild(go);body.appendChild(nav);body.appendChild(er);
+  card.appendChild(body);
+}
+async function savePlan(p){
+  var a=answers, stamp=new Date().toISOString();
+  var row={user_id:user.id,goal:a.goal,sex:a.sex,age:a.age,height_cm:a.height_cm,weight_kg:a.weight_kg,
+    goal_weight_kg:a.goal==='maintain'?null:(a.goal_weight_kg||null),activity:a.activity,training_days:a.training_days,
+    pace:a.goal==='maintain'?null:(a.pace||'steady'),onboarded_at:(profile&&profile.onboarded_at)||stamp,updated_at:stamp};
+  var got=await api('profiles?on_conflict=user_id',{method:'POST',prefer:'resolution=merge-duplicates,return=representation',body:row});
+  profile=(got&&got[0])||row;
+  await api('goals?on_conflict=user_id',{method:'POST',prefer:'resolution=merge-duplicates,return=minimal',body:{user_id:user.id,kcal:p.kcal,protein:p.protein,updated_at:stamp}});
+  goals={kcal:p.kcal,protein:p.protein};
+}
+function renderPlanCard(){
+  var c=$('plancard'); if(!profile||!profile.onboarded_at){c.hidden=true;return;}
+  var p=computePlan(profile), w=planWords(p,profile);
+  c.hidden=false; $('plhead').textContent=w.head;
+  $('plsub').textContent=fmt(p.kcal)+' kcal · '+p.protein+' g protein'+(p.goal!=='maintain'?' · about '+wkg(p.rate)+' a week':'');
+  var t=$('pltips'); t.textContent='';
+  w.tips.forEach(function(x){var d=el('div','tip'),y=el('div');y.appendChild(el('b',null,x.t));y.appendChild(el('span',null,x.d));d.appendChild(y);t.appendChild(d);});
+}
+$('pltoggle').onclick=function(){var t=$('pltips'),open=t.hidden;t.hidden=!open;this.setAttribute('aria-expanded',String(open));this.textContent=open?'Hide':'What to do';};
+$('plredo').onclick=function(){
+  var pre={};['goal','sex','age','height_cm','weight_kg','goal_weight_kg','activity','training_days','pace'].forEach(function(k){if(profile[k]!=null)pre[k]=profile[k];});
+  startOnboarding(false,pre);
+};
+
+/* ===================== the log ===================== */
 var cur=new Date(); cur.setHours(12,0,0,0);
-var days={}, goals={kcal:2500,protein:150}, recent=[], googleOn=false;
+var days={}, goals={kcal:2500,protein:150}, recent=[];
 function key(d){var m=d.getMonth()+1,dd=d.getDate();return d.getFullYear()+'-'+(m<10?'0':'')+m+'-'+(dd<10?'0':'')+dd;}
 function shift(d,n){var x=new Date(d);x.setDate(x.getDate()+n);return x;}
 function num(v){v=Math.round(Number(v));return isFinite(v)&&v>0?v:0;}
 function rows(k){return days[k]||[];}
 function totals(k){var t={k:0,p:0,c:0,f:0};rows(k).forEach(function(e){if(e.failed)return;t.k+=e.kcal;t.p+=e.protein;t.c+=e.carbs;t.f+=e.fat;});return t;}
-function carbGoal(){return Math.max(1,Math.round(goals.kcal*0.45/4));}
-function fatGoal(){return Math.max(1,Math.round(goals.kcal*0.28/9));}
-function dayLabel(){
-  var t=new Date();t.setHours(12,0,0,0);
-  var diff=Math.round((cur-t)/86400000);
-  if(diff===0)return 'Today'; if(diff===-1)return 'Yesterday'; if(diff===1)return 'Tomorrow';
-  return cur.toLocaleDateString(undefined,{weekday:'short',month:'short',day:'numeric'});
-}
-var syncT=null;
-function setSync(msg,kind){
-  var s=$('sync'); s.textContent=msg||''; s.className='sync'+(kind==='err'?' err':kind==='busy'?' busy':'');
-  clearTimeout(syncT);
-  if(msg==='Saved')syncT=setTimeout(function(){if(s.textContent==='Saved'){s.textContent='Synced';}},1800);
-}
-
-/* ---------------- data ---------------- */
+function fatGoal(){return Math.max(1,Math.round(goals.kcal*.28/9));}
+function carbGoal(){return Math.max(1,Math.round((goals.kcal-goals.protein*4-fatGoal()*9)/4));}
+function dayLabel(){var t=new Date();t.setHours(12,0,0,0);var diff=Math.round((cur-t)/86400000);
+  if(diff===0)return 'Today';if(diff===-1)return 'Yesterday';if(diff===1)return 'Tomorrow';
+  return cur.toLocaleDateString(undefined,{weekday:'short',month:'short',day:'numeric'});}
 async function loadWindow(){
-  var from=key(shift(cur,-6)), to=key(cur);
+  var from=key(shift(cur,-6)),to=key(cur);
   var got=await api('entries?select=id,eaten_on,name,kcal,protein,carbs,fat,created_at&eaten_on=gte.'+from+'&eaten_on=lte.'+to+'&order=created_at.asc');
   var local={};
-  for(var i=0;i<7;i++){var k=key(shift(cur,-i)); local[k]=rows(k).filter(function(e){return e.pending||e.failed;}); days[k]=[];}
+  for(var i=0;i<7;i++){var k=key(shift(cur,-i));local[k]=rows(k).filter(function(e){return e.pending||e.failed;});days[k]=[];}
   (got||[]).forEach(function(e){(days[e.eaten_on]=days[e.eaten_on]||[]).push(e);});
   Object.keys(local).forEach(function(k){days[k]=(days[k]||[]).concat(local[k]);});
 }
 async function loadRecent(){
   var got=await api('entries?select=name,kcal,protein,carbs,fat,created_at&order=created_at.desc&limit=120');
-  var seen={}, out=[];
-  (got||[]).forEach(function(e){var k=e.name.trim().toLowerCase();if(!seen[k]&&out.length<14){seen[k]=1;out.push(e);}});
-  recent=out;
+  var seen={},out=[];(got||[]).forEach(function(e){var k=e.name.trim().toLowerCase();if(!seen[k]&&out.length<14){seen[k]=1;out.push(e);}});recent=out;
 }
-async function loadGoals(){
-  var got=await api('goals?select=kcal,protein');
-  if(got&&got.length)goals={kcal:got[0].kcal,protein:got[0].protein};
-}
+async function loadGoals(){var got=await api('goals?select=kcal,protein');if(got&&got.length)goals={kcal:got[0].kcal,protein:got[0].protein};}
 var goalT=null;
-function saveGoalsSoon(){
-  clearTimeout(goalT);
-  goalT=setTimeout(async function(){
-    setSync('Saving…','busy');
-    try{
-      await api('goals?on_conflict=user_id',{method:'POST',prefer:'resolution=merge-duplicates,return=minimal',
-        body:{user_id:user.id,kcal:goals.kcal,protein:goals.protein,updated_at:new Date().toISOString()}});
-      setSync('Saved');
-    }catch(e){handle(e,'Your goals didn’t save. Try again.');}
-  },500);
-}
-function bumpRecent(e){
-  var k=e.name.trim().toLowerCase();
-  recent=[e].concat(recent.filter(function(r){return r.name.trim().toLowerCase()!==k;})).slice(0,14);
-}
+function saveGoalsSoon(){clearTimeout(goalT);goalT=setTimeout(async function(){setSync('Saving…','busy');
+  try{await api('goals?on_conflict=user_id',{method:'POST',prefer:'resolution=merge-duplicates,return=minimal',body:{user_id:user.id,kcal:goals.kcal,protein:goals.protein,updated_at:new Date().toISOString()}});setSync('Saved');}
+  catch(e){handle(e,'Your goals didn’t save. Try again.');}},500);}
+function bumpRecent(e){var k=e.name.trim().toLowerCase();recent=[e].concat(recent.filter(function(r){return r.name.trim().toLowerCase()!==k;})).slice(0,14);}
 async function addEntry(x,dayKey){
   var k=dayKey||key(cur);
   var temp={id:'tmp-'+Math.random().toString(36).slice(2),eaten_on:k,name:x.name,kcal:x.kcal,protein:x.protein,carbs:x.carbs,fat:x.fat,pending:true};
-  (days[k]=days[k]||[]).push(temp); render();
-  setSync('Saving…','busy');
-  try{
-    var got=await api('entries',{method:'POST',prefer:'return=representation',
-      body:{eaten_on:k,name:x.name,kcal:x.kcal,protein:x.protein,carbs:x.carbs,fat:x.fat}});
-    var list=days[k]||[], i=list.indexOf(temp);
-    if(i>=0)list[i]=(got&&got[0])||Object.assign(temp,{pending:false});
-    bumpRecent(x); setSync('Saved'); render();
-  }catch(e){
-    temp.pending=false; temp.failed=true; render();
-    handle(e, navigator.onLine?'That entry didn’t save. Tap Retry.':'You’re offline, so that entry didn’t save. Tap Retry when you’re back.');
-  }
+  (days[k]=days[k]||[]).push(temp);render();setSync('Saving…','busy');
+  try{var got=await api('entries',{method:'POST',prefer:'return=representation',body:{eaten_on:k,name:x.name,kcal:x.kcal,protein:x.protein,carbs:x.carbs,fat:x.fat}});
+    var list=days[k]||[],i=list.indexOf(temp);if(i>=0)list[i]=(got&&got[0])||Object.assign(temp,{pending:false});bumpRecent(x);setSync('Saved');render();}
+  catch(e){temp.pending=false;temp.failed=true;render();handle(e,navigator.onLine?'That entry didn’t save. Tap Retry.':'You’re offline, so that entry didn’t save. Tap Retry when you’re back.');}
 }
 async function removeEntry(e){
-  var k=e.eaten_on;
-  days[k]=rows(k).filter(function(r){return r!==e;}); render();
-  if(String(e.id).indexOf('tmp-')===0)return;
-  setSync('Saving…','busy');
+  var k=e.eaten_on;days[k]=rows(k).filter(function(r){return r!==e;});render();
+  if(String(e.id).indexOf('tmp-')===0)return;setSync('Saving…','busy');
   try{await api('entries?id=eq.'+encodeURIComponent(e.id),{method:'DELETE'});setSync('Saved');}
   catch(err){(days[k]=days[k]||[]).push(e);render();handle(err,'That entry didn’t delete. Try again.');}
 }
-async function refreshAll(){
-  if(!user)return;
-  try{await Promise.all([loadWindow(),loadRecent()]);render();if(!$('sync').classList.contains('err'))setSync('Synced');}
-  catch(e){handle(e,'Can’t reach your log right now.');}
-}
+async function refreshAll(){if(!user||$('app').hidden)return;try{await Promise.all([loadWindow(),loadRecent()]);render();if(!$('sync').classList.contains('err'))setSync('Synced');}catch(e){handle(e,'Can’t reach your log right now.');}}
 function handle(e,msg){
-  if(e&&e.status===401){saveSession(null);user=null;showSignIn('Your session ended. Sign in again to see your log.');return;}
+  if(e&&e.status===401){saveSession(null);user=null;showAuth();authStep('s-email');setMsg('sst','Your session ended. Sign in again to see your log.','err');return;}
   setSync(msg||'Something went wrong.','err');
 }
-
-/* ---------------- render ---------------- */
 function render(){
-  var k=key(cur), t=totals(k), g=goals;
-  $('dlabel').textContent=dayLabel();
-  $('addday').textContent=dayLabel()==='Today'?'to today':'to '+dayLabel().toLowerCase();
-  $('addbtn').textContent=dayLabel()==='Today'?'Add to today':'Add to '+dayLabel();
-  $('kcal').textContent=t.k.toLocaleString();
-  var left=g.kcal-t.k;
+  var k=key(cur),t=totals(k),g=goals,lbl=dayLabel();
+  $('dlabel').textContent=lbl;$('addday').textContent=lbl==='Today'?'to today':'to '+lbl.toLowerCase();
+  $('addbtn').textContent=lbl==='Today'?'Add to today':'Add to '+lbl;
+  $('kcal').textContent=t.k.toLocaleString();var left=g.kcal-t.k;
   $('kleft').textContent=left>=0?(left.toLocaleString()+' left'):(Math.abs(left).toLocaleString()+' over');
-  var ring=$('ring'), C=383.27;
-  ring.setAttribute('stroke-dashoffset',String(C*(1-(g.kcal>0?Math.min(1,t.k/g.kcal):0))));
-  ring.setAttribute('stroke',left<0?'var(--over)':'url(#rg)');
+  var ring=$('ring'),C=383.27;ring.setAttribute('stroke-dashoffset',String(C*(1-(g.kcal>0?Math.min(1,t.k/g.kcal):0))));ring.setAttribute('stroke',left<0?'var(--over)':'url(#rg)');
   function bar(id,txt,val,goal){$(id).style.width=(goal>0?Math.min(100,val/goal*100):0)+'%';$(txt).textContent=val+' / '+goal+' g';}
-  bar('pbar','ptxt',t.p,g.protein); bar('cbar','ctxt',t.c,carbGoal()); bar('fbar','ftxt',t.f,fatGoal());
-
-  var list=$('list'), es=rows(k);
-  list.textContent='';
-  var okCount=es.filter(function(e){return !e.failed;}).length;
-  $('count').textContent=okCount?(okCount+(okCount===1?' item · ':' items · ')+t.k.toLocaleString()+' kcal'):'';
-  if(!es.length){
-    var p=document.createElement('p');p.className='empty';
-    p.textContent=dayLabel()==='Today'?'Nothing logged yet today. Add your first food above.':'Nothing logged for '+dayLabel()+'.';
-    list.appendChild(p);
-  }
+  bar('pbar','ptxt',t.p,g.protein);bar('cbar','ctxt',t.c,carbGoal());bar('fbar','ftxt',t.f,fatGoal());
+  var list=$('list'),es=rows(k);list.textContent='';
+  var okn=es.filter(function(e){return !e.failed;}).length;
+  $('count').textContent=okn?(okn+(okn===1?' item · ':' items · ')+t.k.toLocaleString()+' kcal'):'';
+  if(!es.length)list.appendChild(el('p','empty',lbl==='Today'?'Nothing logged yet today. Add your first food above.':'Nothing logged for '+lbl+'.'));
   es.forEach(function(e){
-    var row=document.createElement('div');row.className='item'+(e.pending?' pending':'')+(e.failed?' failed':'');
-    var nm=document.createElement('div');nm.className='nm';
-    var a=document.createElement('div');a.textContent=e.name;
-    var b=document.createElement('div');b.className='mc';
-    b.textContent=e.failed?'Not saved':('P '+e.protein+' g · C '+e.carbs+' g · F '+e.fat+' g'+(e.pending?' · saving…':''));
-    if(e.failed){var rb=document.createElement('button');rb.className='retry';rb.type='button';rb.textContent='Retry';
-      rb.onclick=function(){days[e.eaten_on]=rows(e.eaten_on).filter(function(r){return r!==e;});addEntry(e,e.eaten_on);};b.appendChild(rb);}
-    nm.appendChild(a);nm.appendChild(b);
-    var kc=document.createElement('div');kc.className='kc';kc.textContent=e.kcal.toLocaleString()+' kcal';
-    var x=document.createElement('button');x.className='x';x.type='button';x.textContent='×';x.setAttribute('aria-label','Delete '+e.name);
-    x.onclick=function(){removeEntry(e);};
-    row.appendChild(nm);row.appendChild(kc);row.appendChild(x);list.appendChild(row);
+    var row=el('div','item'+(e.pending?' pending':'')+(e.failed?' failed':'')),nm=el('div','nm');nm.appendChild(el('div',null,e.name));
+    var b=el('div','mc',e.failed?'Not saved':('P '+e.protein+' g · C '+e.carbs+' g · F '+e.fat+' g'+(e.pending?' · saving…':'')));
+    if(e.failed){var rb=el('button','retry','Retry');rb.type='button';rb.onclick=function(){days[e.eaten_on]=rows(e.eaten_on).filter(function(r){return r!==e;});addEntry(e,e.eaten_on);};b.appendChild(rb);}
+    nm.appendChild(b);var x=el('button','x','×');x.type='button';x.setAttribute('aria-label','Delete '+e.name);x.onclick=function(){removeEntry(e);};
+    row.appendChild(nm);row.appendChild(el('div','kc',e.kcal.toLocaleString()+' kcal'));row.appendChild(x);list.appendChild(row);
   });
-
-  var wk=$('wk'); wk.textContent='';
-  var ds=[], max=g.kcal;
+  var wk=$('wk');wk.textContent='';var ds=[],max=g.kcal;
   for(var i=6;i>=0;i--){var d=shift(cur,-i),kk=key(d),v=totals(kk).k;ds.push({d:d,k:kk,v:v});if(v>max)max=v;}
   max*=1.12;
-  ds.forEach(function(o){
-    var col=document.createElement('button');col.type='button';col.className='wcol'+(o.k===k?' sel':'');
+  ds.forEach(function(o){var col=el('button','wcol'+(o.k===k?' sel':''));col.type='button';
     col.setAttribute('aria-label',o.d.toLocaleDateString(undefined,{weekday:'long'})+', '+o.v+' calories');
-    var br=document.createElement('div');br.className='wbar';br.style.height=Math.max(2,Math.round(o.v/max*88))+'px';
-    var lb=document.createElement('span');lb.textContent=o.d.toLocaleDateString(undefined,{weekday:'narrow'});
-    col.appendChild(br);col.appendChild(lb);
-    col.onclick=function(){cur=new Date(o.d);render();};
-    wk.appendChild(col);
-  });
-  var gl=document.createElement('div');gl.className='wg';gl.style.bottom=(23+Math.round(g.kcal/max*88))+'px';wk.appendChild(gl);
-
-  var rc=$('recent'), dl=$('recentlist');
-  rc.textContent=''; dl.textContent='';
-  $('recentwrap').hidden=!recent.length;
-  recent.forEach(function(r){
-    var c=document.createElement('button');c.type='button';c.className='chip';
-    var s=document.createElement('span');s.textContent=r.name;
-    var sm=document.createElement('small');sm.textContent=r.kcal+' kcal';
-    c.appendChild(s);c.appendChild(sm);
-    c.setAttribute('aria-label','Add '+r.name+', '+r.kcal+' calories');
-    c.onclick=function(){addEntry({name:r.name,kcal:r.kcal,protein:r.protein,carbs:r.carbs,fat:r.fat});};
-    rc.appendChild(c);
-    var o=document.createElement('option');o.value=r.name;dl.appendChild(o);
-  });
-
-  if(document.activeElement!==$('gk'))$('gk').value=g.kcal;
-  if(document.activeElement!==$('gp'))$('gp').value=g.protein;
+    var br=el('div','wbar');br.style.height=Math.max(2,Math.round(o.v/max*88))+'px';col.appendChild(br);
+    col.appendChild(el('span',null,o.d.toLocaleDateString(undefined,{weekday:'narrow'})));col.onclick=function(){cur=new Date(o.d);render();};wk.appendChild(col);});
+  var gl=el('div','wg');gl.style.bottom=(23+Math.round(g.kcal/max*88))+'px';wk.appendChild(gl);
+  var rc=$('recent'),dl=$('recentlist');rc.textContent='';dl.textContent='';$('recentwrap').hidden=!recent.length;
+  recent.forEach(function(r){var c=el('button','chip');c.type='button';c.appendChild(el('span',null,r.name));c.appendChild(el('small',null,r.kcal+' kcal'));
+    c.setAttribute('aria-label','Add '+r.name+', '+r.kcal+' calories');c.onclick=function(){addEntry({name:r.name,kcal:r.kcal,protein:r.protein,carbs:r.carbs,fat:r.fat});};
+    rc.appendChild(c);var o=document.createElement('option');o.value=r.name;dl.appendChild(o);});
+  if(document.activeElement!==$('gk'))$('gk').value=g.kcal;if(document.activeElement!==$('gp'))$('gp').value=g.protein;
 }
-
-/* ---------------- views ---------------- */
-function initials(n){n=(n||'').trim();if(!n)return '·';var p=n.split(/[\s@.]+/).filter(Boolean);return ((p[0]||'')[0]+((p[1]||'')[0]||'')).toUpperCase();}
-function showSignIn(msg){
-  $('boot').hidden=true; $('app').hidden=true; $('me').hidden=true; $('signin').hidden=false;
-  $('google').hidden=!googleOn; $('or').hidden=!googleOn;
-  setSync('');
-  var s=$('sst'); s.textContent=msg||''; s.className='st'+(msg?' err':'');
-  if(location.hash==='#email')setTimeout(function(){$('email').focus();},50);
-}
-function showApp(){
-  $('boot').hidden=true; $('signin').hidden=true; $('app').hidden=false; $('me').hidden=false;
-  var md=(user&&user.user_metadata)||{};
-  var name=md.full_name||md.name||(user&&user.email)||'';
-  $('who').textContent=name;
-  var av=$('av'); av.textContent='';
-  if(md.avatar_url){var img=new Image();img.alt='';img.referrerPolicy='no-referrer';img.src=md.avatar_url;
-    img.onerror=function(){av.textContent=initials(name);};av.appendChild(img);}
-  else av.textContent=initials(name);
-}
-
-/* ---------------- sign-in actions ---------------- */
-async function checkProviders(){
-  try{
-    var r=await fetch(SB_URL+'/auth/v1/settings',{headers:{apikey:SB_KEY}});
-    if(r.ok){var j=await r.json();googleOn=!!(j.external&&j.external.google);}
-  }catch(e){googleOn=false;}
-}
-function startGoogle(){
-  location.href=SB_URL+'/auth/v1/authorize?provider=google&redirect_to='+encodeURIComponent(APP_URL);
-}
-$('google').onclick=function(){$('google').disabled=true;startGoogle();};
-$('emailform').onsubmit=async function(ev){
-  ev.preventDefault();
-  var email=$('email').value.trim(), s=$('sst');
-  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){s.textContent='Enter the email address you want to sign in with.';s.className='st err';return;}
-  $('sendlink').disabled=true; s.textContent='Sending…'; s.className='st';
-  try{
-    var r=await fetch(SB_URL+'/auth/v1/otp?redirect_to='+encodeURIComponent(APP_URL),{method:'POST',
-      headers:{apikey:SB_KEY,'Content-Type':'application/json'},body:JSON.stringify({email:email,create_user:true})});
-    if(!r.ok){
-      var j={};try{j=await r.json();}catch(e){}
-      if(r.status===429)throw new Error('Too many sign-in emails were sent recently. Wait a few minutes and try again'+(googleOn?', or use Continue with Google.':'.'));
-      throw new Error(j.msg||j.error_description||j.message||'That email couldn’t be sent. Check the address and try again.');
-    }
-    s.textContent='Check your inbox at '+email+'. The link signs you in on whichever device you open it on.'; s.className='st ok';
-  }catch(e){s.textContent=e.message;s.className='st err';}
-  finally{$('sendlink').disabled=false;}
-};
-$('out').onclick=async function(){
-  var tok=session&&session.access_token;
-  saveSession(null); user=null; days={}; recent=[];
-  showSignIn('');
-  if(tok){try{await fetch(SB_URL+'/auth/v1/logout',{method:'POST',headers:{apikey:SB_KEY,Authorization:'Bearer '+tok}});}catch(e){}}
-};
-
-/* ---------------- app controls ---------------- */
-$('addform').onsubmit=function(ev){
-  ev.preventDefault();
-  var name=$('fname').value.trim(), s=$('ast');
-  if(!name){s.textContent='Type what you ate.';s.className='st err';$('fname').focus();return;}
-  if($('fk').value===''){s.textContent='Add the calories — even a rough number helps.';s.className='st err';$('fk').focus();return;}
+$('addform').onsubmit=function(ev){ev.preventDefault();var name=$('fname').value.trim();
+  if(!name){setMsg('ast','Type what you ate.','err');$('fname').focus();return;}
+  if($('fk').value===''){setMsg('ast','Add the calories — even a rough number helps.','err');$('fk').focus();return;}
   addEntry({name:name.slice(0,120),kcal:num($('fk').value),protein:num($('fp').value),carbs:num($('fc').value),fat:num($('ff').value)});
-  ['fname','fk','fp','fc','ff'].forEach(function(id){$(id).value='';});
-  s.textContent=''; s.className='st'; $('fname').focus();
-};
-$('fname').addEventListener('input',function(){
-  var v=$('fname').value.trim().toLowerCase();
-  var hit=recent.filter(function(r){return r.name.trim().toLowerCase()===v;})[0];
-  if(hit){$('fk').value=hit.kcal;$('fp').value=hit.protein;$('fc').value=hit.carbs;$('ff').value=hit.fat;}
-});
+  ['fname','fk','fp','fc','ff'].forEach(function(id){$(id).value='';});setMsg('ast','');$('fname').focus();};
+$('fname').addEventListener('input',function(){var v=$('fname').value.trim().toLowerCase();var hit=recent.filter(function(r){return r.name.trim().toLowerCase()===v;})[0];
+  if(hit){$('fk').value=hit.kcal;$('fp').value=hit.protein;$('fc').value=hit.carbs;$('ff').value=hit.fat;}});
 $('prev').onclick=function(){cur=shift(cur,-1);render();refreshAll();};
 $('next').onclick=function(){cur=shift(cur,1);render();refreshAll();};
 $('gk').onchange=function(){var v=num($('gk').value);if(v>=500&&v<=10000){goals.kcal=v;saveGoalsSoon();}render();};
 $('gp').onchange=function(){var v=num($('gp').value);if(v>=10&&v<=1000){goals.protein=v;saveGoalsSoon();}render();};
-document.addEventListener('visibilitychange',function(){if(document.visibilityState==='visible')refreshAll();});
-addEventListener('online',refreshAll);
+document.addEventListener('visibilitychange',function(){if(document.visibilityState!=='visible')return;if(pend&&!$('auth').hidden)tryClaim();else refreshAll();});
+addEventListener('online',function(){if(pend)tryClaim();else refreshAll();});
 setInterval(function(){if(document.visibilityState==='visible')refreshAll();},45000);
+$('out').onclick=async function(){
+  var tok=session&&session.access_token;saveSession(null);user=null;profile=null;days={};recent=[];
+  showAuth();authStep('s-email');setMsg('sst','');
+  if(tok){try{await fetch(SB_URL+'/auth/v1/logout',{method:'POST',headers:{apikey:SB_KEY,Authorization:'Bearer '+tok}});}catch(e){}}
+};
 
-/* ---------------- boot ---------------- */
+/* ===================== boot ===================== */
 async function boot(){
   loadSession();
-  var fromHash=readHash();
-  if(fromHash){
-    history.replaceState(null,'',location.pathname);
-    if(!fromHash.error)saveSession(fromHash);
-  }
+  var hash=readHash(), q=new URLSearchParams(location.search), hid=q.get('handoff'), goGoogle=q.get('go')==='google', wantEmail=location.hash==='#email';
+  if(hash||hid||goGoogle)history.replaceState(null,'',location.pathname);
   await checkProviders();
-  if(fromHash&&fromHash.error){showSignIn('Sign-in didn’t finish: '+fromHash.error+'. Try again.');return;}
+  if(hash&&hash.error){showAuth();authStep('s-email');setMsg('sst','Sign-in didn’t finish: '+hash.error+'. Try again.','err');return;}
+  if(hash&&hid){await handleLinkTab(hash,hid);return;}
+  if(hash){saveSession(hash);try{showView('auth');await signedIn(true);}catch(e){showAuth();authStep('s-email');setMsg('sst','Sign-in didn’t finish. Try again.','err');}return;}
   if(!session){
-    if(new URLSearchParams(location.search).get('go')==='google'&&googleOn){startGoogle();return;}
-    showSignIn('');return;
+    pend=loadPend();
+    if(goGoogle&&googleOn){startGoogle();return;}
+    showAuth();
+    if(pend)startWaiting(); else {authStep('s-email');if(wantEmail)setTimeout(function(){$('email').focus();},80);}
+    return;
   }
-  try{
-    var r=await authed(SB_URL+'/auth/v1/user',{});
-    if(!r.ok)throw {status:r.status===403||r.status===404?401:r.status};
-    user=await r.json(); session.user=user; saveSession(session);
-    showApp(); render(); setSync('Loading…','busy');
-    await Promise.all([loadGoals(),loadWindow(),loadRecent()]);
-    render(); setSync('Synced');
-  }catch(e){
-    if(e&&e.status===401){saveSession(null);showSignIn('Your session ended. Sign in again to see your log.');}
-    else if(session&&session.user){user=session.user;showApp();render();setSync('Can’t reach your log right now. Check your connection.','err');}
-    else showSignIn('Can’t reach the server right now. Check your connection and try again.');
+  try{await signedIn(false);}
+  catch(e){
+    if(e&&e.status===401){saveSession(null);showAuth();authStep('s-email');setMsg('sst','Your session ended. Sign in again to see your log.','err');}
+    else if(session&&session.user){user=session.user;showView('app');showMe();render();setSync('Can’t reach your log right now. Check your connection.','err');}
+    else{showAuth();authStep('s-email');setMsg('sst','Can’t reach the server right now. Check your connection and try again.','err');}
   }
 }
+if(location.protocol==='file:')window.__macro={startOnboarding:startOnboarding,showView:showView,authStep:authStep,Ring:Ring,RING:RING,
+  setAnswers:function(a){answers=a;},showPlan:showPlan,renderQ:renderQ,computePlan:computePlan,setQi:function(i){qi=i;}};
 boot();
 })();
 </script>

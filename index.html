@@ -445,7 +445,7 @@ footer{background:var(--void);color:var(--ink-dark);padding-block:clamp(56px,9vh
     </h1>
     <p class="hero-sub rv s2">Describe the meal in plain words. Macro splits it into foods, estimates the calories and macros, and a coach who can read your whole log answers whatever you ask next.</p>
     <div class="hero-row rv s3">
-      <a class="btn btn-google" id="heroSignIn" href="app.html?go=google"><svg viewBox="0 0 48 48" aria-hidden="true"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg><span>Sign in with Google</span></a>
+      <a class="btn btn-fill" id="heroSignIn" href="app.html"><span>Start your log</span><svg width="15" height="15" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h9M8.5 4.2 12.6 8l-4.1 3.8" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
       <a class="btn btn-line" href="#say">See how it reads a meal</a>
     </div>
     <div class="hero-strip rv s4">
@@ -498,7 +498,7 @@ footer{background:var(--void);color:var(--ink-dark);padding-block:clamp(56px,9vh
           <div class="mtrack"><div class="mfill" id="bp" style="background:linear-gradient(90deg,#2C5AD6,#4273F8)"></div></div>
         </div>
         <div class="mrow">
-          <div class="mlab"><b>Carbs</b><span class="num" id="lc">0 / 281 g</span></div>
+          <div class="mlab"><b>Carbs</b><span class="num" id="lc">0 / 300 g</span></div>
           <div class="mtrack"><div class="mfill" id="bc" style="background:linear-gradient(90deg,#C4870C,#E3A017)"></div></div>
         </div>
         <div class="mrow">
@@ -506,7 +506,7 @@ footer{background:var(--void);color:var(--ink-dark);padding-block:clamp(56px,9vh
           <div class="mtrack"><div class="mfill" id="bf" style="background:linear-gradient(90deg,#C42F58,#E4416D)"></div></div>
         </div>
       </div>
-      <p class="p closenote">Carbs and fat aren't targets you set — they're derived from the calorie goal, at 45% and 28%. Protein is the one number you choose, because it's the one that's hard to hit.</p>
+      <p class="p closenote">Carbs and fat aren't targets you set: fat is 28% of your calories, and carbs fill in whatever's left after protein. Protein is the number that matters, because it's the one that's hard to hit.</p>
     </div>
   </div>
 </section>
@@ -565,7 +565,7 @@ footer{background:var(--void);color:var(--ink-dark);padding-block:clamp(56px,9vh
       <div class="ln ind"><span>of a derived 78 g target</span><span class="dv">105%</span></div>
       <hr class="thin">
       <div class="ln"><b>Total Carbohydrate</b><span class="dv">221 g</span></div>
-      <div class="ln ind"><span>of a derived 281 g target</span><span class="dv">79%</span></div>
+      <div class="ln ind"><span>of a derived 300 g target</span><span class="dv">74%</span></div>
       <hr class="thin">
       <div class="ln"><b>Protein</b><span class="dv">132 g</span></div>
       <div class="ln ind"><span>of the 150 g you set</span><span class="dv">88%</span></div>
@@ -677,17 +677,17 @@ footer{background:var(--void);color:var(--ink-dark);padding-block:clamp(56px,9vh
     <div>
       <p class="eyebrow rv">Your log, on every device</p>
       <h2 class="d2 rv s1">Sign in once.<br>Pick up anywhere.</h2>
-      <p class="p rv s2" style="margin-top:20px;font-size:17px">Sign in with your Google account and every meal you log is saved to it. Open Macro on your phone at lunch and your laptop at night — same account, same day, same numbers.</p>
+      <p class="p rv s2" style="margin-top:20px;font-size:17px">Sign in with a link sent to your email and answer a few quick questions the first time — Macro works out your calories and protein from them. After that, every meal you log is saved to your account: phone at lunch, laptop at night, same numbers.</p>
       <div class="startbtns rv s3">
-        <a class="btn btn-google" id="startGoogle" href="app.html?go=google"><svg viewBox="0 0 48 48" aria-hidden="true"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg><span>Continue with Google</span></a>
-        <a class="btn btn-quiet" id="startEmail" href="app.html#email">Email me a sign-in link</a>
+        <a class="btn btn-fill" id="startEmail" href="app.html#email"><span>Sign in with email</span></a>
+        <a class="btn btn-google" id="startGoogle" href="app.html?go=google" hidden><svg viewBox="0 0 48 48" aria-hidden="true"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg><span>Continue with Google</span></a>
       </div>
       <p class="startnote rv s4">Logging is by hand here: type a food and its numbers once, and it's one tap from then on.</p>
     </div>
     <div class="startfacts rv rvS s2">
       <div class="fact"><b>Private</b><span>Your entries are sealed to your account. Nobody else can read them.</span></div>
       <div class="fact"><b>Synced</b><span>Log on your phone, check on your laptop. Same list in both places.</span></div>
-      <div class="fact"><b>Free</b><span>No card, no trial, no ads.</span></div>
+      <div class="fact"><b>Made for you</b><span>A few questions the first time, and your calories and protein are set for you.</span></div>
     </div>
   </div>
 </section>
@@ -817,12 +817,12 @@ function sayScene(p){
 var bigk=D.getElementById('bigk'),
     lp=D.getElementById('lp'), lc=D.getElementById('lc'), lf=D.getElementById('lf'),
     bp=D.getElementById('bp'), bc=D.getElementById('bc'), bf=D.getElementById('bf');
-var DAY={k:2176,p:132,c:221,f:82}, GOAL={k:2500,p:150,c:281,f:78};
+var DAY={k:2176,p:132,c:221,f:82}, GOAL={k:2500,p:150,c:300,f:78};
 function closeScene(p){
   var t=easeOut(clamp((p-0.05)/0.62,0,1));
   bigk.textContent=Math.round(DAY.k*t).toLocaleString();
   var pv=Math.round(DAY.p*t), cv=Math.round(DAY.c*t), fv=Math.round(DAY.f*t);
-  lp.textContent=pv+' / 150 g'; lc.textContent=cv+' / 281 g'; lf.textContent=fv+' / 78 g';
+  lp.textContent=pv+' / 150 g'; lc.textContent=cv+' / 300 g'; lf.textContent=fv+' / 78 g';
   bp.style.width=clamp(pv/GOAL.p*100,0,100)+'%';
   bc.style.width=clamp(cv/GOAL.c*100,0,100)+'%';
   bf.style.width=clamp(fv/GOAL.f*100,0,100)+'%';
@@ -1119,18 +1119,25 @@ if(D.fonts&&D.fonts.ready) D.fonts.ready.then(function(){measureGallery();lastY=
 </script>
 
 <script>
-/* Signed in already? Every sign-in button goes straight to the log. */
+/* Signed in already? Buttons go straight to the log. Google buttons appear only when Google sign-in is switched on. */
 (function(){
-  try{
-    var sess=JSON.parse(localStorage.getItem('macro.session.v1'));
-    if(!sess||!sess.refresh_token)return;
-    var nav=document.getElementById('navcta'); if(nav){nav.textContent='Open your log';nav.href='app.html';}
-    ['heroSignIn','startGoogle'].forEach(function(id){
-      var b=document.getElementById(id); if(!b)return;
-      b.href='app.html'; var t=b.querySelector('span'); if(t)t.textContent='Open your log';
-    });
-    var e=document.getElementById('startEmail'); if(e)e.hidden=true;
-  }catch(err){}
+  var signed=false;
+  try{var sess=JSON.parse(localStorage.getItem('macro.session.v1'));signed=!!(sess&&sess.refresh_token);}catch(err){}
+  var nav=document.getElementById('navcta'), hero=document.getElementById('heroSignIn'), sg=document.getElementById('startGoogle'), se=document.getElementById('startEmail');
+  if(signed){
+    if(nav){nav.textContent='Open your log';nav.href='app.html';}
+    if(hero){hero.href='app.html';hero.querySelector('span').textContent='Open your log';}
+    if(se){se.href='app.html';se.querySelector('span').textContent='Open your log';}
+    return;
+  }
+  fetch('https://ankbtgrxztdvtrrvocca.supabase.co/auth/v1/settings',{headers:{apikey:'sb_publishable_lRr3KZd92Sqi8odS6BP-7Q_8sxgL4A3'}})
+    .then(function(r){return r.ok?r.json():null;})
+    .then(function(j){
+      if(!j||!j.external||!j.external.google)return;
+      if(sg)sg.hidden=false;
+      if(hero){hero.className='btn btn-google';hero.href='app.html?go=google';
+        hero.innerHTML=sg?sg.innerHTML.replace('Continue with Google','Sign in with Google'):hero.innerHTML;}
+    }).catch(function(){});
 })();
 </script>
 </body>
