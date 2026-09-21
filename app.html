@@ -1,0 +1,631 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Your log · Macro</title>
+<meta name="description" content="Your Macro food log: calories and macros for every day, saved to your account and synced across your devices.">
+<meta name="theme-color" content="#080C0A" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#F2F1E9" media="(prefers-color-scheme: light)">
+<meta name="robots" content="noindex">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Familjen+Grotesk:wght@400..700&family=IBM+Plex+Mono:wght@400;500&family=Instrument+Sans:wght@400..600&display=swap">
+<style>
+:root{
+  color-scheme:light dark;
+  --bg:#F2F1E9;--surf:#FFFFFF;--ink:#0F1613;--sub:#5C6962;--line:rgba(15,32,24,.13);
+  --glass:255,255,255;--ga:.78;
+  --accent:#126B49;--accent-soft:#63E5AB;--accent-ink:#FFFFFF;--over:#C13F2B;
+  --azure:#4273F8;--saffron:#E3A017;--rose:#E4416D;--mint:#63E5AB;
+  --shadow:0 1px 2px rgba(10,30,20,.06),0 18px 44px -20px rgba(10,30,20,.28);
+  --head:'Familjen Grotesk','Trebuchet MS',system-ui,sans-serif;
+  --body:'Instrument Sans',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --mono:'IBM Plex Mono',ui-monospace,'SF Mono',Menlo,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#080C0A;--surf:#101714;--ink:#EDF2EE;--sub:#8D9B93;--line:rgba(178,222,201,.16);
+  --glass:17,25,21;--ga:.72;
+  --accent:#63E5AB;--accent-soft:#0F6B48;--accent-ink:#04120B;--over:#F07A64;
+  --shadow:0 1px 2px rgba(0,0,0,.45),0 22px 50px -22px rgba(0,0,0,.8);
+}}
+:root[data-theme="dark"]{
+  --bg:#080C0A;--surf:#101714;--ink:#EDF2EE;--sub:#8D9B93;--line:rgba(178,222,201,.16);
+  --glass:17,25,21;--ga:.72;
+  --accent:#63E5AB;--accent-soft:#0F6B48;--accent-ink:#04120B;--over:#F07A64;
+  --shadow:0 1px 2px rgba(0,0,0,.45),0 22px 50px -22px rgba(0,0,0,.8);
+}
+*{box-sizing:border-box;}
+html{-webkit-text-size-adjust:100%;}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.55;
+  min-height:100vh;overflow-x:clip;-webkit-font-smoothing:antialiased;
+  padding-bottom:env(safe-area-inset-bottom,0px);}
+[hidden]{display:none!important;}
+button{font:inherit;color:inherit;cursor:pointer;}
+a{color:inherit;}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:6px;}
+#glow{position:fixed;inset:-25%;z-index:-1;pointer-events:none;filter:blur(80px);opacity:.5;}
+#glow i{position:absolute;border-radius:50%;display:block;}
+#glow i:nth-child(1){width:46vmax;height:46vmax;left:-8vmax;top:-10vmax;background:var(--accent-soft);opacity:.55;animation:d1 28s ease-in-out infinite;}
+#glow i:nth-child(2){width:40vmax;height:40vmax;right:-10vmax;top:22vmax;background:#4F8FE8;opacity:.28;animation:d2 34s ease-in-out infinite;}
+@keyframes d1{50%{transform:translate3d(7vmax,5vmax,0) scale(1.1);}}
+@keyframes d2{50%{transform:translate3d(-8vmax,6vmax,0) scale(.92);}}
+
+/* bar */
+.bar{position:sticky;top:0;z-index:20;display:flex;align-items:center;gap:14px;
+  padding:10px 20px;padding-top:calc(10px + env(safe-area-inset-top,0px));
+  background:rgba(var(--glass),.72);backdrop-filter:blur(16px) saturate(150%);-webkit-backdrop-filter:blur(16px) saturate(150%);
+  border-bottom:1px solid var(--line);}
+.brand{display:flex;align-items:center;gap:9px;font-family:var(--head);font-weight:700;font-size:18px;letter-spacing:-.03em;text-decoration:none;}
+.brand svg{width:22px;height:22px;flex:none;}
+.sync{font-family:var(--mono);font-size:11px;letter-spacing:.08em;color:var(--sub);margin-left:auto;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0;}
+.sync.err{color:var(--over);}
+.sync::before{content:"";display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--accent);margin-right:7px;vertical-align:1px;}
+.sync.err::before{background:var(--over);}
+.sync.busy::before{animation:pulse 1s ease-in-out infinite;}
+.sync:empty{display:none;}
+@keyframes pulse{50%{opacity:.25;}}
+.me{display:flex;align-items:center;gap:9px;min-width:0;}
+.av{width:30px;height:30px;border-radius:50%;flex:none;display:grid;place-items:center;overflow:hidden;
+  font-family:var(--head);font-weight:600;font-size:12px;background:linear-gradient(155deg,var(--accent-soft),var(--accent));color:var(--accent-ink);}
+.av img{width:100%;height:100%;object-fit:cover;display:block;}
+.who{font-size:13.5px;color:var(--sub);max-width:22ch;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+@media (max-width:620px){.who{display:none;}}
+.link{background:none;border:0;padding:4px 2px;color:var(--sub);text-decoration:underline;text-underline-offset:3px;font-size:13.5px;}
+.link:hover{color:var(--ink);}
+
+/* layout */
+.wrap{max-width:760px;margin:0 auto;padding:26px 16px 60px;}
+h1{font-family:var(--head);font-weight:700;letter-spacing:-.03em;margin:0;}
+h2{font-family:var(--head);font-weight:600;font-size:16px;letter-spacing:-.01em;margin:0 0 13px;display:flex;align-items:center;gap:8px;}
+h2 em{font-family:var(--mono);font-style:normal;font-weight:400;font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--sub);margin-left:auto;}
+.eyebrow{font-family:var(--mono);font-size:11px;font-weight:500;letter-spacing:.2em;text-transform:uppercase;color:var(--sub);margin:0 0 12px;}
+.p{color:var(--sub);margin:10px 0 0;max-width:52ch;}
+.fine{font-size:12.5px;color:var(--sub);margin:14px 0 0;}
+.card{position:relative;border-radius:20px;border:1px solid var(--line);background:rgba(var(--glass),var(--ga));
+  backdrop-filter:blur(18px) saturate(150%);-webkit-backdrop-filter:blur(18px) saturate(150%);
+  box-shadow:var(--shadow);padding:18px;margin-bottom:14px;}
+
+/* boot */
+.boot{display:grid;place-items:center;gap:14px;padding:18vh 0;color:var(--sub);}
+.spin{width:34px;height:34px;border-radius:50%;border:3px solid var(--line);border-top-color:var(--accent);animation:sp .9s linear infinite;}
+@keyframes sp{to{transform:rotate(360deg);}}
+
+/* sign in */
+.signin{display:grid;place-items:center;padding:6vh 0;}
+.signcard{max-width:440px;width:100%;padding:28px;}
+.signcard h1{font-size:clamp(28px,6vw,36px);line-height:1.05;}
+.gbtn{width:100%;display:flex;align-items:center;justify-content:center;gap:11px;margin-top:22px;height:48px;border-radius:12px;
+  border:1px solid rgba(15,32,24,.18);background:#fff;color:#1F1F1F;font-weight:500;font-size:15.5px;
+  box-shadow:0 1px 2px rgba(0,0,0,.08);transition:transform .2s cubic-bezier(.2,.9,.2,1),box-shadow .2s;}
+.gbtn:hover{transform:translateY(-1px);box-shadow:0 8px 20px -10px rgba(0,0,0,.35);}
+.gbtn svg{width:19px;height:19px;flex:none;}
+.gbtn[disabled]{opacity:.55;cursor:default;transform:none;}
+.or{display:flex;align-items:center;gap:12px;margin:18px 0 14px;color:var(--sub);font-size:12.5px;}
+#emailform{margin-top:20px;}
+#or:not([hidden])+#emailform{margin-top:0;}
+.or::before,.or::after{content:"";flex:1;height:1px;background:var(--line);}
+label{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--sub);display:block;margin-bottom:6px;}
+input[type=text],input[type=email],input[type=number]{font:inherit;color:var(--ink);background:rgba(var(--glass),.6);
+  border:1px solid var(--line);border-radius:12px;padding:11px 13px;width:100%;min-width:0;}
+input::placeholder{color:var(--sub);opacity:.75;}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;}
+.row input{flex:1 1 200px;}
+.pbtn{background:linear-gradient(155deg,var(--accent-soft),var(--accent));color:var(--accent-ink);border:0;border-radius:12px;height:46px;padding:0 20px;
+  font-weight:500;white-space:nowrap;box-shadow:0 10px 26px -12px var(--accent);transition:transform .2s cubic-bezier(.2,.9,.2,1),box-shadow .2s;}
+.pbtn:hover{transform:translateY(-2px);box-shadow:0 16px 32px -14px var(--accent);}
+.pbtn:active{transform:translateY(1px);}
+.pbtn[disabled]{opacity:.55;cursor:default;transform:none;box-shadow:none;}
+.st{font-size:13.5px;color:var(--sub);min-height:20px;margin:10px 0 0;}
+.st.err{color:var(--over);}
+.st.ok{color:var(--accent);}
+
+/* app */
+.top{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:16px;}
+.top h1{font-size:clamp(26px,5vw,32px);}
+.daynav{display:flex;align-items:center;gap:6px;}
+.daynav button{background:rgba(var(--glass),var(--ga));border:1px solid var(--line);border-radius:10px;height:36px;min-width:36px;padding:0 10px;line-height:1;font-size:18px;
+  transition:border-color .2s,transform .2s;}
+.daynav button:hover{border-color:var(--accent);transform:translateY(-1px);}
+#dlabel{font-family:var(--head);font-weight:600;font-size:14.5px;min-width:112px;text-align:center;}
+.sum{display:flex;gap:22px;align-items:center;flex-wrap:wrap;}
+.ringwrap{position:relative;width:148px;height:148px;flex:none;}
+.ringtxt{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;}
+.ringtxt b{font-family:var(--head);font-weight:700;font-size:31px;line-height:1;letter-spacing:-.03em;font-variant-numeric:tabular-nums;}
+.ringtxt span{font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--sub);margin-top:6px;}
+.macros{flex:1;min-width:210px;display:flex;flex-direction:column;gap:14px;}
+.mlab{display:flex;justify-content:space-between;align-items:baseline;font-size:14px;margin-bottom:7px;}
+.mlab b{font-family:var(--head);font-weight:600;}
+.mlab span{font-family:var(--mono);font-size:12px;color:var(--sub);font-variant-numeric:tabular-nums;}
+.mtrack{height:8px;border-radius:99px;background:var(--line);overflow:hidden;}
+.mfill{height:100%;width:0;border-radius:99px;transition:width .55s cubic-bezier(.2,.9,.2,1);}
+.nums{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-top:12px;}
+@media (max-width:560px){.nums{grid-template-columns:repeat(2,minmax(0,1fr));}}
+.recent{margin-top:16px;border-top:1px solid var(--line);padding-top:14px;}
+.lbl{font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--sub);margin:0 0 10px;}
+.chips{display:flex;gap:8px;flex-wrap:wrap;}
+.chip{background:rgba(var(--glass),.55);border:1px solid var(--line);border-radius:999px;padding:7px 13px;font-size:13.5px;
+  display:inline-flex;gap:7px;align-items:baseline;transition:border-color .2s,transform .2s;max-width:100%;}
+.chip:hover{border-color:var(--accent);transform:translateY(-1px);}
+.chip span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:26ch;}
+.chip small{font-family:var(--mono);font-size:11px;color:var(--sub);}
+.item{display:flex;align-items:flex-start;gap:12px;padding:13px 0;border-top:1px solid var(--line);animation:pop .45s cubic-bezier(.16,.9,.24,1) both;}
+.item:first-child{border-top:0;padding-top:0;}
+@keyframes pop{from{opacity:0;transform:translateY(-6px);}}
+.item .nm{flex:1;min-width:0;}
+.item .nm>div:first-child{font-weight:500;overflow-wrap:anywhere;}
+.item .mc{font-family:var(--mono);font-size:11px;color:var(--sub);margin-top:3px;}
+.item .kc{font-family:var(--head);font-weight:600;white-space:nowrap;font-variant-numeric:tabular-nums;}
+.item .x{background:none;border:0;color:var(--sub);font-size:19px;line-height:1;padding:0 4px;border-radius:6px;}
+.item .x:hover{color:var(--over);}
+.item.pending{opacity:.6;}
+.item.failed .mc{color:var(--over);}
+.retry{background:none;border:1px solid var(--over);color:var(--over);border-radius:8px;font-size:12px;padding:3px 8px;margin-left:6px;}
+.empty{color:var(--sub);margin:0;font-size:15px;}
+.wk{display:flex;align-items:flex-end;gap:8px;height:124px;position:relative;}
+.wcol{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;background:none;border:0;padding:0;}
+.wbar{width:100%;border-radius:7px 7px 0 0;background:var(--line);min-height:2px;transition:height .5s cubic-bezier(.2,.9,.2,1);}
+.wcol.sel .wbar{background:linear-gradient(180deg,var(--accent-soft),var(--accent));}
+.wcol span{font-family:var(--mono);font-size:10.5px;color:var(--sub);margin-top:6px;}
+.wg{position:absolute;left:0;right:0;border-top:1px dashed var(--sub);pointer-events:none;opacity:.8;}
+.goals{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;}
+.disc{font-size:12px;color:var(--sub);text-align:center;margin:18px 0 0;}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important;}}
+</style>
+</head>
+<body>
+<div id="glow" aria-hidden="true"><i></i><i></i></div>
+
+<header class="bar">
+  <a class="brand" href="./">
+    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <circle cx="12" cy="12" r="9.2" stroke="currentColor" stroke-width="2.1" opacity=".28"/>
+      <path d="M12 2.8a9.2 9.2 0 0 1 8.2 5" stroke="#63E5AB" stroke-width="2.6" stroke-linecap="round"/>
+      <path d="M20.2 7.8a9.2 9.2 0 0 1-3.4 12" stroke="#4273F8" stroke-width="2.6" stroke-linecap="round"/>
+      <path d="M16.8 19.8a9.2 9.2 0 0 1-12.6-4" stroke="#E3A017" stroke-width="2.6" stroke-linecap="round"/>
+    </svg>
+    Macro
+  </a>
+  <span class="sync" id="sync" role="status"></span>
+  <div class="me" id="me" hidden>
+    <span class="av" id="av"></span>
+    <span class="who" id="who"></span>
+    <button class="link" id="out">Sign out</button>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="boot" id="boot"><div class="spin"></div><p>Opening your log…</p></section>
+
+  <section class="signin" id="signin" hidden>
+    <div class="card signcard">
+      <p class="eyebrow">Your log, on every device</p>
+      <h1>Sign in to Macro</h1>
+      <p class="p">Everything you log is saved to your account. Sign in on your phone or another computer with the same email and it's all there.</p>
+      <button class="gbtn" id="google" type="button" hidden>
+        <svg viewBox="0 0 48 48" aria-hidden="true"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
+        Continue with Google
+      </button>
+      <div class="or" id="or" hidden><span>or</span></div>
+      <form id="emailform" novalidate>
+        <label for="email">Email</label>
+        <div class="row">
+          <input type="email" id="email" autocomplete="email" inputmode="email" placeholder="you@gmail.com" required>
+          <button class="pbtn" type="submit" id="sendlink">Email me a link</button>
+        </div>
+      </form>
+      <p class="st" id="sst" role="status"></p>
+      <p class="fine">Your email is only used to sign you in. Your food log is private to your account — nobody else can read it.</p>
+    </div>
+  </section>
+
+  <section id="app" hidden>
+    <div class="top">
+      <h1>Food log</h1>
+      <div class="daynav">
+        <button id="prev" type="button" aria-label="Previous day">&lsaquo;</button>
+        <div id="dlabel">Today</div>
+        <button id="next" type="button" aria-label="Next day">&rsaquo;</button>
+      </div>
+    </div>
+
+    <section class="card" aria-label="Daily summary">
+      <div class="sum">
+        <div class="ringwrap">
+          <svg width="148" height="148" viewBox="0 0 148 148" role="img" aria-label="Calories against your goal">
+            <defs><linearGradient id="rg" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="var(--accent-soft)"></stop>
+              <stop offset="100%" stop-color="var(--accent)"></stop></linearGradient></defs>
+            <circle cx="74" cy="74" r="61" fill="none" stroke="var(--line)" stroke-width="13"></circle>
+            <circle id="ring" cx="74" cy="74" r="61" fill="none" stroke="url(#rg)" stroke-width="13" stroke-linecap="round"
+              stroke-dasharray="383.27" stroke-dashoffset="383.27" transform="rotate(-90 74 74)"
+              style="transition:stroke-dashoffset .6s cubic-bezier(.2,.9,.2,1)"></circle>
+          </svg>
+          <div class="ringtxt"><b id="kcal">0</b><span id="kleft">2,500 left</span></div>
+        </div>
+        <div class="macros">
+          <div><div class="mlab"><b>Protein</b><span id="ptxt">0 / 150 g</span></div><div class="mtrack"><div class="mfill" id="pbar" style="background:var(--azure)"></div></div></div>
+          <div><div class="mlab"><b>Carbs</b><span id="ctxt">0 / 281 g</span></div><div class="mtrack"><div class="mfill" id="cbar" style="background:var(--saffron)"></div></div></div>
+          <div><div class="mlab"><b>Fat</b><span id="ftxt">0 / 78 g</span></div><div class="mtrack"><div class="mfill" id="fbar" style="background:var(--rose)"></div></div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="card" aria-label="Add food">
+      <h2>Add food <em id="addday">to today</em></h2>
+      <form id="addform" novalidate>
+        <label for="fname">Food</label>
+        <input type="text" id="fname" list="recentlist" autocomplete="off" maxlength="120" placeholder="Chicken shawarma wrap">
+        <datalist id="recentlist"></datalist>
+        <div class="nums">
+          <div><label for="fk">Calories</label><input type="number" id="fk" min="0" max="20000" inputmode="numeric" placeholder="640"></div>
+          <div><label for="fp">Protein g</label><input type="number" id="fp" min="0" max="2000" inputmode="numeric" placeholder="44"></div>
+          <div><label for="fc">Carbs g</label><input type="number" id="fc" min="0" max="2000" inputmode="numeric" placeholder="58"></div>
+          <div><label for="ff">Fat g</label><input type="number" id="ff" min="0" max="2000" inputmode="numeric" placeholder="24"></div>
+        </div>
+        <div class="row" style="margin-top:14px">
+          <button class="pbtn" type="submit" id="addbtn">Add</button>
+        </div>
+        <p class="st" id="ast" role="status"></p>
+      </form>
+      <div class="recent" id="recentwrap" hidden>
+        <p class="lbl">Recent — tap to add again</p>
+        <div class="chips" id="recent"></div>
+      </div>
+    </section>
+
+    <section class="card" aria-label="Logged entries">
+      <h2>Logged <em id="count"></em></h2>
+      <div id="list"></div>
+    </section>
+
+    <section class="card" aria-label="Last seven days">
+      <h2>Last 7 days</h2>
+      <div class="wk" id="wk"></div>
+    </section>
+
+    <section class="card" aria-label="Daily goals">
+      <h2>Daily goals</h2>
+      <div class="goals">
+        <div><label for="gk">Calories</label><input type="number" id="gk" min="500" max="10000" step="50" inputmode="numeric"></div>
+        <div><label for="gp">Protein g</label><input type="number" id="gp" min="10" max="1000" step="5" inputmode="numeric"></div>
+      </div>
+      <p class="fine">Carbs and fat targets follow from calories, at 45% and 28%.</p>
+    </section>
+
+    <p class="disc">Calorie counts are estimates, not medical advice.</p>
+  </section>
+</main>
+
+<script>
+(function(){
+'use strict';
+var SB_URL='https://ankbtgrxztdvtrrvocca.supabase.co';
+var SB_KEY='sb_publishable_lRr3KZd92Sqi8odS6BP-7Q_8sxgL4A3'; // publishable: safe in the browser, data is protected by row-level security
+var SKEY='macro.session.v1';
+var APP_URL=location.origin+location.pathname;
+var $=function(id){return document.getElementById(id);};
+
+/* ---------------- session ---------------- */
+var session=null, refreshing=null, user=null;
+function now(){return Math.floor(Date.now()/1000);}
+function loadSession(){try{session=JSON.parse(localStorage.getItem(SKEY));}catch(e){session=null;}}
+function saveSession(s){session=s;try{if(s)localStorage.setItem(SKEY,JSON.stringify(s));else localStorage.removeItem(SKEY);}catch(e){}}
+function readHash(){
+  var h=location.hash; if(!h||h.length<2)return null;
+  var p=new URLSearchParams(h.slice(1));
+  if(p.get('error')||p.get('error_description'))return {error:(p.get('error_description')||p.get('error')||'').replace(/\+/g,' ')};
+  var at=p.get('access_token'), rt=p.get('refresh_token');
+  if(!at||!rt)return null;
+  return {access_token:at,refresh_token:rt,expires_at:Number(p.get('expires_at'))||(now()+Number(p.get('expires_in')||3600))};
+}
+function doRefresh(){
+  if(refreshing)return refreshing;
+  refreshing=fetch(SB_URL+'/auth/v1/token?grant_type=refresh_token',{method:'POST',
+      headers:{apikey:SB_KEY,'Content-Type':'application/json'},
+      body:JSON.stringify({refresh_token:session&&session.refresh_token})})
+    .then(function(r){if(!r.ok)throw {status:401};return r.json();})
+    .then(function(j){saveSession({access_token:j.access_token,refresh_token:j.refresh_token,
+      expires_at:j.expires_at||(now()+(j.expires_in||3600)),user:j.user||(session&&session.user)});})
+    .then(function(){refreshing=null;},function(e){refreshing=null;throw e;});
+  return refreshing;
+}
+async function token(){
+  if(!session)throw {status:401};
+  if((session.expires_at||0)-now()<90)await doRefresh();
+  return session.access_token;
+}
+async function authed(url,init){
+  init=init||{};
+  var h=init.headers||(init.headers={});
+  h.apikey=SB_KEY; h.Authorization='Bearer '+(await token());
+  var r=await fetch(url,init);
+  if(r.status===401){await doRefresh();h.Authorization='Bearer '+session.access_token;r=await fetch(url,init);}
+  return r;
+}
+async function api(path,opt){
+  opt=opt||{};
+  var init={method:opt.method||'GET',headers:{}};
+  if(opt.body!==undefined){init.headers['Content-Type']='application/json';init.body=JSON.stringify(opt.body);}
+  if(opt.prefer)init.headers.Prefer=opt.prefer;
+  var r=await authed(SB_URL+'/rest/v1/'+path,init);
+  if(!r.ok){var t='';try{t=await r.text();}catch(e){}throw {status:r.status,body:t};}
+  var txt=await r.text();
+  return txt?JSON.parse(txt):null;
+}
+
+/* ---------------- state ---------------- */
+var cur=new Date(); cur.setHours(12,0,0,0);
+var days={}, goals={kcal:2500,protein:150}, recent=[], googleOn=false;
+function key(d){var m=d.getMonth()+1,dd=d.getDate();return d.getFullYear()+'-'+(m<10?'0':'')+m+'-'+(dd<10?'0':'')+dd;}
+function shift(d,n){var x=new Date(d);x.setDate(x.getDate()+n);return x;}
+function num(v){v=Math.round(Number(v));return isFinite(v)&&v>0?v:0;}
+function rows(k){return days[k]||[];}
+function totals(k){var t={k:0,p:0,c:0,f:0};rows(k).forEach(function(e){if(e.failed)return;t.k+=e.kcal;t.p+=e.protein;t.c+=e.carbs;t.f+=e.fat;});return t;}
+function carbGoal(){return Math.max(1,Math.round(goals.kcal*0.45/4));}
+function fatGoal(){return Math.max(1,Math.round(goals.kcal*0.28/9));}
+function dayLabel(){
+  var t=new Date();t.setHours(12,0,0,0);
+  var diff=Math.round((cur-t)/86400000);
+  if(diff===0)return 'Today'; if(diff===-1)return 'Yesterday'; if(diff===1)return 'Tomorrow';
+  return cur.toLocaleDateString(undefined,{weekday:'short',month:'short',day:'numeric'});
+}
+var syncT=null;
+function setSync(msg,kind){
+  var s=$('sync'); s.textContent=msg||''; s.className='sync'+(kind==='err'?' err':kind==='busy'?' busy':'');
+  clearTimeout(syncT);
+  if(msg==='Saved')syncT=setTimeout(function(){if(s.textContent==='Saved'){s.textContent='Synced';}},1800);
+}
+
+/* ---------------- data ---------------- */
+async function loadWindow(){
+  var from=key(shift(cur,-6)), to=key(cur);
+  var got=await api('entries?select=id,eaten_on,name,kcal,protein,carbs,fat,created_at&eaten_on=gte.'+from+'&eaten_on=lte.'+to+'&order=created_at.asc');
+  var local={};
+  for(var i=0;i<7;i++){var k=key(shift(cur,-i)); local[k]=rows(k).filter(function(e){return e.pending||e.failed;}); days[k]=[];}
+  (got||[]).forEach(function(e){(days[e.eaten_on]=days[e.eaten_on]||[]).push(e);});
+  Object.keys(local).forEach(function(k){days[k]=(days[k]||[]).concat(local[k]);});
+}
+async function loadRecent(){
+  var got=await api('entries?select=name,kcal,protein,carbs,fat,created_at&order=created_at.desc&limit=120');
+  var seen={}, out=[];
+  (got||[]).forEach(function(e){var k=e.name.trim().toLowerCase();if(!seen[k]&&out.length<14){seen[k]=1;out.push(e);}});
+  recent=out;
+}
+async function loadGoals(){
+  var got=await api('goals?select=kcal,protein');
+  if(got&&got.length)goals={kcal:got[0].kcal,protein:got[0].protein};
+}
+var goalT=null;
+function saveGoalsSoon(){
+  clearTimeout(goalT);
+  goalT=setTimeout(async function(){
+    setSync('Saving…','busy');
+    try{
+      await api('goals?on_conflict=user_id',{method:'POST',prefer:'resolution=merge-duplicates,return=minimal',
+        body:{user_id:user.id,kcal:goals.kcal,protein:goals.protein,updated_at:new Date().toISOString()}});
+      setSync('Saved');
+    }catch(e){handle(e,'Your goals didn’t save. Try again.');}
+  },500);
+}
+function bumpRecent(e){
+  var k=e.name.trim().toLowerCase();
+  recent=[e].concat(recent.filter(function(r){return r.name.trim().toLowerCase()!==k;})).slice(0,14);
+}
+async function addEntry(x,dayKey){
+  var k=dayKey||key(cur);
+  var temp={id:'tmp-'+Math.random().toString(36).slice(2),eaten_on:k,name:x.name,kcal:x.kcal,protein:x.protein,carbs:x.carbs,fat:x.fat,pending:true};
+  (days[k]=days[k]||[]).push(temp); render();
+  setSync('Saving…','busy');
+  try{
+    var got=await api('entries',{method:'POST',prefer:'return=representation',
+      body:{eaten_on:k,name:x.name,kcal:x.kcal,protein:x.protein,carbs:x.carbs,fat:x.fat}});
+    var list=days[k]||[], i=list.indexOf(temp);
+    if(i>=0)list[i]=(got&&got[0])||Object.assign(temp,{pending:false});
+    bumpRecent(x); setSync('Saved'); render();
+  }catch(e){
+    temp.pending=false; temp.failed=true; render();
+    handle(e, navigator.onLine?'That entry didn’t save. Tap Retry.':'You’re offline, so that entry didn’t save. Tap Retry when you’re back.');
+  }
+}
+async function removeEntry(e){
+  var k=e.eaten_on;
+  days[k]=rows(k).filter(function(r){return r!==e;}); render();
+  if(String(e.id).indexOf('tmp-')===0)return;
+  setSync('Saving…','busy');
+  try{await api('entries?id=eq.'+encodeURIComponent(e.id),{method:'DELETE'});setSync('Saved');}
+  catch(err){(days[k]=days[k]||[]).push(e);render();handle(err,'That entry didn’t delete. Try again.');}
+}
+async function refreshAll(){
+  if(!user)return;
+  try{await Promise.all([loadWindow(),loadRecent()]);render();if(!$('sync').classList.contains('err'))setSync('Synced');}
+  catch(e){handle(e,'Can’t reach your log right now.');}
+}
+function handle(e,msg){
+  if(e&&e.status===401){saveSession(null);user=null;showSignIn('Your session ended. Sign in again to see your log.');return;}
+  setSync(msg||'Something went wrong.','err');
+}
+
+/* ---------------- render ---------------- */
+function render(){
+  var k=key(cur), t=totals(k), g=goals;
+  $('dlabel').textContent=dayLabel();
+  $('addday').textContent=dayLabel()==='Today'?'to today':'to '+dayLabel().toLowerCase();
+  $('addbtn').textContent=dayLabel()==='Today'?'Add to today':'Add to '+dayLabel();
+  $('kcal').textContent=t.k.toLocaleString();
+  var left=g.kcal-t.k;
+  $('kleft').textContent=left>=0?(left.toLocaleString()+' left'):(Math.abs(left).toLocaleString()+' over');
+  var ring=$('ring'), C=383.27;
+  ring.setAttribute('stroke-dashoffset',String(C*(1-(g.kcal>0?Math.min(1,t.k/g.kcal):0))));
+  ring.setAttribute('stroke',left<0?'var(--over)':'url(#rg)');
+  function bar(id,txt,val,goal){$(id).style.width=(goal>0?Math.min(100,val/goal*100):0)+'%';$(txt).textContent=val+' / '+goal+' g';}
+  bar('pbar','ptxt',t.p,g.protein); bar('cbar','ctxt',t.c,carbGoal()); bar('fbar','ftxt',t.f,fatGoal());
+
+  var list=$('list'), es=rows(k);
+  list.textContent='';
+  var okCount=es.filter(function(e){return !e.failed;}).length;
+  $('count').textContent=okCount?(okCount+(okCount===1?' item · ':' items · ')+t.k.toLocaleString()+' kcal'):'';
+  if(!es.length){
+    var p=document.createElement('p');p.className='empty';
+    p.textContent=dayLabel()==='Today'?'Nothing logged yet today. Add your first food above.':'Nothing logged for '+dayLabel()+'.';
+    list.appendChild(p);
+  }
+  es.forEach(function(e){
+    var row=document.createElement('div');row.className='item'+(e.pending?' pending':'')+(e.failed?' failed':'');
+    var nm=document.createElement('div');nm.className='nm';
+    var a=document.createElement('div');a.textContent=e.name;
+    var b=document.createElement('div');b.className='mc';
+    b.textContent=e.failed?'Not saved':('P '+e.protein+' g · C '+e.carbs+' g · F '+e.fat+' g'+(e.pending?' · saving…':''));
+    if(e.failed){var rb=document.createElement('button');rb.className='retry';rb.type='button';rb.textContent='Retry';
+      rb.onclick=function(){days[e.eaten_on]=rows(e.eaten_on).filter(function(r){return r!==e;});addEntry(e,e.eaten_on);};b.appendChild(rb);}
+    nm.appendChild(a);nm.appendChild(b);
+    var kc=document.createElement('div');kc.className='kc';kc.textContent=e.kcal.toLocaleString()+' kcal';
+    var x=document.createElement('button');x.className='x';x.type='button';x.textContent='×';x.setAttribute('aria-label','Delete '+e.name);
+    x.onclick=function(){removeEntry(e);};
+    row.appendChild(nm);row.appendChild(kc);row.appendChild(x);list.appendChild(row);
+  });
+
+  var wk=$('wk'); wk.textContent='';
+  var ds=[], max=g.kcal;
+  for(var i=6;i>=0;i--){var d=shift(cur,-i),kk=key(d),v=totals(kk).k;ds.push({d:d,k:kk,v:v});if(v>max)max=v;}
+  max*=1.12;
+  ds.forEach(function(o){
+    var col=document.createElement('button');col.type='button';col.className='wcol'+(o.k===k?' sel':'');
+    col.setAttribute('aria-label',o.d.toLocaleDateString(undefined,{weekday:'long'})+', '+o.v+' calories');
+    var br=document.createElement('div');br.className='wbar';br.style.height=Math.max(2,Math.round(o.v/max*88))+'px';
+    var lb=document.createElement('span');lb.textContent=o.d.toLocaleDateString(undefined,{weekday:'narrow'});
+    col.appendChild(br);col.appendChild(lb);
+    col.onclick=function(){cur=new Date(o.d);render();};
+    wk.appendChild(col);
+  });
+  var gl=document.createElement('div');gl.className='wg';gl.style.bottom=(23+Math.round(g.kcal/max*88))+'px';wk.appendChild(gl);
+
+  var rc=$('recent'), dl=$('recentlist');
+  rc.textContent=''; dl.textContent='';
+  $('recentwrap').hidden=!recent.length;
+  recent.forEach(function(r){
+    var c=document.createElement('button');c.type='button';c.className='chip';
+    var s=document.createElement('span');s.textContent=r.name;
+    var sm=document.createElement('small');sm.textContent=r.kcal+' kcal';
+    c.appendChild(s);c.appendChild(sm);
+    c.setAttribute('aria-label','Add '+r.name+', '+r.kcal+' calories');
+    c.onclick=function(){addEntry({name:r.name,kcal:r.kcal,protein:r.protein,carbs:r.carbs,fat:r.fat});};
+    rc.appendChild(c);
+    var o=document.createElement('option');o.value=r.name;dl.appendChild(o);
+  });
+
+  if(document.activeElement!==$('gk'))$('gk').value=g.kcal;
+  if(document.activeElement!==$('gp'))$('gp').value=g.protein;
+}
+
+/* ---------------- views ---------------- */
+function initials(n){n=(n||'').trim();if(!n)return '·';var p=n.split(/[\s@.]+/).filter(Boolean);return ((p[0]||'')[0]+((p[1]||'')[0]||'')).toUpperCase();}
+function showSignIn(msg){
+  $('boot').hidden=true; $('app').hidden=true; $('me').hidden=true; $('signin').hidden=false;
+  $('google').hidden=!googleOn; $('or').hidden=!googleOn;
+  setSync('');
+  var s=$('sst'); s.textContent=msg||''; s.className='st'+(msg?' err':'');
+  if(location.hash==='#email')setTimeout(function(){$('email').focus();},50);
+}
+function showApp(){
+  $('boot').hidden=true; $('signin').hidden=true; $('app').hidden=false; $('me').hidden=false;
+  var md=(user&&user.user_metadata)||{};
+  var name=md.full_name||md.name||(user&&user.email)||'';
+  $('who').textContent=name;
+  var av=$('av'); av.textContent='';
+  if(md.avatar_url){var img=new Image();img.alt='';img.referrerPolicy='no-referrer';img.src=md.avatar_url;
+    img.onerror=function(){av.textContent=initials(name);};av.appendChild(img);}
+  else av.textContent=initials(name);
+}
+
+/* ---------------- sign-in actions ---------------- */
+async function checkProviders(){
+  try{
+    var r=await fetch(SB_URL+'/auth/v1/settings',{headers:{apikey:SB_KEY}});
+    if(r.ok){var j=await r.json();googleOn=!!(j.external&&j.external.google);}
+  }catch(e){googleOn=false;}
+}
+function startGoogle(){
+  location.href=SB_URL+'/auth/v1/authorize?provider=google&redirect_to='+encodeURIComponent(APP_URL);
+}
+$('google').onclick=function(){$('google').disabled=true;startGoogle();};
+$('emailform').onsubmit=async function(ev){
+  ev.preventDefault();
+  var email=$('email').value.trim(), s=$('sst');
+  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){s.textContent='Enter the email address you want to sign in with.';s.className='st err';return;}
+  $('sendlink').disabled=true; s.textContent='Sending…'; s.className='st';
+  try{
+    var r=await fetch(SB_URL+'/auth/v1/otp?redirect_to='+encodeURIComponent(APP_URL),{method:'POST',
+      headers:{apikey:SB_KEY,'Content-Type':'application/json'},body:JSON.stringify({email:email,create_user:true})});
+    if(!r.ok){
+      var j={};try{j=await r.json();}catch(e){}
+      if(r.status===429)throw new Error('Too many sign-in emails were sent recently. Wait a few minutes and try again'+(googleOn?', or use Continue with Google.':'.'));
+      throw new Error(j.msg||j.error_description||j.message||'That email couldn’t be sent. Check the address and try again.');
+    }
+    s.textContent='Check your inbox at '+email+'. The link signs you in on whichever device you open it on.'; s.className='st ok';
+  }catch(e){s.textContent=e.message;s.className='st err';}
+  finally{$('sendlink').disabled=false;}
+};
+$('out').onclick=async function(){
+  var tok=session&&session.access_token;
+  saveSession(null); user=null; days={}; recent=[];
+  showSignIn('');
+  if(tok){try{await fetch(SB_URL+'/auth/v1/logout',{method:'POST',headers:{apikey:SB_KEY,Authorization:'Bearer '+tok}});}catch(e){}}
+};
+
+/* ---------------- app controls ---------------- */
+$('addform').onsubmit=function(ev){
+  ev.preventDefault();
+  var name=$('fname').value.trim(), s=$('ast');
+  if(!name){s.textContent='Type what you ate.';s.className='st err';$('fname').focus();return;}
+  if($('fk').value===''){s.textContent='Add the calories — even a rough number helps.';s.className='st err';$('fk').focus();return;}
+  addEntry({name:name.slice(0,120),kcal:num($('fk').value),protein:num($('fp').value),carbs:num($('fc').value),fat:num($('ff').value)});
+  ['fname','fk','fp','fc','ff'].forEach(function(id){$(id).value='';});
+  s.textContent=''; s.className='st'; $('fname').focus();
+};
+$('fname').addEventListener('input',function(){
+  var v=$('fname').value.trim().toLowerCase();
+  var hit=recent.filter(function(r){return r.name.trim().toLowerCase()===v;})[0];
+  if(hit){$('fk').value=hit.kcal;$('fp').value=hit.protein;$('fc').value=hit.carbs;$('ff').value=hit.fat;}
+});
+$('prev').onclick=function(){cur=shift(cur,-1);render();refreshAll();};
+$('next').onclick=function(){cur=shift(cur,1);render();refreshAll();};
+$('gk').onchange=function(){var v=num($('gk').value);if(v>=500&&v<=10000){goals.kcal=v;saveGoalsSoon();}render();};
+$('gp').onchange=function(){var v=num($('gp').value);if(v>=10&&v<=1000){goals.protein=v;saveGoalsSoon();}render();};
+document.addEventListener('visibilitychange',function(){if(document.visibilityState==='visible')refreshAll();});
+addEventListener('online',refreshAll);
+setInterval(function(){if(document.visibilityState==='visible')refreshAll();},45000);
+
+/* ---------------- boot ---------------- */
+async function boot(){
+  loadSession();
+  var fromHash=readHash();
+  if(fromHash){
+    history.replaceState(null,'',location.pathname);
+    if(!fromHash.error)saveSession(fromHash);
+  }
+  await checkProviders();
+  if(fromHash&&fromHash.error){showSignIn('Sign-in didn’t finish: '+fromHash.error+'. Try again.');return;}
+  if(!session){
+    if(new URLSearchParams(location.search).get('go')==='google'&&googleOn){startGoogle();return;}
+    showSignIn('');return;
+  }
+  try{
+    var r=await authed(SB_URL+'/auth/v1/user',{});
+    if(!r.ok)throw {status:r.status===403||r.status===404?401:r.status};
+    user=await r.json(); session.user=user; saveSession(session);
+    showApp(); render(); setSync('Loading…','busy');
+    await Promise.all([loadGoals(),loadWindow(),loadRecent()]);
+    render(); setSync('Synced');
+  }catch(e){
+    if(e&&e.status===401){saveSession(null);showSignIn('Your session ended. Sign in again to see your log.');}
+    else if(session&&session.user){user=session.user;showApp();render();setSync('Can’t reach your log right now. Check your connection.','err');}
+    else showSignIn('Can’t reach the server right now. Check your connection and try again.');
+  }
+}
+boot();
+})();
+</script>
+</body>
+</html>

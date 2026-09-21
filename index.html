@@ -358,81 +358,21 @@ html.js #hero .d1 .sp>span{transform:translateY(105%);animation:rise 1.05s cubic
 .fcard h4{font-family:var(--head);font-weight:600;font-size:18px;margin:0;letter-spacing:-.015em;}
 .fcard p{margin:0;color:var(--sub);font-size:15px;}
 
-/* ============================================================
-   THE LIVE APP
-   ============================================================ */
-#app{scroll-margin-top:80px;}
-.appshell{max-width:760px;margin-inline:auto;}
-.appframe{border-radius:30px;border:1px solid var(--line);background:rgba(var(--gl),var(--gla));
-  backdrop-filter:blur(20px) saturate(150%);-webkit-backdrop-filter:blur(20px) saturate(150%);
-  box-shadow:var(--shadow);padding:clamp(16px,2.4vw,26px);position:relative;overflow:hidden;}
-.appframe::before{content:"";position:absolute;inset:0;pointer-events:none;border-radius:30px;
-  background:linear-gradient(150deg,rgba(255,255,255,.3),rgba(255,255,255,0) 40%);mix-blend-mode:overlay;}
-.apptop{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:16px;}
-.apptop h3{font-family:var(--head);font-weight:700;font-size:23px;letter-spacing:-.025em;margin:0;}
-.who{display:flex;align-items:center;gap:9px;font-size:13.5px;color:var(--sub);margin-left:auto;}
-.av{width:28px;height:28px;border-radius:50%;flex:none;display:grid;place-items:center;font-family:var(--head);font-weight:600;font-size:12px;
-  background:linear-gradient(155deg,var(--accent-soft),var(--accent));color:var(--accent-ink);}
-.card{border-radius:20px;border:1px solid var(--line);background:rgba(var(--gl),calc(var(--gla) * .72));padding:18px;margin-bottom:14px;position:relative;}
-.card>h4{font-family:var(--head);font-weight:600;font-size:16px;margin:0 0 13px;letter-spacing:-.01em;display:flex;align-items:center;gap:8px;}
-.card>h4 em{font-family:var(--mono);font-style:normal;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--sub);margin-left:auto;font-weight:400;}
-.daynav{display:flex;align-items:center;gap:6px;}
-.daynav button{background:rgba(var(--gl),var(--gla));border:1px solid var(--line);border-radius:10px;height:34px;min-width:34px;padding:0 9px;line-height:1;transition:border-color .2s,transform .2s;}
-.daynav button:hover{border-color:var(--accent);transform:translateY(-1px);}
-#dlabel{font-family:var(--head);font-weight:600;font-size:14px;min-width:104px;text-align:center;}
-.sumrow{display:flex;gap:22px;align-items:center;flex-wrap:wrap;}
-.ringwrap{position:relative;width:146px;height:146px;flex:none;}
-.ringtxt{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;}
-.ringtxt b{font-family:var(--head);font-weight:700;font-size:31px;line-height:1;letter-spacing:-.03em;font-variant-numeric:tabular-nums;}
-.ringtxt span{font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--sub);margin-top:6px;}
-.macros{flex:1;min-width:212px;display:flex;flex-direction:column;gap:14px;}
-textarea,input[type=number],input[type=text]{font:inherit;color:var(--ink);background:rgba(var(--gl),.55);border:1px solid var(--line);border-radius:12px;padding:12px 14px;width:100%;}
-textarea{resize:vertical;min-height:76px;}
-textarea::placeholder,input::placeholder{color:var(--sub);opacity:.8;}
-.row{display:flex;gap:10px;align-items:center;margin-top:12px;flex-wrap:wrap;}
-.pbtn{background:linear-gradient(155deg,var(--accent-soft),var(--accent));color:var(--accent-ink);border:0;border-radius:12px;height:44px;padding:0 22px;font-weight:500;
-  box-shadow:0 10px 26px -12px var(--accent);transition:transform .2s cubic-bezier(.2,.9,.2,1),box-shadow .2s;}
-.pbtn:hover{transform:translateY(-2px);box-shadow:0 16px 32px -14px var(--accent);}
-.pbtn:active{transform:translateY(1px);}
-.pbtn[disabled]{opacity:.55;cursor:default;transform:none;box-shadow:none;}
-.gbtn{background:rgba(var(--gl),.5);border:1px solid var(--line);border-radius:12px;height:44px;padding:0 16px;transition:border-color .2s;}
-.gbtn:hover{border-color:var(--accent);}
-.st{font-size:13.5px;color:var(--sub);min-height:20px;}
-.st.err{color:var(--over);}
-.item{display:flex;align-items:flex-start;gap:12px;padding:13px 0;border-top:1px solid var(--line);
-  animation:pop .5s cubic-bezier(.16,.9,.24,1) both;}
-@keyframes pop{from{opacity:0;transform:translateY(-8px) scale(.985);}}
-.item:first-child{border-top:0;padding-top:0;}
-.item .nm{flex:1;min-width:0;}
-.item .nm>div:first-child{overflow-wrap:anywhere;font-weight:500;}
-.item .mc{font-family:var(--mono);font-size:11px;letter-spacing:.04em;color:var(--sub);margin-top:3px;}
-.item .kc{font-family:var(--head);font-weight:600;white-space:nowrap;font-variant-numeric:tabular-nums;}
-.item .x{background:none;border:0;color:var(--sub);font-size:19px;line-height:1;padding:0 4px;border-radius:6px;transition:color .2s;}
-.item .x:hover{color:var(--over);}
-.empty{color:var(--sub);font-size:15px;margin:0;}
-.chat{display:flex;flex-direction:column;gap:10px;max-height:340px;overflow-y:auto;padding-right:4px;}
-.msg{max-width:88%;padding:11px 14px;border-radius:16px;white-space:pre-wrap;overflow-wrap:anywhere;font-size:15px;
-  animation:pop .45s cubic-bezier(.16,.9,.24,1) both;}
-.msg.me{align-self:flex-end;background:linear-gradient(155deg,var(--accent-soft),var(--accent));color:var(--accent-ink);border-bottom-right-radius:6px;}
-.msg.ai{align-self:flex-start;background:rgba(var(--gl),.9);border:1px solid var(--line);border-bottom-left-radius:6px;}
-.msg.sys{align-self:center;font-size:12.5px;color:var(--sub);background:none;padding:2px;text-align:center;max-width:100%;}
-.chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px;}
-.chip{background:rgba(var(--gl),.5);border:1px solid var(--line);border-radius:999px;padding:8px 14px;font-size:13.5px;transition:border-color .2s,transform .2s;}
-.chip:hover{border-color:var(--accent);transform:translateY(-1px);}
-.ask{display:flex;gap:8px;margin-top:12px;}
-.ask input{flex:1;}
-.wk{display:flex;align-items:flex-end;gap:8px;height:120px;position:relative;margin-top:4px;}
-.wcol2{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;background:none;border:0;padding:0;}
-.wbar2{width:100%;border-radius:7px 7px 0 0;background:var(--line);min-height:2px;transition:height .5s cubic-bezier(.2,.9,.2,1);}
-.wcol2.sel .wbar2{background:linear-gradient(180deg,var(--accent-soft),var(--accent));}
-.wcol2 span{font-family:var(--mono);font-size:10.5px;color:var(--sub);margin-top:6px;}
-.wg{position:absolute;left:0;right:0;border-top:1px dashed var(--sub);pointer-events:none;}
-details{margin-top:12px;}
-summary{cursor:pointer;color:var(--sub);font-size:14px;}
-.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:10px;}
-.grid2 label{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--sub);display:block;margin-bottom:5px;}
-.disc{font-size:12px;color:var(--sub);text-align:center;margin:14px 0 0;}
-.notice{border:1px solid var(--line);border-radius:14px;padding:12px 14px;font-size:13.5px;color:var(--sub);background:rgba(var(--gl),.45);margin-bottom:14px;}
+/* ---------- sign-in chapter ---------- */
+.startwrap{display:grid;grid-template-columns:1.1fr .9fr;gap:clamp(28px,5vw,72px);align-items:center;}
+@media (max-width:900px){.startwrap{grid-template-columns:1fr;}}
+.startbtns{display:flex;gap:12px;flex-wrap:wrap;margin-top:30px;}
+.btn-google{background:#FFFFFF;color:#1F1F1F;border:1px solid rgba(15,32,24,.16);box-shadow:0 12px 32px -14px rgba(0,0,0,.55);}
+.btn-google:hover{transform:translateY(-3px);box-shadow:0 20px 44px -16px rgba(0,0,0,.6);}
+.btn-google svg{width:19px;height:19px;flex:none;}
+.btn-quiet{background:transparent;color:var(--ink);border:1px solid var(--line);}
+.btn-quiet:hover{transform:translateY(-3px);border-color:currentColor;}
+.startnote{font-size:13.5px;color:var(--sub);margin:18px 0 0;max-width:52ch;}
+.startfacts{display:flex;flex-direction:column;gap:12px;}
+.fact{padding:20px 22px;border-radius:18px;border:1px solid var(--line);background:var(--card);display:flex;flex-direction:column;gap:4px;
+  box-shadow:0 22px 44px -32px rgba(15,32,24,.4);}
+.fact b{font-family:var(--head);font-weight:600;font-size:18px;letter-spacing:-.015em;}
+.fact span{color:var(--sub);font-size:15px;}
 
 /* ---------- footer ---------- */
 footer{background:var(--void);color:var(--ink-dark);padding-block:clamp(56px,9vh,96px) 34px;position:relative;z-index:1;}
@@ -485,7 +425,7 @@ footer{background:var(--void);color:var(--ink-dark);padding-block:clamp(56px,9vh
     <a href="#say" class="hideS">Logging</a>
     <a href="#coach" class="hideS">Coach</a>
     <a href="#gallery" class="hideS">Everything else</a>
-    <a class="navcta" href="#app">Open the app</a>
+    <a class="navcta" id="navcta" href="app.html">Sign in</a>
   </div>
 </header>
 
@@ -505,15 +445,13 @@ footer{background:var(--void);color:var(--ink-dark);padding-block:clamp(56px,9vh
     </h1>
     <p class="hero-sub rv s2">Describe the meal in plain words. Macro splits it into foods, estimates the calories and macros, and a coach who can read your whole log answers whatever you ask next.</p>
     <div class="hero-row rv s3">
-      <a class="btn btn-fill" href="#app">Try the live log
-        <svg width="15" height="15" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h9M8.5 4.2 12.6 8l-4.1 3.8" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      </a>
+      <a class="btn btn-google" id="heroSignIn" href="app.html?go=google"><svg viewBox="0 0 48 48" aria-hidden="true"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg><span>Sign in with Google</span></a>
       <a class="btn btn-line" href="#say">See how it reads a meal</a>
     </div>
     <div class="hero-strip rv s4">
       <div><b class="num">0</b><span>Barcodes scanned</span></div>
       <div><b class="num">~2 s</b><span>From sentence to macros</span></div>
-      <div><b class="num">1</b><span>File, no back end</span></div>
+      <div><b class="num">1</b><span>Account, every device</span></div>
       <div><b class="num">g &amp; kcal</b><span>The only units</span></div>
     </div>
   </div>
@@ -728,112 +666,28 @@ footer{background:var(--void);color:var(--ink-dark);padding-block:clamp(56px,9vh
     <div style="max-width:48ch">
       <p class="eyebrow rv" style="justify-content:center">Private by construction</p>
       <h2 class="d2 rv s1">Nobody else opens<br>your food log.</h2>
-      <p class="p rv s2" style="margin:20px auto 0">The log lives in your own browser on this device. Nothing about what you eat is sent anywhere to be stored, and the coach only ever sees the slice of the log needed to answer the question you just asked.</p>
+      <p class="p rv s2" style="margin:20px auto 0">Every entry is saved to your account and sealed to it. The database checks who is asking on every read and every write, so your meals come back to you — signed in, on any device — and to nobody else.</p>
     </div>
   </div>
 </section>
 
-<!-- ============ 9 · THE LIVE APP ============ -->
-<section class="ch ch-app pad" id="app" data-chapter="Try it">
-  <div class="wrap">
-    <div style="text-align:center;max-width:52ch;margin:0 auto clamp(30px,5vh,52px)">
-      <p class="eyebrow rv" style="justify-content:center">Not a screenshot</p>
-      <h2 class="d2 rv s1">This one works.</h2>
-      <p class="p rv s2" style="margin:20px auto 0">The real food log, running on this page. Type a meal below and it gets estimated and counted. Your entries stay in this browser.</p>
-    </div>
-
-    <div class="appshell rv rvS">
-      <div class="appframe">
-        <div class="apptop">
-          <h3>Food log</h3>
-          <div class="daynav">
-            <button id="xprev" aria-label="Previous day">&lsaquo;</button>
-            <div id="xdlabel">Today</div>
-            <button id="xnext" aria-label="Next day">&rsaquo;</button>
-          </div>
-          <div class="who" id="xwho"></div>
-        </div>
-        <div class="notice" id="xnotice" hidden></div>
-
-        <section class="card" aria-label="Daily summary">
-          <div class="sumrow">
-            <div class="ringwrap">
-              <svg width="146" height="146" viewBox="0 0 146 146" role="img" aria-label="Calories progress ring">
-                <defs><linearGradient id="xrg" x1="0" y1="0" x2="1" y2="1">
-                  <stop offset="0%" stop-color="var(--accent-soft)"></stop>
-                  <stop offset="100%" stop-color="var(--accent)"></stop></linearGradient></defs>
-                <circle cx="73" cy="73" r="60" fill="none" stroke="var(--line)" stroke-width="13"></circle>
-                <circle id="xring" cx="73" cy="73" r="60" fill="none" stroke="url(#xrg)" stroke-width="13" stroke-linecap="round"
-                  stroke-dasharray="376.99" stroke-dashoffset="376.99" transform="rotate(-90 73 73)"
-                  style="transition:stroke-dashoffset .6s cubic-bezier(.2,.9,.2,1)"></circle>
-              </svg>
-              <div class="ringtxt"><b id="xkcal">0</b><span id="xkleft">0 left</span></div>
-            </div>
-            <div class="macros">
-              <div class="mrow"><div class="mlab"><b>Protein</b><span class="num" id="xptxt">0 / 150 g</span></div>
-                <div class="mtrack"><div class="mfill" id="xpbar" style="background:var(--azure);transition:width .5s cubic-bezier(.2,.9,.2,1)"></div></div></div>
-              <div class="mrow"><div class="mlab"><b>Carbs</b><span class="num" id="xctxt">0 / 281 g</span></div>
-                <div class="mtrack"><div class="mfill" id="xcbar" style="background:var(--saffron);transition:width .5s cubic-bezier(.2,.9,.2,1)"></div></div></div>
-              <div class="mrow"><div class="mlab"><b>Fat</b><span class="num" id="xftxt">0 / 78 g</span></div>
-                <div class="mtrack"><div class="mfill" id="xfbar" style="background:var(--rose);transition:width .5s cubic-bezier(.2,.9,.2,1)"></div></div></div>
-            </div>
-          </div>
-        </section>
-
-        <section class="card" aria-label="Log food">
-          <h4>What did you eat? <em>⌘ + return</em></h4>
-          <label for="xta" style="position:absolute;left:-9999px">Describe what you ate</label>
-          <textarea id="xta" placeholder="2 eggs, a slice of sourdough with butter, and a flat white"></textarea>
-          <div class="row">
-            <button class="pbtn" id="xgo">Log it</button>
-            <button class="gbtn" id="xstop" hidden>Stop</button>
-            <span class="st" id="xst" role="status"></span>
-          </div>
-          <details>
-            <summary>Add manually</summary>
-            <div class="grid2">
-              <div style="grid-column:1/-1"><label for="xmn">Food</label><input type="text" id="xmn" placeholder="Chicken salad"></div>
-              <div><label for="xmk">Calories</label><input type="number" id="xmk" min="0" inputmode="numeric"></div>
-              <div><label for="xmp">Protein (g)</label><input type="number" id="xmp" min="0" inputmode="numeric"></div>
-              <div><label for="xmc">Carbs (g)</label><input type="number" id="xmc" min="0" inputmode="numeric"></div>
-              <div><label for="xmf">Fat (g)</label><input type="number" id="xmf" min="0" inputmode="numeric"></div>
-            </div>
-            <div class="row"><button class="gbtn" id="xmadd">Add entry</button><span class="st" id="xmst"></span></div>
-          </details>
-        </section>
-
-        <section class="card" aria-label="Logged entries">
-          <h4>Logged <em id="xcount"></em></h4>
-          <div id="xlist"></div>
-        </section>
-
-        <section class="card" aria-label="Nutrition coach">
-          <h4>Ask your coach</h4>
-          <div class="chat" id="xchat"></div>
-          <div class="chips" id="xchips"></div>
-          <div class="ask">
-            <label for="xq" style="position:absolute;left:-9999px">Ask the coach</label>
-            <input type="text" id="xq" placeholder="Ask anything about your food or training">
-            <button class="pbtn" id="xsend">Ask</button>
-            <button class="gbtn" id="xqstop" hidden>Stop</button>
-          </div>
-          <div class="st" id="xqst" role="status"></div>
-        </section>
-
-        <section class="card" aria-label="Last seven days">
-          <h4>Last 7 days</h4>
-          <div class="wk" id="xwk"></div>
-        </section>
-
-        <section class="card" aria-label="Daily goals" style="margin-bottom:0">
-          <h4>Daily goals</h4>
-          <div class="grid2">
-            <div><label for="xgk">Calories</label><input type="number" id="xgk" min="500" step="50" inputmode="numeric" value="2500"></div>
-            <div><label for="xgp">Protein (g)</label><input type="number" id="xgp" min="10" step="5" inputmode="numeric" value="150"></div>
-          </div>
-        </section>
+<!-- ============ 9 · SIGN IN ============ -->
+<section class="ch ch-light pad" id="start" data-chapter="Sign in">
+  <div class="wrap startwrap">
+    <div>
+      <p class="eyebrow rv">Your log, on every device</p>
+      <h2 class="d2 rv s1">Sign in once.<br>Pick up anywhere.</h2>
+      <p class="p rv s2" style="margin-top:20px;font-size:17px">Sign in with your Google account and every meal you log is saved to it. Open Macro on your phone at lunch and your laptop at night — same account, same day, same numbers.</p>
+      <div class="startbtns rv s3">
+        <a class="btn btn-google" id="startGoogle" href="app.html?go=google"><svg viewBox="0 0 48 48" aria-hidden="true"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg><span>Continue with Google</span></a>
+        <a class="btn btn-quiet" id="startEmail" href="app.html#email">Email me a sign-in link</a>
       </div>
-      <p class="disc">Calorie counts are estimates, not medical advice.</p>
+      <p class="startnote rv s4">Logging is by hand here: type a food and its numbers once, and it's one tap from then on.</p>
+    </div>
+    <div class="startfacts rv rvS s2">
+      <div class="fact"><b>Private</b><span>Your entries are sealed to your account. Nobody else can read them.</span></div>
+      <div class="fact"><b>Synced</b><span>Log on your phone, check on your laptop. Same list in both places.</span></div>
+      <div class="fact"><b>Free</b><span>No card, no trial, no ads.</span></div>
     </div>
   </div>
 </section>
@@ -852,18 +706,18 @@ footer{background:var(--void);color:var(--ink-dark);padding-block:clamp(56px,9vh
       </div>
       <div>
         <b>The app</b>
-        <a href="#app">Open the food log</a>
+        <a href="app.html">Sign in</a>
         <a href="#label">How estimates work</a>
         <a href="#privacy">Where your data lives</a>
       </div>
       <div>
         <b>Built from</b>
-        <a href="#app">One HTML file</a>
-        <a href="#app">No frameworks</a>
-        <a href="#app">No build step</a>
+        <a href="https://github.com/mahanmajdi/macro">Source on GitHub</a>
+        <a href="https://github.com/mahanmajdi/macro">No frameworks</a>
+        <a href="https://github.com/mahanmajdi/macro">No build step</a>
       </div>
     </div>
-    <p class="fine">Macro estimates calories and macronutrients from text you type. Estimates can be wrong, sometimes by a lot, and nothing here is medical or dietary advice — for anything involving a condition, a medication or a symptom, talk to a professional. The 3D scenes, the scroll scenes and the food log on this page are all drawn by the page itself; nothing is a video and nothing is a screenshot.</p>
+    <p class="fine">Macro estimates calories and macronutrients from text you type. Estimates can be wrong, sometimes by a lot, and nothing here is medical or dietary advice — for anything involving a condition, a medication or a symptom, talk to a professional. The 3D scenes and scroll scenes on this page are drawn by the page itself; nothing is a video and nothing is a screenshot.</p>
   </div>
 </footer>
 
@@ -1265,303 +1119,18 @@ if(D.fonts&&D.fonts.ready) D.fonts.ready.then(function(){measureGallery();lastY=
 </script>
 
 <script>
-/* ==========================================================
-   PART 2 — the live food log
-   ========================================================== */
+/* Signed in already? Every sign-in button goes straight to the log. */
 (function(){
-"use strict";
-var D=document, $=function(id){return D.getElementById(id);};
-var KEY='macro-log-v2';
-var state={goal:{kcal:2500,protein:150},days:{},seeded:false};
-var cur=new Date(); cur.setHours(12,0,0,0);
-var sample=null, sampleChecked=false, canTools=false, ctl=null, qctl=null, turns=[];
-
-function key(d){var m=d.getMonth()+1,day=d.getDate();return d.getFullYear()+'-'+(m<10?'0':'')+m+'-'+(day<10?'0':'')+day;}
-function num(v){v=Math.round(Number(v));return isFinite(v)&&v>0?v:0;}
-function entries(k){return state.days[k]||[];}
-function totals(k){var t={k:0,p:0,c:0,f:0};entries(k).forEach(function(e){t.k+=e.kcal;t.p+=e.p;t.c+=e.c;t.f+=e.f;});return t;}
-function uid(){return Date.now().toString(36)+'-'+Math.random().toString(36).slice(2,7);}
-function load(){try{var s=JSON.parse(localStorage.getItem(KEY));if(s&&s.days&&s.goal)return s;}catch(e){}return null;}
-function save(){try{localStorage.setItem(KEY,JSON.stringify(state));}catch(e){}}
-
-var SEED=[
-  {off:6,items:[{name:'Earlier day (example)',kcal:2410,p:148,c:246,f:86}]},
-  {off:5,items:[{name:'Earlier day (example)',kcal:2680,p:162,c:288,f:92}]},
-  {off:4,items:[{name:'Earlier day (example)',kcal:1980,p:121,c:201,f:70}]},
-  {off:3,items:[{name:'Earlier day (example)',kcal:2520,p:155,c:259,f:85}]},
-  {off:2,items:[{name:'Earlier day (example)',kcal:2176,p:132,c:221,f:82}]},
-  {off:1,items:[{name:'Earlier day (example)',kcal:2840,p:171,c:306,f:97}]},
-  {off:0,items:[
-    {name:'2 large eggs, scrambled (example)',kcal:180,p:12,c:2,f:14},
-    {name:'Sourdough slice with butter (example)',kcal:210,p:6,c:26,f:9},
-    {name:'Flat white, whole milk (example)',kcal:120,p:7,c:9,f:6}]}
-];
-(function init(){
-  var l=load();
-  if(l){ state={goal:l.goal,days:l.days,seeded:!!l.seeded}; return; }
-  SEED.forEach(function(s){
-    var d=new Date(cur); d.setDate(d.getDate()-s.off);
-    state.days[key(d)]=s.items.map(function(x){return {id:uid(),name:x.name,kcal:x.kcal,p:x.p,c:x.c,f:x.f,ex:true};});
-  });
-  state.seeded=true;
-  var n=$('xnotice');
-  n.hidden=false;
-  n.textContent='Showing a week of example entries so the numbers mean something. Delete them with the × and log your own — everything stays in this browser.';
-})();
-
-function carbGoal(){return Math.max(1,Math.round(state.goal.kcal*0.45/4));}
-function fatGoal(){return Math.max(1,Math.round(state.goal.kcal*0.28/9));}
-function dayLabel(){
-  var t=new Date(); t.setHours(12,0,0,0);
-  var diff=Math.round((cur-t)/86400000);
-  if(diff===0)return 'Today';
-  if(diff===-1)return 'Yesterday';
-  if(diff===1)return 'Tomorrow';
-  return cur.toLocaleDateString(undefined,{weekday:'short',month:'short',day:'numeric'});
-}
-function addEntries(list){
-  var k=key(cur);
-  if(!state.days[k])state.days[k]=[];
-  list.forEach(function(x){
-    state.days[k].push({id:uid(),name:String(x.name||'Food').slice(0,120),kcal:num(x.kcal),p:num(x.p),c:num(x.c),f:num(x.f)});
-  });
-  save(); render();
-}
-function setSt(el,msg,err){var s=$(el);s.textContent=msg||'';s.className='st'+(err?' err':'');}
-
-function render(){
-  var k=key(cur), t=totals(k), g=state.goal;
-  $('xdlabel').textContent=dayLabel();
-  $('xkcal').textContent=t.k.toLocaleString();
-  var left=g.kcal-t.k;
-  $('xkleft').textContent = left>=0 ? (left.toLocaleString()+' left') : (Math.abs(left).toLocaleString()+' over');
-  var ring=$('xring'), C=376.99;
-  ring.setAttribute('stroke-dashoffset', String(C*(1-(g.kcal>0?Math.min(1,t.k/g.kcal):0))));
-  ring.setAttribute('stroke', left<0 ? 'var(--over)' : 'url(#xrg)');
-  function bar(id,txt,val,goal){
-    $(id).style.width=(goal>0?Math.min(100,val/goal*100):0)+'%';
-    $(txt).textContent=val+' / '+goal+' g';
-  }
-  bar('xpbar','xptxt',t.p,g.protein);
-  bar('xcbar','xctxt',t.c,carbGoal());
-  bar('xfbar','xftxt',t.f,fatGoal());
-
-  var list=$('xlist'), es=entries(k);
-  list.textContent='';
-  $('xcount').textContent = es.length ? (es.length+(es.length===1?' item · ':' items · ')+t.k.toLocaleString()+' kcal') : '';
-  if(!es.length){
-    var p=D.createElement('p'); p.className='empty';
-    p.textContent='Nothing logged for '+dayLabel().toLowerCase()+'. Type what you ate above.';
-    list.appendChild(p);
-  }
-  es.forEach(function(e){
-    var row=D.createElement('div'); row.className='item';
-    var nm=D.createElement('div'); nm.className='nm';
-    var a=D.createElement('div'); a.textContent=e.name;
-    var b=D.createElement('div'); b.className='mc';
-    b.textContent='P '+e.p+' g · C '+e.c+' g · F '+e.f+' g';
-    nm.appendChild(a); nm.appendChild(b);
-    var kc=D.createElement('div'); kc.className='kc'; kc.textContent=e.kcal.toLocaleString()+' kcal';
-    var x=D.createElement('button'); x.className='x'; x.textContent='×';
-    x.setAttribute('aria-label','Delete '+e.name);
-    x.onclick=function(){
-      state.days[k]=entries(k).filter(function(y){return y.id!==e.id;});
-      save(); render();
-    };
-    row.appendChild(nm); row.appendChild(kc); row.appendChild(x);
-    list.appendChild(row);
-  });
-
-  var wk=$('xwk'); wk.textContent='';
-  var days=[], max=g.kcal;
-  for(var i=6;i>=0;i--){
-    var d=new Date(cur); d.setDate(d.getDate()-i);
-    var kk=key(d), tt=totals(kk).k;
-    days.push({d:d,k:kk,v:tt});
-    if(tt>max)max=tt;
-  }
-  max=max*1.12;
-  days.forEach(function(o){
-    var col=D.createElement('button');
-    col.className='wcol2'+(o.k===k?' sel':'');
-    col.setAttribute('aria-label',o.d.toLocaleDateString(undefined,{weekday:'long'})+', '+o.v+' calories');
-    var br=D.createElement('div'); br.className='wbar2';
-    br.style.height=Math.max(2,Math.round(o.v/max*86))+'px';
-    var lb=D.createElement('span'); lb.textContent=o.d.toLocaleDateString(undefined,{weekday:'narrow'});
-    col.appendChild(br); col.appendChild(lb);
-    col.onclick=function(){cur=new Date(o.d);render();};
-    wk.appendChild(col);
-  });
-  var gl=D.createElement('div'); gl.className='wg';
-  gl.style.bottom=(23+Math.round(g.kcal/max*86))+'px';
-  wk.appendChild(gl);
-
-  $('xgk').value=g.kcal; $('xgp').value=g.protein;
-}
-
-function errCopy(e){
-  var c=e&&e.code;
-  if(c==='not_granted'||c==='sampling_disabled'||c==='not_declared'||c==='capability_disabled'||c==='capability_removed')
-    return 'Claude is not available here. Use Add manually below.';
-  if(c==='rate_limited')return 'Too many requests just now. Wait a moment, then try again.';
-  if(c==='session_expired')return 'Your session expired. Reload the page and try again.';
-  if(c==='invalid_json'||c==='empty_completion')return 'Could not read that answer. Try rewording it.';
-  if(c==='refused')return 'That could not be answered. Try rewording it.';
-  if(c==='prompt_too_large')return 'That was too long. Try a shorter message.';
-  return 'Something went wrong. Try again.';
-}
-
-async function logIt(){
-  var text=$('xta').value.trim();
-  if(!text){setSt('xst','Type what you ate first.',true);return;}
-  if(!sample){setSt('xst',sampleChecked?'Claude is not available here. Use Add manually below.':'Still connecting. Try again in a moment.',true);return;}
-  $('xgo').disabled=true; $('xstop').hidden=false;
-  setSt('xst','Estimating…');
-  ctl=new AbortController();
-  var prompt='You are a careful nutrition estimator. The user described what they ate. Split it into individual foods or drinks. For each, state the portion you assumed inside the name (use a typical serving when none is given) and estimate calories and macros. Reply with only a JSON array. Each item: {"name": string, "kcal": integer, "protein": integer grams, "carbs": integer grams, "fat": integer grams}. Example: [{"name":"2 large eggs, scrambled","kcal":180,"protein":12,"carbs":2,"fat":14}]. If the text contains no food or drink, reply with [].\n\nWhat they ate: '+text.slice(0,2000);
   try{
-    var items=await sample.json(prompt,{modelTier:'quick',signal:ctl.signal});
-    if(!Array.isArray(items)||!items.length){setSt('xst','No food found in that. Try describing a meal.',true);return;}
-    var clean=items.slice(0,20).map(function(x){return {name:x&&x.name,kcal:x&&x.kcal,p:x&&x.protein,c:x&&x.carbs,f:x&&x.fat};});
-    addEntries(clean);
-    $('xta').value='';
-    setSt('xst','Added '+clean.length+(clean.length===1?' item':' items')+', about '+clean.reduce(function(a,x){return a+num(x.kcal);},0).toLocaleString()+' kcal.');
-  }catch(e){
-    if(e&&e.code==='cancelled')setSt('xst','Stopped.');
-    else setSt('xst',errCopy(e),true);
-  }finally{$('xgo').disabled=false;$('xstop').hidden=true;ctl=null;}
-}
-
-function bubble(cls,text){
-  var d=D.createElement('div'); d.className='msg '+cls; d.textContent=text;
-  var c=$('xchat'); c.appendChild(d); c.scrollTop=c.scrollHeight;
-  return d;
-}
-function logContext(){
-  var k=key(cur), t=totals(k), g=state.goal;
-  var names=entries(k).map(function(e){return e.name+' ('+e.kcal+' kcal, '+e.p+' g protein)';}).join('; ')||'nothing yet';
-  var hist=[];
-  for(var i=1;i<=6;i++){var d=new Date(cur);d.setDate(d.getDate()-i);hist.push(d.toLocaleDateString(undefined,{weekday:'short'})+': '+totals(key(d)).k+' kcal');}
-  return 'Day shown: '+dayLabel()+' ('+k+'). Goals: '+g.kcal+' kcal, '+g.protein+' g protein, with carbs derived at '+carbGoal()+' g and fat at '+fatGoal()+' g. Eaten so far: '+t.k+' kcal, '+t.p+' g protein, '+t.c+' g carbs, '+t.f+' g fat. Remaining: '+(g.kcal-t.k)+' kcal, '+(g.protein-t.p)+' g protein. Items: '+names+'. Previous days: '+hist.join(', ')+'.';
-}
-var RULES='You are the nutrition coach built into this food-logging app. The user is eating for muscle gain. Answer their questions about food, calories, macros, meal ideas, recipes, grocery shopping and general training nutrition. Be concrete and brief, normally under 120 words, plain text with no markdown. Use the log data you are given rather than asking for it. If you are unsure of a number, say it is an estimate. You are not a doctor or dietitian: for medical conditions, medication or symptoms, say a professional should be consulted. When the user says they ate something, use the log_food tool to add it, then confirm in one sentence.';
-
-function tools(){
-  return [{
-    name:'log_food',
-    description:'Add one or more foods the user says they ate to the day currently shown in the app. Returns the updated day totals. Use it only when the user states they ate or drank something.',
-    inputSchema:{type:'object',properties:{items:{type:'array',items:{type:'object',properties:{name:{type:'string'},kcal:{type:'integer'},protein:{type:'integer'},carbs:{type:'integer'},fat:{type:'integer'}},required:['name','kcal','protein','carbs','fat']}}},required:['items']},
-    execute:function(input){
-      var arr=Array.isArray(input.items)?input.items:[];
-      if(!arr.length)throw new Error('No items given.');
-      addEntries(arr.slice(0,20).map(function(x){return {name:x.name,kcal:x.kcal,p:x.protein,c:x.carbs,f:x.fat};}));
-      var t=totals(key(cur));
-      return {added:arr.length,day_total_kcal:t.k,day_total_protein:t.p};
-    }
-  },{
-    name:'get_day',
-    description:'Read the log for another date, formatted YYYY-MM-DD. Returns that day totals and item names. Use it for questions about earlier days.',
-    inputSchema:{type:'object',properties:{date:{type:'string'}},required:['date']},
-    execute:function(input){
-      var k=String(input.date||''), t=totals(k);
-      return {date:k,kcal:t.k,protein:t.p,carbs:t.c,fat:t.f,items:entries(k).map(function(e){return e.name;})};
-    }
-  }];
-}
-
-async function ask(text){
-  text=(text||'').trim();
-  if(!text){setSt('xqst','Type a question first.',true);return;}
-  if(!sample){setSt('xqst',sampleChecked?'Claude is not available here.':'Still connecting. Try again in a moment.',true);return;}
-  setSt('xqst','');
-  bubble('me',text);
-  $('xq').value='';
-  turns.push({role:'user',content:text});
-  if(turns.length>12)turns=turns.slice(-12);
-  var out=bubble('ai','Thinking…');
-  $('xsend').disabled=true; $('xqstop').hidden=false;
-  qctl=new AbortController();
-  var input=[{role:'user',content:RULES+'\n\nCurrent log: '+logContext()}].concat(turns);
-  var opts={modelTier:'quick',cache:false,signal:qctl.signal,onText:function(u){out.textContent=u.text;var c=$('xchat');c.scrollTop=c.scrollHeight;}};
-  if(canTools)opts.tools=tools();
-  try{
-    var r=await sample(input,opts);
-    out.textContent=r.text;
-    turns.push({role:'assistant',content:r.text});
-  }catch(e){
-    if(e&&e.code==='cancelled'){out.textContent=e.text||'Stopped.';turns.pop();}
-    else{out.remove();turns.pop();setSt('xqst',errCopy(e),true);}
-  }finally{
-    $('xsend').disabled=false;$('xqstop').hidden=true;qctl=null;
-    var c=$('xchat');c.scrollTop=c.scrollHeight;
-  }
-}
-
-['What should I eat next?','Is my protein on track?','High-protein snack ideas','How was my week?'].forEach(function(q){
-  var b=D.createElement('button'); b.className='chip'; b.textContent=q;
-  b.onclick=function(){ask(q);};
-  $('xchips').appendChild(b);
-});
-
-$('xgo').onclick=logIt;
-$('xstop').onclick=function(){if(ctl)ctl.abort();};
-$('xsend').onclick=function(){ask($('xq').value);};
-$('xqstop').onclick=function(){if(qctl)qctl.abort();};
-$('xq').addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();ask($('xq').value);}});
-$('xta').addEventListener('keydown',function(e){if(e.key==='Enter'&&(e.metaKey||e.ctrlKey)){e.preventDefault();logIt();}});
-$('xprev').onclick=function(){cur.setDate(cur.getDate()-1);render();};
-$('xnext').onclick=function(){cur.setDate(cur.getDate()+1);render();};
-$('xmadd').onclick=function(){
-  var n=$('xmn').value.trim(), k=num($('xmk').value);
-  if(!n||!k){setSt('xmst','Enter a food name and calories.',true);return;}
-  addEntries([{name:n,kcal:k,p:$('xmp').value,c:$('xmc').value,f:$('xmf').value}]);
-  ['xmn','xmk','xmp','xmc','xmf'].forEach(function(id){$(id).value='';});
-  setSt('xmst','Added.');
-};
-$('xgk').onchange=function(){var v=num($('xgk').value);if(v>=500){state.goal.kcal=v;save();}render();};
-$('xgp').onchange=function(){var v=num($('xgp').value);if(v>=10){state.goal.protein=v;save();}render();};
-
-render();
-bubble('sys','Ask about meals, macros, recipes or your week. You can also just say what you ate and it gets logged.');
-
-/* ---------- Claude runtime ---------- */
-function initials(n){
-  n=(n||'').trim(); if(!n)return '·';
-  var p=n.split(/\s+/);
-  return (p[0][0]+(p[1]?p[1][0]:'')).toUpperCase();
-}
-function noClaude(msg){
-  var n=$('xnotice'); n.hidden=false; n.textContent=msg;
-  $('xgo').disabled=true; $('xgo').textContent='Needs Claude';
-  $('xsend').disabled=true;
-  $('xq').disabled=true; $('xq').placeholder='The coach needs Claude to answer';
-  [].slice.call($('xchips').children).forEach(function(c){c.disabled=true;c.style.opacity='.5';c.style.cursor='default';});
-  $('xta').placeholder='Estimating needs Claude — use Add manually below';
-  var d=D.querySelector('#app details'); if(d)d.open=true;
-}
-if(window.claude&&typeof window.claude.use==='function'){
-  window.claude.use('sample').then(function(s){
-    sample=s; sampleChecked=true;
-    if(!s){
-      noClaude('Claude is not reachable on this view, so estimating and the coach are switched off. Manual entry below works, and the log is saved in this browser.');
-      return;
-    }
-    return s.limits().then(function(l){canTools=!!(l&&l.tools);}).catch(function(){});
-  }).catch(function(){sampleChecked=true;});
-  window.claude.use('user').then(function(u){
-    if(!u)return;
-    return u.name().then(function(nm){
-      if(!nm)return;
-      var w=$('xwho'); w.textContent='';
-      var av=D.createElement('div'); av.className='av'; av.textContent=initials(nm);
-      var sp=D.createElement('span'); sp.textContent=nm;
-      w.appendChild(av); w.appendChild(sp);
+    var sess=JSON.parse(localStorage.getItem('macro.session.v1'));
+    if(!sess||!sess.refresh_token)return;
+    var nav=document.getElementById('navcta'); if(nav){nav.textContent='Open your log';nav.href='app.html';}
+    ['heroSignIn','startGoogle'].forEach(function(id){
+      var b=document.getElementById(id); if(!b)return;
+      b.href='app.html'; var t=b.querySelector('span'); if(t)t.textContent='Open your log';
     });
-  }).catch(function(){});
-}else{
-  sampleChecked=true;
-  noClaude('This is the public build, so it has no Claude behind it: estimating a meal from a sentence and the coach both need one, and they are switched off here. Everything else is live — add entries by hand below, set your goals, move between days. The log is saved in this browser.');
-}
+    var e=document.getElementById('startEmail'); if(e)e.hidden=true;
+  }catch(err){}
 })();
 </script>
 </body>

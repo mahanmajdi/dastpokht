@@ -2,58 +2,40 @@
 
 **Live:** https://mahanmajdi.github.io/macro/
 
-Describe a meal the way you'd say it out loud — *"2 eggs, sourdough with butter,
-and a flat white"* — and Macro splits it into individual foods, estimates the
-calories and macros for each, and counts the day against your goal. No barcodes,
-no database search, no picking a portion size from a dropdown.
+A calorie and macro tracker with a scroll-driven 3D product site in front of it.
+Sign in with Google (or an emailed link), log what you eat, and your log follows
+you to every device you sign in on.
 
-## The page
+## Pages
 
-A single scroll-driven product site, ending in the working app.
+| Page | What it is |
+|---|---|
+| `index.html` | The product site: a hand-built 3D calorie ring, light and dark scroll chapters, and the sign-in buttons. |
+| `app.html` | The food log. Sign in, then log foods for any day, watch the ring and macro bars fill, re-add recent foods with one tap, and set your goals. |
 
-- **The 3D is drawn, not filmed.** A hand-written perspective renderer — no
-  Three.js, no CDN, nothing to fail to load. The calorie ring is a torus with
-  real face normals, two lights, specular highlights, depth-sorted facets and a
-  bloom pass. Scroll drives its position, camera distance and fill; the cursor
-  turns it.
-- **One object through the whole film.** The ring sits beside the headline,
-  recedes while the sentence scene plays, returns centred and closes as the
-  counter climbs, then splits into the protein / carb / fat colours by energy
-  share.
-- **Chapters that switch light and dark** as you scroll, with the nav and the
-  chapter rail recolouring to match.
-- **Scene work:** a sentence lighting up word by word and breaking into three log
-  entries, a pinned horizontal card gallery, extruded 3D week bars against a
-  dashed goal line, a tilting phone playing out a coach conversation, and a
-  Nutrition Facts panel for one logged day.
-- **Calm when asked.** Everything, including the scroll scenes, switches off
-  under `prefers-reduced-motion`. The page reads fine with JavaScript disabled.
+## Accounts and sync
 
-## The app
+- **Sign-in** is handled by [Supabase Auth](https://supabase.com/docs/guides/auth):
+  *Continue with Google*, or an emailed magic link. The same email on another
+  device opens the same account.
+- **Storage** is a Supabase Postgres database with two tables, `entries` and
+  `goals`. Row-level security is on for both: every read and write is checked
+  against the signed-in user, so each person only ever sees their own rows.
+- **Sync** — the log refreshes whenever you return to the tab and every 45
+  seconds while it's open, so a meal logged on your phone shows up on your
+  laptop.
+- The page talks to Supabase's HTTP API directly with `fetch` — no client
+  library, nothing to install.
 
-Plain-language logging, manual entry, day navigation, the calorie ring and macro
-bars, a seven-day chart, editable goals, and a coach with two page tools —
-`log_food` writes entries, `get_day` reads an earlier date.
-
-Carbs and fat aren't goals you set: they're derived from the calorie goal at 45%
-and 28%. Protein is the one number you choose.
-
-The log lives in `localStorage`, in your browser. It is never sent anywhere.
-
-## About this public build
-
-Estimating a meal from a sentence, and the coach, both need a Claude runtime
-(`window.claude`), which exists only when the page is opened inside Claude. On
-this GitHub Pages build they are switched off, and the page says so where it
-matters. Everything else is live — add entries by hand, set goals, move between
-days, watch the week fill in.
-
-Wiring the AI up for a genuinely public site means putting the API key behind a
-server (a Supabase Edge Function or equivalent), never in this file.
+The key in `app.html` is Supabase's *publishable* key. It is designed to live
+in browser code; the row-level security policies are what protect the data.
 
 ## Built from
 
-One `index.html`. No frameworks, no build step, no dependencies, nothing to
-install. Fonts come from Google Fonts; everything else is in the file.
+Plain HTML, CSS and JavaScript. No frameworks, no build step. Fonts from Google
+Fonts; everything else is in the files.
+
+Carbs and fat targets are derived from the calorie goal at 45% and 28%.
+Protein is the one number you set yourself.
 
 Calorie counts are estimates, not medical advice.
