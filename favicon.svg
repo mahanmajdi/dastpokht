@@ -1,5 +1,7 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-  <rect width="64" height="64" rx="12" fill="#030303"/>
-  <text x="32" y="41" font-family="Arial, Helvetica, sans-serif" font-size="24" font-weight="900"
-        letter-spacing="-1" text-anchor="middle" fill="#c0392b">011</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none">
+<rect width="24" height="24" rx="5" fill="#080C0A"/>
+<circle cx="12" cy="12" r="6.6" stroke="#2A3A33" stroke-width="2.4"/>
+<path d="M12 5.4a6.6 6.6 0 0 1 5.9 3.6" stroke="#63E5AB" stroke-width="2.8" stroke-linecap="round"/>
+<path d="M17.9 9a6.6 6.6 0 0 1-2.5 8.6" stroke="#4273F8" stroke-width="2.8" stroke-linecap="round"/>
+<path d="M15.4 17.6a6.6 6.6 0 0 1-9-2.9" stroke="#E3A017" stroke-width="2.8" stroke-linecap="round"/>
 </svg>

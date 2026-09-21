@@ -1,70 +1,59 @@
-# Hakim International School — website concept
+# Macro — a food log that reads sentences
 
-A design concept for the website of **Hakim International School**
-(مجتمع آموزشی بین‌المللی حکیم), Tehran.
+**Live:** https://mahanmajdi.github.io/macro/
 
-**Live:** https://mahanmajdi.github.io/hakim-international-school/
+Describe a meal the way you'd say it out loud — *"2 eggs, sourdough with butter,
+and a flat white"* — and Macro splits it into individual foods, estimates the
+calories and macros for each, and counts the day against your goal. No barcodes,
+no database search, no picking a portion size from a dropdown.
 
-> Unofficial. This is a design proposal, not an official school site, and is
-> not affiliated with or endorsed by the school. All figures, names and portal
-> activity shown are sample content for demonstration.
+## The page
 
-## The idea
+A single scroll-driven product site, ending in the working app.
 
-*Hakim* (حکیم) is the Persian word for the polymath — the scholar who refuses a
-single discipline. The whole site is built on that, down to the 3D: the hero is
-a **muqarnas vault**, the stalactite honeycomb found in the ceilings of Persian
-domes, generated procedurally and flown through as you scroll.
+- **The 3D is drawn, not filmed.** A hand-written perspective renderer — no
+  Three.js, no CDN, nothing to fail to load. The calorie ring is a torus with
+  real face normals, two lights, specular highlights, depth-sorted facets and a
+  bloom pass. Scroll drives its position, camera distance and fill; the cursor
+  turns it.
+- **One object through the whole film.** The ring sits beside the headline,
+  recedes while the sentence scene plays, returns centred and closes as the
+  counter climbs, then splits into the protein / carb / fat colours by energy
+  share.
+- **Chapters that switch light and dark** as you scroll, with the nav and the
+  chapter rail recolouring to match.
+- **Scene work:** a sentence lighting up word by word and breaking into three log
+  entries, a pinned horizontal card gallery, extruded 3D week bars against a
+  dashed goal line, a tilting phone playing out a coach conversation, and a
+  Nutrition Facts panel for one logged day.
+- **Calm when asked.** Everything, including the scroll scenes, switches off
+  under `prefers-reduced-motion`. The page reads fine with JavaScript disabled.
 
-The palette comes from the school's own mark — the plum `#7A3A8C` was sampled
-from their logo — paired with the gold of Persian manuscript illumination.
+## The app
 
-## What's in it
+Plain-language logging, manual entry, day navigation, the calorie ring and macro
+bars, a seven-day chart, editable goals, and a coach with two page tools —
+`log_food` writes entries, `get_day` reads an earlier date.
 
-- **Scroll-driven WebGL hero** — 168 instanced niches across seven tiers on a
-  girih star ring, lit and fogged, with scroll driving the camera up into it.
-- **Bilingual EN ⇄ فارسی** — every string translated, full RTL layout flip,
-  Persian numerals, Vazirmatn typeface, mirrored chart, Persian ordinals.
-- **Live data** — a Tehran-time clock driving a real "in session / free period /
-  finished" status, a timetable that marks Now / Next / Done against the actual
-  clock, and a streaming activity feed.
-- **⌘K command palette** — fuzzy search across sections, programs, subjects and
-  the timetable, fully keyboard navigable.
-- **Student portal preview** — the school's current LMS (sixteen identical
-  tiles) shown beside a redesigned dashboard.
+Carbs and fat aren't goals you set: they're derived from the calorie goal at 45%
+and 28%. Protein is the one number you choose.
 
-Respects `prefers-reduced-motion`. No horizontal scroll from 360px to 1440px in
-either text direction. No login form and no data collection anywhere.
+The log lives in `localStorage`, in your browser. It is never sent anywhere.
 
-## Stack
+## About this public build
 
-Single self-contained `index.html`. No build step, no framework.
-Three.js r128 and the typefaces (Fraunces, Archivo, Vazirmatn) load from CDNs.
+Estimating a meal from a sentence, and the coach, both need a Claude runtime
+(`window.claude`), which exists only when the page is opened inside Claude. On
+this GitHub Pages build they are switched off, and the page says so where it
+matters. Everything else is live — add entries by hand, set goals, move between
+days, watch the week fill in.
 
-## Editing
+Wiring the AI up for a genuinely public site means putting the API key behind a
+server (a Supabase Edge Function or equivalent), never in this file.
 
-| What | Where |
-|---|---|
-| Copy, both languages | the `I18N` object — `en` and `fa` keys must match |
-| Colours | CSS custom properties on `:root` |
-| Sample figures | `data-count` attributes, and the `SUBJ` / `SCHED` arrays |
-| 3D vault | `initVault()` — `R`, `TIERS`, cell width factor |
-| Search index | `buildIndex()` |
+## Built from
 
-The emblem is an original mark drawn in SVG, not the school's official logo.
-To use the real one, replace the two inline `<svg class="mark">` blocks.
+One `index.html`. No frameworks, no build step, no dependencies, nothing to
+install. Fonts come from Google Fonts; everything else is in the file.
 
-`<meta name="robots" content="noindex, nofollow">` in the `<head>` keeps this
-concept out of search results so it is not mistaken for the school's official
-site. Remove that line to have it indexed.
-
----
-
-### Previously
-
-This repository previously held *Zero Eleven*, a landing page for an original
-series. It is preserved in git history at `1d8e4b9` and can be restored with:
-
-```
-git checkout 1d8e4b9 -- index.html
-```
+Calorie counts are estimates, not medical advice.

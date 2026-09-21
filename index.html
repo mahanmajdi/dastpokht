@@ -1,1184 +1,1568 @@
 <!doctype html>
-<html lang="en" dir="ltr">
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#141017">
-<meta name="description" content="A design concept for Hakim International School, Tehran: a bilingual English/Persian site built around a scroll-driven WebGL muqarnas vault, with a redesigned student portal. Unofficial proposal.">
-<!-- Kept out of search results so this concept is not mistaken for the school's official site.
-     Delete the next line if you want it indexed by Google. -->
-<meta name="robots" content="noindex, nofollow">
+<meta name="description" content="Macro counts calories and macros from a sentence. Describe the meal in plain words; a coach that can read your log answers what to eat next.">
+<meta name="theme-color" content="#080C0A" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#F2F1E9" media="(prefers-color-scheme: light)">
 <meta property="og:type" content="website">
-<meta property="og:title" content="Hakim International School — design concept">
-<meta property="og:description" content="Bilingual EN/فارسی site concept with a scroll-driven 3D muqarnas vault and a redesigned student portal. An unofficial proposal.">
-<meta property="og:image" content="https://mahanmajdi.github.io/hakim-international-school/og.png">
-<meta property="og:url" content="https://mahanmajdi.github.io/hakim-international-school/">
+<meta property="og:title" content="Macro - eat like you mean it">
+<meta property="og:description" content="Describe the meal in plain words. Macro splits it into foods, estimates the calories and macros, and counts the day against your goal.">
+<meta property="og:image" content="og.png">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2064%2064%22%3E%3Ccircle%20cx%3D%2232%22%20cy%3D%2232%22%20r%3D%2229.5%22%20fill%3D%22none%22%20stroke%3D%22%237A3A8C%22%20stroke-width%3D%223%22/%3E%3Cg%20fill%3D%22none%22%20stroke%3D%22%237A3A8C%22%20stroke-width%3D%223%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22M32%209%20L45.3%2016.5%20L45.3%2031.5%20L32%2039%20L18.7%2031.5%20L18.7%2016.5%20Z%22/%3E%3Cpath%20d%3D%22M32%2025%20L45.3%2032.5%20L45.3%2047.5%20L32%2055%20L18.7%2047.5%20L18.7%2032.5%20Z%22/%3E%3C/g%3E%3Ccircle%20cx%3D%2232%22%20cy%3D%2232%22%20r%3D%224%22%20fill%3D%22%23E3A23C%22/%3E%3C/svg%3E">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
 <style>
-  :root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
-  html,body{margin:0}
-  img{max-width:100%}
-  [hidden]{display:none!important}
+:root{color-scheme:light dark;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);}
+body{margin:0;}
+img{max-width:100%;}
+[hidden]{display:none!important;}
+</style>
+<title>Macro Food Log</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Familjen+Grotesk:wght@400..700&family=IBM+Plex+Mono:wght@400;500&family=Instrument+Sans:wght@400..600&display=swap">
+<style>
+/* ============================================================
+   MACRO — tokens
+   Fixed art direction for the scroll chapters (cast-iron void /
+   ceramic plate), theme-aware tokens for the shell and the live app.
+   ============================================================ */
+:root{
+  /* art direction — identical in both themes on purpose */
+  --void:#080C0A;
+  --void-2:#0D1310;
+  --ceramic:#F2F1E9;
+  --ceramic-2:#E6E4D8;
+  --ink-dark:#EDF2EE;   --sub-dark:#8D9B93;
+  --ink-light:#0F1613;  --sub-light:#5C6962;
+  --azure:#4273F8;      /* protein */
+  --saffron:#E3A017;    /* carbs   */
+  --rose:#E4416D;       /* fat     */
+  --mint:#63E5AB;       /* calories */
+  --mint-deep:#0F6B48;
+  --hair-dark:rgba(178,222,201,.16);
+  --hair-light:rgba(15,32,24,.13);
+
+  /* shell + app: light palette lives here, complete */
+  --bg:#F2F1E9;
+  --surf:#FFFFFF;
+  --ink:#0F1613;
+  --sub:#5C6962;
+  --line:rgba(15,32,24,.13);
+  --glass:255,255,255;
+  --glass-a:.74;
+  --accent:#126B49;
+  --accent-soft:#63E5AB;
+  --accent-ink:#FFFFFF;
+  --over:#C13F2B;
+  --shadow:0 1px 2px rgba(10,30,20,.06),0 18px 44px -20px rgba(10,30,20,.28);
+
+  --head:'Familjen Grotesk','Trebuchet MS',system-ui,sans-serif;
+  --body:'Instrument Sans',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --mono:'IBM Plex Mono',ui-monospace,'SF Mono',Menlo,monospace;
+
+  --rail:20px;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#080C0A;
+  --surf:#101714;
+  --ink:#EDF2EE;
+  --sub:#8D9B93;
+  --line:rgba(178,222,201,.16);
+  --glass:17,25,21;
+  --glass-a:.7;
+  --accent:#63E5AB;
+  --accent-soft:#0F6B48;
+  --accent-ink:#04120B;
+  --over:#F07A64;
+  --shadow:0 1px 2px rgba(0,0,0,.45),0 22px 50px -22px rgba(0,0,0,.8);
+}}
+:root[data-theme="dark"]{
+  --bg:#080C0A;
+  --surf:#101714;
+  --ink:#EDF2EE;
+  --sub:#8D9B93;
+  --line:rgba(178,222,201,.16);
+  --glass:17,25,21;
+  --glass-a:.7;
+  --accent:#63E5AB;
+  --accent-soft:#0F6B48;
+  --accent-ink:#04120B;
+  --over:#F07A64;
+  --shadow:0 1px 2px rgba(0,0,0,.45),0 22px 50px -22px rgba(0,0,0,.8);
+}
+
+*{box-sizing:border-box;}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth;overflow-x:clip;}
+body{
+  margin:0;background:var(--bg);color:var(--ink);
+  font-family:var(--body);font-size:16.5px;line-height:1.6;
+  overflow-x:clip;letter-spacing:-.005em;
+  -webkit-font-smoothing:antialiased;
+}
+img{max-width:100%;}
+button{font:inherit;color:inherit;cursor:pointer;}
+a{color:inherit;}
+:focus-visible{outline:2px solid var(--mint);outline-offset:3px;border-radius:4px;}
+
+/* ---------- type ---------- */
+.d1{font-family:var(--head);font-weight:700;font-size:clamp(46px,10.4vw,138px);line-height:.9;letter-spacing:-.048em;margin:0;text-wrap:balance;}
+.d2{font-family:var(--head);font-weight:700;font-size:clamp(31px,5.4vw,68px);line-height:.96;letter-spacing:-.04em;margin:0;text-wrap:balance;}
+.d3{font-family:var(--head);font-weight:600;font-size:clamp(25px,3.3vw,44px);line-height:1.06;letter-spacing:-.03em;margin:0;text-wrap:balance;}
+.d4{font-family:var(--head);font-weight:600;font-size:clamp(19px,1.7vw,24px);line-height:1.18;letter-spacing:-.018em;margin:0;}
+.lead{font-size:clamp(17px,1.65vw,22px);line-height:1.5;color:var(--sub);max-width:34ch;margin:0;}
+.p{max-width:62ch;color:var(--sub);margin:0;}
+.eyebrow{font-family:var(--mono);font-size:11.5px;font-weight:500;letter-spacing:.2em;text-transform:uppercase;color:var(--sub);margin:0 0 18px;display:flex;align-items:center;gap:10px;}
+.eyebrow::before{content:"";width:22px;height:1px;background:currentColor;opacity:.55;flex:none;}
+.num{font-variant-numeric:tabular-nums;}
+
+/* ---------- layout ---------- */
+.wrap{max-width:1180px;margin:0 auto;padding-inline:20px;width:100%;}
+.ch{position:relative;z-index:1;}
+.ch-void{--ink:var(--ink-dark);--sub:var(--sub-dark);--line:var(--hair-dark);--card:rgba(255,255,255,.05);--gl:18,27,23;--gla:.42;
+  background:transparent;color:var(--ink);}
+.ch-dark{--ink:var(--ink-dark);--sub:var(--sub-dark);--line:var(--hair-dark);--card:rgba(255,255,255,.05);--gl:18,27,23;--gla:.6;
+  background:var(--void);color:var(--ink);}
+.ch-light{--ink:var(--ink-light);--sub:var(--sub-light);--line:var(--hair-light);--card:rgba(255,255,255,.72);--gl:255,255,255;--gla:.72;
+  background:var(--ceramic);color:var(--ink);}
+.ch-app{--card:rgba(var(--glass),var(--glass-a));--gl:var(--glass);--gla:var(--glass-a);background:var(--bg);color:var(--ink);}
+.pad{padding-block:clamp(80px,12vh,150px);}
+
+/* ---------- fixed 3D stage ---------- */
+#stage{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;background:var(--void);}
+#stage canvas{position:absolute;inset:0;width:100%;height:100%;display:block;}
+#vig{position:absolute;inset:0;
+  background:radial-gradient(120% 90% at 50% 40%,rgba(8,12,10,0) 30%,rgba(8,12,10,.55) 72%,rgba(8,12,10,.94) 100%);}
+#stage.off{opacity:0;}
+#stage{transition:opacity .5s linear;}
+
+/* ---------- scroll rail ---------- */
+#rail{position:fixed;right:14px;top:50%;transform:translateY(-50%);z-index:40;display:flex;flex-direction:column;gap:11px;align-items:center;}
+#rail b{display:block;width:6px;height:6px;border-radius:50%;background:currentColor;opacity:.26;transition:opacity .3s,transform .3s;color:var(--ink-dark);}
+#rail b.on{opacity:1;transform:scale(1.75);}
+#rail.lightrail b{color:var(--ink-light);}
+@media (max-width:860px){#rail{display:none;}}
+
+/* ---------- nav ---------- */
+#nav{position:fixed;left:0;right:0;top:0;z-index:50;
+  padding:12px 20px calc(12px);padding-top:calc(12px + env(safe-area-inset-top,0px));
+  display:flex;align-items:center;gap:18px;
+  color:var(--ink-dark);transition:color .35s ease,background .35s ease,backdrop-filter .35s;}
+#nav.solid{background:rgba(8,12,10,.62);backdrop-filter:blur(18px) saturate(150%);-webkit-backdrop-filter:blur(18px) saturate(150%);border-bottom:1px solid var(--hair-dark);}
+#nav.lightnav{color:var(--ink-light);}
+#nav.lightnav.solid{background:rgba(242,241,233,.7);border-bottom-color:var(--hair-light);}
+.brand{display:flex;align-items:center;gap:9px;font-family:var(--head);font-weight:700;font-size:18px;letter-spacing:-.03em;text-decoration:none;}
+.mark{width:22px;height:22px;flex:none;}
+.navlinks{display:flex;gap:4px;margin-left:auto;align-items:center;}
+.navlinks a{font-size:14px;text-decoration:none;opacity:.72;padding:7px 11px;border-radius:9px;transition:opacity .2s,background .2s;}
+.navlinks a:hover{opacity:1;background:rgba(140,155,148,.18);}
+@media (max-width:760px){.navlinks a.hideS{display:none;}.scrollcue{display:none;}}
+.navcta{font-family:var(--body);font-weight:500;font-size:14px;border:0;border-radius:999px;padding:9px 17px;
+  background:var(--mint);color:#052014;text-decoration:none;white-space:nowrap;
+  box-shadow:0 8px 24px -10px rgba(99,229,171,.8);transition:transform .2s cubic-bezier(.2,.9,.2,1),box-shadow .2s;}
+.navcta:hover{transform:translateY(-2px);box-shadow:0 14px 32px -12px rgba(99,229,171,.9);}
+
+/* ---------- reveal system (visible with no JS) ---------- */
+.rv{opacity:1;}
+html.js .rv{opacity:0;transform:translate3d(0,28px,0);filter:blur(6px);
+  transition:opacity .85s cubic-bezier(.16,.84,.26,1),transform .95s cubic-bezier(.16,.84,.26,1),filter .8s ease;}
+html.js .rv.in{opacity:1;transform:none;filter:none;}
+html.js .rv.s1,html.js .rvS.s1,html.js .rvL.s1{transition-delay:.08s}
+html.js .rv.s2,html.js .rvS.s2,html.js .rvL.s2{transition-delay:.17s}
+html.js .rv.s3,html.js .rvS.s3,html.js .rvL.s3{transition-delay:.26s}
+html.js .rv.s4,html.js .rvS.s4,html.js .rvL.s4{transition-delay:.35s}
+html.js .rv.s5,html.js .rvS.s5,html.js .rvL.s5{transition-delay:.44s}
+html.js .rvL{opacity:0;transform:translate3d(-34px,0,0);}
+html.js .rvL.in{opacity:1;transform:none;}
+html.js .rvS{opacity:0;transform:scale(.92) translate3d(0,24px,0);}
+html.js .rvS.in{opacity:1;transform:none;}
+
+/* ---------- hero ---------- */
+#hero{min-height:min(96svh,900px);display:flex;flex-direction:column;justify-content:center;
+  padding-block:clamp(110px,16vh,180px) clamp(40px,7vh,80px);}
+.hero-kick{font-family:var(--mono);font-size:11.5px;letter-spacing:.22em;text-transform:uppercase;color:var(--mint);
+  display:inline-flex;align-items:center;gap:9px;margin-bottom:22px;}
+.hero-kick i{width:6px;height:6px;border-radius:50%;background:var(--mint);box-shadow:0 0 14px 3px rgba(99,229,171,.8);flex:none;}
+#hero .d1{max-width:16ch;}
+#hero .d1 .sp{display:inline-block;overflow:hidden;vertical-align:bottom;}
+#hero .d1 .sp>span{display:inline-block;}
+html.js #hero .d1 .sp>span{transform:translateY(105%);animation:rise 1.05s cubic-bezier(.16,.9,.22,1) forwards;}
+@keyframes rise{to{transform:translateY(0);}}
+.hero-grad{background:linear-gradient(94deg,var(--mint) 0%,#9BE7FF 48%,var(--azure) 100%);
+  -webkit-background-clip:text;background-clip:text;color:transparent;}
+.hero-sub{margin:26px 0 0;font-size:clamp(17px,1.75vw,23px);line-height:1.48;color:#B8C7BF;max-width:40ch;}
+.hero-row{display:flex;gap:12px;flex-wrap:wrap;margin-top:34px;align-items:center;}
+.btn{border:0;border-radius:999px;padding:14px 26px;font-weight:500;font-size:16px;text-decoration:none;display:inline-flex;align-items:center;gap:9px;
+  transition:transform .25s cubic-bezier(.2,.9,.2,1),box-shadow .25s,background .25s;position:relative;}
+.btn-fill{background:var(--mint);color:#052014;box-shadow:0 12px 34px -12px rgba(99,229,171,.85);}
+.btn-fill:hover{transform:translateY(-3px) scale(1.015);box-shadow:0 20px 46px -14px rgba(99,229,171,.95);}
+.btn-line{background:rgba(255,255,255,.06);color:var(--ink-dark);border:1px solid var(--hair-dark);backdrop-filter:blur(10px);}
+.btn-line:hover{transform:translateY(-3px);background:rgba(255,255,255,.12);}
+.hero-strip{display:flex;gap:clamp(18px,4vw,54px);flex-wrap:wrap;margin-top:clamp(46px,8vh,84px);}
+.hero-strip div{min-width:118px;}
+.hero-strip b{display:block;font-family:var(--head);font-weight:700;font-size:clamp(24px,2.6vw,34px);letter-spacing:-.03em;line-height:1;}
+.hero-strip span{font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--sub-dark);display:block;margin-top:8px;}
+.scrollcue{position:absolute;left:50%;bottom:22px;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:8px;
+  font-family:var(--mono);font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--sub-dark);}
+.scrollcue i{width:1px;height:38px;background:linear-gradient(180deg,transparent,var(--mint));animation:cue 2.1s ease-in-out infinite;}
+@keyframes cue{0%,100%{transform:scaleY(.35);opacity:.4;transform-origin:top;}50%{transform:scaleY(1);opacity:1;transform-origin:top;}}
+
+/* ---------- pinned scenes ---------- */
+.pin{position:relative;}
+.pinner{position:sticky;top:0;height:100vh;height:100svh;display:flex;align-items:center;overflow:hidden;}
+
+/* scene 1: the sentence */
+#say{height:320vh;}
+.saystage{width:100%;}
+.sayline{font-family:var(--head);font-weight:600;font-size:clamp(23px,4.2vw,54px);line-height:1.14;letter-spacing:-.035em;
+  display:flex;flex-wrap:wrap;gap:0 .3em;justify-content:center;max-width:17ch;margin:0 auto;}
+.sayline .w{display:inline-block;transition:color .4s,opacity .4s;opacity:.22;}
+.sayline .w.hit{opacity:1;}
+.caret{display:inline-block;width:.06em;height:1em;background:var(--mint);vertical-align:-.12em;animation:blink 1s steps(1) infinite;}
+@keyframes blink{50%{opacity:0;}}
+.chipgrid{display:flex;flex-direction:column;gap:10px;align-items:stretch;margin-top:clamp(22px,4vh,46px);max-width:470px;margin-inline:auto;}
+.fchip{display:flex;align-items:center;gap:12px;padding:12px 16px;border-radius:15px;
+  background:var(--card);border:1px solid var(--line);backdrop-filter:blur(14px) saturate(150%);-webkit-backdrop-filter:blur(14px);
+  box-shadow:0 12px 30px -18px rgba(0,0,0,.5);
+  opacity:0;transform:translate3d(0,26px,0) scale(.94);transition:opacity .5s,transform .6s cubic-bezier(.16,.9,.24,1);}
+.fchip.on{opacity:1;transform:none;}
+.fchip .nm{flex:1;min-width:0;}
+.fchip .fn{font-weight:500;font-size:15px;}
+.fchip .fk{font-family:var(--head);font-weight:600;font-size:15px;white-space:nowrap;}
+.fchip .fm{display:flex;gap:7px;font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;margin-top:3px;}
+.fchip .fm i{font-style:normal;}
+.fp{color:var(--azure);}.fc{color:var(--saffron);}.ff{color:var(--rose);}
+.saycap{text-align:center;margin-top:clamp(24px,4vh,44px);font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--sub);}
+
+/* scene 2: ring closes */
+#close{height:300vh;}
+.closestack{width:100%;display:flex;flex-direction:column;align-items:flex-start;gap:clamp(15px,2.6vh,28px);max-width:540px;}
+.closestack .mstack{width:100%;gap:16px;}
+.closenote{max-width:46ch;font-size:15px;}
+@media (max-width:900px){.closestack{max-width:none;}}
+.readout{position:relative;font-family:var(--head);font-weight:700;font-size:clamp(58px,11vw,150px);line-height:.86;letter-spacing:-.05em;
+  font-variant-numeric:tabular-nums;background:linear-gradient(180deg,#fff,#9FBDB0);-webkit-background-clip:text;background-clip:text;color:transparent;}
+.readout small{display:block;font-family:var(--mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--sub-dark);-webkit-text-fill-color:var(--sub-dark);margin-top:16px;font-weight:400;}
+.mstack{display:flex;flex-direction:column;gap:20px;max-width:440px;}
+.mrow .mlab{display:flex;justify-content:space-between;align-items:baseline;font-size:14px;margin-bottom:8px;}
+.mrow .mlab b{font-family:var(--head);font-weight:600;font-size:15px;letter-spacing:-.01em;}
+.mrow .mlab span{font-family:var(--mono);font-size:12px;color:var(--sub);}
+.mtrack{height:8px;border-radius:99px;background:color-mix(in srgb,currentColor 14%,transparent);overflow:hidden;}
+.mfill{height:100%;border-radius:99px;width:0;}
+
+/* ---------- coach ---------- */
+.coachwrap{display:grid;grid-template-columns:.9fr 1.1fr;gap:clamp(28px,5vw,72px);align-items:center;}
+@media (max-width:920px){.coachwrap{grid-template-columns:1fr;}}
+.phone3d{perspective:1400px;perspective-origin:50% 45%;}
+.phone{width:min(360px,86vw);margin-inline:auto;border-radius:42px;padding:12px;
+  background:linear-gradient(150deg,#2B3733,#0B110E 55%,#1B2420);
+  box-shadow:0 2px 0 rgba(255,255,255,.12) inset,0 50px 90px -40px rgba(0,0,0,.9),0 0 0 1px rgba(255,255,255,.07);
+  transform-style:preserve-3d;transform:rotateY(-16deg) rotateX(7deg);
+  transition:transform .6s cubic-bezier(.2,.9,.2,1);}
+.phone-screen{border-radius:32px;overflow:hidden;background:#0A0F0C;padding:16px 14px 18px;min-height:470px;
+  display:flex;flex-direction:column;gap:10px;transform:translateZ(14px);border:1px solid rgba(255,255,255,.06);}
+.phone-notch{width:74px;height:5px;border-radius:99px;background:rgba(255,255,255,.14);margin:0 auto 8px;}
+.bub{max-width:82%;padding:11px 14px;border-radius:17px;font-size:14.5px;line-height:1.45;white-space:pre-wrap;
+  opacity:0;transform:translate3d(0,14px,0) scale(.96);transition:opacity .5s,transform .55s cubic-bezier(.16,.9,.24,1);}
+.bub.on{opacity:1;transform:none;}
+.bub.me{align-self:flex-end;background:linear-gradient(160deg,#63E5AB,#0F6B48);color:#04150D;border-bottom-right-radius:6px;font-weight:500;}
+.bub.ai{align-self:flex-start;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.09);color:#E6EEE9;border-bottom-left-radius:6px;}
+.bub.tool{align-self:center;background:none;border:1px dashed rgba(99,229,171,.45);color:#63E5AB;
+  font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;padding:6px 11px;border-radius:99px;}
+.toolnote{display:flex;gap:12px;align-items:flex-start;padding:15px 17px;border-radius:16px;background:var(--card);border:1px solid var(--line);margin-top:14px;}
+.toolnote code{font-family:var(--mono);font-size:12.5px;color:var(--mint);background:rgba(99,229,171,.1);padding:2px 7px;border-radius:6px;}
+
+/* ---------- nutrition facts panel ---------- */
+.nfwrap{display:grid;grid-template-columns:1fr 1fr;gap:clamp(28px,5vw,64px);align-items:center;}
+@media (max-width:900px){.nfwrap{grid-template-columns:1fr;}}
+.nf{background:#FBFAF4;color:#0B0F0D;border:2px solid #0B0F0D;border-radius:4px;padding:14px 16px 16px;
+  font-family:'Instrument Sans',system-ui,sans-serif;max-width:400px;box-shadow:14px 14px 0 rgba(11,15,13,.1);
+  transform:rotate(-1.1deg);transition:transform .5s cubic-bezier(.2,.9,.2,1);}
+.nf:hover{transform:rotate(0deg) translateY(-4px);}
+.nf h4{font-family:var(--head);font-weight:700;font-size:30px;letter-spacing:-.035em;margin:0;line-height:1;}
+.nf .srv{font-size:13px;margin:6px 0 0;}
+.nf hr{border:0;border-top:9px solid #0B0F0D;margin:8px 0;}
+.nf hr.thin{border-top-width:1px;}
+.nf hr.mid{border-top-width:4px;}
+.nf .big{display:flex;justify-content:space-between;align-items:flex-end;}
+.nf .big b{font-family:var(--head);font-weight:700;font-size:34px;line-height:1;letter-spacing:-.03em;}
+.nf .big span{font-size:13px;font-weight:600;}
+.nf .ln{display:flex;justify-content:space-between;font-size:13.5px;padding:3px 0;}
+.nf .ln.ind{padding-left:16px;}
+.nf .ln b{font-weight:600;}
+.nf .foot{font-size:10.5px;line-height:1.35;margin:8px 0 0;color:#3A443E;}
+.nf .dv{font-family:var(--mono);font-size:12px;}
+
+/* ---------- week 3D chart ---------- */
+.weekstage{perspective:900px;perspective-origin:50% 70%;padding-block:8px;}
+.week3d{position:relative;display:flex;align-items:flex-end;gap:clamp(10px,2vw,30px);height:clamp(200px,30vh,300px);width:max-content;max-width:100%;margin-inline:auto;
+  transform:rotateX(21deg) rotateY(-15deg) rotateZ(-1deg);transform-style:preserve-3d;justify-content:center;}
+.wcol{width:clamp(30px,5.4vw,66px);display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;position:relative;transform-style:preserve-3d;}
+.wbar{width:100%;border-radius:7px 7px 2px 2px;height:0;transform-style:preserve-3d;position:relative;
+  background:linear-gradient(180deg,var(--mint),#0F6B48);
+  box-shadow:0 0 0 1px rgba(255,255,255,.14) inset,0 22px 40px -18px rgba(99,229,171,.5);
+  transition:height 1.1s cubic-bezier(.16,.86,.24,1);}
+.wbar.miss{background:linear-gradient(180deg,#9AA8A0,#5A675F);box-shadow:0 0 0 1px rgba(255,255,255,.1) inset;}
+.wbar::before{content:"";position:absolute;left:0;right:0;top:0;height:26px;border-radius:6px 6px 2px 2px;
+  transform-origin:top;transform:rotateX(-90deg);background:linear-gradient(180deg,#CFFBE6,#8FEFC4);}
+.wbar.miss::before{background:linear-gradient(180deg,#DDE4DF,#B4C0B8);}
+.wbar::after{content:"";position:absolute;top:0;left:100%;width:26px;height:100%;
+  transform-origin:left;transform:rotateY(90deg);background:linear-gradient(180deg,#1C7E58,#0A4630);}
+.wbar.miss::after{background:linear-gradient(180deg,#5B685F,#333D37);}
+.wbar em{position:absolute;top:-26px;left:50%;transform:translateX(-50%) translateZ(10px);font-family:var(--mono);font-size:10.5px;font-style:normal;letter-spacing:.06em;color:var(--sub);white-space:nowrap;}
+.wcol>span{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--sub);margin-top:12px;transform:translateZ(6px);}
+.goal3d{position:absolute;left:0;right:0;bottom:80%;height:0;pointer-events:none;transform:translateZ(-16px);}
+.goal3d i{position:absolute;left:0;right:0;top:0;border-top:1px dashed var(--sub);opacity:.8;}
+.goal3d em{position:absolute;left:0;top:-23px;transform:translateZ(22px);font-family:var(--mono);font-style:normal;font-size:10.5px;letter-spacing:.1em;color:var(--sub);white-space:nowrap;}
+
+/* ---------- horizontal gallery ---------- */
+#gallery{height:320vh;}
+#gallery .pinner{flex-direction:column;justify-content:center;gap:clamp(20px,4vh,46px);}
+#gallery .gwrap{padding-top:0;}
+.gtrack{display:flex;gap:clamp(16px,2vw,26px);will-change:transform;padding-inline:max(20px,calc((100vw - 1180px)/2));}
+.gcard{width:clamp(262px,29vw,392px);flex:none;border-radius:26px;padding:26px;border:1px solid var(--line);
+  background:var(--card);backdrop-filter:blur(16px) saturate(150%);-webkit-backdrop-filter:blur(16px);
+  display:flex;flex-direction:column;gap:12px;min-height:clamp(296px,40vh,404px);box-shadow:var(--shadow);}
+.gcard .gno{font-family:var(--mono);font-size:11px;letter-spacing:.2em;color:var(--sub);}
+.gcard p{color:var(--sub);font-size:15.5px;margin:0;}
+.gicon{width:52px;height:52px;border-radius:15px;display:grid;place-items:center;margin-bottom:6px;
+  background:linear-gradient(150deg,rgba(255,255,255,.14),rgba(255,255,255,.03));border:1px solid var(--line);}
+.gspacer{flex:1;}
+.gtag{font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--mint);}
+
+/* ---------- marquee ---------- */
+.marquee{overflow:hidden;border-block:1px solid var(--line);padding-block:18px;mask-image:linear-gradient(90deg,transparent,#000 12%,#000 88%,transparent);
+  -webkit-mask-image:linear-gradient(90deg,transparent,#000 12%,#000 88%,transparent);}
+.mtrackk{display:flex;gap:34px;width:max-content;animation:slide 38s linear infinite;}
+.mtrackk span{font-family:var(--head);font-weight:600;font-size:clamp(20px,2.6vw,34px);letter-spacing:-.03em;color:var(--sub);white-space:nowrap;display:flex;align-items:center;gap:34px;}
+.mtrackk span::after{content:"";width:7px;height:7px;border-radius:50%;background:var(--mint);opacity:.75;}
+@keyframes slide{to{transform:translateX(-50%);}}
+.marquee:hover .mtrackk{animation-play-state:paused;}
+
+/* ---------- privacy ---------- */
+.vault{display:grid;place-items:center;padding-block:10px;}
+.vaultart{width:min(320px,80vw);aspect-ratio:1;border-radius:50%;position:relative;display:grid;place-items:center;
+  background:radial-gradient(circle at 50% 42%,rgba(99,229,171,.2),transparent 62%);}
+.vaultart i{position:absolute;inset:0;border-radius:50%;border:1.5px solid var(--line);}
+.vaultart i:nth-child(1){inset:0;animation:spin 26s linear infinite;border-top-color:var(--mint);}
+.vaultart i:nth-child(2){inset:12%;animation:spin 18s linear infinite reverse;border-left-color:var(--azure);}
+.vaultart i:nth-child(3){inset:26%;animation:spin 13s linear infinite;border-bottom-color:var(--rose);}
+@keyframes spin{to{transform:rotate(360deg);}}
+.vaultart b{font-family:var(--head);font-weight:700;font-size:clamp(30px,5vw,54px);letter-spacing:-.04em;z-index:1;}
+
+/* ---------- generic feature grid ---------- */
+.fgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(248px,1fr));gap:clamp(14px,2vw,22px);}
+.fcard{padding:24px;border-radius:20px;border:1px solid var(--line);background:var(--card);display:flex;flex-direction:column;gap:9px;}
+.fcard h4{font-family:var(--head);font-weight:600;font-size:18px;margin:0;letter-spacing:-.015em;}
+.fcard p{margin:0;color:var(--sub);font-size:15px;}
+
+/* ============================================================
+   THE LIVE APP
+   ============================================================ */
+#app{scroll-margin-top:80px;}
+.appshell{max-width:760px;margin-inline:auto;}
+.appframe{border-radius:30px;border:1px solid var(--line);background:rgba(var(--gl),var(--gla));
+  backdrop-filter:blur(20px) saturate(150%);-webkit-backdrop-filter:blur(20px) saturate(150%);
+  box-shadow:var(--shadow);padding:clamp(16px,2.4vw,26px);position:relative;overflow:hidden;}
+.appframe::before{content:"";position:absolute;inset:0;pointer-events:none;border-radius:30px;
+  background:linear-gradient(150deg,rgba(255,255,255,.3),rgba(255,255,255,0) 40%);mix-blend-mode:overlay;}
+.apptop{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:16px;}
+.apptop h3{font-family:var(--head);font-weight:700;font-size:23px;letter-spacing:-.025em;margin:0;}
+.who{display:flex;align-items:center;gap:9px;font-size:13.5px;color:var(--sub);margin-left:auto;}
+.av{width:28px;height:28px;border-radius:50%;flex:none;display:grid;place-items:center;font-family:var(--head);font-weight:600;font-size:12px;
+  background:linear-gradient(155deg,var(--accent-soft),var(--accent));color:var(--accent-ink);}
+.card{border-radius:20px;border:1px solid var(--line);background:rgba(var(--gl),calc(var(--gla) * .72));padding:18px;margin-bottom:14px;position:relative;}
+.card>h4{font-family:var(--head);font-weight:600;font-size:16px;margin:0 0 13px;letter-spacing:-.01em;display:flex;align-items:center;gap:8px;}
+.card>h4 em{font-family:var(--mono);font-style:normal;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--sub);margin-left:auto;font-weight:400;}
+.daynav{display:flex;align-items:center;gap:6px;}
+.daynav button{background:rgba(var(--gl),var(--gla));border:1px solid var(--line);border-radius:10px;height:34px;min-width:34px;padding:0 9px;line-height:1;transition:border-color .2s,transform .2s;}
+.daynav button:hover{border-color:var(--accent);transform:translateY(-1px);}
+#dlabel{font-family:var(--head);font-weight:600;font-size:14px;min-width:104px;text-align:center;}
+.sumrow{display:flex;gap:22px;align-items:center;flex-wrap:wrap;}
+.ringwrap{position:relative;width:146px;height:146px;flex:none;}
+.ringtxt{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;}
+.ringtxt b{font-family:var(--head);font-weight:700;font-size:31px;line-height:1;letter-spacing:-.03em;font-variant-numeric:tabular-nums;}
+.ringtxt span{font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--sub);margin-top:6px;}
+.macros{flex:1;min-width:212px;display:flex;flex-direction:column;gap:14px;}
+textarea,input[type=number],input[type=text]{font:inherit;color:var(--ink);background:rgba(var(--gl),.55);border:1px solid var(--line);border-radius:12px;padding:12px 14px;width:100%;}
+textarea{resize:vertical;min-height:76px;}
+textarea::placeholder,input::placeholder{color:var(--sub);opacity:.8;}
+.row{display:flex;gap:10px;align-items:center;margin-top:12px;flex-wrap:wrap;}
+.pbtn{background:linear-gradient(155deg,var(--accent-soft),var(--accent));color:var(--accent-ink);border:0;border-radius:12px;height:44px;padding:0 22px;font-weight:500;
+  box-shadow:0 10px 26px -12px var(--accent);transition:transform .2s cubic-bezier(.2,.9,.2,1),box-shadow .2s;}
+.pbtn:hover{transform:translateY(-2px);box-shadow:0 16px 32px -14px var(--accent);}
+.pbtn:active{transform:translateY(1px);}
+.pbtn[disabled]{opacity:.55;cursor:default;transform:none;box-shadow:none;}
+.gbtn{background:rgba(var(--gl),.5);border:1px solid var(--line);border-radius:12px;height:44px;padding:0 16px;transition:border-color .2s;}
+.gbtn:hover{border-color:var(--accent);}
+.st{font-size:13.5px;color:var(--sub);min-height:20px;}
+.st.err{color:var(--over);}
+.item{display:flex;align-items:flex-start;gap:12px;padding:13px 0;border-top:1px solid var(--line);
+  animation:pop .5s cubic-bezier(.16,.9,.24,1) both;}
+@keyframes pop{from{opacity:0;transform:translateY(-8px) scale(.985);}}
+.item:first-child{border-top:0;padding-top:0;}
+.item .nm{flex:1;min-width:0;}
+.item .nm>div:first-child{overflow-wrap:anywhere;font-weight:500;}
+.item .mc{font-family:var(--mono);font-size:11px;letter-spacing:.04em;color:var(--sub);margin-top:3px;}
+.item .kc{font-family:var(--head);font-weight:600;white-space:nowrap;font-variant-numeric:tabular-nums;}
+.item .x{background:none;border:0;color:var(--sub);font-size:19px;line-height:1;padding:0 4px;border-radius:6px;transition:color .2s;}
+.item .x:hover{color:var(--over);}
+.empty{color:var(--sub);font-size:15px;margin:0;}
+.chat{display:flex;flex-direction:column;gap:10px;max-height:340px;overflow-y:auto;padding-right:4px;}
+.msg{max-width:88%;padding:11px 14px;border-radius:16px;white-space:pre-wrap;overflow-wrap:anywhere;font-size:15px;
+  animation:pop .45s cubic-bezier(.16,.9,.24,1) both;}
+.msg.me{align-self:flex-end;background:linear-gradient(155deg,var(--accent-soft),var(--accent));color:var(--accent-ink);border-bottom-right-radius:6px;}
+.msg.ai{align-self:flex-start;background:rgba(var(--gl),.9);border:1px solid var(--line);border-bottom-left-radius:6px;}
+.msg.sys{align-self:center;font-size:12.5px;color:var(--sub);background:none;padding:2px;text-align:center;max-width:100%;}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px;}
+.chip{background:rgba(var(--gl),.5);border:1px solid var(--line);border-radius:999px;padding:8px 14px;font-size:13.5px;transition:border-color .2s,transform .2s;}
+.chip:hover{border-color:var(--accent);transform:translateY(-1px);}
+.ask{display:flex;gap:8px;margin-top:12px;}
+.ask input{flex:1;}
+.wk{display:flex;align-items:flex-end;gap:8px;height:120px;position:relative;margin-top:4px;}
+.wcol2{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;background:none;border:0;padding:0;}
+.wbar2{width:100%;border-radius:7px 7px 0 0;background:var(--line);min-height:2px;transition:height .5s cubic-bezier(.2,.9,.2,1);}
+.wcol2.sel .wbar2{background:linear-gradient(180deg,var(--accent-soft),var(--accent));}
+.wcol2 span{font-family:var(--mono);font-size:10.5px;color:var(--sub);margin-top:6px;}
+.wg{position:absolute;left:0;right:0;border-top:1px dashed var(--sub);pointer-events:none;}
+details{margin-top:12px;}
+summary{cursor:pointer;color:var(--sub);font-size:14px;}
+.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:10px;}
+.grid2 label{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--sub);display:block;margin-bottom:5px;}
+.disc{font-size:12px;color:var(--sub);text-align:center;margin:14px 0 0;}
+.notice{border:1px solid var(--line);border-radius:14px;padding:12px 14px;font-size:13.5px;color:var(--sub);background:rgba(var(--gl),.45);margin-bottom:14px;}
+
+/* ---------- footer ---------- */
+footer{background:var(--void);color:var(--ink-dark);padding-block:clamp(56px,9vh,96px) 34px;position:relative;z-index:1;}
+.bigmark{font-family:var(--head);font-weight:700;font-size:clamp(64px,19vw,260px);line-height:.8;letter-spacing:-.06em;margin:0;
+  background:linear-gradient(180deg,rgba(237,242,238,.9),rgba(237,242,238,.08));-webkit-background-clip:text;background-clip:text;color:transparent;}
+.fcols{display:flex;gap:40px;flex-wrap:wrap;justify-content:space-between;margin-top:44px;border-top:1px solid var(--hair-dark);padding-top:28px;}
+.fcols div{display:flex;flex-direction:column;gap:9px;}
+.fcols b{font-family:var(--mono);font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--sub-dark);font-weight:400;}
+.fcols a{font-size:14.5px;text-decoration:none;opacity:.85;}
+.fcols a:hover{opacity:1;color:var(--mint);}
+.fine{font-size:12px;color:var(--sub-dark);margin-top:34px;max-width:70ch;}
+
+/* ---------- spotlight cursor ---------- */
+#spot{position:fixed;width:520px;height:520px;border-radius:50%;pointer-events:none;z-index:2;opacity:0;
+  background:radial-gradient(circle,rgba(99,229,171,.1),transparent 62%);transition:opacity .5s;mix-blend-mode:screen;}
+
+/* ---------- reduced motion ---------- */
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto;}
+  *,*::before,*::after{animation-duration:.001s!important;animation-iteration-count:1!important;transition-duration:.001s!important;}
+  html.js .rv,html.js .rvL,html.js .rvS{opacity:1!important;transform:none!important;filter:none!important;}
+  .fchip,.bub{opacity:1!important;transform:none!important;}
+  #spot{display:none;}
+  .phone{transform:none;}
+  .week3d{transform:none;}
+}
 </style>
 </head>
 <body>
-<title>Hakim International School</title>
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300..900&family=Archivo:wght@400..800&family=Vazirmatn:wght@300..900&display=swap">
-<style>
-:root{
-  --ink:#141017; --ink-2:#1E1824; --ink-3:#2A2233;
-  --plum:#7A3A8C; --plum-lift:#C07FD8; --plum-deep:#4A1F57;
-  --saffron:#E3A23C; --saffron-soft:#F2CE8E;
-  --paper:#F7F4F6; --paper-2:#EFEAF0; --paper-3:#E3DCE6;
-  --on-ink:#F4EFF6; --muted:#A296AC; --muted-2:#6E6276;
-  --on-paper:#241C2A; --on-paper-mute:#6B5F73;
-  --good:#3FA46A; --warn:#D98324; --crit:#C6453F;
-  --line-dark:rgba(244,239,246,.13); --line-light:rgba(36,28,42,.12);
-  --f-display:"Fraunces","Iowan Old Style",Georgia,serif;
-  --f-ui:"Archivo","Helvetica Neue",Arial,sans-serif;
-  --f-fa:"Vazirmatn","Archivo",Tahoma,sans-serif;
-  --shell:min(1240px,100%);
-  --ease:cubic-bezier(.22,1,.36,1);
-}
-*{box-sizing:border-box}
-html{scroll-behavior:smooth}
-body{
-  margin:0;background:var(--ink);color:var(--on-ink);
-  font-family:var(--f-ui);font-size:16px;line-height:1.6;
-  -webkit-font-smoothing:antialiased;overflow-x:hidden;
-}
-body[dir="rtl"]{font-family:var(--f-fa)}
-body[dir="rtl"] .display{font-family:var(--f-fa);font-weight:800;letter-spacing:0}
-img{max-width:100%}
-h1,h2,h3,h4{margin:0;text-wrap:balance;font-weight:600}
-p{margin:0}
-a{color:inherit;text-decoration:none}
-button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
-:focus-visible{outline:2px solid var(--saffron);outline-offset:3px;border-radius:4px}
-.display{font-family:var(--f-display);font-optical-sizing:auto;font-variation-settings:"SOFT" 18,"WONK" 1;letter-spacing:-.022em;font-weight:500}
-.shell{width:var(--shell);margin-inline:auto;padding-inline:clamp(18px,4vw,44px)}
-.eyebrow{
-  font-family:var(--f-ui);font-size:11.5px;font-weight:600;letter-spacing:.18em;
-  text-transform:uppercase;color:var(--saffron);display:flex;align-items:center;gap:10px;
-}
-body[dir="rtl"] .eyebrow{font-family:var(--f-fa);letter-spacing:0;font-size:13px}
-.eyebrow::before{content:"";width:26px;height:1px;background:currentColor;opacity:.55;flex:none}
-.tnum{font-variant-numeric:tabular-nums}
+<script>document.documentElement.classList.add("js");</script>
 
-/* ---------- fixed 3D ground ---------- */
-#bg{position:fixed;inset:0;z-index:0;background:
-  radial-gradient(120% 90% at 50% 8%,#2B1A33 0%,#1A1220 45%,var(--ink) 100%);}
-#vault{display:block;width:100%;height:100%}
-#veil{position:absolute;inset:0;pointer-events:none;
-  background:
-   radial-gradient(64% 78% at 20% 44%,rgba(18,13,22,.86) 0%,rgba(18,13,22,.52) 44%,rgba(18,13,22,0) 72%),
-   linear-gradient(180deg,rgba(20,16,23,.18) 0%,rgba(20,16,23,0) 34%,rgba(20,16,23,.74) 78%,var(--ink) 100%);}
-body[dir="rtl"] #veil{background:
-   radial-gradient(64% 78% at 80% 44%,rgba(18,13,22,.86) 0%,rgba(18,13,22,.52) 44%,rgba(18,13,22,0) 72%),
-   linear-gradient(180deg,rgba(20,16,23,.18) 0%,rgba(20,16,23,0) 34%,rgba(20,16,23,.74) 78%,var(--ink) 100%);}
-main{position:relative;z-index:1}
+<div id="stage" aria-hidden="true">
+  <canvas id="c3d"></canvas>
+  <div id="vig"></div>
+</div>
+<div id="spot" aria-hidden="true"></div>
+<nav id="rail" aria-hidden="true"></nav>
 
-/* ---------- nav ---------- */
-.nav{
-  position:sticky;top:env(safe-area-inset-top,0px);z-index:60;
-  backdrop-filter:blur(18px) saturate(1.5);-webkit-backdrop-filter:blur(18px) saturate(1.5);
-  background:rgba(20,16,23,.58);border-bottom:1px solid var(--line-dark);
-  transition:background .5s var(--ease),border-color .5s var(--ease),color .5s var(--ease);
-}
-.nav.on-paper{background:rgba(247,244,246,.78);border-bottom-color:var(--line-light);color:var(--on-paper)}
-.nav-in{display:flex;align-items:center;gap:clamp(12px,2.4vw,30px);height:62px}
-.brand{display:flex;align-items:center;gap:11px;flex:none;min-width:0}
-.brand .mark{width:32px;height:32px;flex:none}
-.brand .wm{display:flex;flex-direction:column;line-height:1.05;min-width:0}
-.brand .wm b{font-family:var(--f-display);font-weight:600;font-size:15.5px;letter-spacing:-.01em;white-space:nowrap}
-body[dir="rtl"] .brand .wm b{font-family:var(--f-fa);font-weight:700}
-.brand .wm span{font-size:9.5px;letter-spacing:.17em;text-transform:uppercase;color:var(--muted);white-space:nowrap}
-.nav.on-paper .brand .wm span{color:var(--on-paper-mute)}
-body[dir="rtl"] .brand .wm span{letter-spacing:0;font-size:10.5px;text-transform:none}
-.navlinks{display:flex;gap:clamp(10px,1.7vw,24px);margin-inline-start:auto;align-items:center}
-.navlinks a{font-size:13.5px;color:var(--muted);transition:color .25s;white-space:nowrap}
-.navlinks a:hover{color:var(--on-ink)}
-.nav.on-paper .navlinks a{color:var(--on-paper-mute)}
-.nav.on-paper .navlinks a:hover{color:var(--on-paper)}
-.nav-tools{display:flex;align-items:center;gap:8px;flex:none;margin-inline-start:auto}
-.navlinks+.nav-tools{margin-inline-start:0}
-.chip{
-  display:inline-flex;align-items:center;gap:7px;height:32px;padding:0 12px;border-radius:999px;
-  border:1px solid var(--line-dark);font-size:12.5px;color:var(--muted);
-  transition:border-color .25s,color .25s,background .25s;white-space:nowrap;
-}
-.chip:hover{color:var(--on-ink);border-color:rgba(244,239,246,.32)}
-.nav.on-paper .chip{border-color:var(--line-light);color:var(--on-paper-mute)}
-.nav.on-paper .chip:hover{color:var(--on-paper);border-color:rgba(36,28,42,.34)}
-.chip kbd{font:inherit;font-size:10.5px;opacity:.68;border:1px solid currentColor;border-radius:4px;padding:0 4px;line-height:15px}
-.chip.concept{border-color:rgba(227,162,60,.42);color:var(--saffron-soft);background:rgba(227,162,60,.08)}
-.nav.on-paper .chip.concept{color:#8A5B12;border-color:rgba(227,162,60,.5);background:rgba(227,162,60,.14)}
-.lang{font-weight:600;letter-spacing:.02em}
-@media(max-width:940px){.navlinks{display:none}}
-@media(max-width:620px){
-  .nav-in{gap:8px}
-  .brand{flex:1 1 auto;min-width:0}
-  .brand .mark{width:28px;height:28px}
-  .brand .wm b{font-size:12.8px;line-height:1.14;white-space:normal}
-  .brand .wm span{display:none}
-  .nav-tools{flex:0 0 auto;gap:6px}
-  .chip{height:30px;padding:0 10px;font-size:12px}
-  .chip kbd{display:none}
-  #openPal span{display:none}
-  #openPal{padding:0 9px}
-}
-
-/* ---------- hero ---------- */
-#hero{min-height:min(88vh,760px);display:flex;align-items:flex-end;padding-block:clamp(56px,11vh,120px) clamp(40px,7vh,74px)}
-.hero-grid{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,.85fr);gap:clamp(24px,5vw,64px);align-items:end;width:100%}
-h1.hero-h{font-size:clamp(42px,7.4vw,98px);line-height:.96;font-weight:400;margin-block:20px 22px}
-h1.hero-h em{font-style:normal;font-variation-settings:"SOFT" 40,"WONK" 1;font-weight:600;
-  background:linear-gradient(96deg,var(--saffron-soft),var(--saffron) 42%,var(--plum-lift));
-  -webkit-background-clip:text;background-clip:text;color:transparent;}
-.hero-sub{font-size:clamp(15px,1.7vw,19px);color:var(--muted);max-width:46ch;line-height:1.62}
-.hero-cta{display:flex;flex-wrap:wrap;gap:12px;margin-top:30px}
-.btn{display:inline-flex;align-items:center;gap:9px;height:46px;padding:0 22px;border-radius:999px;
-  font-size:14.5px;font-weight:600;transition:transform .3s var(--ease),box-shadow .3s var(--ease),background .3s}
-.btn:hover{transform:translateY(-2px)}
-.btn-primary{background:linear-gradient(180deg,#F0F0F2,#D9D2DE);color:#1A1220;box-shadow:0 10px 30px -12px rgba(192,127,216,.7)}
-.btn-primary:hover{box-shadow:0 18px 40px -14px rgba(192,127,216,.85)}
-.btn-ghost{border:1px solid var(--line-dark);color:var(--on-ink)}
-.btn-ghost:hover{border-color:rgba(244,239,246,.36);background:rgba(244,239,246,.05)}
-.hero-side{display:flex;flex-direction:column;gap:14px;padding-bottom:6px}
-.hero-card{
-  border:1px solid var(--line-dark);border-radius:16px;padding:16px 18px;
-  background:linear-gradient(180deg,rgba(32,24,38,.86),rgba(24,17,29,.78));
-}
-.hero-card .k{font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:var(--muted)}
-body[dir="rtl"] .hero-card .k{letter-spacing:0;text-transform:none;font-size:12.5px}
-.hero-card .v{font-family:var(--f-display);font-size:26px;font-weight:600;margin-top:3px;display:flex;align-items:baseline;gap:8px}
-.live-dot{width:7px;height:7px;border-radius:50%;background:var(--good);flex:none;
-  box-shadow:0 0 0 0 rgba(63,164,106,.65);animation:pulse 2.4s infinite}
-@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(63,164,106,.55)}70%{box-shadow:0 0 0 9px rgba(63,164,106,0)}100%{box-shadow:0 0 0 0 rgba(63,164,106,0)}}
-.scroll-cue{display:flex;align-items:center;gap:10px;font-size:11px;letter-spacing:.17em;text-transform:uppercase;color:var(--muted);margin-top:34px}
-body[dir="rtl"] .scroll-cue{letter-spacing:0;text-transform:none;font-size:12.5px}
-.scroll-cue i{display:block;width:1px;height:26px;background:linear-gradient(var(--saffron),transparent);animation:drop 2.2s var(--ease) infinite}
-@keyframes drop{0%{transform:scaleY(.2);transform-origin:top;opacity:0}40%{transform:scaleY(1);opacity:1}100%{transform:scaleY(.2);transform-origin:bottom;opacity:0}}
-@media(max-width:820px){.hero-grid{grid-template-columns:1fr;gap:34px}.hero-side{flex-direction:row;flex-wrap:wrap}.hero-card{flex:1 1 180px}}
-</style>
-<style>
-/* ---------- generic section ---------- */
-.sec{padding-block:clamp(60px,8.5vh,104px);position:relative}
-.sec-head{max-width:64ch;margin-bottom:clamp(34px,5vh,58px)}
-.sec-head h2{font-size:clamp(28px,4.4vw,54px);line-height:1.06;font-weight:400;margin-block:18px 16px}
-.sec-head p{color:var(--muted);font-size:clamp(14.5px,1.5vw,17.5px);max-width:52ch}
-.on-light .sec-head p{color:var(--on-paper-mute)}
-
-/* reveal: visible at rest; JS opts in to motion */
-[data-anim="on"] .rv{opacity:0;transform:translateY(22px)}
-[data-anim="on"] .rv.in{opacity:1;transform:none;transition:opacity .85s var(--ease),transform .85s var(--ease)}
-[data-anim="on"] .rv.in.d1{transition-delay:.08s}
-[data-anim="on"] .rv.in.d2{transition-delay:.16s}
-[data-anim="on"] .rv.in.d3{transition-delay:.24s}
-
-/* ---------- live pulse band ---------- */
-#pulse{border-block:1px solid var(--line-dark);padding-block:clamp(26px,4vh,40px);
-  background:linear-gradient(180deg,rgba(20,16,23,.55),rgba(20,16,23,.8))}
-.pulse-row{display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(14px,3vw,38px)}
-.pulse-row .cell{display:flex;flex-direction:column;gap:5px;min-width:0}
-.pulse-row .n{font-family:var(--f-display);font-size:clamp(28px,4.2vw,50px);font-weight:600;line-height:1;
-  font-variant-numeric:tabular-nums;letter-spacing:-.03em}
-.pulse-row .l{font-size:12.5px;color:var(--muted);line-height:1.35}
-@media(max-width:700px){.pulse-row{grid-template-columns:1fr 1fr;gap:26px 18px}}
-
-/* ---------- programs: 3D tilt cards ---------- */
-.prog-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(12px,1.6vw,20px);perspective:1400px}
-@media(max-width:1000px){.prog-grid{grid-template-columns:repeat(2,1fr)}}
-@media(max-width:560px){.prog-grid{grid-template-columns:1fr}}
-.prog{
-  position:relative;border-radius:18px;padding:clamp(20px,2.2vw,28px);min-height:290px;
-  display:flex;flex-direction:column;justify-content:space-between;gap:26px;overflow:hidden;
-  border:1px solid var(--line-dark);background:linear-gradient(170deg,rgba(244,239,246,.075),rgba(244,239,246,.018));
-  transform-style:preserve-3d;transition:border-color .4s,box-shadow .5s var(--ease);
-}
-.prog:hover{border-color:rgba(192,127,216,.45);box-shadow:0 26px 60px -30px rgba(122,58,140,.9)}
-.prog .glow{position:absolute;width:280px;height:280px;border-radius:50%;pointer-events:none;opacity:0;
-  background:radial-gradient(circle,rgba(192,127,216,.4),transparent 66%);transition:opacity .45s;filter:blur(8px)}
-.prog:hover .glow{opacity:1}
-.prog .yrs{font-family:var(--f-display);font-size:13px;color:var(--saffron);letter-spacing:.02em}
-.prog h3{font-family:var(--f-display);font-size:clamp(20px,2vw,25px);font-weight:600;line-height:1.14;margin-top:10px}
-body[dir="rtl"] .prog h3{font-family:var(--f-fa);font-weight:700}
-.prog p{font-size:13.6px;color:var(--muted);margin-top:9px;line-height:1.55}
-.prog .tags{display:flex;flex-wrap:wrap;gap:6px}
-.prog .tags span{font-size:11px;padding:4px 9px;border-radius:999px;border:1px solid var(--line-dark);color:var(--muted)}
-.prog .idx{position:absolute;inset-inline-end:18px;top:14px;font-family:var(--f-display);font-size:52px;
-  font-weight:600;color:rgba(244,239,246,.055);line-height:1;pointer-events:none}
-
-/* ---------- academics strip ---------- */
-.acc{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(14px,2vw,26px)}
-@media(max-width:860px){.acc{grid-template-columns:1fr}}
-.acc-item{border-top:1px solid var(--line-dark);padding-top:20px;display:flex;flex-direction:column;gap:10px}
-.acc-item .ico{width:40px;height:40px;color:var(--saffron)}
-.acc-item h4{font-family:var(--f-display);font-size:19px;font-weight:600}
-body[dir="rtl"] .acc-item h4{font-family:var(--f-fa);font-weight:700}
-.acc-item p{font-size:14px;color:var(--muted);line-height:1.6}
-
-/* ---------- portal (light world) ---------- */
-#portal{background:var(--paper);color:var(--on-paper);
-  border-radius:clamp(26px,3.4vw,44px) clamp(26px,3.4vw,44px) 0 0;
-  box-shadow:0 -34px 90px -40px rgba(0,0,0,.85)}
-#portal .eyebrow{color:#8A5B12}
-.demo-pill{display:inline-flex;align-items:center;gap:6px;font-size:11.5px;font-weight:600;
-  padding:4px 11px;border-radius:999px;background:rgba(227,162,60,.16);color:#8A5B12;border:1px solid rgba(227,162,60,.4)}
-.before-after{display:grid;grid-template-columns:minmax(0,300px) minmax(0,1fr);gap:clamp(16px,2.4vw,30px);align-items:start;margin-bottom:clamp(30px,4vh,48px)}
-@media(max-width:900px){.before-after{grid-template-columns:1fr}}
-.panel-label{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--on-paper-mute);margin-bottom:10px;display:block}
-body[dir="rtl"] .panel-label{letter-spacing:0;text-transform:none;font-size:12.5px}
-.old-lms{border:1px solid var(--paper-3);border-radius:14px;background:#fff;padding:14px;opacity:.85}
-.old-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:7px}
-.old-grid i{display:block;aspect-ratio:1;border-radius:6px;background:var(--paper-2);border:1px solid var(--paper-3)}
-.old-note{font-size:12.5px;color:var(--on-paper-mute);margin-top:12px;line-height:1.55}
-
-.app{container-type:inline-size;border:1px solid var(--paper-3);border-radius:18px;overflow:hidden;background:#fff;
-  box-shadow:0 30px 70px -42px rgba(36,28,42,.55)}
-.app-bar{display:flex;align-items:center;gap:10px;padding:11px 15px;border-bottom:1px solid var(--paper-2);background:var(--paper)}
-.app-bar .dots{display:flex;gap:5px}.app-bar .dots i{width:9px;height:9px;border-radius:50%;background:var(--paper-3)}
-.app-bar .who{font-size:12.5px;color:var(--on-paper-mute);margin-inline-start:auto;display:flex;align-items:center;gap:8px}
-.app-body{display:grid;grid-template-columns:168px minmax(0,1fr);min-height:400px}
-@container (max-width:470px){.app-body{grid-template-columns:1fr}.app-rail{display:none!important}}
-.app-rail{border-inline-end:1px solid var(--paper-2);padding:14px 10px;display:flex;flex-direction:column;gap:2px;background:var(--paper)}
-.app-rail button{display:flex;align-items:center;gap:10px;padding:8px 11px;border-radius:9px;font-size:13.2px;
-  color:var(--on-paper-mute);text-align:start;transition:background .2s,color .2s;width:100%}
-.app-rail button:hover{background:var(--paper-2);color:var(--on-paper)}
-.app-rail button[aria-selected="true"]{background:var(--plum);color:#fff;font-weight:600}
-.app-rail .badge{margin-inline-start:auto;font-size:10.5px;font-weight:700;background:var(--crit);color:#fff;
-  border-radius:999px;min-width:18px;height:18px;display:grid;place-items:center;padding:0 5px}
-.app-rail button[aria-selected="true"] .badge{background:rgba(255,255,255,.28)}
-.app-main{padding:clamp(16px,2.2vw,24px);display:flex;flex-direction:column;gap:18px;min-width:0}
-.app-h{display:flex;align-items:flex-end;justify-content:space-between;gap:14px;flex-wrap:wrap}
-.app-h h3{font-family:var(--f-display);font-size:23px;font-weight:600}
-body[dir="rtl"] .app-h h3{font-family:var(--f-fa);font-weight:700}
-.app-h .sub{font-size:13px;color:var(--on-paper-mute)}
-.tiles{display:grid;grid-template-columns:repeat(4,1fr);gap:11px}
-@container (max-width:700px){.tiles{grid-template-columns:repeat(2,1fr)}}
-@container (max-width:360px){.tiles{grid-template-columns:1fr}}
-.tile{border:1px solid var(--paper-2);border-radius:12px;padding:13px 14px;display:flex;flex-direction:column;gap:5px;background:#fff}
-.tile .t-l{font-size:11.5px;color:var(--on-paper-mute);display:flex;align-items:center;gap:6px}
-.tile .t-v{font-family:var(--f-display);font-size:26px;font-weight:600;font-variant-numeric:tabular-nums;line-height:1.08}
-.tile .t-d{font-size:11.5px;font-weight:600;display:flex;align-items:center;gap:4px}
-.up{color:var(--good)}.down{color:var(--crit)}.flat{color:var(--on-paper-mute)}
-.tile.accent{background:linear-gradient(165deg,var(--plum-deep),var(--plum));border-color:transparent;color:#fff}
-.tile.accent .t-l{color:rgba(255,255,255,.76)}
-.split{display:grid;grid-template-columns:1.25fr .75fr;gap:14px;align-items:start}
-@container (max-width:700px){.split{grid-template-columns:1fr}}
-.card{border:1px solid var(--paper-2);border-radius:13px;padding:15px;background:#fff;min-width:0}
-.card h4{font-size:13px;font-weight:700;letter-spacing:.01em;display:flex;align-items:center;gap:8px;margin-bottom:12px}
-.card h4 .r{margin-inline-start:auto;font-size:11.5px;font-weight:500;color:var(--on-paper-mute)}
-#chart{width:100%;height:170px;display:block;overflow:visible}
-.feed{display:flex;flex-direction:column;gap:0;max-height:212px;overflow-y:auto}
-.feed li{display:flex;gap:10px;padding:9px 0;border-bottom:1px solid var(--paper-2);font-size:12.8px;align-items:flex-start;animation:slideIn .5s var(--ease)}
-.feed li:last-child{border-bottom:0}
-@keyframes slideIn{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:none}}
-.feed .dot{width:7px;height:7px;border-radius:50%;margin-top:6px;flex:none}
-.feed .tm{margin-inline-start:auto;color:var(--on-paper-mute);font-size:11px;font-variant-numeric:tabular-nums;flex:none}
-.feed .tx{min-width:0;line-height:1.45}
-.sched{display:flex;flex-direction:column;gap:7px}
-.slot{display:flex;align-items:center;gap:11px;padding:9px 11px;border-radius:10px;border:1px solid var(--paper-2);font-size:13px}
-.slot .tm{font-variant-numeric:tabular-nums;color:var(--on-paper-mute);font-size:12px;flex:none}
-.slot .nm{font-weight:600;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.slot .st{margin-inline-start:auto;font-size:11px;font-weight:700;padding:3px 9px;border-radius:999px;flex:none}
-.slot.now{border-color:var(--good);background:rgba(63,164,106,.07)}
-.slot.now .st{background:var(--good);color:#fff}
-.slot.done{opacity:.52}.slot.done .st{background:var(--paper-2);color:var(--on-paper-mute)}
-.slot.next .st{background:rgba(122,58,140,.12);color:var(--plum)}
-.ul{list-style:none;margin:0;padding:0}
-@supports not (container-type:inline-size){
-  .tiles{grid-template-columns:repeat(2,1fr)}.split{grid-template-columns:1fr}
-  @media(max-width:760px){.app-body{grid-template-columns:1fr}.app-rail{display:none!important}}
-}
-</style>
-<style>
-/* ---------- admissions (real sequence -> numbering earns its place) ---------- */
-#admissions{background:var(--paper-2);color:var(--on-paper)}
-#admissions .eyebrow{color:#8A5B12}
-.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(12px,1.8vw,22px);counter-reset:s}
-@media(max-width:920px){.steps{grid-template-columns:1fr 1fr}}
-@media(max-width:540px){.steps{grid-template-columns:1fr}}
-.step{position:relative;padding-top:26px;border-top:2px solid var(--paper-3);display:flex;flex-direction:column;gap:8px}
-.step::before{counter-increment:s;content:counter(s,decimal-leading-zero);position:absolute;top:-2px;inset-inline-start:0;
-  transform:translateY(-100%);padding-bottom:9px;font-family:var(--f-display);font-size:12.5px;font-weight:700;
-  color:var(--plum);letter-spacing:.06em}
-body[dir="rtl"] .step::before{content:counter(s,persian)}
-.step.active{border-top-color:var(--plum)}
-.step h4{font-family:var(--f-display);font-size:17.5px;font-weight:600}
-body[dir="rtl"] .step h4{font-family:var(--f-fa);font-weight:700}
-.step p{font-size:13.6px;color:var(--on-paper-mute);line-height:1.58}
-.step .when{font-size:12px;font-weight:600;color:var(--plum)}
-.cta-band{margin-top:clamp(40px,6vh,64px);border-radius:20px;padding:clamp(26px,4vw,44px);
-  background:linear-gradient(140deg,var(--plum-deep),var(--plum) 58%,#8E4AA0);color:#fff;
-  display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap;
-  box-shadow:0 30px 70px -40px rgba(122,58,140,.95)}
-.cta-band h3{font-family:var(--f-display);font-size:clamp(22px,3vw,34px);font-weight:600;line-height:1.14;max-width:22ch}
-body[dir="rtl"] .cta-band h3{font-family:var(--f-fa);font-weight:700}
-.cta-band p{color:rgba(255,255,255,.82);font-size:14.5px;margin-top:8px;max-width:44ch}
-.btn-light{background:#fff;color:var(--plum-deep)}
-
-/* ---------- footer ---------- */
-footer{position:relative;z-index:1;background:var(--ink);color:var(--muted);padding-block:clamp(44px,6vh,70px) 30px;border-top:1px solid var(--line-dark)}
-.f-grid{display:grid;grid-template-columns:1.5fr repeat(3,1fr);gap:clamp(20px,3vw,40px)}
-@media(max-width:820px){.f-grid{grid-template-columns:1fr 1fr}}
-footer h5{font-size:11px;letter-spacing:.17em;text-transform:uppercase;color:var(--on-ink);margin-bottom:13px}
-body[dir="rtl"] footer h5{letter-spacing:0;text-transform:none;font-size:13px}
-footer ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px;font-size:13.5px}
-footer a:hover{color:var(--on-ink)}
-.f-note{margin-top:clamp(30px,5vh,50px);padding-top:20px;border-top:1px solid var(--line-dark);
-  font-size:12px;line-height:1.65;color:var(--muted-2);display:flex;gap:16px;justify-content:space-between;flex-wrap:wrap}
-.f-note p{max-width:74ch}
-
-/* ---------- command palette ---------- */
-#pal{position:fixed;inset:0;z-index:100;display:grid;place-items:start center;padding:12vh 16px 16px;
-  background:rgba(12,9,15,.62);backdrop-filter:blur(7px);-webkit-backdrop-filter:blur(7px)}
-#pal[hidden]{display:none!important}
-.pal-box{width:min(620px,100%);background:var(--ink-2);border:1px solid rgba(244,239,246,.16);border-radius:16px;
-  overflow:hidden;box-shadow:0 40px 100px -30px #000;animation:palIn .3s var(--ease)}
-@keyframes palIn{from{opacity:0;transform:translateY(-14px) scale(.98)}to{opacity:1;transform:none}}
-.pal-in{display:flex;align-items:center;gap:11px;padding:15px 18px;border-bottom:1px solid var(--line-dark)}
-.pal-in input{flex:1;background:none;border:0;outline:0;color:var(--on-ink);font:inherit;font-size:16px;min-width:0}
-.pal-in input::placeholder{color:var(--muted-2)}
-.pal-res{max-height:min(46vh,380px);overflow-y:auto;padding:7px}
-.pal-res li{display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:10px;cursor:pointer;font-size:14px}
-.pal-res li[aria-selected="true"]{background:var(--plum);color:#fff}
-.pal-res li .cat{margin-inline-start:auto;font-size:11px;color:var(--muted);flex:none}
-.pal-res li[aria-selected="true"] .cat{color:rgba(255,255,255,.75)}
-.pal-res li .ic{width:16px;height:16px;flex:none;opacity:.8}
-.pal-res .none{padding:26px 14px;text-align:center;color:var(--muted);font-size:13.5px;display:block}
-.pal-foot{display:flex;gap:16px;padding:10px 18px;border-top:1px solid var(--line-dark);font-size:11.5px;color:var(--muted-2)}
-.pal-foot span{display:flex;align-items:center;gap:5px}
-.pal-foot kbd{border:1px solid var(--line-dark);border-radius:4px;padding:1px 5px;font:inherit;font-size:10.5px}
-
-/* ---------- rtl + motion ---------- */
-body[dir="rtl"] .display{letter-spacing:0}
-body[dir="rtl"] h1.hero-h{line-height:1.22;font-weight:800}
-body[dir="rtl"] .prog .idx{font-family:var(--f-ui)}
-body[dir="rtl"] .pulse-row .n{font-family:var(--f-fa);font-weight:800}
-body[dir="rtl"] .tile .t-v,body[dir="rtl"] .hero-card .v{font-family:var(--f-fa);font-weight:700}
-@media(prefers-reduced-motion:reduce){
-  html{scroll-behavior:auto}
-  *,*::before,*::after{animation-duration:.001s!important;animation-iteration-count:1!important;transition-duration:.001s!important}
-  [data-anim="on"] .rv{opacity:1!important;transform:none!important}
-}
-</style>
-
-<!-- ============ 3D GROUND ============ -->
-<div id="bg" aria-hidden="true"><canvas id="vault"></canvas><div id="veil"></div></div>
-
-<!-- ============ NAV ============ -->
-<header class="nav" id="nav">
- <div class="shell nav-in">
+<header id="nav">
   <a class="brand" href="#top">
-   <svg class="mark" viewBox="0 0 64 64" aria-hidden="true">
-    <defs><linearGradient id="mg" x1="0" y1="0" x2="1" y2="1">
-     <stop offset="0" stop-color="#C07FD8"/><stop offset="55%" stop-color="#7A3A8C"/><stop offset="100%" stop-color="#E3A23C"/>
-    </linearGradient></defs>
-    <circle cx="32" cy="32" r="29.5" fill="none" stroke="url(#mg)" stroke-width="1.6" opacity=".8"/>
-    <g fill="none" stroke="url(#mg)" stroke-width="1.7" stroke-linejoin="round">
-     <path d="M32 9 L45.3 16.5 L45.3 31.5 L32 39 L18.7 31.5 L18.7 16.5 Z"/>
-     <path d="M32 25 L45.3 32.5 L45.3 47.5 L32 55 L18.7 47.5 L18.7 32.5 Z"/>
-     <path d="M32 17 L38.9 21 L38.9 29 L32 33 L25.1 29 L25.1 21 Z" opacity=".55"/>
-    </g>
-    <circle cx="32" cy="32" r="3" fill="#E3A23C"/>
-   </svg>
-   <span class="wm"><b data-i18n="brand">Hakim International School</b><span data-i18n="brandSub">Tehran · Est. 1998</span></span>
+    <svg class="mark" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <circle cx="12" cy="12" r="9.2" stroke="currentColor" stroke-width="2.1" opacity=".28"/>
+      <path d="M12 2.8a9.2 9.2 0 0 1 8.2 5" stroke="#63E5AB" stroke-width="2.6" stroke-linecap="round"/>
+      <path d="M20.2 7.8a9.2 9.2 0 0 1-3.4 12" stroke="#4273F8" stroke-width="2.6" stroke-linecap="round"/>
+      <path d="M16.8 19.8a9.2 9.2 0 0 1-12.6-4" stroke="#E3A017" stroke-width="2.6" stroke-linecap="round"/>
+    </svg>
+    Macro
   </a>
-  <nav class="navlinks" aria-label="Main">
-   <a href="#programs" data-i18n="navPrograms">Programs</a>
-   <a href="#academics" data-i18n="navAcademics">Academics</a>
-   <a href="#portal" data-i18n="navPortal">The Portal</a>
-   <a href="#admissions" data-i18n="navAdmissions">Admissions</a>
-  </nav>
-  <div class="nav-tools">
-   <span class="chip concept" data-i18n="conceptChip">Concept</span>
-   <button class="chip" id="openPal" aria-label="Search">
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
-    <span data-i18n="search">Search</span><kbd>⌘K</kbd>
-   </button>
-   <button class="chip lang" id="langBtn" aria-label="Change language">فارسی</button>
+  <div class="navlinks">
+    <a href="#say" class="hideS">Logging</a>
+    <a href="#coach" class="hideS">Coach</a>
+    <a href="#gallery" class="hideS">Everything else</a>
+    <a class="navcta" href="#app">Open the app</a>
   </div>
- </div>
 </header>
-<main id="top">
 
-<!-- ============ HERO ============ -->
-<section id="hero" class="sec" style="padding-block:clamp(40px,8vh,96px) clamp(34px,6vh,70px)">
- <div class="shell hero-grid">
-  <div>
-   <span class="eyebrow" data-i18n="heroEyebrow">Tehran · International Curriculum</span>
-   <h1 class="hero-h display">
-    <span data-i18n="heroL1">A school built on</span><br>
-    <em data-i18n="heroL2">the mind of the sage</em>
-   </h1>
-   <p class="hero-sub" data-i18n="heroSub">Hakim — حکیم — is the Persian word for the scholar who refuses a single discipline. We teach the same way: mathematics beside metalwork, Farsi beside Cambridge English, and a vault of geometry overhead to remind everyone where this tradition began.</p>
-   <div class="hero-cta">
-    <a class="btn btn-primary" href="#admissions"><span data-i18n="ctaVisit">Book a campus visit</span>
-     <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M5 12h13m-5-6 6 6-6 6"/></svg></a>
-    <a class="btn btn-ghost" href="#portal" data-i18n="ctaPortal">See the student portal</a>
-   </div>
-   <div class="scroll-cue"><i></i><span data-i18n="scrollCue">Scroll to enter the vault</span></div>
-  </div>
-  <aside class="hero-side">
-   <div class="hero-card">
-    <div class="k" data-i18n="cardTimeK">Campus time · Tehran</div>
-    <div class="v"><span class="tnum" id="clock">—</span></div>
-   </div>
-   <div class="hero-card">
-    <div class="k" data-i18n="cardNowK">Right now on campus</div>
-    <div class="v" style="font-size:17px"><span class="live-dot" id="nowDot"></span><span id="nowText" data-i18n="loading">Loading…</span></div>
-   </div>
-  </aside>
- </div>
-</section>
+<main id="page">
+<span id="top"></span>
 
-<!-- ============ LIVE PULSE ============ -->
-<section id="pulse">
- <div class="shell pulse-row">
-  <div class="cell rv"><span class="n tnum" data-count="1240">1,240</span><span class="l" data-i18n="statStudents">Students, Grades 1–12</span></div>
-  <div class="cell rv d1"><span class="n tnum" data-count="118">118</span><span class="l" data-i18n="statFaculty">Teaching faculty</span></div>
-  <div class="cell rv d2"><span class="n tnum" data-count="11">11</span><span class="l" data-i18n="statRatio">Students per teacher</span></div>
-  <div class="cell rv d3"><span class="n tnum" data-count="26">26</span><span class="l" data-i18n="statCountries">Nationalities on roll</span></div>
- </div>
-</section>
-
-<!-- ============ PROGRAMS ============ -->
-<section id="programs" class="sec">
- <div class="shell">
-  <div class="sec-head rv">
-   <span class="eyebrow" data-i18n="progEyebrow">Programs</span>
-   <h2 class="display" data-i18n="progH">Twelve years, four distinct worlds</h2>
-   <p data-i18n="progP">Each stage is designed around what that age actually needs — not a thinner version of the stage above it.</p>
-  </div>
-  <div class="prog-grid" id="progGrid">
-   <article class="prog rv"><div class="glow"></div><span class="idx">01</span>
-    <div><span class="yrs" data-i18n="p1y">Grades 1–5 · Ages 6–11</span>
-     <h3 data-i18n="p1h">Primary</h3><p data-i18n="p1p">Reading, number sense and curiosity, taught bilingually from day one. Afternoons are workshop time — clay, circuits, choir.</p></div>
-    <div class="tags"><span data-i18n="p1t1">Bilingual literacy</span><span data-i18n="p1t2">Workshop afternoons</span></div></article>
-
-   <article class="prog rv d1"><div class="glow"></div><span class="idx">02</span>
-    <div><span class="yrs" data-i18n="p2y">Grades 6–8 · Ages 11–14</span>
-     <h3 data-i18n="p2h">Middle</h3><p data-i18n="p2p">The years students decide whether they like thinking. Project terms, first laboratory work, and a tutor who stays with them all three years.</p></div>
-    <div class="tags"><span data-i18n="p2t1">Project terms</span><span data-i18n="p2t2">Named tutor</span></div></article>
-
-   <article class="prog rv d2"><div class="glow"></div><span class="idx">03</span>
-    <div><span class="yrs" data-i18n="p3y">Grades 9–12 · Ages 14–18</span>
-     <h3 data-i18n="p3h">Senior</h3><p data-i18n="p3p">Konkur preparation running alongside Cambridge International AS &amp; A Levels, so a student can keep both doors open until they are ready to choose.</p></div>
-    <div class="tags"><span data-i18n="p3t1">AS &amp; A Level</span><span data-i18n="p3t2">Konkur track</span></div></article>
-
-   <article class="prog rv d3"><div class="glow"></div><span class="idx">04</span>
-    <div><span class="yrs" data-i18n="p4y">Grades 9–12 · By selection</span>
-     <h3 data-i18n="p4h">Olympiad &amp; Research</h3><p data-i18n="p4p">A parallel track for students who have outgrown the syllabus: competition mathematics, physics and informatics, plus a supervised research year.</p></div>
-    <div class="tags"><span data-i18n="p4t1">Informatics</span><span data-i18n="p4t2">Research year</span></div></article>
-  </div>
- </div>
-</section>
-
-<!-- ============ ACADEMICS ============ -->
-<section id="academics" class="sec">
- <div class="shell">
-  <div class="sec-head rv">
-   <span class="eyebrow" data-i18n="acEyebrow">What we build</span>
-   <h2 class="display" data-i18n="acH">Everything a hakim was supposed to know</h2>
-   <p data-i18n="acP">The classical Persian polymath moved freely between geometry, medicine, poetry and astronomy. Six departments keep that range alive here.</p>
-  </div>
-  <div class="acc">
-   <div class="acc-item rv"><svg class="ico" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="24" cy="24" r="16"/><path d="M24 8v32M8 24h32M12.7 12.7l22.6 22.6M35.3 12.7 12.7 35.3"/></svg>
-    <h4 data-i18n="a1h">Geometry &amp; Mathematics</h4><p data-i18n="a1p">From girih construction with compass and straightedge in Grade 4 to multivariable calculus in Grade 12.</p></div>
-   <div class="acc-item rv d1"><svg class="ico" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M19 6v14L9 38a4 4 0 0 0 3.5 6h23A4 4 0 0 0 39 38L29 20V6"/><path d="M16 6h16M14.5 29h19"/></svg>
-    <h4 data-i18n="a2h">Laboratory Sciences</h4><p data-i18n="a2p">Four wet labs and an electronics bench. Every senior designs, runs and defends one original experiment.</p></div>
-   <div class="acc-item rv d2"><svg class="ico" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 10h14a6 6 0 0 1 6 6v24a5 5 0 0 0-5-5H6zM42 10H28a6 6 0 0 0-6 6v24a5 5 0 0 1 5-5h15z"/></svg>
-    <h4 data-i18n="a3h">Languages &amp; Literature</h4><p data-i18n="a3p">Farsi and English carried at full weight to Grade 12, with Arabic from Grade 6 and French or German by election.</p></div>
-   <div class="acc-item rv"><svg class="ico" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M24 4 6 14v20l18 10 18-10V14z"/><path d="m6 14 18 10 18-10M24 24v20"/></svg>
-    <h4 data-i18n="a4h">Design &amp; Making</h4><p data-i18n="a4p">A workshop with kilns, a laser cutter and looms. Persian tilework and CAD are taught in the same room, deliberately.</p></div>
-   <div class="acc-item rv d1"><svg class="ico" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="24" cy="15" r="8"/><path d="M8 42c0-8.8 7.2-16 16-16s16 7.2 16 16"/></svg>
-    <h4 data-i18n="a5h">Counselling</h4><p data-i18n="a5p">One counsellor per 160 students, plus university guidance that starts in Grade 9 rather than the final term.</p></div>
-   <div class="acc-item rv d2"><svg class="ico" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M24 44s16-10.6 16-23A16 16 0 0 0 8 21c0 12.4 16 23 16 23z"/><circle cx="24" cy="20" r="6"/></svg>
-    <h4 data-i18n="a6h">Sport &amp; Wellbeing</h4><p data-i18n="a6p">Two gymnasiums, a 25m pool and compulsory daily movement — including for Grade 12, especially for Grade 12.</p></div>
-  </div>
- </div>
-</section>
-<!-- ============ PORTAL ============ -->
-<section id="portal" class="sec on-light">
- <div class="shell">
-  <div class="sec-head rv">
-   <span class="eyebrow" data-i18n="poEyebrow">The Portal</span>
-   <h2 class="display" data-i18n="poH">The part students actually open every day</h2>
-   <p data-i18n="poP">The current system shows sixteen identical squares and makes you click to find out if anything happened. This one answers that before you touch it.</p>
-  </div>
-
-  <div class="before-after">
-   <div class="rv">
-    <span class="panel-label" data-i18n="beforeL">Today — lms.hakim.school</span>
-    <div class="old-lms"><div class="old-grid">
-     <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
-    </div></div>
-    <p class="old-note" data-i18n="beforeP">Sixteen tiles of equal weight. No grades, no deadlines, no unread count until you open each one. Nothing tells a parent whether today went well.</p>
-   </div>
-
-   <div class="rv d1">
-    <span class="panel-label" style="display:flex;align-items:center;gap:10px"><span data-i18n="afterL">Proposed</span>
-     <span class="demo-pill"><span class="live-dot" style="background:#8A5B12;animation:none"></span><span data-i18n="demoData">Sample data</span></span></span>
-    <div class="app">
-     <div class="app-bar">
-      <div class="dots"><i></i><i></i><i></i></div>
-      <span style="font-size:12px;color:var(--on-paper-mute)">hakim.school/portal</span>
-      <span class="who"><span data-i18n="whoName">Mahan M. · Grade 11</span></span>
-     </div>
-     <div class="app-body">
-      <nav class="app-rail" aria-label="Portal">
-       <button aria-selected="true" data-i18n="rDash">Dashboard</button>
-       <button data-i18n="rScores">Scores</button>
-       <button data-i18n="rHw">Homework<span class="badge">3</span></button>
-       <button data-i18n="rMsg">Messages<span class="badge" id="msgBadge">6</span></button>
-       <button data-i18n="rSched">Schedule</button>
-       <button data-i18n="rClass">Online class</button>
-       <button data-i18n="rBuffet">e-Buffet</button>
-       <button data-i18n="rReports">Reports</button>
-      </nav>
-      <div class="app-main">
-       <div class="app-h">
-        <div><h3 data-i18n="goodDay">Good afternoon, Mahan</h3>
-         <span class="sub" id="portalSub" data-i18n="loading">Loading…</span></div>
-       </div>
-
-       <div class="tiles">
-        <div class="tile accent"><span class="t-l" data-i18n="tAvg">Term average</span>
-         <span class="t-v" id="tAvg">18.4</span><span class="t-d" style="color:#F2CE8E">▲ <span data-i18n="tAvgD">0.6 since Mehr</span></span></div>
-        <div class="tile"><span class="t-l" data-i18n="tAtt">Attendance</span>
-         <span class="t-v tnum" id="tAtt">97%</span><span class="t-d flat" data-i18n="tAttD">1 late this month</span></div>
-        <div class="tile"><span class="t-l" data-i18n="tDue">Due in 48 hours</span>
-         <span class="t-v tnum">3</span><span class="t-d down" data-i18n="tDueD">Physics set closes tonight</span></div>
-        <div class="tile"><span class="t-l" data-i18n="tRank">Class standing</span>
-         <span class="t-v tnum">4<span style="font-size:14px">/31</span></span><span class="t-d up" data-i18n="tRankD">▲ 2 places</span></div>
-       </div>
-
-       <div class="split">
-        <div class="card">
-         <h4><span data-i18n="chartT">Subject averages, this term</span><span class="r" data-i18n="chartR">out of 20</span></h4>
-         <svg id="chart" viewBox="0 0 520 170" role="img" aria-label="Subject averages this term, out of 20"></svg>
-        </div>
-        <div class="card">
-         <h4><span class="live-dot"></span><span data-i18n="feedT">Live activity</span></h4>
-         <ul class="ul feed" id="feed"></ul>
-        </div>
-       </div>
-
-       <div class="card">
-        <h4><span data-i18n="schedT">Today's schedule</span><span class="r" id="schedR"></span></h4>
-        <div class="sched" id="sched"></div>
-       </div>
-      </div>
-     </div>
+<!-- ============ 1 · HERO ============ -->
+<section class="ch ch-void" id="hero" data-chapter="Overview">
+  <div class="wrap">
+    <span class="hero-kick"><i></i>Counts what you say, not what you scan</span>
+    <h1 class="d1">
+      <span class="sp"><span style="animation-delay:.05s">Eat</span></span>
+      <span class="sp"><span style="animation-delay:.12s">like</span></span>
+      <span class="sp"><span style="animation-delay:.19s">you</span></span>
+      <span class="sp"><span class="hero-grad" style="animation-delay:.26s">mean</span></span>
+      <span class="sp"><span class="hero-grad" style="animation-delay:.33s">it.</span></span>
+    </h1>
+    <p class="hero-sub rv s2">Describe the meal in plain words. Macro splits it into foods, estimates the calories and macros, and a coach who can read your whole log answers whatever you ask next.</p>
+    <div class="hero-row rv s3">
+      <a class="btn btn-fill" href="#app">Try the live log
+        <svg width="15" height="15" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h9M8.5 4.2 12.6 8l-4.1 3.8" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+      <a class="btn btn-line" href="#say">See how it reads a meal</a>
     </div>
-   </div>
+    <div class="hero-strip rv s4">
+      <div><b class="num">0</b><span>Barcodes scanned</span></div>
+      <div><b class="num">~2 s</b><span>From sentence to macros</span></div>
+      <div><b class="num">1</b><span>File, no back end</span></div>
+      <div><b class="num">g &amp; kcal</b><span>The only units</span></div>
+    </div>
   </div>
- </div>
+  <div class="scrollcue" aria-hidden="true"><i></i>Scroll</div>
 </section>
 
-<!-- ============ ADMISSIONS ============ -->
-<section id="admissions" class="sec on-light">
- <div class="shell">
-  <div class="sec-head rv">
-   <span class="eyebrow" data-i18n="adEyebrow">Admissions · 1405–06</span>
-   <h2 class="display" data-i18n="adH">Four steps, eight weeks</h2>
-   <p data-i18n="adP">We assess every applicant in person. No family is asked to commit before they have spent a morning in the building.</p>
+<!-- ============ 2 · THE SENTENCE ============ -->
+<section class="ch ch-void pin" id="say" data-chapter="Logging">
+  <div class="pinner">
+    <div class="saystage wrap">
+      <p class="eyebrow" style="justify-content:center">Plain-language logging</p>
+      <p class="sayline" id="sayline" aria-label="chicken shawarma wrap, a can of coke, and greek yogurt with honey"></p>
+      <div class="chipgrid" id="chipgrid" aria-hidden="true">
+        <div class="fchip">
+          <div class="nm"><div class="fn">Chicken shawarma wrap, 1 large</div>
+            <div class="fm"><i class="fp">P 44 g</i><i class="fc">C 58 g</i><i class="ff">F 24 g</i></div></div>
+          <div class="fk num">640 kcal</div>
+        </div>
+        <div class="fchip">
+          <div class="nm"><div class="fn">Coca-Cola, 330 ml can</div>
+            <div class="fm"><i class="fp">P 0 g</i><i class="fc">C 35 g</i><i class="ff">F 0 g</i></div></div>
+          <div class="fk num">139 kcal</div>
+        </div>
+        <div class="fchip">
+          <div class="nm"><div class="fn">Greek yogurt with honey, 170 g</div>
+            <div class="fm"><i class="fp">P 18 g</i><i class="fc">C 26 g</i><i class="ff">F 6 g</i></div></div>
+          <div class="fk num">220 kcal</div>
+        </div>
+      </div>
+      <p class="saycap" id="saycap">Typed once. Split into three. Portions assumed out loud.</p>
+    </div>
   </div>
-  <div class="steps">
-   <div class="step active rv"><span class="when" data-i18n="s1w">Open now</span><h4 data-i18n="s1h">Enquiry</h4><p data-i18n="s1p">A short form and a phone call. We will tell you honestly if a place is unlikely before you go further.</p></div>
-   <div class="step rv d1"><span class="when" data-i18n="s2w">Within 2 weeks</span><h4 data-i18n="s2h">Assessment morning</h4><p data-i18n="s2p">Mathematics and language, written on campus. Grades 1–3 come for a play-based session instead.</p></div>
-   <div class="step rv d2"><span class="when" data-i18n="s3w">Within 4 weeks</span><h4 data-i18n="s3h">Family interview</h4><p data-i18n="s3p">Student and parents, with the head of the relevant school. Forty minutes, and you ask most of the questions.</p></div>
-   <div class="step rv d3"><span class="when" data-i18n="s4w">Within 8 weeks</span><h4 data-i18n="s4h">Offer &amp; enrolment</h4><p data-i18n="s4p">A written offer, a fee schedule with no later additions, and a two-week window to decide.</p></div>
-  </div>
+</section>
 
-  <div class="cta-band rv">
-   <div><h3 data-i18n="ctaH">Come and see the vault for yourself</h3>
-    <p data-i18n="ctaP">Campus mornings run every Wednesday through Esfand. Bring your child — they will be given something to build.</p></div>
-   <a class="btn btn-light" href="#top" data-i18n="ctaBtn">Request a visit</a>
+<!-- ============ 3 · THE RING CLOSES ============ -->
+<section class="ch ch-void pin" id="close" data-chapter="The day">
+  <div class="pinner">
+    <div class="closestack wrap">
+      <p class="eyebrow">One day, counted</p>
+      <div class="readout"><span id="bigk" class="num">0</span><small>kcal against a 2,500 goal</small></div>
+      <div class="mstack">
+        <div class="mrow">
+          <div class="mlab"><b>Protein</b><span class="num" id="lp">0 / 150 g</span></div>
+          <div class="mtrack"><div class="mfill" id="bp" style="background:linear-gradient(90deg,#2C5AD6,#4273F8)"></div></div>
+        </div>
+        <div class="mrow">
+          <div class="mlab"><b>Carbs</b><span class="num" id="lc">0 / 281 g</span></div>
+          <div class="mtrack"><div class="mfill" id="bc" style="background:linear-gradient(90deg,#C4870C,#E3A017)"></div></div>
+        </div>
+        <div class="mrow">
+          <div class="mlab"><b>Fat</b><span class="num" id="lf">0 / 78 g</span></div>
+          <div class="mtrack"><div class="mfill" id="bf" style="background:linear-gradient(90deg,#C42F58,#E4416D)"></div></div>
+        </div>
+      </div>
+      <p class="p closenote">Carbs and fat aren't targets you set — they're derived from the calorie goal, at 45% and 28%. Protein is the one number you choose, because it's the one that's hard to hit.</p>
+    </div>
   </div>
- </div>
+</section>
+
+<div class="marquee ch ch-dark" aria-hidden="true">
+  <div class="mtrackk">
+    <span>two eggs and sourdough<span></span></span><span>chicken shawarma<span></span></span><span>a flat white<span></span></span><span>180 g salmon<span></span></span><span>protein shake after the gym<span></span></span><span>handful of almonds<span></span></span>
+    <span>two eggs and sourdough<span></span></span><span>chicken shawarma<span></span></span><span>a flat white<span></span></span><span>180 g salmon<span></span></span><span>protein shake after the gym<span></span></span><span>handful of almonds<span></span></span>
+  </div>
+</div>
+
+<!-- ============ 4 · THE COACH ============ -->
+<section class="ch ch-light pad" id="coach" data-chapter="Coach">
+  <div class="wrap coachwrap">
+    <div>
+      <p class="eyebrow rv">A coach that can read the log</p>
+      <h2 class="d2 rv s1">It doesn't ask<br>what you ate.</h2>
+      <p class="p rv s2" style="margin-top:22px;font-size:17px">Every question arrives with the day already attached — what's logged, what's left, the six days behind it. So the answers are about your food, in your numbers, not general advice about protein.</p>
+      <div class="toolnote rv s3">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" style="flex:none;margin-top:2px" aria-hidden="true"><path d="M4 6h12M4 10h12M4 14h7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+        <p style="margin:0;font-size:14.5px">It holds two keys to the app itself: <code>log_food</code> adds what you mention to today, and <code>get_day</code> opens any earlier date. Say you ate something and it lands in the log — you never repeat yourself.</p>
+      </div>
+      <div class="fgrid rv s4" style="margin-top:16px">
+        <div class="fcard"><h4>Streams as it thinks</h4><p>Answers appear word by word, with a Stop button for when you've read enough.</p></div>
+        <div class="fcard"><h4>Twelve turns of memory</h4><p>Enough to follow a thread about tonight's dinner, short enough to stay fast.</p></div>
+      </div>
+    </div>
+    <div class="phone3d rv s2">
+      <div class="phone" id="phone">
+        <div class="phone-screen">
+          <div class="phone-notch"></div>
+          <div class="bub me" data-step="0">2 eggs, sourdough with butter, and a flat white</div>
+          <div class="bub tool" data-step="1">log_food · 3 items</div>
+          <div class="bub ai" data-step="2">Logged: 510 kcal, 25 g protein. Light on protein for a gain phase — 1,990 kcal and 125 g protein still to go today.</div>
+          <div class="bub me" data-step="3">what should I eat next?</div>
+          <div class="bub ai" data-step="4">Have the shawarma wrap you like: roughly 640 kcal and 44 g protein, which gets you a third of the way through the protein by lunch. Keep the coke if you want it — you've got the calories today.</div>
+          <div class="bub tool" data-step="5">get_day · 2026-09-19</div>
+          <div class="bub ai" data-step="6">Yesterday you finished on 2,410 kcal and 148 g protein. Two solid days in a row.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 5 · A DAY AS A LABEL ============ -->
+<section class="ch ch-dark pad" id="label" data-chapter="A day">
+  <div class="wrap nfwrap">
+    <div class="nf rv rvS" role="img" aria-label="Nutrition facts panel for one logged day: 2176 calories, 132 grams protein, 221 grams carbohydrate, 82 grams fat, across eight logged items.">
+      <h4>Nutrition Facts</h4>
+      <p class="srv">1 logged day · 8 items</p>
+      <hr>
+      <p class="srv" style="margin:0;font-weight:600">Amount per day</p>
+      <div class="big"><b class="num">2,176</b><span>Calories</span></div>
+      <hr class="mid">
+      <div class="ln"><b>Total Fat</b><span class="dv">82 g</span></div>
+      <div class="ln ind"><span>of a derived 78 g target</span><span class="dv">105%</span></div>
+      <hr class="thin">
+      <div class="ln"><b>Total Carbohydrate</b><span class="dv">221 g</span></div>
+      <div class="ln ind"><span>of a derived 281 g target</span><span class="dv">79%</span></div>
+      <hr class="thin">
+      <div class="ln"><b>Protein</b><span class="dv">132 g</span></div>
+      <div class="ln ind"><span>of the 150 g you set</span><span class="dv">88%</span></div>
+      <hr class="mid">
+      <div class="ln"><b>Calories remaining</b><span class="dv">324</span></div>
+      <hr class="thin">
+      <p class="foot">Percentages compare the day to your own goals, not to a population average. Every figure here is an estimate produced from a sentence you typed — treat it as a good guess, not a measurement.</p>
+    </div>
+    <div>
+      <p class="eyebrow rv">The maths, out loud</p>
+      <h2 class="d2 rv s1">Honest about being<br>an estimate.</h2>
+      <p class="p rv s2" style="margin-top:22px;font-size:17px">A wrap is never exactly 640 kcal. Macro says the portion it assumed inside the food's own name — "1 large", "330 ml can", "180 g" — so you can see the guess it made and correct it in one tap instead of trusting a number with no story.</p>
+      <div class="fgrid rv s3" style="margin-top:20px">
+        <div class="fcard"><h4>Portions stated</h4><p>The assumed serving is written into the entry, not hidden behind it.</p></div>
+        <div class="fcard"><h4>Fix it inline</h4><p>Wrong? Open Add manually and type the four numbers yourself.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 6 · SEVEN DAYS ============ -->
+<section class="ch ch-light pad" id="week" data-chapter="Seven days">
+  <div class="wrap">
+    <p class="eyebrow rv">Seven days</p>
+    <h2 class="d2 rv s1" style="max-width:20ch">A week reads faster<br>than a spreadsheet.</h2>
+    <p class="p rv s2" style="margin-top:20px">Bars against the dashed goal line. Tap one to jump to that day's entries. Muted means you came in short.</p>
+    <div class="weekstage rv s3" style="margin-top:clamp(34px,6vh,64px)">
+      <div class="week3d" id="week3d" role="img" aria-label="Seven-day calorie chart: 2540, 2680, 1980, 2520, 2176, 2840, 2610 calories against a 2500 goal. Wednesday and Friday came in under the goal.">
+        <div class="wcol"><div class="wbar" data-v="2540"><em>2,540</em></div><span>Mon</span></div>
+        <div class="wcol"><div class="wbar" data-v="2680"><em>2,680</em></div><span>Tue</span></div>
+        <div class="wcol"><div class="wbar miss" data-v="1980"><em>1,980</em></div><span>Wed</span></div>
+        <div class="wcol"><div class="wbar" data-v="2520"><em>2,520</em></div><span>Thu</span></div>
+        <div class="wcol"><div class="wbar miss" data-v="2176"><em>2,176</em></div><span>Fri</span></div>
+        <div class="wcol"><div class="wbar" data-v="2840"><em>2,840</em></div><span>Sat</span></div>
+        <div class="wcol"><div class="wbar" data-v="2610"><em>2,610</em></div><span>Sun</span></div>
+        <div class="goal3d" aria-hidden="true"><i></i><em>2,500 goal</em></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 7 · HORIZONTAL GALLERY ============ -->
+<section class="ch ch-dark pin" id="gallery" data-chapter="Everything else">
+  <div class="pinner">
+    <div class="wrap gwrap">
+      <p class="eyebrow">Everything else it does</p>
+      <h2 class="d3" style="max-width:24ch">Six things you only notice<br>the day you need them.</h2>
+    </div>
+    <div style="overflow:hidden;width:100%">
+      <div class="gtrack" id="gtrack">
+        <article class="gcard">
+          <div class="gicon"><svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M4 11h14M11 4v14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></div>
+          <div class="gno">01</div><h3 class="d4">Manual override</h3>
+          <p>When the estimate is off, or Claude isn't reachable, type food, calories and three macros yourself. Same entry, same totals.</p>
+          <div class="gspacer"></div><div class="gtag">Always available</div>
+        </article>
+        <article class="gcard">
+          <div class="gicon"><svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M9 5 4 11l5 6M18 11H5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <div class="gno">02</div><h3 class="d4">Any day, either direction</h3>
+          <p>Step back to Tuesday, log the dinner you forgot, step forward again. The ring, the bars and the coach all follow the day you're looking at.</p>
+          <div class="gspacer"></div><div class="gtag">Today · Yesterday · Sat 12 Sep</div>
+        </article>
+        <article class="gcard">
+          <div class="gicon"><svg width="22" height="22" viewBox="0 0 22 22" fill="none"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"/><circle cx="11" cy="11" r="2.4" fill="currentColor"/></svg></div>
+          <div class="gno">03</div><h3 class="d4">Protein-first goals</h3>
+          <p>Two fields: calories and protein. Carbs and fat fall out of the calorie number, because nobody hits a fat target on purpose.</p>
+          <div class="gspacer"></div><div class="gtag">2,500 kcal · 150 g</div>
+        </article>
+        <article class="gcard">
+          <div class="gicon"><svg width="22" height="22" viewBox="0 0 22 22" fill="none"><rect x="6" y="6" width="10" height="10" rx="2" stroke="currentColor" stroke-width="2"/></svg></div>
+          <div class="gno">04</div><h3 class="d4">Stop mid-thought</h3>
+          <p>Answers stream in. If you've read enough at the second sentence, Stop ends the call — and you keep what already arrived.</p>
+          <div class="gspacer"></div><div class="gtag">Nothing runs on unattended</div>
+        </article>
+        <article class="gcard">
+          <div class="gicon"><svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M11 3v3M11 16v3M3 11h3M16 11h3M5.6 5.6l2.1 2.1M14.3 14.3l2.1 2.1M16.4 5.6l-2.1 2.1M7.7 14.3l-2.1 2.1" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><circle cx="11" cy="11" r="3.2" stroke="currentColor" stroke-width="1.8"/></svg></div>
+          <div class="gno">05</div><h3 class="d4">Follows your system</h3>
+          <p>Light in daylight, dark at night, switching with the device rather than with a setting you have to remember.</p>
+          <div class="gspacer"></div><div class="gtag">Light · Dark · Auto</div>
+        </article>
+        <article class="gcard">
+          <div class="gicon"><svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M11 4.5 17.5 8v5c0 2.8-2.6 4.5-6.5 5.5C7.1 17.5 4.5 15.8 4.5 13V8L11 4.5Z" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"/></svg></div>
+          <div class="gno">06</div><h3 class="d4">Calm by default</h3>
+          <p>Every animation on this page, including the one you're scrolling, switches itself off when your system asks for reduced motion.</p>
+          <div class="gspacer"></div><div class="gtag">prefers-reduced-motion</div>
+        </article>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 8 · PRIVACY ============ -->
+<section class="ch ch-dark pad" id="privacy" data-chapter="Private">
+  <div class="wrap" style="display:grid;grid-template-columns:1fr;gap:clamp(30px,6vh,60px);justify-items:center;text-align:center">
+    <div class="vault rv rvS">
+      <div class="vaultart"><i></i><i></i><i></i><b>Yours</b></div>
+    </div>
+    <div style="max-width:48ch">
+      <p class="eyebrow rv" style="justify-content:center">Private by construction</p>
+      <h2 class="d2 rv s1">Nobody else opens<br>your food log.</h2>
+      <p class="p rv s2" style="margin:20px auto 0">The log lives in your own browser on this device. Nothing about what you eat is sent anywhere to be stored, and the coach only ever sees the slice of the log needed to answer the question you just asked.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 9 · THE LIVE APP ============ -->
+<section class="ch ch-app pad" id="app" data-chapter="Try it">
+  <div class="wrap">
+    <div style="text-align:center;max-width:52ch;margin:0 auto clamp(30px,5vh,52px)">
+      <p class="eyebrow rv" style="justify-content:center">Not a screenshot</p>
+      <h2 class="d2 rv s1">This one works.</h2>
+      <p class="p rv s2" style="margin:20px auto 0">The real food log, running on this page. Type a meal below and it gets estimated and counted. Your entries stay in this browser.</p>
+    </div>
+
+    <div class="appshell rv rvS">
+      <div class="appframe">
+        <div class="apptop">
+          <h3>Food log</h3>
+          <div class="daynav">
+            <button id="xprev" aria-label="Previous day">&lsaquo;</button>
+            <div id="xdlabel">Today</div>
+            <button id="xnext" aria-label="Next day">&rsaquo;</button>
+          </div>
+          <div class="who" id="xwho"></div>
+        </div>
+        <div class="notice" id="xnotice" hidden></div>
+
+        <section class="card" aria-label="Daily summary">
+          <div class="sumrow">
+            <div class="ringwrap">
+              <svg width="146" height="146" viewBox="0 0 146 146" role="img" aria-label="Calories progress ring">
+                <defs><linearGradient id="xrg" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0%" stop-color="var(--accent-soft)"></stop>
+                  <stop offset="100%" stop-color="var(--accent)"></stop></linearGradient></defs>
+                <circle cx="73" cy="73" r="60" fill="none" stroke="var(--line)" stroke-width="13"></circle>
+                <circle id="xring" cx="73" cy="73" r="60" fill="none" stroke="url(#xrg)" stroke-width="13" stroke-linecap="round"
+                  stroke-dasharray="376.99" stroke-dashoffset="376.99" transform="rotate(-90 73 73)"
+                  style="transition:stroke-dashoffset .6s cubic-bezier(.2,.9,.2,1)"></circle>
+              </svg>
+              <div class="ringtxt"><b id="xkcal">0</b><span id="xkleft">0 left</span></div>
+            </div>
+            <div class="macros">
+              <div class="mrow"><div class="mlab"><b>Protein</b><span class="num" id="xptxt">0 / 150 g</span></div>
+                <div class="mtrack"><div class="mfill" id="xpbar" style="background:var(--azure);transition:width .5s cubic-bezier(.2,.9,.2,1)"></div></div></div>
+              <div class="mrow"><div class="mlab"><b>Carbs</b><span class="num" id="xctxt">0 / 281 g</span></div>
+                <div class="mtrack"><div class="mfill" id="xcbar" style="background:var(--saffron);transition:width .5s cubic-bezier(.2,.9,.2,1)"></div></div></div>
+              <div class="mrow"><div class="mlab"><b>Fat</b><span class="num" id="xftxt">0 / 78 g</span></div>
+                <div class="mtrack"><div class="mfill" id="xfbar" style="background:var(--rose);transition:width .5s cubic-bezier(.2,.9,.2,1)"></div></div></div>
+            </div>
+          </div>
+        </section>
+
+        <section class="card" aria-label="Log food">
+          <h4>What did you eat? <em>⌘ + return</em></h4>
+          <label for="xta" style="position:absolute;left:-9999px">Describe what you ate</label>
+          <textarea id="xta" placeholder="2 eggs, a slice of sourdough with butter, and a flat white"></textarea>
+          <div class="row">
+            <button class="pbtn" id="xgo">Log it</button>
+            <button class="gbtn" id="xstop" hidden>Stop</button>
+            <span class="st" id="xst" role="status"></span>
+          </div>
+          <details>
+            <summary>Add manually</summary>
+            <div class="grid2">
+              <div style="grid-column:1/-1"><label for="xmn">Food</label><input type="text" id="xmn" placeholder="Chicken salad"></div>
+              <div><label for="xmk">Calories</label><input type="number" id="xmk" min="0" inputmode="numeric"></div>
+              <div><label for="xmp">Protein (g)</label><input type="number" id="xmp" min="0" inputmode="numeric"></div>
+              <div><label for="xmc">Carbs (g)</label><input type="number" id="xmc" min="0" inputmode="numeric"></div>
+              <div><label for="xmf">Fat (g)</label><input type="number" id="xmf" min="0" inputmode="numeric"></div>
+            </div>
+            <div class="row"><button class="gbtn" id="xmadd">Add entry</button><span class="st" id="xmst"></span></div>
+          </details>
+        </section>
+
+        <section class="card" aria-label="Logged entries">
+          <h4>Logged <em id="xcount"></em></h4>
+          <div id="xlist"></div>
+        </section>
+
+        <section class="card" aria-label="Nutrition coach">
+          <h4>Ask your coach</h4>
+          <div class="chat" id="xchat"></div>
+          <div class="chips" id="xchips"></div>
+          <div class="ask">
+            <label for="xq" style="position:absolute;left:-9999px">Ask the coach</label>
+            <input type="text" id="xq" placeholder="Ask anything about your food or training">
+            <button class="pbtn" id="xsend">Ask</button>
+            <button class="gbtn" id="xqstop" hidden>Stop</button>
+          </div>
+          <div class="st" id="xqst" role="status"></div>
+        </section>
+
+        <section class="card" aria-label="Last seven days">
+          <h4>Last 7 days</h4>
+          <div class="wk" id="xwk"></div>
+        </section>
+
+        <section class="card" aria-label="Daily goals" style="margin-bottom:0">
+          <h4>Daily goals</h4>
+          <div class="grid2">
+            <div><label for="xgk">Calories</label><input type="number" id="xgk" min="500" step="50" inputmode="numeric" value="2500"></div>
+            <div><label for="xgp">Protein (g)</label><input type="number" id="xgp" min="10" step="5" inputmode="numeric" value="150"></div>
+          </div>
+        </section>
+      </div>
+      <p class="disc">Calorie counts are estimates, not medical advice.</p>
+    </div>
+  </div>
 </section>
 </main>
 
 <footer>
- <div class="shell">
-  <div class="f-grid">
-   <div><div class="brand" style="margin-bottom:12px">
-     <svg class="mark" viewBox="0 0 64 64" aria-hidden="true">
-      <circle cx="32" cy="32" r="29.5" fill="none" stroke="#7A3A8C" stroke-width="1.6" opacity=".9"/>
-      <g fill="none" stroke="#7A3A8C" stroke-width="1.7" stroke-linejoin="round">
-       <path d="M32 9 L45.3 16.5 L45.3 31.5 L32 39 L18.7 31.5 L18.7 16.5 Z"/>
-       <path d="M32 25 L45.3 32.5 L45.3 47.5 L32 55 L18.7 47.5 L18.7 32.5 Z"/></g>
-      <circle cx="32" cy="32" r="3" fill="#E3A23C"/></svg>
-     <span class="wm"><b style="color:var(--on-ink)" data-i18n="brand">Hakim International School</b></span></div>
-    <p style="font-size:13.5px;max-width:34ch;line-height:1.6" data-i18n="fTag">A school named for the Persian scholar who refused to pick one subject.</p></div>
-   <div><h5 data-i18n="fSchool">School</h5><ul>
-    <li><a href="#programs" data-i18n="navPrograms">Programs</a></li>
-    <li><a href="#academics" data-i18n="navAcademics">Academics</a></li>
-    <li><a href="#admissions" data-i18n="navAdmissions">Admissions</a></li></ul></div>
-   <div><h5 data-i18n="fFamilies">Families</h5><ul>
-    <li><a href="#portal" data-i18n="navPortal">The Portal</a></li>
-    <li><a href="#portal" data-i18n="fCalendar">Calendar</a></li>
-    <li><a href="#portal" data-i18n="fBuffet">e-Buffet</a></li></ul></div>
-   <div><h5 data-i18n="fContact">Contact</h5><ul>
-    <li data-i18n="fAddr">Tehran, Iran</li>
-    <li>hakim.school</li></ul></div>
+  <div class="wrap">
+    <p class="bigmark">Macro</p>
+    <div class="fcols">
+      <div>
+        <b>The page</b>
+        <a href="#hero">Overview</a>
+        <a href="#say">Plain-language logging</a>
+        <a href="#coach">The coach</a>
+        <a href="#gallery">Everything else</a>
+      </div>
+      <div>
+        <b>The app</b>
+        <a href="#app">Open the food log</a>
+        <a href="#label">How estimates work</a>
+        <a href="#privacy">Where your data lives</a>
+      </div>
+      <div>
+        <b>Built from</b>
+        <a href="#app">One HTML file</a>
+        <a href="#app">No frameworks</a>
+        <a href="#app">No build step</a>
+      </div>
+    </div>
+    <p class="fine">Macro estimates calories and macronutrients from text you type. Estimates can be wrong, sometimes by a lot, and nothing here is medical or dietary advice — for anything involving a condition, a medication or a symptom, talk to a professional. The 3D scenes, the scroll scenes and the food log on this page are all drawn by the page itself; nothing is a video and nothing is a screenshot.</p>
   </div>
-  <div class="f-note">
-   <p data-i18n="disclaimer">Independent design concept. This is an unofficial proposal for a website redesign, not an official Hakim International School site, and it is not affiliated with or endorsed by the school. All figures, names and portal activity shown are sample content for demonstration.</p>
-   <span data-i18n="fYear">Concept · 2026</span>
-  </div>
- </div>
 </footer>
 
-<!-- ============ COMMAND PALETTE ============ -->
-<div id="pal" hidden role="dialog" aria-modal="true" aria-label="Search">
- <div class="pal-box">
-  <div class="pal-in">
-   <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="2.2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
-   <input id="palInput" type="search" autocomplete="off" spellcheck="false" placeholder="Search the school, the portal, anything…">
-   <kbd class="chip" style="height:24px;padding:0 8px;font-size:11px" id="palEsc">ESC</kbd>
-  </div>
-  <ul class="ul pal-res" id="palRes" role="listbox" aria-label="Results"></ul>
-  <div class="pal-foot">
-   <span><kbd>↑</kbd><kbd>↓</kbd> <span data-i18n="palNav">navigate</span></span>
-   <span><kbd>↵</kbd> <span data-i18n="palOpen">open</span></span>
-   <span><kbd>⌘K</kbd> <span data-i18n="palToggle">toggle</span></span>
-  </div>
- </div>
-</div>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script>
-/* ============================================================
-   Hakim International School — concept site
-   ============================================================ */
-const I18N = {
-en:{
- brand:"Hakim International School", brandSub:"Tehran · Est. 1998",
- navPrograms:"Programs", navAcademics:"Academics", navPortal:"The Portal", navAdmissions:"Admissions",
- conceptChip:"Concept", search:"Search", loading:"Loading…",
- heroEyebrow:"Tehran · International Curriculum",
- heroL1:"A school built on", heroL2:"the mind of the sage",
- heroSub:"Hakim — حکیم — is the Persian word for the scholar who refuses a single discipline. We teach the same way: mathematics beside metalwork, Farsi beside Cambridge English, and a vault of geometry overhead to remind everyone where this tradition began.",
- ctaVisit:"Book a campus visit", ctaPortal:"See the student portal", scrollCue:"Scroll to enter the vault",
- cardTimeK:"Campus time · Tehran", cardNowK:"Right now on campus",
- statStudents:"Students, Grades 1–12", statFaculty:"Teaching faculty",
- statRatio:"Students per teacher", statCountries:"Nationalities on roll",
- progEyebrow:"Programs", progH:"Twelve years, four distinct worlds",
- progP:"Each stage is designed around what that age actually needs — not a thinner version of the stage above it.",
- p1y:"Grades 1–5 · Ages 6–11", p1h:"Primary", p1p:"Reading, number sense and curiosity, taught bilingually from day one. Afternoons are workshop time — clay, circuits, choir.", p1t1:"Bilingual literacy", p1t2:"Workshop afternoons",
- p2y:"Grades 6–8 · Ages 11–14", p2h:"Middle", p2p:"The years students decide whether they like thinking. Project terms, first laboratory work, and a tutor who stays with them all three years.", p2t1:"Project terms", p2t2:"Named tutor",
- p3y:"Grades 9–12 · Ages 14–18", p3h:"Senior", p3p:"Konkur preparation running alongside Cambridge International AS & A Levels, so a student can keep both doors open until they are ready to choose.", p3t1:"AS & A Level", p3t2:"Konkur track",
- p4y:"Grades 9–12 · By selection", p4h:"Olympiad & Research", p4p:"A parallel track for students who have outgrown the syllabus: competition mathematics, physics and informatics, plus a supervised research year.", p4t1:"Informatics", p4t2:"Research year",
- acEyebrow:"What we build", acH:"Everything a hakim was supposed to know",
- acP:"The classical Persian polymath moved freely between geometry, medicine, poetry and astronomy. Six departments keep that range alive here.",
- a1h:"Geometry & Mathematics", a1p:"From girih construction with compass and straightedge in Grade 4 to multivariable calculus in Grade 12.",
- a2h:"Laboratory Sciences", a2p:"Four wet labs and an electronics bench. Every senior designs, runs and defends one original experiment.",
- a3h:"Languages & Literature", a3p:"Farsi and English carried at full weight to Grade 12, with Arabic from Grade 6 and French or German by election.",
- a4h:"Design & Making", a4p:"A workshop with kilns, a laser cutter and looms. Persian tilework and CAD are taught in the same room, deliberately.",
- a5h:"Counselling", a5p:"One counsellor per 160 students, plus university guidance that starts in Grade 9 rather than the final term.",
- a6h:"Sport & Wellbeing", a6p:"Two gymnasiums, a 25m pool and compulsory daily movement — including for Grade 12, especially for Grade 12.",
- poEyebrow:"The Portal", poH:"The part students actually open every day",
- poP:"The current system shows sixteen identical squares and makes you click to find out if anything happened. This one answers that before you touch it.",
- beforeL:"Today — lms.hakim.school", afterL:"Proposed", demoData:"Sample data",
- beforeP:"Sixteen tiles of equal weight. No grades, no deadlines, no unread count until you open each one. Nothing tells a parent whether today went well.",
- whoName:"Mahan M. · Grade 11",
- rDash:"Dashboard", rScores:"Scores", rHw:"Homework", rMsg:"Messages", rSched:"Schedule",
- rClass:"Online class", rBuffet:"e-Buffet", rReports:"Reports",
- goodDay:"Good afternoon, Mahan",
- tAvg:"Term average", tAvgD:"0.6 since Mehr", tAtt:"Attendance", tAttD:"1 late this month",
- tDue:"Due in 48 hours", tDueD:"Physics set closes tonight", tRank:"Class standing", tRankD:"▲ 2 places",
- chartT:"Subject averages, this term", chartR:"out of 20", feedT:"Live activity", schedT:"Today's schedule",
- adEyebrow:"Admissions · 1405–06", adH:"Four steps, eight weeks",
- adP:"We assess every applicant in person. No family is asked to commit before they have spent a morning in the building.",
- s1w:"Open now", s1h:"Enquiry", s1p:"A short form and a phone call. We will tell you honestly if a place is unlikely before you go further.",
- s2w:"Within 2 weeks", s2h:"Assessment morning", s2p:"Mathematics and language, written on campus. Grades 1–3 come for a play-based session instead.",
- s3w:"Within 4 weeks", s3h:"Family interview", s3p:"Student and parents, with the head of the relevant school. Forty minutes, and you ask most of the questions.",
- s4w:"Within 8 weeks", s4h:"Offer & enrolment", s4p:"A written offer, a fee schedule with no later additions, and a two-week window to decide.",
- ctaH:"Come and see the vault for yourself", ctaP:"Campus mornings run every Wednesday through Esfand. Bring your child — they will be given something to build.", ctaBtn:"Request a visit",
- fTag:"A school named for the Persian scholar who refused to pick one subject.",
- fSchool:"School", fFamilies:"Families", fContact:"Contact", fCalendar:"Calendar", fBuffet:"e-Buffet", fAddr:"Tehran, Iran",
- disclaimer:"Independent design concept. This is an unofficial proposal for a website redesign, not an official Hakim International School site, and it is not affiliated with or endorsed by the school. All figures, names and portal activity shown are sample content for demonstration.",
- fYear:"Concept · 2026",
- palNav:"navigate", palOpen:"open", palToggle:"toggle",
- palPlaceholder:"Search the school, the portal, anything…", palNone:"Nothing matches that.",
- inSession:"in session", freePeriod:"No class — free period", dayDone:"Classes finished for today",
- beforeSchool:"Campus opens at 07:30", weekend:"Weekend — campus closed",
- now:"Now", next:"Next", done:"Done", room:"Room"
-},
-fa:{
- brand:"مجتمع آموزشی بین‌المللی حکیم", brandSub:"تهران · تأسیس ۱۳۷۷",
- navPrograms:"دوره‌ها", navAcademics:"آموزش", navPortal:"پورتال", navAdmissions:"ثبت‌نام",
- conceptChip:"طرح پیشنهادی", search:"جست‌وجو", loading:"در حال بارگذاری…",
- heroEyebrow:"تهران · برنامهٔ آموزشی بین‌المللی",
- heroL1:"مدرسه‌ای بر پایهٔ", heroL2:"اندیشهٔ حکیم",
- heroSub:"حکیم، واژه‌ای پارسی برای دانشمندی است که به یک رشته بسنده نمی‌کند. ما نیز چنین می‌آموزیم: ریاضی در کنار هنر، ادبیات فارسی در کنار انگلیسی کمبریج، و طاق مقرنسی از هندسه بر فراز سر، تا یادمان بماند این سنت از کجا آغاز شد.",
- ctaVisit:"رزرو بازدید از مجتمع", ctaPortal:"مشاهدهٔ پورتال دانش‌آموز", scrollCue:"برای ورود به طاق، اسکرول کنید",
- cardTimeK:"ساعت مجتمع · تهران", cardNowK:"هم‌اکنون در مجتمع",
- statStudents:"دانش‌آموز، پایهٔ ۱ تا ۱۲", statFaculty:"عضو هیئت آموزشی",
- statRatio:"دانش‌آموز به ازای هر معلم", statCountries:"ملیت در میان دانش‌آموزان",
- progEyebrow:"دوره‌ها", progH:"دوازده سال، چهار جهان متفاوت",
- progP:"هر دوره بر پایهٔ نیاز واقعی همان سن طراحی شده است، نه نسخه‌ای رقیق‌شده از دورهٔ بالاتر.",
- p1y:"پایهٔ ۱ تا ۵ · ۶ تا ۱۱ سال", p1h:"دبستان", p1p:"خواندن، درک عدد و کنجکاوی، از روز نخست به‌صورت دوزبانه. بعدازظهرها وقت کارگاه است؛ سفال، مدار، هم‌سرایی.", p1t1:"سوادآموزی دوزبانه", p1t2:"کارگاه بعدازظهر",
- p2y:"پایهٔ ۶ تا ۸ · ۱۱ تا ۱۴ سال", p2h:"متوسطهٔ اول", p2p:"سال‌هایی که دانش‌آموز تصمیم می‌گیرد اندیشیدن را دوست دارد یا نه. ترم‌های پروژه‌محور، نخستین کار آزمایشگاهی، و مربی‌ای که هر سه سال همراه اوست.", p2t1:"ترم پروژه‌محور", p2t2:"مربی اختصاصی",
- p3y:"پایهٔ ۹ تا ۱۲ · ۱۴ تا ۱۸ سال", p3h:"متوسطهٔ دوم", p3p:"آمادگی کنکور هم‌زمان با مدارک AS و A Level کمبریج، تا دانش‌آموز تا لحظهٔ انتخاب، هر دو در را باز نگه دارد.", p3t1:"AS و A Level", p3t2:"مسیر کنکور",
- p4y:"پایهٔ ۹ تا ۱۲ · با گزینش", p4h:"المپیاد و پژوهش", p4p:"مسیری موازی برای دانش‌آموزانی که از سرفصل جلو زده‌اند: ریاضی، فیزیک و کامپیوتر المپیاد، به‌همراه یک سال پژوهش با استاد راهنما.", p4t1:"کامپیوتر", p4t2:"سال پژوهش",
- acEyebrow:"آنچه می‌سازیم", acH:"هر آنچه یک حکیم باید می‌دانست",
- acP:"حکیم کلاسیک ایرانی آزادانه میان هندسه، پزشکی، شعر و نجوم حرکت می‌کرد. شش گروه آموزشی این گستره را اینجا زنده نگه داشته‌اند.",
- a1h:"هندسه و ریاضیات", a1p:"از ترسیم گره با پرگار و خط‌کش در پایهٔ چهارم تا حساب دیفرانسیل چندمتغیره در پایهٔ دوازدهم.",
- a2h:"علوم آزمایشگاهی", a2p:"چهار آزمایشگاه و یک میز الکترونیک. هر دانش‌آموز دورهٔ دوم یک آزمایش اصیل را طراحی، اجرا و دفاع می‌کند.",
- a3h:"زبان و ادبیات", a3p:"فارسی و انگلیسی با وزن کامل تا پایهٔ دوازدهم، عربی از پایهٔ ششم، و فرانسه یا آلمانی به انتخاب دانش‌آموز.",
- a4h:"طراحی و ساخت", a4p:"کارگاهی با کورهٔ سفال، برش لیزری و دار قالی. کاشی‌کاری ایرانی و نرم‌افزار CAD عامدانه در یک اتاق آموزش داده می‌شوند.",
- a5h:"مشاوره", a5p:"یک مشاور به ازای هر ۱۶۰ دانش‌آموز، و هدایت دانشگاهی که از پایهٔ نهم آغاز می‌شود، نه در ترم آخر.",
- a6h:"ورزش و سلامت", a6p:"دو سالن ورزشی، استخر ۲۵ متری و تحرک روزانهٔ اجباری؛ برای پایهٔ دوازدهم هم، و به‌ویژه برای پایهٔ دوازدهم.",
- poEyebrow:"پورتال", poH:"بخشی که دانش‌آموز هر روز واقعاً باز می‌کند",
- poP:"سامانهٔ فعلی شانزده مربع یکسان نشان می‌دهد و باید کلیک کنید تا بفهمید اصلاً اتفاقی افتاده یا نه. این یکی، پیش از آنکه دست بزنید پاسخ می‌دهد.",
- beforeL:"امروز — lms.hakim.school", afterL:"طرح پیشنهادی", demoData:"دادهٔ نمونه",
- beforeP:"شانزده کاشی با وزن یکسان. نه نمره‌ای، نه مهلتی، نه شمار پیام خوانده‌نشده‌ای، تا وقتی تک‌تک را باز نکنید. هیچ‌چیز به والدین نمی‌گوید امروز خوب گذشته یا نه.",
- whoName:"ماهان م. · پایهٔ یازدهم",
- rDash:"میزکار", rScores:"نمرات", rHw:"تکالیف", rMsg:"پیام‌ها", rSched:"برنامه",
- rClass:"کلاس آنلاین", rBuffet:"بوفه", rReports:"کارنامه",
- goodDay:"بعدازظهر بخیر، ماهان",
- tAvg:"معدل ترم", tAvgD:"۰.۶ از مهر", tAtt:"حضور", tAttD:"یک تأخیر در این ماه",
- tDue:"مهلت تا ۴۸ ساعت", tDueD:"تکلیف فیزیک امشب بسته می‌شود", tRank:"رتبهٔ کلاس", tRankD:"▲ ۲ پله",
- chartT:"میانگین دروس، این ترم", chartR:"از ۲۰", feedT:"فعالیت زنده", schedT:"برنامهٔ امروز",
- adEyebrow:"ثبت‌نام · ۱۴۰۵–۰۶", adH:"چهار گام، هشت هفته",
- adP:"هر داوطلب را حضوری می‌سنجیم. از هیچ خانواده‌ای خواسته نمی‌شود پیش از گذراندن یک صبح در ساختمان، تعهدی بدهد.",
- s1w:"هم‌اکنون باز است", s1h:"درخواست اولیه", s1p:"یک فرم کوتاه و یک تماس تلفنی. اگر احتمال پذیرش کم باشد، صادقانه پیش از ادامه به شما می‌گوییم.",
- s2w:"تا ۲ هفته", s2h:"صبح ارزیابی", s2p:"ریاضی و زبان، به‌صورت کتبی در مجتمع. پایهٔ ۱ تا ۳ به‌جای آن در جلسه‌ای بازی‌محور شرکت می‌کنند.",
- s3w:"تا ۴ هفته", s3h:"مصاحبهٔ خانوادگی", s3p:"دانش‌آموز و والدین، با مدیر دورهٔ مربوطه. چهل دقیقه، و بیشتر پرسش‌ها را شما می‌پرسید.",
- s4w:"تا ۸ هفته", s4h:"پذیرش و ثبت‌نام", s4p:"پیشنهاد کتبی، جدول شهریه بدون افزوده‌های بعدی، و دو هفته فرصت تصمیم‌گیری.",
- ctaH:"بیایید و طاق را از نزدیک ببینید", ctaP:"صبح‌های بازدید، هر چهارشنبه تا پایان اسفند. فرزندتان را بیاورید؛ چیزی برای ساختن به او می‌دهیم.", ctaBtn:"درخواست بازدید",
- fTag:"مدرسه‌ای به نام دانشمند ایرانی که حاضر نشد تنها یک رشته را برگزیند.",
- fSchool:"مدرسه", fFamilies:"خانواده‌ها", fContact:"تماس", fCalendar:"تقویم", fBuffet:"بوفه", fAddr:"تهران، ایران",
- disclaimer:"طرح طراحی مستقل. این یک پیشنهاد غیررسمی برای بازطراحی وب‌سایت است، نه وب‌سایت رسمی مجتمع آموزشی بین‌المللی حکیم، و هیچ وابستگی یا تأییدی از سوی مدرسه ندارد. تمام اعداد، نام‌ها و فعالیت‌های پورتال، محتوای نمونه برای نمایش هستند.",
- fYear:"طرح پیشنهادی · ۲۰۲۶",
- palNav:"حرکت", palOpen:"باز کردن", palToggle:"باز/بسته",
- palPlaceholder:"جست‌وجو در مدرسه، پورتال، هر چیزی…", palNone:"چیزی مطابقت ندارد.",
- inSession:"در حال برگزاری", freePeriod:"بدون کلاس — زنگ آزاد", dayDone:"کلاس‌های امروز پایان یافت",
- beforeSchool:"مجتمع از ساعت ۰۷:۳۰ باز است", weekend:"تعطیل آخر هفته — مجتمع بسته است",
- now:"اکنون", next:"بعدی", done:"پایان", room:"کلاس"
-}};
-</script>
-<script>
+/* ==========================================================
+   PART 1 — motion: the 3D stage, the scroll film, the reveals
+   ========================================================== */
 (function(){
 "use strict";
-const $=(s,r)=>(r||document).querySelector(s), $$=(s,r)=>[...(r||document).querySelectorAll(s)];
-const REDUCED = matchMedia("(prefers-reduced-motion: reduce)").matches;
-const FA_D=["۰","۱","۲","۳","۴","۵","۶","۷","۸","۹"];
-let lang = "en";
-const t = k => (I18N[lang][k] ?? I18N.en[k] ?? k);
-const nd = s => lang==="fa" ? String(s).replace(/[0-9]/g,d=>FA_D[+d]) : String(s);
+var D=document, root=D.documentElement;
+root.classList.add('js');
+var calm = window.matchMedia('(prefers-reduced-motion:reduce)').matches;
+var finePointer = window.matchMedia('(hover:hover) and (pointer:fine)').matches;
+var clamp=function(v,a,b){return v<a?a:v>b?b:v;};
+var ease=function(t){return t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2;};
+var easeOut=function(t){return 1-Math.pow(1-t,3);};
+var lerp=function(a,b,t){return a+(b-a)*t;};
 
-/* ---------- Tehran time ---------- */
-const TZ="Asia/Tehran";
-const tfmt=new Intl.DateTimeFormat("en-GB",{timeZone:TZ,hour:"2-digit",minute:"2-digit",second:"2-digit",weekday:"short",hour12:false});
-function tehran(){
-  const p=tfmt.formatToParts(new Date()), g=k=>p.find(x=>x.type===k).value;
-  const h=+g("hour"), m=+g("minute");
-  return {h,m,s:+g("second"),wd:g("weekday"),mins:h*60+m};
+/* ---------- reveal on scroll (content is visible without JS) ---------- */
+(function(){
+  var els=[].slice.call(D.querySelectorAll('.rv,.rvL,.rvS'));
+  if(calm||!('IntersectionObserver' in window)){els.forEach(function(e){e.classList.add('in');});return;}
+  var io=new IntersectionObserver(function(en){
+    en.forEach(function(x){if(x.isIntersecting){x.target.classList.add('in');io.unobserve(x.target);}});
+  },{threshold:.12,rootMargin:'0px 0px -6% 0px'});
+  els.forEach(function(e){io.observe(e);});
+  setTimeout(function(){els.forEach(function(e){
+    if(e.getBoundingClientRect().top < innerHeight) e.classList.add('in');
+  });},400);
+})();
+
+/* ---------- chapter rail + adaptive nav ---------- */
+var chapters=[].slice.call(D.querySelectorAll('[data-chapter]'));
+var rail=D.getElementById('rail'), nav=D.getElementById('nav');
+chapters.forEach(function(s,i){
+  var b=D.createElement('b');
+  b.title=s.getAttribute('data-chapter');
+  b.onclick=function(){s.scrollIntoView({behavior:calm?'auto':'smooth'});};
+  b.style.cursor='pointer';
+  rail.appendChild(b);
+  s.__dot=b;
+  s.__ground = s.classList.contains('ch-light') ? 'light' : (s.classList.contains('ch-app') ? 'auto' : 'dark');
+});
+function themeIsDark(){
+  var t=root.getAttribute('data-theme');
+  if(t==='dark')return true; if(t==='light')return false;
+  return window.matchMedia('(prefers-color-scheme:dark)').matches;
 }
-const pad=n=>String(n).padStart(2,"0");
+var lastGround='';
+function paintChrome(){
+  var probe=72, g='dark', act=null;
+  for(var i=0;i<chapters.length;i++){
+    var r=chapters[i].getBoundingClientRect();
+    if(r.top<=probe && r.bottom>probe) g=chapters[i].__ground;
+    if(r.top<=innerHeight*0.42 && r.bottom>innerHeight*0.42) act=chapters[i];
+  }
+  if(g==='auto') g = themeIsDark()?'dark':'light';
+  if(g!==lastGround){
+    lastGround=g;
+    nav.classList.toggle('lightnav',g==='light');
+    rail.classList.toggle('lightrail',g==='light');
+  }
+  nav.classList.toggle('solid',scrollY>46);
+  chapters.forEach(function(s){s.__dot.classList.toggle('on',s===act);});
+}
 
-/* ---------- schedule (sample) ---------- */
-const SCHED=[
- {a:"07:45",b:"08:35",en:"Geometry",fa:"هندسه",r:"B‑204"},
- {a:"08:45",b:"09:35",en:"Physics",fa:"فیزیک",r:"Lab 2"},
- {a:"09:45",b:"10:35",en:"English · Cambridge",fa:"انگلیسی · کمبریج",r:"A‑110"},
- {a:"10:45",b:"11:35",en:"Chemistry",fa:"شیمی",r:"Lab 1"},
- {a:"12:30",b:"13:20",en:"Persian Literature",fa:"ادبیات فارسی",r:"A‑115"},
- {a:"13:30",b:"14:20",en:"Design Workshop",fa:"کارگاه طراحی",r:"Workshop"}
-].map(s=>{const p=x=>{const[h,m]=x.split(":").map(Number);return h*60+m};return{...s,A:p(s.a),B:p(s.b)}});
+/* ---------- section progress helpers ---------- */
+function progPinned(el){
+  var r=el.getBoundingClientRect(), span=r.height-innerHeight;
+  if(span<=0) return clamp(-r.top/Math.max(1,r.height),0,1);
+  return clamp(-r.top/span,0,1);
+}
+function progPlain(el){
+  var r=el.getBoundingClientRect();
+  return clamp(-r.top/Math.max(1,r.height),0,1);
+}
 
-const SUBJ=[
- {en:"Mathematics",fa:"ریاضی",v:19.2},{en:"Physics",fa:"فیزیک",v:17.6},
- {en:"Chemistry",fa:"شیمی",v:18.5},{en:"Literature",fa:"ادبیات",v:18.9},
- {en:"English",fa:"انگلیسی",v:19.5},{en:"Geometry",fa:"هندسه",v:18.2}
+/* ---------- scene 2: the sentence ---------- */
+var SENT='chicken shawarma wrap, a can of coke, and greek yogurt with honey';
+var sayline=D.getElementById('sayline'), saycap=D.getElementById('saycap');
+var words=SENT.split(' ').map(function(w){
+  var s=D.createElement('span'); s.className='w'; s.textContent=w; sayline.appendChild(s); return s;
+});
+var caret=D.createElement('i'); caret.className='caret'; sayline.appendChild(caret);
+var chips=[].slice.call(D.querySelectorAll('#chipgrid .fchip'));
+var CAP1='Typed once. Split into three. Portions assumed out loud.';
+var CAP2='999 kcal · 62 g protein · 119 g carbs · 30 g fat — added to today.';
+function sayScene(p){
+  var n=Math.round(clamp(p/0.42,0,1)*words.length);
+  for(var i=0;i<words.length;i++) words[i].classList.toggle('hit',i<n);
+  caret.style.opacity = p<0.46 ? '1':'0';
+  for(var j=0;j<chips.length;j++) chips[j].classList.toggle('on', p > 0.5 + j*0.11);
+  saycap.textContent = p>0.86 ? CAP2 : CAP1;
+}
+
+/* ---------- scene 3: the ring closes (DOM side) ---------- */
+var bigk=D.getElementById('bigk'),
+    lp=D.getElementById('lp'), lc=D.getElementById('lc'), lf=D.getElementById('lf'),
+    bp=D.getElementById('bp'), bc=D.getElementById('bc'), bf=D.getElementById('bf');
+var DAY={k:2176,p:132,c:221,f:82}, GOAL={k:2500,p:150,c:281,f:78};
+function closeScene(p){
+  var t=easeOut(clamp((p-0.05)/0.62,0,1));
+  bigk.textContent=Math.round(DAY.k*t).toLocaleString();
+  var pv=Math.round(DAY.p*t), cv=Math.round(DAY.c*t), fv=Math.round(DAY.f*t);
+  lp.textContent=pv+' / 150 g'; lc.textContent=cv+' / 281 g'; lf.textContent=fv+' / 78 g';
+  bp.style.width=clamp(pv/GOAL.p*100,0,100)+'%';
+  bc.style.width=clamp(cv/GOAL.c*100,0,100)+'%';
+  bf.style.width=clamp(fv/GOAL.f*100,0,100)+'%';
+}
+
+/* ---------- scene: coach phone ---------- */
+(function(){
+  var bubs=[].slice.call(D.querySelectorAll('.bub')), phone=D.getElementById('phone'), coach=D.getElementById('coach');
+  if(calm){bubs.forEach(function(b){b.classList.add('on');});return;}
+  var fired=false;
+  var io=new IntersectionObserver(function(en){
+    en.forEach(function(x){
+      if(x.isIntersecting&&!fired){
+        fired=true;
+        bubs.forEach(function(b,i){setTimeout(function(){b.classList.add('on');},260+i*430);});
+      }
+    });
+  },{threshold:.3});
+  io.observe(coach);
+  if(finePointer) coach.addEventListener('pointermove',function(e){
+    var r=coach.getBoundingClientRect();
+    var rx=((e.clientY-r.top)/r.height-.5)*-9;
+    var ry=((e.clientX-r.left)/r.width-.5)*26-9;
+    phone.style.transform='rotateY('+ry.toFixed(2)+'deg) rotateX('+rx.toFixed(2)+'deg)';
+  });
+})();
+
+/* ---------- scene: week bars ---------- */
+(function(){
+  var bars=[].slice.call(D.querySelectorAll('#week3d .wbar'));
+  var max=2840*1.1;
+  function fill(){bars.forEach(function(b,i){
+    var h=Math.round(b.getAttribute('data-v')/max*100);
+    setTimeout(function(){b.style.height=h+'%';}, calm?0:i*95);
+  });}
+  if(calm||!('IntersectionObserver' in window)){fill();return;}
+  var io=new IntersectionObserver(function(en){en.forEach(function(x){if(x.isIntersecting){fill();io.disconnect();}});},{threshold:.35});
+  io.observe(D.getElementById('week'));
+})();
+
+/* ---------- scene: horizontal gallery ---------- */
+var gal=D.getElementById('gallery'), gtrack=D.getElementById('gtrack'), galSpan=0;
+function measureGallery(){ galSpan=Math.max(0, gtrack.scrollWidth - innerWidth + 24); }
+function galScene(p){ gtrack.style.transform='translate3d('+(-galSpan*ease(p)).toFixed(1)+'px,0,0)'; }
+
+/* ---------- spotlight + magnetic buttons ---------- */
+(function(){
+  if(!finePointer||calm) return;
+  var spot=D.getElementById('spot');
+  addEventListener('pointermove',function(e){
+    spot.style.transform='translate3d('+(e.clientX-260)+'px,'+(e.clientY-260)+'px,0)';
+    spot.style.opacity = lastGround==='light' ? '0' : '1';
+  },{passive:true});
+  [].slice.call(D.querySelectorAll('.btn,.navcta,.pbtn')).forEach(function(b){
+    b.addEventListener('pointermove',function(e){
+      var r=b.getBoundingClientRect();
+      var dx=(e.clientX-(r.left+r.width/2))/r.width*10;
+      var dy=(e.clientY-(r.top+r.height/2))/r.height*7;
+      b.style.transform='translate3d('+dx.toFixed(1)+'px,'+(dy-2).toFixed(1)+'px,0)';
+    });
+    b.addEventListener('pointerleave',function(){b.style.transform='';});
+  });
+})();
+
+/* ==========================================================
+   The 3D stage — hand-built projector, no libraries.
+   A torus is the calorie ring; three spheres are the macros.
+   ========================================================== */
+var stage=D.getElementById('stage'), cv=D.getElementById('c3d');
+var ctx=cv.getContext('2d');
+var bl=D.createElement('canvas'), blx=bl.getContext('2d');
+var W=0,H=0,dpr=1,NU=84,NV=13;
+var mobile=innerWidth<820;
+if(mobile){NU=52;NV=9;}
+var canFilter = (function(){try{blx.filter='blur(2px)';return blx.filter!=='none'&&blx.filter!=='';}catch(e){return false;}})();
+
+function sizeCanvas(){
+  dpr=Math.min(window.devicePixelRatio||1, mobile?1.6:2);
+  W=cv.clientWidth; H=cv.clientHeight;
+  cv.width=Math.round(W*dpr); cv.height=Math.round(H*dpr);
+  bl.width=Math.max(1,Math.round(W*dpr/7)); bl.height=Math.max(1,Math.round(H*dpr/7));
+  measureGallery();
+}
+
+/* particles */
+var PN=mobile?70:150, parts=[];
+(function(){
+  for(var i=0;i<PN;i++){
+    var th=Math.random()*Math.PI*2, ph=Math.acos(2*Math.random()-1), rr=2.1+Math.random()*4.2;
+    parts.push({x:rr*Math.sin(ph)*Math.cos(th), y:rr*Math.cos(ph), z:rr*Math.sin(ph)*Math.sin(th),
+      s:0.5+Math.random()*1.5, h:Math.random()});
+  }
+})();
+
+/* macro split of a 2,176 kcal day, by energy */
+var SEG=[{end:0.245,col:[66,115,248]},{end:0.656,col:[227,160,23]},{end:1.0,col:[228,65,109]}];
+var MINT=[99,229,171], STEEL=[38,48,44];
+var L1=(function(){var v=[-0.42,0.78,0.86],m=Math.hypot(v[0],v[1],v[2]);return [v[0]/m,v[1]/m,v[2]/m];})();
+var L2=(function(){var v=[0.82,-0.28,-0.42],m=Math.hypot(v[0],v[1],v[2]);return [v[0]/m,v[1]/m,v[2]/m];})();
+var HV=(function(){var v=[L1[0],L1[1],L1[2]+1],m=Math.hypot(v[0],v[1],v[2]);return [v[0]/m,v[1]/m,v[2]/m];})();
+
+var st={x:0.31,y:0,D:4.05,a:1,prog:.30,split:0};
+var KF=[
+  {x:0.310,y:0.02,D:4.05,a:1.00,prog:.30},
+  {x:0.310,y:0.06,D:4.40,a:1.00,prog:.34},
+  {x:0.140,y:0.00,D:9.60,a:0.10,prog:.00},
+  {x:0.268,y:0.00,D:3.62,a:1.00,prog:.87}
 ];
+function setPhase(ph){
+  var i=Math.min(2,Math.floor(ph)), t=clamp(ph-i,0,1), A=KF[i], B=KF[i+1];
+  var tp=t, tf=t;
+  if(i===2){ tp=easeOut(clamp(t/0.28,0,1)); tf=easeOut(clamp((t-0.05)/0.62,0,1)); }
+  st.x=lerp(A.x,B.x,tp); st.y=lerp(A.y,B.y,tp); st.D=lerp(A.D,B.D,tp);
+  st.a=lerp(A.a,B.a,tp); st.prog=lerp(A.prog,B.prog,tf);
+  st.split=(i===2)?clamp((t-0.70)/0.26,0,1):0;
+  st.ph=ph;
+}
 
-/* =========================================================
-   1 · WEBGL MUQARNAS VAULT
-   ========================================================= */
-let three=null;
-function initVault(){
-  if(!window.THREE) return false;
-  const cv=$("#vault"), host=$("#bg");
-  let W=host.clientWidth, H=host.clientHeight;
-  const renderer=new THREE.WebGLRenderer({canvas:cv,antialias:true,alpha:true,powerPreference:"high-performance"});
-  renderer.setPixelRatio(Math.min(devicePixelRatio||1,1.75));
-  renderer.setSize(W,H,false);
-  const scene=new THREE.Scene();
-  scene.fog=new THREE.FogExp2(0x160F1C,0.0075);
-  const cam=new THREE.PerspectiveCamera(46,W/H,0.1,400);
+var px=0,py=0,tpx=0,tpy=0;
+if(finePointer&&!calm) addEventListener('pointermove',function(e){
+  tpx=(e.clientX/innerWidth-.5); tpy=(e.clientY/innerHeight-.5);
+},{passive:true});
 
-  const group=new THREE.Group(); scene.add(group);
+var buf=[];
 
-  /* --- muqarnas cells: tiers of niches on a dome --- */
-  const R=34, TIERS=7;
-  const cell=new THREE.ConeGeometry(1,1.55,4,1,true); cell.rotateX(Math.PI/2);
-  const matPlum=new THREE.MeshStandardMaterial({color:0x6B3080,metalness:.38,roughness:.44,side:THREE.DoubleSide,flatShading:true});
-  const matGold=new THREE.MeshStandardMaterial({color:0xE3A23C,metalness:.72,roughness:.26,emissive:0x2E1B05,side:THREE.DoubleSide,flatShading:true});
+function drawScene(time){
+  var sx = mobile ? 0.20 : st.x, sy = mobile ? st.y+0.15 : st.y, salpha = st.a*(mobile?0.40:1);
+  var cx=W*(0.5+sx), cy=H*(0.5+sy);
+  var f=Math.min(W,H)*(mobile?0.80:0.92);
+  px+=(tpx-px)*0.06; py+=(tpy-py)*0.06;
+  var rot=(st.ph||0)*1.15 + time*0.00013;
+  var rx=0.46+py*0.30, ry=rot+px*0.42, rz=-0.14;
+  var cxr=Math.cos(rx),sxr=Math.sin(rx),cyr=Math.cos(ry),syr=Math.sin(ry),czr=Math.cos(rz),szr=Math.sin(rz);
 
-  const plumM=[],goldM=[],dummy=new THREE.Object3D(),up=new THREE.Vector3(0,1,0);
-  for(let ti=0;ti<TIERS;ti++){
-    const phi=0.16+(ti/(TIERS-1))*1.06;
-    const n=6+ti*6, y=Math.cos(phi)*R, rad=Math.sin(phi)*R;
-    const w=(2*Math.PI*rad)/n*0.40;
-    for(let i=0;i<n;i++){
-      const th=(i/n)*Math.PI*2 + (ti%2? Math.PI/n : 0);
-      const px=Math.cos(th)*rad, pz=Math.sin(th)*rad;
-      dummy.position.set(px,y,pz);
-      dummy.up.copy(up);
-      dummy.lookAt(px*2,y*2,pz*2);          /* niche opens toward the centre */
-      dummy.rotateZ(ti%2?Math.PI/4:0);
-      dummy.scale.set(w,w,w*1.45);
-      dummy.updateMatrix();
-      ((ti+i)%5===0?goldM:plumM).push(dummy.matrix.clone());
+  function tr(x,y,z){
+    var y1=y*cxr-z*sxr, z1=y*sxr+z*cxr;
+    var x2=x*cyr+z1*syr, z2=-x*syr+z1*cyr;
+    var x3=x2*czr-y1*szr, y3=x2*szr+y1*czr;
+    return [x3,y3,z2];
+  }
+  ctx.setTransform(dpr,0,0,dpr,0,0);
+  ctx.clearRect(0,0,W,H);
+  ctx.globalAlpha=1;
+
+  /* ambient blooms behind the object */
+  var g0=ctx.createRadialGradient(cx,cy,0,cx,cy,Math.min(W,H)*0.62);
+  g0.addColorStop(0,'rgba(99,229,171,'+(0.13*salpha).toFixed(3)+')');
+  g0.addColorStop(.55,'rgba(28,80,120,'+(0.07*salpha).toFixed(3)+')');
+  g0.addColorStop(1,'rgba(8,12,10,0)');
+  ctx.fillStyle=g0; ctx.fillRect(0,0,W,H);
+  var bx=cx+Math.sin(time*0.00021)*W*0.18, by=cy+Math.cos(time*0.00017)*H*0.2;
+  var g1=ctx.createRadialGradient(bx,by,0,bx,by,Math.min(W,H)*0.44);
+  g1.addColorStop(0,'rgba(66,115,248,'+(0.09*salpha).toFixed(3)+')');
+  g1.addColorStop(1,'rgba(66,115,248,0)');
+  ctx.fillStyle=g1; ctx.fillRect(0,0,W,H);
+
+  var DD = mobile ? st.D*1.12 : st.D;
+  var R=1.0, r=0.30, du=Math.PI*2/NU, dv=Math.PI*2/NV;
+  buf.length=0;
+
+  /* torus */
+  var cu=[],su=[],cvv=[],svv=[],cuh=[],suh=[],cvh=[],svh=[],i,j;
+  for(i=0;i<=NU;i++){cu[i]=Math.cos(i*du);su[i]=Math.sin(i*du);cuh[i]=Math.cos((i+.5)*du);suh[i]=Math.sin((i+.5)*du);}
+  for(j=0;j<=NV;j++){cvv[j]=Math.cos(j*dv);svv[j]=Math.sin(j*dv);cvh[j]=Math.cos((j+.5)*dv);svh[j]=Math.sin((j+.5)*dv);}
+  var vert=[];
+  for(i=0;i<=NU;i++){
+    var row=[];
+    for(j=0;j<=NV;j++){
+      var rad=R+r*cvv[j];
+      var p=tr(rad*cu[i], rad*su[i], r*svv[j]);
+      var pz=DD-p[2]; if(pz<0.25)pz=0.25;
+      var s=f/pz;
+      row.push([cx+p[0]*s, cy-p[1]*s, pz]);
+    }
+    vert.push(row);
+  }
+  for(i=0;i<NU;i++){
+    var frac=i/NU;
+    var lit = frac <= st.prog;
+    var base;
+    if(!lit){ base=STEEL; }
+    else if(st.split<=0.001){ base=MINT; }
+    else {
+      var segc=SEG[0].col;
+      for(var q=0;q<SEG.length;q++){ if(frac<=SEG[q].end){segc=SEG[q].col;break;} }
+      base=[lerp(MINT[0],segc[0],st.split),lerp(MINT[1],segc[1],st.split),lerp(MINT[2],segc[2],st.split)];
+    }
+    for(j=0;j<NV;j++){
+      var n=tr(cvh[j]*cuh[i], cvh[j]*suh[i], svh[j]);
+      if(n[2]<=0.02) continue;
+      var d1=n[0]*L1[0]+n[1]*L1[1]+n[2]*L1[2]; if(d1<0)d1=0;
+      var d2=n[0]*L2[0]+n[1]*L2[1]+n[2]*L2[2]; if(d2<0)d2=0;
+      var hs=n[0]*HV[0]+n[1]*HV[1]+n[2]*HV[2]; if(hs<0)hs=0;
+      var spec=Math.pow(hs,42)*(lit?235:120);
+      var k=0.15+d1*0.95+d2*0.30;
+      var rr2=clamp(base[0]*k+spec,0,255)|0, gg=clamp(base[1]*k+spec*1.02,0,255)|0, bb=clamp(base[2]*k+spec*0.96,0,255)|0;
+      var A=vert[i][j], B=vert[i+1][j], C=vert[i+1][j+1], E=vert[i][j+1];
+      buf.push({t:0,a:A,b:B,c:C,d:E,col:'rgb('+rr2+','+gg+','+bb+')',z:(A[2]+C[2])*0.5});
     }
   }
-  const mk=(mats,mat)=>{const m=new THREE.InstancedMesh(cell,mat,mats.length);
-    mats.forEach((mx,i)=>m.setMatrixAt(i,mx)); m.instanceMatrix.needsUpdate=true; group.add(m); return m;};
-  mk(plumM,matPlum); mk(goldM,matGold);
 
-  /* --- girih star ring at the rim --- */
-  (function(){
-    const N=32, rr=R*Math.sin(1.30), yy=R*Math.cos(1.30), pts=[];
-    const P=i=>new THREE.Vector3(Math.cos(i/N*Math.PI*2)*rr,yy,Math.sin(i/N*Math.PI*2)*rr);
-    for(let i=0;i<N;i++){ pts.push(P(i),P(i+9)); pts.push(P(i),P(i+11)); }
-    const g=new THREE.BufferGeometry().setFromPoints(pts);
-    group.add(new THREE.LineSegments(g,new THREE.LineBasicMaterial({color:0xE3A23C,transparent:true,opacity:.17})));
-  })();
+  /* three macro spheres riding the ring at the segment seams */
+  for(var m=0;m<SEG.length;m++){
+    var ang=(m===0?0.245:m===1?0.656:1.0)*Math.PI*2 + 0.0;
+    var p2=tr((R)*Math.cos(ang),(R)*Math.sin(ang), 0);
+    var pz2=DD-p2[2]; if(pz2<0.25)pz2=0.25;
+    var s2=f/pz2;
+    buf.push({t:1,x:cx+p2[0]*s2, y:cy-p2[1]*s2, rad:0.155*s2, col:SEG[m].col, z:pz2, alpha:st.split*0.95+0.08});
+  }
 
-  /* --- gold dust --- */
-  const dust=(function(){
-    const N=520, pos=new Float32Array(N*3);
-    for(let i=0;i<N;i++){const r=8+Math.random()*34,a=Math.random()*Math.PI*2;
-      pos[i*3]=Math.cos(a)*r; pos[i*3+1]=-14+Math.random()*46; pos[i*3+2]=Math.sin(a)*r;}
-    const g=new THREE.BufferGeometry(); g.setAttribute("position",new THREE.BufferAttribute(pos,3));
-    const p=new THREE.Points(g,new THREE.PointsMaterial({color:0xF2CE8E,size:.17,transparent:true,opacity:.5,depthWrite:false}));
-    scene.add(p); return p;
-  })();
+  /* particles */
+  for(var q2=0;q2<parts.length;q2++){
+    var pt=parts[q2];
+    var p3=tr(pt.x,pt.y,pt.z);
+    var pz3=DD-p3[2]; if(pz3<0.3) continue;
+    var s3=f/pz3;
+    buf.push({t:2,x:cx+p3[0]*s3, y:cy-p3[1]*s3, rad:Math.max(0.35,pt.s*s3*0.0022), z:pz3, h:pt.h});
+  }
 
-  scene.add(new THREE.AmbientLight(0x3E2C4A,1.15));
-  const l1=new THREE.PointLight(0xC07FD8,2.3,160); l1.position.set(0,-7,12); scene.add(l1);
-  const l2=new THREE.PointLight(0xE3A23C,1.5,130); l2.position.set(16,16,-10); scene.add(l2);
-  const l3=new THREE.DirectionalLight(0xF4EFF6,.45); l3.position.set(0,34,22); scene.add(l3);
+  buf.sort(function(a,b){return b.z-a.z;});
 
-  let mx=0,my=0,tx=0,ty=0;
-  if(!REDUCED) addEventListener("pointermove",e=>{
-    tx=(e.clientX/innerWidth-.5)*2; ty=(e.clientY/innerHeight-.5)*2;
-  },{passive:true});
+  ctx.globalAlpha=salpha;
+  for(var n2=0;n2<buf.length;n2++){
+    var o=buf[n2];
+    if(o.t===0){
+      ctx.beginPath();
+      ctx.moveTo(o.a[0],o.a[1]); ctx.lineTo(o.b[0],o.b[1]); ctx.lineTo(o.c[0],o.c[1]); ctx.lineTo(o.d[0],o.d[1]);
+      ctx.closePath(); ctx.fillStyle=o.col; ctx.fill();
+      ctx.strokeStyle=o.col; ctx.lineWidth=1.05; ctx.stroke();
+    } else if(o.t===1){
+      var gr=ctx.createRadialGradient(o.x-o.rad*0.35,o.y-o.rad*0.4,o.rad*0.08,o.x,o.y,o.rad);
+      var c=o.col;
+      gr.addColorStop(0,'rgba(255,255,255,'+(0.95*o.alpha).toFixed(3)+')');
+      gr.addColorStop(.35,'rgba('+c[0]+','+c[1]+','+c[2]+','+(0.95*o.alpha).toFixed(3)+')');
+      gr.addColorStop(1,'rgba('+(c[0]*0.18|0)+','+(c[1]*0.18|0)+','+(c[2]*0.18|0)+',0)');
+      ctx.fillStyle=gr; ctx.beginPath(); ctx.arc(o.x,o.y,o.rad,0,6.2832); ctx.fill();
+    } else {
+      ctx.fillStyle = o.h>0.72 ? 'rgba(99,229,171,.5)' : (o.h>0.45?'rgba(160,190,255,.36)':'rgba(230,240,235,.26)');
+      ctx.beginPath(); ctx.arc(o.x,o.y,o.rad,0,6.2832); ctx.fill();
+    }
+  }
+  ctx.globalAlpha=1;
 
-  function resize(){ W=host.clientWidth; H=host.clientHeight;
-    cam.aspect=W/H; cam.updateProjectionMatrix(); renderer.setSize(W,H,false); }
-  addEventListener("resize",resize,{passive:true});
-
-  three={renderer,scene,cam,group,dust,resize,mxy:()=>{mx+=(tx-mx)*.045;my+=(ty-my)*.045;return[mx,my]}};
-  return true;
+  /* bloom: downsample, blur, add back */
+  if(bl.width>2){
+    blx.setTransform(1,0,0,1,0,0);
+    blx.clearRect(0,0,bl.width,bl.height);
+    blx.drawImage(cv,0,0,bl.width,bl.height);
+    ctx.save();
+    ctx.globalCompositeOperation='lighter';
+    ctx.globalAlpha=0.5*salpha;
+    if(canFilter) ctx.filter='blur(5px)';
+    ctx.drawImage(bl,0,0,W,H);
+    ctx.filter='none';
+    ctx.restore();
+  }
 }
 
-/* =========================================================
-   2 · SCROLL ENGINE
-   ========================================================= */
-let darkEnd=99999, prog=0, clock=0;
-function measure(){ const p=$("#portal"); darkEnd = p ? p.offsetTop : 99999; }
-
-function frame(){
+/* ---------- master loop ---------- */
+var hero=D.getElementById('hero'), say=D.getElementById('say'), close=D.getElementById('close');
+var stageLive=true, lastY=-1;
+function frame(time){
+  var y=scrollY;
+  var pH=progPlain(hero), pS=progPinned(say), pC=progPinned(close);
+  var ph = pC>0 ? 2+pC : (pS>0 ? 1+pS : pH);
+  if(y!==lastY){
+    lastY=y;
+    paintChrome();
+    sayScene(pS);
+    closeScene(pC);
+    galScene(progPinned(gal));
+  }
+  var cr=close.getBoundingClientRect();
+  var live = cr.bottom > -80 && hero.getBoundingClientRect().top < innerHeight+80;
+  if(live!==stageLive){ stageLive=live; stage.classList.toggle('off',!live); }
+  if(live){ setPhase(ph); drawScene(time); }
   requestAnimationFrame(frame);
-  const y=scrollY;
-  prog += (Math.min(y/(innerHeight*1.55),1) - prog)*0.09;
-  if(!three) return;
-  if(y > darkEnd + innerHeight*0.4) return;      /* vault off-screen: skip work */
-  if(!REDUCED) clock += 0.0009;
-  const [mx,my]=three.mxy();
-  const g=three.group, c=three.cam;
-  g.rotation.y = clock + prog*1.15;
-  g.rotation.x = prog*0.22;
-  c.position.set(mx*3, -14 + prog*26 + my*1.6, 39 - prog*11);
-  c.lookAt(0, 15 - prog*9, 0);
-  if(!REDUCED) three.dust.rotation.y = -clock*1.8;
-  three.renderer.render(three.scene,three.cam);
 }
 
-/* nav turns light over the paper sections */
-function navWatch(){
-  const nav=$("#nav"), portal=$("#portal");
-  const sync=()=>nav.classList.toggle("on-paper", portal.getBoundingClientRect().top < 70);
-  addEventListener("scroll",sync,{passive:true});
-  addEventListener("resize",sync,{passive:true});
-  sync();
+function boot(){
+  sizeCanvas();
+  setPhase(0);
+  lastY=-1;
+  requestAnimationFrame(frame);
 }
-
-/* reveals — opt in to motion only once JS is alive */
-function reveals(){
-  document.documentElement.setAttribute("data-anim","on");
-  const io=new IntersectionObserver((es,o)=>es.forEach(e=>{
-    if(e.isIntersecting){ e.target.classList.add("in"); o.unobserve(e.target); countUp(e.target); }
-  }),{rootMargin:"0px 0px -8% 0px",threshold:.08});
-  $$(".rv").forEach(el=>io.observe(el));
-  setTimeout(()=>$$(".rv").forEach(el=>el.classList.add("in")),1400);  /* failsafe */
-}
-function countUp(scope){
-  const els = scope.matches("[data-count]") ? [scope] : $$("[data-count]",scope);
-  els.forEach(el=>{
-    if(el.dataset.done) return; el.dataset.done="1";
-    const to=+el.dataset.count, dur=REDUCED?0:1100, t0=performance.now();
-    (function step(now){
-      const k=dur?Math.min((now-t0)/dur,1):1, e=1-Math.pow(1-k,3);
-      el.textContent=nd(Math.round(to*e).toLocaleString("en-US"));
-      if(k<1) requestAnimationFrame(step);
-    })(t0);
-  });
-}
-window.__reflowCounts=()=>$$("[data-count]").forEach(el=>{
-  if(el.dataset.done) el.textContent=nd((+el.dataset.count).toLocaleString("en-US"));
+var rt;
+addEventListener('resize',function(){
+  clearTimeout(rt);
+  rt=setTimeout(function(){ mobile=innerWidth<820; sizeCanvas(); lastY=-1; },140);
 });
-window.__hakim={measure,reveals,navWatch,frame,initVault,t,nd,tehran,pad,SCHED,SUBJ,$,$$,REDUCED,
-  getLang:()=>lang,setLang:v=>{lang=v}};
+if(D.readyState!=='loading') boot(); else addEventListener('DOMContentLoaded',boot);
+if(D.fonts&&D.fonts.ready) D.fonts.ready.then(function(){measureGallery();lastY=-1;});
 })();
 </script>
+
 <script>
+/* ==========================================================
+   PART 2 — the live food log
+   ========================================================== */
 (function(){
 "use strict";
-const H=window.__hakim, {$,$$,pad,tehran,SCHED,SUBJ,REDUCED}=H;
-const t=H.t, nd=H.nd;
-const L=()=>H.getLang();
+var D=document, $=function(id){return D.getElementById(id);};
+var KEY='macro-log-v2';
+var state={goal:{kcal:2500,protein:150},days:{},seeded:false};
+var cur=new Date(); cur.setHours(12,0,0,0);
+var sample=null, sampleChecked=false, canTools=false, ctl=null, qctl=null, turns=[];
 
-/* ---------- i18n ---------- */
-function setText(el,v){
-  const n=[...el.childNodes].find(x=>x.nodeType===3 && x.textContent.trim());
-  if(n) n.textContent=v; else el.textContent=v;
-}
-function applyLang(l){
-  H.setLang(l);
-  document.body.dir = l==="fa" ? "rtl" : "ltr";
-  document.body.lang = l==="fa" ? "fa" : "en";
-  document.documentElement.lang = l==="fa" ? "fa" : "en";
-  document.documentElement.dir  = l==="fa" ? "rtl" : "ltr";
-  $$("[data-i18n]").forEach(el=>{ const v=I18N[l][el.dataset.i18n]; if(v!=null) setText(el,v); });
-  $("#langBtn").textContent = l==="fa" ? "English" : "فارسی";
-  $("#palInput").placeholder = t("palPlaceholder");
-  $("#tAvg").textContent = nd("18.4");
-  $("#tAtt").textContent = nd("97") + "%";
-  $$(".tile .t-v.tnum, .slot .tm").forEach(el=>{
-    if(el.id) return;
-    const w=document.createTreeWalker(el,NodeFilter.SHOW_TEXT);
-    let n; while((n=w.nextNode())) n.textContent = nd(n.textContent.replace(/[۰-۹]/g,d=>"۰۱۲۳۴۵۶۷۸۹".indexOf(d)));
-  });
-  window.__reflowCounts();
-  buildIndex(); tick(); renderFeed(); drawChart(1);
-}
+function key(d){var m=d.getMonth()+1,day=d.getDate();return d.getFullYear()+'-'+(m<10?'0':'')+m+'-'+(day<10?'0':'')+day;}
+function num(v){v=Math.round(Number(v));return isFinite(v)&&v>0?v:0;}
+function entries(k){return state.days[k]||[];}
+function totals(k){var t={k:0,p:0,c:0,f:0};entries(k).forEach(function(e){t.k+=e.kcal;t.p+=e.p;t.c+=e.c;t.f+=e.f;});return t;}
+function uid(){return Date.now().toString(36)+'-'+Math.random().toString(36).slice(2,7);}
+function load(){try{var s=JSON.parse(localStorage.getItem(KEY));if(s&&s.days&&s.goal)return s;}catch(e){}return null;}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(state));}catch(e){}}
 
-/* ---------- live clock + status ---------- */
-function tick(){
-  const n=tehran(), l=L();
-  $("#clock").textContent = nd(pad(n.h)+":"+pad(n.m)+":"+pad(n.s));
-  const weekend = n.wd==="Thu" || n.wd==="Fri";
-  const cur = SCHED.find(s=>n.mins>=s.A && n.mins<s.B);
-  const nxt = SCHED.find(s=>n.mins<s.A);
-  const dot=$("#nowDot"), txt=$("#nowText");
-  let msg, col;
-  if(weekend){ msg=t("weekend"); col="#6E6276"; }
-  else if(cur){ msg=(l==="fa"?cur.fa:cur.en)+" · "+t("inSession"); col="#3FA46A"; }
-  else if(n.mins<SCHED[0].A){ msg=t("beforeSchool"); col="#D98324"; }
-  else if(nxt){ msg=t("freePeriod")+" · "+(l==="fa"?nxt.fa:nxt.en)+" "+nd(nxt.a); col="#D98324"; }
-  else { msg=t("dayDone"); col="#6E6276"; }
-  txt.textContent=msg; dot.style.background=col;
-  dot.style.animation = col==="#3FA46A" && !REDUCED ? "" : "none";
-  const done=SCHED.filter(s=>n.mins>=s.B).length;
-  $("#portalSub").textContent = weekend ? t("weekend")
-    : nd(done)+"/"+nd(SCHED.length)+" "+(l==="fa"?"کلاس برگزار شد":"classes done")+" · "+nd(pad(n.h)+":"+pad(n.m));
-  $("#schedR").textContent = nd(pad(n.h)+":"+pad(n.m));
-  renderSched(n,weekend);
-}
-function renderSched(n,weekend){
-  const l=L(), box=$("#sched"); box.innerHTML="";
-  SCHED.forEach(s=>{
-    const now = !weekend && n.mins>=s.A && n.mins<s.B;
-    const done = weekend || n.mins>=s.B;
-    const d=document.createElement("div");
-    d.className="slot"+(now?" now":done?" done":" next");
-    d.innerHTML='<span class="tm">'+nd(s.a)+"–"+nd(s.b)+'</span>'+
-      '<span class="nm">'+(l==="fa"?s.fa:s.en)+'</span>'+
-      '<span class="st">'+(now?t("now"):done?t("done"):t("next"))+'</span>';
-    box.appendChild(d);
-  });
-}
-
-/* ---------- live activity feed ---------- */
-const POOL=[
- {k:"good",en:"Chemistry quiz graded — 19.0 / 20",fa:"آزمون شیمی تصحیح شد — ۱۹٫۰ از ۲۰"},
- {k:"crit",en:"Physics problem set closes in 4 hours",fa:"مهلت تکلیف فیزیک تا ۴ ساعت دیگر"},
- {k:"info",en:"Ms. Rahimi posted notes for Geometry",fa:"خانم رحیمی جزوهٔ هندسه را بارگذاری کرد"},
- {k:"good",en:"Attendance confirmed for period 3",fa:"حضور زنگ سوم ثبت شد"},
- {k:"info",en:"Library hold ready: Al‑Biruni, Chronology",fa:"امانت کتابخانه آماده است: آثار الباقیه، بیرونی"},
- {k:"warn",en:"Workshop moved to the ceramics room",fa:"کارگاه به اتاق سفال منتقل شد"},
- {k:"good",en:"Olympiad round 2 result published",fa:"نتیجهٔ مرحلهٔ دوم المپیاد منتشر شد"},
- {k:"info",en:"e‑Buffet balance topped up",fa:"موجودی بوفه شارژ شد"},
- {k:"warn",en:"Bus route 4 running 10 minutes late",fa:"سرویس شمارهٔ ۴ ده دقیقه تأخیر دارد"}
+var SEED=[
+  {off:6,items:[{name:'Earlier day (example)',kcal:2410,p:148,c:246,f:86}]},
+  {off:5,items:[{name:'Earlier day (example)',kcal:2680,p:162,c:288,f:92}]},
+  {off:4,items:[{name:'Earlier day (example)',kcal:1980,p:121,c:201,f:70}]},
+  {off:3,items:[{name:'Earlier day (example)',kcal:2520,p:155,c:259,f:85}]},
+  {off:2,items:[{name:'Earlier day (example)',kcal:2176,p:132,c:221,f:82}]},
+  {off:1,items:[{name:'Earlier day (example)',kcal:2840,p:171,c:306,f:97}]},
+  {off:0,items:[
+    {name:'2 large eggs, scrambled (example)',kcal:180,p:12,c:2,f:14},
+    {name:'Sourdough slice with butter (example)',kcal:210,p:6,c:26,f:9},
+    {name:'Flat white, whole milk (example)',kcal:120,p:7,c:9,f:6}]}
 ];
-const COL={good:"#3FA46A",warn:"#D98324",crit:"#C6453F",info:"#7A3A8C"};
-let feed=[], seed=0;
-function pushFeed(){
-  const n=tehran();
-  feed.unshift({...POOL[seed++%POOL.length], tm:pad(n.h)+":"+pad(n.m)});
-  feed=feed.slice(0,6); renderFeed();
-  const b=$("#msgBadge"); if(b) b.textContent=nd(Math.min(9,6+Math.floor(seed/3)));
-}
-function renderFeed(){
-  const l=L(), ul=$("#feed"); ul.innerHTML="";
-  feed.forEach(f=>{
-    const li=document.createElement("li");
-    li.innerHTML='<span class="dot" style="background:'+COL[f.k]+'"></span>'+
-      '<span class="tx">'+(l==="fa"?f.fa:f.en)+'</span><span class="tm">'+nd(f.tm)+"</span>";
-    ul.appendChild(li);
+(function init(){
+  var l=load();
+  if(l){ state={goal:l.goal,days:l.days,seeded:!!l.seeded}; return; }
+  SEED.forEach(function(s){
+    var d=new Date(cur); d.setDate(d.getDate()-s.off);
+    state.days[key(d)]=s.items.map(function(x){return {id:uid(),name:x.name,kcal:x.kcal,p:x.p,c:x.c,f:x.f,ex:true};});
   });
-}
+  state.seeded=true;
+  var n=$('xnotice');
+  n.hidden=false;
+  n.textContent='Showing a week of example entries so the numbers mean something. Delete them with the × and log your own — everything stays in this browser.';
+})();
 
-/* ---------- chart: lollipop on a labelled 14–20 axis ---------- */
-const MIN=14, MAX=20, X0=100, X1=462;
-function drawChart(p){
-  const svg=$("#chart"), flip=L()==="fa";
-  const M=x=>flip?520-x:x;
-  const X=v=>X0+(Math.max(MIN,v)-MIN)/(MAX-MIN)*(X1-X0);
-  const best=Math.max(...SUBJ.map(s=>s.v));
-  let o="";
-  [14,16,18,20].forEach(v=>{
-    o+='<line x1="'+M(X(v))+'" y1="12" x2="'+M(X(v))+'" y2="132" stroke="#EFEAF0" stroke-width="1" fill="none"/>';
-    o+='<text x="'+M(X(v))+'" y="150" fill="#6B5F73" font-size="10.5" text-anchor="middle" font-family="Archivo,sans-serif">'+nd(v)+"</text>";
+function carbGoal(){return Math.max(1,Math.round(state.goal.kcal*0.45/4));}
+function fatGoal(){return Math.max(1,Math.round(state.goal.kcal*0.28/9));}
+function dayLabel(){
+  var t=new Date(); t.setHours(12,0,0,0);
+  var diff=Math.round((cur-t)/86400000);
+  if(diff===0)return 'Today';
+  if(diff===-1)return 'Yesterday';
+  if(diff===1)return 'Tomorrow';
+  return cur.toLocaleDateString(undefined,{weekday:'short',month:'short',day:'numeric'});
+}
+function addEntries(list){
+  var k=key(cur);
+  if(!state.days[k])state.days[k]=[];
+  list.forEach(function(x){
+    state.days[k].push({id:uid(),name:String(x.name||'Food').slice(0,120),kcal:num(x.kcal),p:num(x.p),c:num(x.c),f:num(x.f)});
   });
-  o+='<line x1="'+M(X0)+'" y1="136" x2="'+M(X1)+'" y2="136" stroke="#E3DCE6" stroke-width="1" fill="none"/>';
-  SUBJ.forEach((s,i)=>{
-    const y=18+ (120/SUBJ.length)*(i+.5);
-    const vx=X(MIN+(s.v-MIN)*p), gold=s.v===best;
-    o+='<text x="'+M(88)+'" y="'+(y+3.5)+'" fill="#6B5F73" font-size="11" text-anchor="'+(flip?"start":"end")+'" font-family="'+(flip?"Vazirmatn":"Archivo")+',sans-serif">'+(flip?s.fa:s.en)+"</text>";
-    o+='<line x1="'+M(X0)+'" y1="'+y+'" x2="'+M(X1)+'" y2="'+y+'" stroke="#F3EEF4" stroke-width="2" stroke-linecap="round" fill="none"/>';
-    o+='<line x1="'+M(X0)+'" y1="'+y+'" x2="'+M(vx)+'" y2="'+y+'" stroke="'+(gold?"#E3A23C":"#7A3A8C")+'" stroke-width="3" stroke-linecap="round" fill="none" opacity=".55"/>';
-    o+='<circle cx="'+M(vx)+'" cy="'+y+'" r="4.6" fill="'+(gold?"#E3A23C":"#7A3A8C")+'"/>';
-    o+='<text x="'+M(X1+12)+'" y="'+(y+3.8)+'" fill="#241C2A" font-size="11.5" font-weight="700" text-anchor="'+(flip?"end":"start")+'" font-family="'+(flip?"Vazirmatn":"Archivo")+',sans-serif">'+nd((MIN+(s.v-MIN)*p).toFixed(1))+"</text>";
+  save(); render();
+}
+function setSt(el,msg,err){var s=$(el);s.textContent=msg||'';s.className='st'+(err?' err':'');}
+
+function render(){
+  var k=key(cur), t=totals(k), g=state.goal;
+  $('xdlabel').textContent=dayLabel();
+  $('xkcal').textContent=t.k.toLocaleString();
+  var left=g.kcal-t.k;
+  $('xkleft').textContent = left>=0 ? (left.toLocaleString()+' left') : (Math.abs(left).toLocaleString()+' over');
+  var ring=$('xring'), C=376.99;
+  ring.setAttribute('stroke-dashoffset', String(C*(1-(g.kcal>0?Math.min(1,t.k/g.kcal):0))));
+  ring.setAttribute('stroke', left<0 ? 'var(--over)' : 'url(#xrg)');
+  function bar(id,txt,val,goal){
+    $(id).style.width=(goal>0?Math.min(100,val/goal*100):0)+'%';
+    $(txt).textContent=val+' / '+goal+' g';
+  }
+  bar('xpbar','xptxt',t.p,g.protein);
+  bar('xcbar','xctxt',t.c,carbGoal());
+  bar('xfbar','xftxt',t.f,fatGoal());
+
+  var list=$('xlist'), es=entries(k);
+  list.textContent='';
+  $('xcount').textContent = es.length ? (es.length+(es.length===1?' item · ':' items · ')+t.k.toLocaleString()+' kcal') : '';
+  if(!es.length){
+    var p=D.createElement('p'); p.className='empty';
+    p.textContent='Nothing logged for '+dayLabel().toLowerCase()+'. Type what you ate above.';
+    list.appendChild(p);
+  }
+  es.forEach(function(e){
+    var row=D.createElement('div'); row.className='item';
+    var nm=D.createElement('div'); nm.className='nm';
+    var a=D.createElement('div'); a.textContent=e.name;
+    var b=D.createElement('div'); b.className='mc';
+    b.textContent='P '+e.p+' g · C '+e.c+' g · F '+e.f+' g';
+    nm.appendChild(a); nm.appendChild(b);
+    var kc=D.createElement('div'); kc.className='kc'; kc.textContent=e.kcal.toLocaleString()+' kcal';
+    var x=D.createElement('button'); x.className='x'; x.textContent='×';
+    x.setAttribute('aria-label','Delete '+e.name);
+    x.onclick=function(){
+      state.days[k]=entries(k).filter(function(y){return y.id!==e.id;});
+      save(); render();
+    };
+    row.appendChild(nm); row.appendChild(kc); row.appendChild(x);
+    list.appendChild(row);
   });
-  svg.innerHTML=o;
-}
-function animChart(){
-  if(REDUCED) return drawChart(1);
-  const t0=performance.now();
-  (function s(n){const k=Math.min((n-t0)/850,1);drawChart(1-Math.pow(1-k,3));if(k<1)requestAnimationFrame(s);})(t0);
-}
 
-/* ---------- ⌘K search ---------- */
-let INDEX=[], sel=0, results=[];
-function buildIndex(){
-  const l=L(), g=(k)=>I18N[l][k]||I18N.en[k];
-  INDEX=[
-   {id:"programs",c:g("navPrograms"),n:g("progH")},
-   {id:"programs",c:g("navPrograms"),n:g("p1h")+" · "+g("p1y")},
-   {id:"programs",c:g("navPrograms"),n:g("p2h")+" · "+g("p2y")},
-   {id:"programs",c:g("navPrograms"),n:g("p3h")+" · "+g("p3y")},
-   {id:"programs",c:g("navPrograms"),n:g("p4h")},
-   {id:"academics",c:g("navAcademics"),n:g("a1h")},
-   {id:"academics",c:g("navAcademics"),n:g("a2h")},
-   {id:"academics",c:g("navAcademics"),n:g("a3h")},
-   {id:"academics",c:g("navAcademics"),n:g("a4h")},
-   {id:"academics",c:g("navAcademics"),n:g("a5h")},
-   {id:"academics",c:g("navAcademics"),n:g("a6h")},
-   {id:"portal",c:g("navPortal"),n:g("rDash")},
-   {id:"portal",c:g("navPortal"),n:g("rScores")},
-   {id:"portal",c:g("navPortal"),n:g("rHw")},
-   {id:"portal",c:g("navPortal"),n:g("rMsg")},
-   {id:"portal",c:g("navPortal"),n:g("rSched")},
-   {id:"portal",c:g("navPortal"),n:g("rClass")},
-   {id:"portal",c:g("navPortal"),n:g("rBuffet")},
-   {id:"portal",c:g("navPortal"),n:g("rReports")},
-   {id:"admissions",c:g("navAdmissions"),n:g("s1h")+" · "+g("s1w")},
-   {id:"admissions",c:g("navAdmissions"),n:g("s2h")+" · "+g("s2w")},
-   {id:"admissions",c:g("navAdmissions"),n:g("s3h")+" · "+g("s3w")},
-   {id:"admissions",c:g("navAdmissions"),n:g("s4h")+" · "+g("s4w")},
-   ...SCHED.map(s=>({id:"portal",c:g("schedT"),n:(l==="fa"?s.fa:s.en)+" · "+nd(s.a)})),
-   ...SUBJ.map(s=>({id:"portal",c:g("chartT"),n:(l==="fa"?s.fa:s.en)+" · "+nd(s.v.toFixed(1))}))
-  ];
-}
-function score(q,s){
-  q=q.toLowerCase().trim(); s=s.toLowerCase();
-  if(!q) return 1;
-  const i=s.indexOf(q); if(i===0) return 100; if(i>0) return 70-i*0.4;
-  let j=0,hit=0; for(const ch of q){ const k=s.indexOf(ch,j); if(k<0) return 0; if(k===j)hit++; j=k+1; }
-  return 26+hit;
-}
-function runSearch(){
-  const q=$("#palInput").value, box=$("#palRes");
-  results = INDEX.map(e=>({e,s:Math.max(score(q,e.n),score(q,e.c)*0.6)}))
-                 .filter(r=>r.s>0).sort((a,b)=>b.s-a.s).slice(0,9).map(r=>r.e);
-  sel=0; box.innerHTML="";
-  if(!results.length){ box.innerHTML='<span class="none">'+t("palNone")+"</span>"; return; }
-  results.forEach((r,i)=>{
-    const li=document.createElement("li");
-    li.setAttribute("role","option"); li.setAttribute("aria-selected", i===0?"true":"false");
-    li.innerHTML='<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12h13m-5-6 6 6-6 6"/></svg><span>'+r.n+'</span><span class="cat">'+r.c+"</span>";
-    li.addEventListener("click",()=>go(r));
-    box.appendChild(li);
+  var wk=$('xwk'); wk.textContent='';
+  var days=[], max=g.kcal;
+  for(var i=6;i>=0;i--){
+    var d=new Date(cur); d.setDate(d.getDate()-i);
+    var kk=key(d), tt=totals(kk).k;
+    days.push({d:d,k:kk,v:tt});
+    if(tt>max)max=tt;
+  }
+  max=max*1.12;
+  days.forEach(function(o){
+    var col=D.createElement('button');
+    col.className='wcol2'+(o.k===k?' sel':'');
+    col.setAttribute('aria-label',o.d.toLocaleDateString(undefined,{weekday:'long'})+', '+o.v+' calories');
+    var br=D.createElement('div'); br.className='wbar2';
+    br.style.height=Math.max(2,Math.round(o.v/max*86))+'px';
+    var lb=D.createElement('span'); lb.textContent=o.d.toLocaleDateString(undefined,{weekday:'narrow'});
+    col.appendChild(br); col.appendChild(lb);
+    col.onclick=function(){cur=new Date(o.d);render();};
+    wk.appendChild(col);
   });
-}
-function mark(){ $$("#palRes li").forEach((li,i)=>li.setAttribute("aria-selected", i===sel?"true":"false"));
-  const a=$$("#palRes li")[sel]; if(a) a.scrollIntoView({block:"nearest"}); }
-function openPal(){ $("#pal").hidden=false; $("#palInput").value=""; runSearch(); $("#palInput").focus(); }
-function closePal(){ $("#pal").hidden=true; }
-function go(r){ closePal(); const el=document.getElementById(r.id);
-  if(el) el.scrollIntoView({behavior:REDUCED?"auto":"smooth",block:"start"}); }
+  var gl=D.createElement('div'); gl.className='wg';
+  gl.style.bottom=(23+Math.round(g.kcal/max*86))+'px';
+  wk.appendChild(gl);
 
-/* ---------- 3D tilt on program cards ---------- */
-function tilt(){
-  if(REDUCED || matchMedia("(pointer:coarse)").matches) return;
-  $$(".prog").forEach(card=>{
-    const glow=$(".glow",card);
-    card.addEventListener("pointermove",e=>{
-      const r=card.getBoundingClientRect(), x=(e.clientX-r.left)/r.width, y=(e.clientY-r.top)/r.height;
-      card.style.transform="rotateY("+(x-.5)*9+"deg) rotateX("+(.5-y)*9+"deg) translateZ(14px)";
-      glow.style.left=(e.clientX-r.left-140)+"px"; glow.style.top=(e.clientY-r.top-140)+"px";
-    });
-    card.addEventListener("pointerleave",()=>{ card.style.transform=""; });
-  });
+  $('xgk').value=g.kcal; $('xgp').value=g.protein;
 }
 
-/* ---------- boot ---------- */
-function boot(){
-  applyLang("en");
-  H.measure(); H.reveals(); H.navWatch(); tilt();
-  if(H.initVault()) H.frame(); else $("#vault").style.display="none";
-  for(let i=0;i<4;i++) pushFeed();
-  setInterval(tick,1000);
-  setInterval(pushFeed, REDUCED?20000:6500);
-  addEventListener("resize",H.measure,{passive:true});
+function errCopy(e){
+  var c=e&&e.code;
+  if(c==='not_granted'||c==='sampling_disabled'||c==='not_declared'||c==='capability_disabled'||c==='capability_removed')
+    return 'Claude is not available here. Use Add manually below.';
+  if(c==='rate_limited')return 'Too many requests just now. Wait a moment, then try again.';
+  if(c==='session_expired')return 'Your session expired. Reload the page and try again.';
+  if(c==='invalid_json'||c==='empty_completion')return 'Could not read that answer. Try rewording it.';
+  if(c==='refused')return 'That could not be answered. Try rewording it.';
+  if(c==='prompt_too_large')return 'That was too long. Try a shorter message.';
+  return 'Something went wrong. Try again.';
+}
 
-  new IntersectionObserver((es,o)=>es.forEach(e=>{ if(e.isIntersecting){ animChart(); o.disconnect(); }}),
-    {threshold:.25}).observe($("#chart"));
+async function logIt(){
+  var text=$('xta').value.trim();
+  if(!text){setSt('xst','Type what you ate first.',true);return;}
+  if(!sample){setSt('xst',sampleChecked?'Claude is not available here. Use Add manually below.':'Still connecting. Try again in a moment.',true);return;}
+  $('xgo').disabled=true; $('xstop').hidden=false;
+  setSt('xst','Estimating…');
+  ctl=new AbortController();
+  var prompt='You are a careful nutrition estimator. The user described what they ate. Split it into individual foods or drinks. For each, state the portion you assumed inside the name (use a typical serving when none is given) and estimate calories and macros. Reply with only a JSON array. Each item: {"name": string, "kcal": integer, "protein": integer grams, "carbs": integer grams, "fat": integer grams}. Example: [{"name":"2 large eggs, scrambled","kcal":180,"protein":12,"carbs":2,"fat":14}]. If the text contains no food or drink, reply with [].\n\nWhat they ate: '+text.slice(0,2000);
+  try{
+    var items=await sample.json(prompt,{modelTier:'quick',signal:ctl.signal});
+    if(!Array.isArray(items)||!items.length){setSt('xst','No food found in that. Try describing a meal.',true);return;}
+    var clean=items.slice(0,20).map(function(x){return {name:x&&x.name,kcal:x&&x.kcal,p:x&&x.protein,c:x&&x.carbs,f:x&&x.fat};});
+    addEntries(clean);
+    $('xta').value='';
+    setSt('xst','Added '+clean.length+(clean.length===1?' item':' items')+', about '+clean.reduce(function(a,x){return a+num(x.kcal);},0).toLocaleString()+' kcal.');
+  }catch(e){
+    if(e&&e.code==='cancelled')setSt('xst','Stopped.');
+    else setSt('xst',errCopy(e),true);
+  }finally{$('xgo').disabled=false;$('xstop').hidden=true;ctl=null;}
+}
 
-  $("#langBtn").addEventListener("click",()=>applyLang(L()==="fa"?"en":"fa"));
-  $("#openPal").addEventListener("click",openPal);
-  $("#palEsc").addEventListener("click",closePal);
-  $("#pal").addEventListener("click",e=>{ if(e.target.id==="pal") closePal(); });
-  $("#palInput").addEventListener("input",runSearch);
-  addEventListener("keydown",e=>{
-    if((e.metaKey||e.ctrlKey) && e.key.toLowerCase()==="k"){ e.preventDefault(); $("#pal").hidden?openPal():closePal(); return; }
-    if($("#pal").hidden){
-      if(e.key==="/" && !/^(INPUT|TEXTAREA)$/.test(document.activeElement.tagName)){ e.preventDefault(); openPal(); }
+function bubble(cls,text){
+  var d=D.createElement('div'); d.className='msg '+cls; d.textContent=text;
+  var c=$('xchat'); c.appendChild(d); c.scrollTop=c.scrollHeight;
+  return d;
+}
+function logContext(){
+  var k=key(cur), t=totals(k), g=state.goal;
+  var names=entries(k).map(function(e){return e.name+' ('+e.kcal+' kcal, '+e.p+' g protein)';}).join('; ')||'nothing yet';
+  var hist=[];
+  for(var i=1;i<=6;i++){var d=new Date(cur);d.setDate(d.getDate()-i);hist.push(d.toLocaleDateString(undefined,{weekday:'short'})+': '+totals(key(d)).k+' kcal');}
+  return 'Day shown: '+dayLabel()+' ('+k+'). Goals: '+g.kcal+' kcal, '+g.protein+' g protein, with carbs derived at '+carbGoal()+' g and fat at '+fatGoal()+' g. Eaten so far: '+t.k+' kcal, '+t.p+' g protein, '+t.c+' g carbs, '+t.f+' g fat. Remaining: '+(g.kcal-t.k)+' kcal, '+(g.protein-t.p)+' g protein. Items: '+names+'. Previous days: '+hist.join(', ')+'.';
+}
+var RULES='You are the nutrition coach built into this food-logging app. The user is eating for muscle gain. Answer their questions about food, calories, macros, meal ideas, recipes, grocery shopping and general training nutrition. Be concrete and brief, normally under 120 words, plain text with no markdown. Use the log data you are given rather than asking for it. If you are unsure of a number, say it is an estimate. You are not a doctor or dietitian: for medical conditions, medication or symptoms, say a professional should be consulted. When the user says they ate something, use the log_food tool to add it, then confirm in one sentence.';
+
+function tools(){
+  return [{
+    name:'log_food',
+    description:'Add one or more foods the user says they ate to the day currently shown in the app. Returns the updated day totals. Use it only when the user states they ate or drank something.',
+    inputSchema:{type:'object',properties:{items:{type:'array',items:{type:'object',properties:{name:{type:'string'},kcal:{type:'integer'},protein:{type:'integer'},carbs:{type:'integer'},fat:{type:'integer'}},required:['name','kcal','protein','carbs','fat']}}},required:['items']},
+    execute:function(input){
+      var arr=Array.isArray(input.items)?input.items:[];
+      if(!arr.length)throw new Error('No items given.');
+      addEntries(arr.slice(0,20).map(function(x){return {name:x.name,kcal:x.kcal,p:x.protein,c:x.carbs,f:x.fat};}));
+      var t=totals(key(cur));
+      return {added:arr.length,day_total_kcal:t.k,day_total_protein:t.p};
+    }
+  },{
+    name:'get_day',
+    description:'Read the log for another date, formatted YYYY-MM-DD. Returns that day totals and item names. Use it for questions about earlier days.',
+    inputSchema:{type:'object',properties:{date:{type:'string'}},required:['date']},
+    execute:function(input){
+      var k=String(input.date||''), t=totals(k);
+      return {date:k,kcal:t.k,protein:t.p,carbs:t.c,fat:t.f,items:entries(k).map(function(e){return e.name;})};
+    }
+  }];
+}
+
+async function ask(text){
+  text=(text||'').trim();
+  if(!text){setSt('xqst','Type a question first.',true);return;}
+  if(!sample){setSt('xqst',sampleChecked?'Claude is not available here.':'Still connecting. Try again in a moment.',true);return;}
+  setSt('xqst','');
+  bubble('me',text);
+  $('xq').value='';
+  turns.push({role:'user',content:text});
+  if(turns.length>12)turns=turns.slice(-12);
+  var out=bubble('ai','Thinking…');
+  $('xsend').disabled=true; $('xqstop').hidden=false;
+  qctl=new AbortController();
+  var input=[{role:'user',content:RULES+'\n\nCurrent log: '+logContext()}].concat(turns);
+  var opts={modelTier:'quick',cache:false,signal:qctl.signal,onText:function(u){out.textContent=u.text;var c=$('xchat');c.scrollTop=c.scrollHeight;}};
+  if(canTools)opts.tools=tools();
+  try{
+    var r=await sample(input,opts);
+    out.textContent=r.text;
+    turns.push({role:'assistant',content:r.text});
+  }catch(e){
+    if(e&&e.code==='cancelled'){out.textContent=e.text||'Stopped.';turns.pop();}
+    else{out.remove();turns.pop();setSt('xqst',errCopy(e),true);}
+  }finally{
+    $('xsend').disabled=false;$('xqstop').hidden=true;qctl=null;
+    var c=$('xchat');c.scrollTop=c.scrollHeight;
+  }
+}
+
+['What should I eat next?','Is my protein on track?','High-protein snack ideas','How was my week?'].forEach(function(q){
+  var b=D.createElement('button'); b.className='chip'; b.textContent=q;
+  b.onclick=function(){ask(q);};
+  $('xchips').appendChild(b);
+});
+
+$('xgo').onclick=logIt;
+$('xstop').onclick=function(){if(ctl)ctl.abort();};
+$('xsend').onclick=function(){ask($('xq').value);};
+$('xqstop').onclick=function(){if(qctl)qctl.abort();};
+$('xq').addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();ask($('xq').value);}});
+$('xta').addEventListener('keydown',function(e){if(e.key==='Enter'&&(e.metaKey||e.ctrlKey)){e.preventDefault();logIt();}});
+$('xprev').onclick=function(){cur.setDate(cur.getDate()-1);render();};
+$('xnext').onclick=function(){cur.setDate(cur.getDate()+1);render();};
+$('xmadd').onclick=function(){
+  var n=$('xmn').value.trim(), k=num($('xmk').value);
+  if(!n||!k){setSt('xmst','Enter a food name and calories.',true);return;}
+  addEntries([{name:n,kcal:k,p:$('xmp').value,c:$('xmc').value,f:$('xmf').value}]);
+  ['xmn','xmk','xmp','xmc','xmf'].forEach(function(id){$(id).value='';});
+  setSt('xmst','Added.');
+};
+$('xgk').onchange=function(){var v=num($('xgk').value);if(v>=500){state.goal.kcal=v;save();}render();};
+$('xgp').onchange=function(){var v=num($('xgp').value);if(v>=10){state.goal.protein=v;save();}render();};
+
+render();
+bubble('sys','Ask about meals, macros, recipes or your week. You can also just say what you ate and it gets logged.');
+
+/* ---------- Claude runtime ---------- */
+function initials(n){
+  n=(n||'').trim(); if(!n)return '·';
+  var p=n.split(/\s+/);
+  return (p[0][0]+(p[1]?p[1][0]:'')).toUpperCase();
+}
+function noClaude(msg){
+  var n=$('xnotice'); n.hidden=false; n.textContent=msg;
+  $('xgo').disabled=true; $('xgo').textContent='Needs Claude';
+  $('xsend').disabled=true;
+  $('xq').disabled=true; $('xq').placeholder='The coach needs Claude to answer';
+  [].slice.call($('xchips').children).forEach(function(c){c.disabled=true;c.style.opacity='.5';c.style.cursor='default';});
+  $('xta').placeholder='Estimating needs Claude — use Add manually below';
+  var d=D.querySelector('#app details'); if(d)d.open=true;
+}
+if(window.claude&&typeof window.claude.use==='function'){
+  window.claude.use('sample').then(function(s){
+    sample=s; sampleChecked=true;
+    if(!s){
+      noClaude('Claude is not reachable on this view, so estimating and the coach are switched off. Manual entry below works, and the log is saved in this browser.');
       return;
     }
-    if(e.key==="Escape"){ closePal(); }
-    else if(e.key==="ArrowDown"){ e.preventDefault(); sel=(sel+1)%Math.max(results.length,1); mark(); }
-    else if(e.key==="ArrowUp"){ e.preventDefault(); sel=(sel-1+results.length)%Math.max(results.length,1); mark(); }
-    else if(e.key==="Enter" && results[sel]){ e.preventDefault(); go(results[sel]); }
-  });
-  $$(".app-rail button").forEach(b=>b.addEventListener("click",()=>{
-    $$(".app-rail button").forEach(x=>x.setAttribute("aria-selected","false"));
-    b.setAttribute("aria-selected","true");
-  }));
+    return s.limits().then(function(l){canTools=!!(l&&l.tools);}).catch(function(){});
+  }).catch(function(){sampleChecked=true;});
+  window.claude.use('user').then(function(u){
+    if(!u)return;
+    return u.name().then(function(nm){
+      if(!nm)return;
+      var w=$('xwho'); w.textContent='';
+      var av=D.createElement('div'); av.className='av'; av.textContent=initials(nm);
+      var sp=D.createElement('span'); sp.textContent=nm;
+      w.appendChild(av); w.appendChild(sp);
+    });
+  }).catch(function(){});
+}else{
+  sampleChecked=true;
+  noClaude('This is the public build, so it has no Claude behind it: estimating a meal from a sentence and the coach both need one, and they are switched off here. Everything else is live — add entries by hand below, set your goals, move between days. The log is saved in this browser.');
 }
-document.readyState==="loading" ? addEventListener("DOMContentLoaded",boot) : boot();
 })();
 </script>
-
 </body>
 </html>
