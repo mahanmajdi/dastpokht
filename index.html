@@ -3,12 +3,12 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="description" content="Macro counts calories and macros from a sentence. Describe the meal in plain words; a coach that can read your log answers what to eat next.">
+<meta name="description" content="Macro counts calories and macros from a sentence and times your workouts. Type what you ate; after training it tells you what to eat and drink next.">
 <meta name="theme-color" content="#080C0A" media="(prefers-color-scheme: dark)">
 <meta name="theme-color" content="#F2F1E9" media="(prefers-color-scheme: light)">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Macro - eat like you mean it">
-<meta property="og:description" content="Describe the meal in plain words. Macro splits it into foods, estimates the calories and macros, and counts the day against your goal.">
+<meta property="og:description" content="Type what you ate and Macro fills in calories, protein, carbs and fat. Start a workout and it tells you what to eat next.">
 <meta property="og:image" content="og.png">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
@@ -399,6 +399,51 @@ footer{background:var(--void);color:var(--ink-dark);padding-block:clamp(56px,9vh
   .phone{transform:none;}
   .week3d{transform:none;}
 }
+
+/* ---------- training chapter ---------- */
+.trainwrap{display:grid;grid-template-columns:1fr 1fr;gap:clamp(28px,5vw,72px);align-items:center;}
+@media (max-width:920px){.trainwrap{grid-template-columns:1fr;}}
+.trainstage{display:flex;flex-direction:column;gap:16px;max-width:520px;width:100%;margin-inline:auto;}
+.tdials{position:relative;overflow:hidden;isolation:isolate;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;padding:24px 16px 20px;border-radius:26px;
+  background:#060A08;border:1px solid rgba(178,222,201,.12);box-shadow:0 40px 90px -40px rgba(0,0,0,.95);}
+.tdials::before{content:"";position:absolute;left:-35%;top:-60%;width:170%;height:220%;z-index:-1;will-change:transform;
+  background:conic-gradient(from 0deg,rgba(99,229,171,.26),rgba(79,125,249,.24),rgba(140,124,255,.30),rgba(79,125,249,.16),rgba(99,229,171,.26));
+  filter:blur(60px);opacity:.6;animation:taur 30s linear infinite;}
+@keyframes taur{to{transform:rotate(360deg);}}
+.tdial{display:flex;flex-direction:column;align-items:center;gap:8px;min-width:0;}
+.tdial svg{width:100%;max-width:132px;height:auto;overflow:visible;}
+.tdial .tr{fill:none;stroke:rgba(255,255,255,.08);stroke-width:9;}
+.tdial .ar{fill:none;stroke-width:9;stroke-linecap:round;stroke-dasharray:314.16;stroke-dashoffset:314.16;transition:stroke-dashoffset 1.7s cubic-bezier(.16,.84,.26,1);}
+.tdial .sg{fill:none;stroke:#8C7CFF;stroke-width:9;}
+.tdial .v{font-family:var(--head);font-weight:700;font-size:25px;letter-spacing:-.035em;fill:#fff;}
+.tdial .u{font-family:var(--mono);font-size:10px;letter-spacing:.06em;fill:#A3B3AA;text-transform:uppercase;}
+.tdial>span{font-family:var(--mono);font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;color:#A3B3AA;}
+.tlive{position:relative;padding:22px 22px 20px;border-radius:26px;border:1px solid rgba(140,124,255,.32);color:#EDF2EE;
+  background:linear-gradient(160deg,rgba(79,125,249,.14),rgba(140,124,255,.12)),rgba(10,14,16,.85);box-shadow:0 40px 90px -40px rgba(20,10,60,.9);}
+.tl-top{display:flex;align-items:center;gap:10px;font-family:var(--head);font-weight:600;font-size:17px;}
+.tl-pill{display:inline-flex;align-items:center;gap:7px;height:24px;padding:0 10px;border-radius:99px;background:rgba(255,77,122,.14);color:#FF8FAA;font-family:var(--mono);font-size:10.5px;letter-spacing:.18em;font-weight:400;}
+.tl-pill i{width:7px;height:7px;border-radius:50%;background:#FF4D7A;box-shadow:0 0 10px #FF4D7A;animation:tlp 1.1s ease-in-out infinite;}
+@keyframes tlp{50%{opacity:.25;}}
+.tl-timer{font-family:var(--head);font-weight:700;font-size:clamp(64px,9vw,96px);letter-spacing:-.05em;line-height:.9;margin:14px 0 12px;
+  background:linear-gradient(180deg,#fff 30%,#BFCBFF);-webkit-background-clip:text;background-clip:text;color:transparent;}
+.tl-goal{display:flex;align-items:center;gap:12px;font-family:var(--mono);font-size:12.5px;color:#A3B3AA;}
+.tl-bar{flex:1;height:6px;border-radius:99px;background:rgba(255,255,255,.08);overflow:hidden;}
+.tl-bar i{display:block;height:100%;width:0;border-radius:99px;background:linear-gradient(90deg,#4F7DF9,#8C7CFF);transition:width 1s linear;}
+.tl-row{display:flex;align-items:center;gap:12px;margin-top:14px;padding:12px 12px 12px 16px;border-radius:18px;border:1px solid rgba(140,124,255,.32);background:rgba(140,124,255,.08);}
+.tl-sets b{display:block;font-family:var(--head);font-weight:700;font-size:36px;line-height:1;letter-spacing:-.04em;}
+.tl-sets span{display:block;font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:#A3B3AA;margin-top:5px;}
+.tl-sets.bump b{animation:tlbump .45s cubic-bezier(.16,.84,.26,1);}
+@keyframes tlbump{35%{transform:scale(1.28);color:#C9C1FF;}}
+.tl-btn{margin-left:auto;height:54px;min-width:112px;padding:0 22px;border-radius:999px;display:inline-grid;place-items:center;background:linear-gradient(120deg,#4F7DF9,#8C7CFF);color:#fff;font-weight:600;font-size:16px;
+  box-shadow:0 14px 30px -12px rgba(140,124,255,.95);transition:transform .18s;}
+.tl-btn.press{transform:scale(.93);}
+.tl-rest{margin-top:12px;font-family:var(--mono);font-size:12px;color:#A3B3AA;}
+.tl-rest>span{display:block;margin-bottom:7px;}
+.tl-rest b{color:#EDF2EE;font-weight:500;}
+.tl-rest .tl-bar i{background:linear-gradient(90deg,#4F7DF9,#63E5AB);}
+.tl-rest.ready b{color:#63E5AB;}
+.tl-rest.ready .tl-bar i{background:#63E5AB;box-shadow:0 0 14px #63E5AB;}
+@media (prefers-reduced-motion:reduce){.tdials::before{animation:none;}.tl-pill i{animation:none;}}
 </style>
 </head>
 <body>
@@ -424,6 +469,7 @@ footer{background:var(--void);color:var(--ink-dark);padding-block:clamp(56px,9vh
   <div class="navlinks">
     <a href="#say" class="hideS">Logging</a>
     <a href="#coach" class="hideS">Coach</a>
+    <a href="#train" class="hideS">Training</a>
     <a href="#gallery" class="hideS">Everything else</a>
     <a class="navcta" id="navcta" href="app.html">Sign in</a>
   </div>
@@ -443,14 +489,14 @@ footer{background:var(--void);color:var(--ink-dark);padding-block:clamp(56px,9vh
       <span class="sp"><span class="hero-grad" style="animation-delay:.26s">mean</span></span>
       <span class="sp"><span class="hero-grad" style="animation-delay:.33s">it.</span></span>
     </h1>
-    <p class="hero-sub rv s2">Describe the meal in plain words. Macro splits it into foods, estimates the calories and macros, and a coach who can read your whole log answers whatever you ask next.</p>
+    <p class="hero-sub rv s2">Type the meal in plain words. Macro splits it into foods and fills in the calories, protein, carbs and fat — then times your workouts and tells you exactly what to eat next.</p>
     <div class="hero-row rv s3">
       <a class="btn btn-fill" id="heroSignIn" href="app.html"><span>Start your log</span><svg width="15" height="15" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h9M8.5 4.2 12.6 8l-4.1 3.8" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
       <a class="btn btn-line" href="#say">See how it reads a meal</a>
     </div>
     <div class="hero-strip rv s4">
       <div><b class="num">0</b><span>Barcodes scanned</span></div>
-      <div><b class="num">~2 s</b><span>From sentence to macros</span></div>
+      <div><b class="num">240+</b><span>Foods it knows by name</span></div>
       <div><b class="num">1</b><span>Account, every device</span></div>
       <div><b class="num">g &amp; kcal</b><span>The only units</span></div>
     </div>
@@ -522,29 +568,29 @@ footer{background:var(--void);color:var(--ink-dark);padding-block:clamp(56px,9vh
 <section class="ch ch-light pad" id="coach" data-chapter="Coach">
   <div class="wrap coachwrap">
     <div>
-      <p class="eyebrow rv">A coach that can read the log</p>
-      <h2 class="d2 rv s1">It doesn't ask<br>what you ate.</h2>
-      <p class="p rv s2" style="margin-top:22px;font-size:17px">Every question arrives with the day already attached — what's logged, what's left, the six days behind it. So the answers are about your food, in your numbers, not general advice about protein.</p>
+      <p class="eyebrow rv">A coach that reads your log</p>
+      <h2 class="d2 rv s1">You say it.<br>It does the maths.</h2>
+      <p class="p rv s2" style="margin-top:22px;font-size:17px">Type a meal the way you'd say it and every food lands with its numbers. Finish a workout and the next step is waiting: how much protein, how many carbs, how much water, and where your week stands. All of it from your own log, in your own numbers.</p>
       <div class="toolnote rv s3">
         <svg width="20" height="20" viewBox="0 0 20 20" fill="none" style="flex:none;margin-top:2px" aria-hidden="true"><path d="M4 6h12M4 10h12M4 14h7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
-        <p style="margin:0;font-size:14.5px">It holds two keys to the app itself: <code>log_food</code> adds what you mention to today, and <code>get_day</code> opens any earlier date. Say you ate something and it lands in the log — you never repeat yourself.</p>
+        <p style="margin:0;font-size:14.5px">Amounts are optional. <code>2 eggs</code>, <code>200 g chicken</code> and <code>a bowl of ghormeh sabzi</code> all work — and anything it doesn't know, you add once and it's one tap from then on.</p>
       </div>
       <div class="fgrid rv s4" style="margin-top:16px">
-        <div class="fcard"><h4>Streams as it thinks</h4><p>Answers appear word by word, with a Stop button for when you've read enough.</p></div>
-        <div class="fcard"><h4>Twelve turns of memory</h4><p>Enough to follow a thread about tonight's dinner, short enough to stay fast.</p></div>
+        <div class="fcard"><h4>Refuel window</h4><p>After training it counts down the two hours that matter and checks whether you've eaten.</p></div>
+        <div class="fcard"><h4>Protein pacing</h4><p>It knows how far along the day you should be — and says so before it's too late to catch up.</p></div>
       </div>
     </div>
     <div class="phone3d rv s2">
       <div class="phone" id="phone">
         <div class="phone-screen">
           <div class="phone-notch"></div>
-          <div class="bub me" data-step="0">2 eggs, sourdough with butter, and a flat white</div>
-          <div class="bub tool" data-step="1">log_food · 3 items</div>
-          <div class="bub ai" data-step="2">Logged: 510 kcal, 25 g protein. Light on protein for a gain phase — 1,990 kcal and 125 g protein still to go today.</div>
-          <div class="bub me" data-step="3">what should I eat next?</div>
-          <div class="bub ai" data-step="4">Have the shawarma wrap you like: roughly 640 kcal and 44 g protein, which gets you a third of the way through the protein by lunch. Keep the coke if you want it — you've got the calories today.</div>
-          <div class="bub tool" data-step="5">get_day · 2026-09-19</div>
-          <div class="bub ai" data-step="6">Yesterday you finished on 2,410 kcal and 148 g protein. Two solid days in a row.</div>
+          <div class="bub me" data-step="0">3 eggs, sangak and panir</div>
+          <div class="bub tool" data-step="1">3 foods · 546 kcal · 32 g protein</div>
+          <div class="bub ai" data-step="2">2,354 kcal and 118 g protein still to go today. You're on pace.</div>
+          <div class="bub me" data-step="3">Start workout · Weights · 60 min</div>
+          <div class="bub tool" data-step="4">58:12 · 16 sets · ~450 kcal</div>
+          <div class="bub ai" data-step="5">Refuel in the next 2 hours: 25 g protein and 60 g carbs, plus about 600 ml of water.</div>
+          <div class="bub ai" data-step="6">That's 4 of 4 workouts this week — goal done. Next time, add a rep or 2.5 kg to your main lifts.</div>
         </div>
       </div>
     </div>
@@ -580,7 +626,7 @@ footer{background:var(--void);color:var(--ink-dark);padding-block:clamp(56px,9vh
       <p class="p rv s2" style="margin-top:22px;font-size:17px">A wrap is never exactly 640 kcal. Macro says the portion it assumed inside the food's own name — "1 large", "330 ml can", "180 g" — so you can see the guess it made and correct it in one tap instead of trusting a number with no story.</p>
       <div class="fgrid rv s3" style="margin-top:20px">
         <div class="fcard"><h4>Portions stated</h4><p>The assumed serving is written into the entry, not hidden behind it.</p></div>
-        <div class="fcard"><h4>Fix it inline</h4><p>Wrong? Open Add manually and type the four numbers yourself.</p></div>
+        <div class="fcard"><h4>Fix it inline</h4><p>Wrong amount? Tap − or + before you add it, or type the four numbers yourself.</p></div>
       </div>
     </div>
   </div>
@@ -607,6 +653,36 @@ footer{background:var(--void);color:var(--ink-dark);padding-block:clamp(56px,9vh
   </div>
 </section>
 
+<!-- ============ 6b · TRAINING ============ -->
+<section class="ch ch-dark pad" id="train" data-chapter="Training">
+  <div class="wrap trainwrap">
+    <div>
+      <p class="eyebrow rv">Training</p>
+      <h2 class="d2 rv s1">Say you're training.<br>It does the rest.</h2>
+      <p class="p rv s2" style="margin-top:22px;font-size:17px">Tap Start workout and a timer runs on every device you're signed in on. Tap + Set between sets and a rest timer starts, tuned to how hard you're going. When you finish, rate the session and Macro tells you what to eat, how much to drink and where your week stands.</p>
+      <div class="fgrid rv s3" style="margin-top:22px">
+        <div class="fcard"><h4>Twelve kinds of training</h4><p>Weights, runs, football, swimming, combat and more — each burns energy at its own rate.</p></div>
+        <div class="fcard"><h4>No strap needed</h4><p>Calories burned are estimated from what you did, for how long, how hard and what you weigh.</p></div>
+      </div>
+    </div>
+    <div class="trainstage rv rvS s2" aria-hidden="true">
+      <svg width="0" height="0" style="position:absolute"><defs><filter id="tglow" x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur stdDeviation="3.2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs></svg>
+      <div class="tdials">
+        <div class="tdial"><svg viewBox="0 0 120 120"><circle class="tr" cx="60" cy="60" r="50"/><circle class="ar" id="tdk" cx="60" cy="60" r="50" stroke="#63E5AB" filter="url(#tglow)" transform="rotate(-90 60 60)" data-f=".62"/><text class="v num" id="tvk" x="60" y="58" text-anchor="middle" dominant-baseline="middle" data-to="1790">1,790</text><text class="u" x="60" y="82" text-anchor="middle">of 2,900</text></svg><span>Calories</span></div>
+        <div class="tdial"><svg viewBox="0 0 120 120"><circle class="tr" cx="60" cy="60" r="50"/><circle class="ar" id="tdp" cx="60" cy="60" r="50" stroke="#6F97FF" filter="url(#tglow)" transform="rotate(-90 60 60)" data-f=".75"/><text class="v num" id="tvp" x="60" y="58" text-anchor="middle" dominant-baseline="middle" data-to="112" data-suf="g">112g</text><text class="u" x="60" y="82" text-anchor="middle">of 150 g</text></svg><span>Protein</span></div>
+        <div class="tdial"><svg viewBox="0 0 120 120"><circle class="tr" id="tst" cx="60" cy="60" r="50"/><circle class="sg" id="tsg" cx="60" cy="60" r="50" filter="url(#tglow)" stroke-dasharray="0 314.16"/><text class="v num" id="tvw" x="60" y="58" text-anchor="middle" dominant-baseline="middle" data-to="3">3</text><text class="u" x="60" y="82" text-anchor="middle">of 4 · week</text></svg><span>Workouts</span></div>
+      </div>
+      <div class="tlive">
+        <div class="tl-top"><span class="tl-pill"><i></i>LIVE</span>Weights</div>
+        <div class="tl-timer num" id="tltimer">41:07</div>
+        <div class="tl-goal"><div class="tl-bar"><i id="tlbar"></i></div><span id="tlgoal">19 min to go</span></div>
+        <div class="tl-row"><div class="tl-sets" id="tlsetsbox"><b class="num" id="tlsets">7</b><span>sets done</span></div><span class="tl-btn" id="tlbtn">+ Set</span></div>
+        <div class="tl-rest" id="tlrestbox"><span><span id="tlrestlbl">Rest</span> <b class="num" id="tlrest">1:24</b> of 2:00</span><div class="tl-bar"><i id="tlrestbar"></i></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- ============ 7 · HORIZONTAL GALLERY ============ -->
 <section class="ch ch-dark pin" id="gallery" data-chapter="Everything else">
   <div class="pinner">
@@ -619,7 +695,7 @@ footer{background:var(--void);color:var(--ink-dark);padding-block:clamp(56px,9vh
         <article class="gcard">
           <div class="gicon"><svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M4 11h14M11 4v14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></div>
           <div class="gno">01</div><h3 class="d4">Manual override</h3>
-          <p>When the estimate is off, or Claude isn't reachable, type food, calories and three macros yourself. Same entry, same totals.</p>
+          <p>When a food isn't in the list, type its calories and three macros once. From then on it's one tap, like everything else.</p>
           <div class="gspacer"></div><div class="gtag">Always available</div>
         </article>
         <article class="gcard">
@@ -636,9 +712,9 @@ footer{background:var(--void);color:var(--ink-dark);padding-block:clamp(56px,9vh
         </article>
         <article class="gcard">
           <div class="gicon"><svg width="22" height="22" viewBox="0 0 22 22" fill="none"><rect x="6" y="6" width="10" height="10" rx="2" stroke="currentColor" stroke-width="2"/></svg></div>
-          <div class="gno">04</div><h3 class="d4">Stop mid-thought</h3>
-          <p>Answers stream in. If you've read enough at the second sentence, Stop ends the call — and you keep what already arrived.</p>
-          <div class="gspacer"></div><div class="gtag">Nothing runs on unattended</div>
+          <div class="gno">04</div><h3 class="d4">A rest timer that knows</h3>
+          <p>Tap + Set and the rest timer starts, longer when you're going hard. Your phone buzzes when it's time for the next one.</p>
+          <div class="gspacer"></div><div class="gtag">60 s · 90 s · 2 min · 3 min</div>
         </article>
         <article class="gcard">
           <div class="gicon"><svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M11 3v3M11 16v3M3 11h3M16 11h3M5.6 5.6l2.1 2.1M14.3 14.3l2.1 2.1M16.4 5.6l-2.1 2.1M7.7 14.3l-2.1 2.1" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><circle cx="11" cy="11" r="3.2" stroke="currentColor" stroke-width="1.8"/></svg></div>
@@ -677,16 +753,16 @@ footer{background:var(--void);color:var(--ink-dark);padding-block:clamp(56px,9vh
     <div>
       <p class="eyebrow rv">Your log, on every device</p>
       <h2 class="d2 rv s1">Sign in once.<br>Pick up anywhere.</h2>
-      <p class="p rv s2" style="margin-top:20px;font-size:17px">Sign in with a link sent to your email and answer a few quick questions the first time — Macro works out your calories and protein from them. After that, every meal you log is saved to your account: phone at lunch, laptop at night, same numbers.</p>
+      <p class="p rv s2" style="margin-top:20px;font-size:17px">Sign in with a link sent to your email and answer a few quick questions the first time — Macro works out your calories, protein and weekly workouts from them. After that, every meal and workout is saved to your account: phone at the gym, laptop at night, same numbers.</p>
       <div class="startbtns rv s3">
         <a class="btn btn-fill" id="startEmail" href="app.html#email"><span>Sign in with email</span></a>
         <a class="btn btn-google" id="startGoogle" href="app.html?go=google" hidden><svg viewBox="0 0 48 48" aria-hidden="true"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg><span>Continue with Google</span></a>
       </div>
-      <p class="startnote rv s4">Logging is by hand here: type a food and its numbers once, and it's one tap from then on.</p>
+      <p class="startnote rv s4">Type a food's name and Macro fills in the numbers — over 240 everyday and Persian dishes. Anything it doesn't know, you add once.</p>
     </div>
     <div class="startfacts rv rvS s2">
       <div class="fact"><b>Private</b><span>Your entries are sealed to your account. Nobody else can read them.</span></div>
-      <div class="fact"><b>Synced</b><span>Log on your phone, check on your laptop. Same list in both places.</span></div>
+      <div class="fact"><b>Synced</b><span>Start a workout on your phone and watch the timer on your laptop. Same log in both places.</span></div>
       <div class="fact"><b>Made for you</b><span>A few questions the first time, and your calories and protein are set for you.</span></div>
     </div>
   </div>
@@ -702,6 +778,7 @@ footer{background:var(--void);color:var(--ink-dark);padding-block:clamp(56px,9vh
         <a href="#hero">Overview</a>
         <a href="#say">Plain-language logging</a>
         <a href="#coach">The coach</a>
+        <a href="#train">Training</a>
         <a href="#gallery">Everything else</a>
       </div>
       <div>
@@ -848,6 +925,39 @@ function closeScene(p){
     var ry=((e.clientX-r.left)/r.width-.5)*26-9;
     phone.style.transform='rotateY('+ry.toFixed(2)+'deg) rotateX('+rx.toFixed(2)+'deg)';
   });
+})();
+
+/* ---------- scene: training (dials + a live workout that ticks) ---------- */
+(function(){
+  var sec=D.getElementById('train');if(!sec)return;
+  var C=314.16,G=4,seg=C/G,gap=7,len=seg-gap;
+  function segs(p){var a=[];for(var i=0;i<G;i++){var f=clamp(p-i,0,1)*len;a.push(f.toFixed(2),(seg-f).toFixed(2));}return a.join(' ');}
+  var trk=D.getElementById('tst'),sg=D.getElementById('tsg'),rot='rotate('+(-90+gap/2/C*360).toFixed(2)+' 60 60)';
+  trk.setAttribute('stroke-dasharray',segs(G));trk.setAttribute('transform',rot);sg.setAttribute('transform',rot);
+  function fmtN(n){return Math.round(n).toLocaleString('en-US');}
+  function fill(){
+    ['tdk','tdp'].forEach(function(id){var c=D.getElementById(id);c.style.strokeDashoffset=String(C*(1-Number(c.getAttribute('data-f'))));});
+    var t0=performance.now();
+    (function step(t){var p=calm?1:clamp((t-t0)/1500,0,1),e=easeOut(p);
+      ['tvk','tvp','tvw'].forEach(function(id){var x=D.getElementById(id);x.textContent=fmtN(Number(x.getAttribute('data-to'))*e)+(x.getAttribute('data-suf')||'');});
+      sg.setAttribute('stroke-dasharray',segs(3*e));if(p<1)requestAnimationFrame(step);})(t0);
+  }
+  var sec0=41*60+7,sets=7,rest=84,REST=120,timer=null,$=function(id){return D.getElementById(id);};
+  function clk(s){var m=Math.floor(s/60),x=s%60;return m+':'+(x<10?'0':'')+x;}
+  function paint(){$('tltimer').textContent=clk(sec0);$('tlbar').style.width=Math.min(100,sec0/3600*100).toFixed(1)+'%';
+    var left=Math.max(0,Math.ceil((3600-sec0)/60));$('tlgoal').textContent=left?left+' min to go':'Goal reached';
+    $('tlrest').textContent=clk(Math.min(rest,REST));$('tlrestbar').style.width=Math.min(100,rest/REST*100).toFixed(1)+'%';
+    var ready=rest>=REST;$('tlrestbox').classList.toggle('ready',ready);$('tlrestlbl').textContent=ready?'Ready — next set':'Rest';}
+  function tick(){sec0++;rest++;
+    if(rest>=REST+3){var b=$('tlbtn');b.classList.add('press');setTimeout(function(){b.classList.remove('press');},180);
+      sets++;$('tlsets').textContent=sets;var bx=$('tlsetsbox');bx.classList.remove('bump');void bx.offsetWidth;bx.classList.add('bump');rest=0;}
+    paint();}
+  paint();
+  if(calm||!('IntersectionObserver' in window)){fill();return;}
+  var filled=false;
+  new IntersectionObserver(function(en){en.forEach(function(x){
+    if(x.isIntersecting){if(!filled){filled=true;fill();rest=100;}if(!timer)timer=setInterval(tick,1000);}
+    else if(timer){clearInterval(timer);timer=null;}});},{threshold:.25}).observe(sec);
 })();
 
 /* ---------- scene: week bars ---------- */
