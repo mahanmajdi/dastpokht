@@ -666,7 +666,7 @@ function showView(id){
   var cine=(id==='auth'||id==='verified'||id==='onboard');
   document.body.classList.toggle('cine',cine);
   if(cine)Ring.start(); else setTimeout(function(){if(!document.body.classList.contains('cine'))Ring.stop();},1000);
-  $('me').hidden=(id!=='app');
+  $('me').hidden=!(id==='app'||id==='onboard');
 }
 function animate(el,cls){if(!el)return;el.classList.remove('enter','fromleft','rise','lift','shake','stagger');void el.offsetWidth;cls.split(' ').forEach(function(c){el.classList.add(c);});}
 function authStep(id,fromLeft){
@@ -855,7 +855,7 @@ function activeQs(){return QUESTIONS.filter(function(q){return !q.when||q.when(a
 async function startOnboarding(anim,prefill){
   editing=!!prefill; answers=prefill?Object.assign({},prefill):{}; qi=0;
   if(anim)await leaveCard();
-  showView('onboard'); Ring.setShares(150,281,78);
+  showView('onboard'); showMe(); Ring.setShares(150,300,78);
   Ring.to(Object.assign({},RING.onboard,{prog:.05}),1000);
   renderQ(false);
 }
