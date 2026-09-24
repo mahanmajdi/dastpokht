@@ -1,103 +1,36 @@
-# Macro — say what you ate, start a workout, get told what's next
+# Dastpokht · دستپخت
 
-**Live:** https://mahanmajdi.github.io/macro/
+**Cook with what you have.** Tell Dastpokht what’s in your kitchen and it shows you the dishes you can cook right now — mostly Persian home cooking — plus the ones you’re one or two ingredients away from.
 
-A calorie, macro and workout tracker with a scroll-driven 3D site in front of
-it. Type a meal the way you'd say it and Macro fills in the numbers. Start a
-workout and it runs a timer, counts your sets and times your rest. When you
-finish, it tells you what to eat, how much to drink and where your week stands.
-Everything is saved to your account and follows you to every device.
+Live: https://mahanmajdi.github.io/macro/
 
-## Pages
+## What it does
 
-| Page | What it is |
-|---|---|
-| `index.html` | The product site: a hand-built 3D calorie ring, light and dark scroll chapters, a live training demo, and the sign-in buttons. |
-| `app.html` | Sign-in, first-time setup, Today, the food log and live workouts. |
-| `foods.js` | The food list and the sentence parser the app uses. |
+- **Your kitchen**: a running list of ingredients and appliances. Type it or say it, in any of the app’s languages. Recipes that need an appliance you don’t have are marked.
+- **Cook now**: 51 Persian classics (plus a few everyday dishes), matched against your kitchen.
+- **Full meal**: pick a main dish and it adds the rice, salad, yogurt and drink that go with it, scales every amount to your table, writes the shopping list and times each step back from serving.
+- **Cook along**: a live timer that chimes and buzzes when the next step is due, across every dish at once.
+- **Recipes from cooks**: anyone can post a recipe for everyone to browse; only the author can edit or delete it.
+- **Kitchen assistant**: a chat that plans your week, suggests dishes from what you have and links to the recipes. It switches on once an AI key is added (see below).
+- **Food log**: type what you ate (“a plate of ghormeh sabzi and a doogh”) and calories, protein, carbs and fat fill in. Optional daily targets.
+- **8 languages**: English, فارسی, العربية, Türkçe, Español, Français, Deutsch, Русский. Persian and Arabic are right-to-left and use their own numerals.
 
-## Logging food by name
+## Files
 
-Type `2 eggs, toast and a flat white` or `a bowl of ghormeh sabzi with chelo`
-and each food appears with its calories, protein, carbs and fat before you add
-it. Amounts are optional — counts (`3 dates`), sizes (`large fries`), grams and
-millilitres (`200 g chicken`, `500 ml doogh`), and household units (`a cup of
-rice`, `2 tbsp peanut butter`, `2 skewers koobideh`) all work.
+| File | What it is |
+| --- | --- |
+| `index.html` | Landing page, with a working “try it” demo |
+| `app.html` | The app |
+| `recipes.js` | Recipe library (English + Persian) |
+| `kitchen.js` | Ingredient catalogue, matcher, meal timeline and shopping list |
+| `foods.js` | Food list and parser for the food log |
+| `i18n.js` | Interface text in English and Persian |
+| `lang-xx.js` | Everything in one more language, loaded only when chosen |
 
-- `foods.js` holds 240+ everyday foods, drinks and Persian dishes with a
-  typical portion each. Values are typical figures (USDA FoodData Central and
-  common recipes) — good estimates, not lab numbers.
-- `−` and `+` adjust an amount before you add it; `×` drops a food.
-- A misspelling gets "did you mean" suggestions. A food that isn't in the list
-  is added once with numbers, and after that typing its name is enough.
+Backend: Supabase (auth by email link, Postgres with row-level security, and the `cook` edge function for AI).
 
-## Today
+## Switching on the AI
 
-A dark, watch-style panel with three animated dials — **Calories** (eaten
-against today's target), **Protein**, and **Workouts** (the last 7 days against
-the weekly goal from your plan) — a coach line that changes with the day, and
-the Start workout button. Below it: the coach, macros, food, workouts, the last
-7 days and a four-week training history with your streak.
+The assistant and “Ask AI for ideas” use Claude through a Supabase edge function named `cook`. To turn them on, add a secret named `ANTHROPIC_API_KEY` in Supabase → Edge Functions → Secrets. Every signed-in cook gets 60 AI requests a day.
 
-There's deliberately no strain, sleep or recovery score: those need a wearable
-to be honest, and Macro doesn't pretend to have one.
-
-## Workouts
-
-- **Start workout:** pick one of 12 activities, how hard you plan to go, and an
-  optional time goal. The row is saved straight away, so the timer shows up on
-  every device you're signed in on.
-- **Live screen:** a big timer, a 3D ring that fills toward your time goal,
-  estimated calories, intensity you can change as you go, and — for weights,
-  HIIT, combat and climbing — a **+ Set** button that starts a rest timer (60 s
-  to 3 min, depending on intensity) and buzzes when it's time to go again.
-- **End:** rate the session 1–10 and fix the minutes if you forgot to stop.
-- **Summary:** refuel targets with one-tap meals, water, whether today's
-  calories went up, the week so far, and one thing to do next time.
-- **Log a past workout** for anything you didn't time.
-
-Calories burned are estimated from the activity's MET value (adjusted for
-effort), your body weight and the minutes. Your plan already includes a typical
-training day's burn; only the part above that is added to the day's target,
-and the extra goes to carbs.
-
-## Signing in
-
-1. Type your email and Macro sends you a sign-in link.
-2. Open the link anywhere — the same computer or your phone. That tab just says
-   **Email verification complete**.
-3. The page where you typed your email signs itself in.
-
-The link tab stores a one-time token under a 256-bit random id that only the
-waiting page knows; the waiting page claims it through a database function —
-once, within 15 minutes. *Continue with Google* appears automatically once
-Google sign-in is switched on in Supabase.
-
-## First-time setup
-
-Goal, sex, age, height, weight, an optional goal weight, how active your day
-is, how often you train and how fast you want to go. From that:
-
-- **Calories** — Mifflin–St Jeor resting energy × activity level, ± a deficit
-  or surplus for your goal and pace.
-- **Protein** — 1.6–2.0 g per kg depending on goal and training.
-- **Fat** at 28% of calories, **carbs** filling what's left.
-- **Weekly workouts** — the goal behind the Workouts dial.
-
-Safety rails: no deficit or surplus for under-18s, no cut for anyone already at
-the low end of the healthy range, a calorie floor, and goal weights below the
-healthy range are planned toward its edge instead.
-
-## Accounts and data
-
-Supabase handles sign-in and storage: `entries`, `goals`, `profiles`,
-`workouts` and `login_handoffs`, all with row-level security, so each person
-only ever reads and writes their own rows. The pages use Supabase's
-*publishable* key, which is made for browser code, and talk to its HTTP API
-with `fetch` — no client library.
-
-## Built from
-
-Plain HTML, CSS and JavaScript. No frameworks, no build step.
-
-Calories, burn and targets are estimates, not medical advice.
+Nutrition numbers are estimates, not medical advice.

@@ -252,37 +252,145 @@ MACRO_FOODS.push(
 ['ketchup','tbsp',17,17,.2,4.5,0],
 ['rice cake|rice cakes','cake',9,35,.7,7.3,.3]
 );
+MACRO_FOODS.push(
+['halva|halva ardeh|persian halva|halvah','serving',60,290,3,38,14],
+['fereni|ferni|rice flour pudding','bowl',200,220,6,36,6],
+['cake yazdi|yazdi cake|keyk yazdi','piece',50,210,3,26,11],
+['sekanjabin|sekanjabin drink|mint vinegar syrup','glass',250,100,0,26,0,'','ml'],
+['noon panir sabzi|nan panir sabzi|bread cheese and herbs|nun panir sabzi','serving',150,330,13,40,13],
+['yatimcheh|yatimche','bowl',250,200,4,18,13],
+['kabab tabei|kebab tabei|pan kebab|kabab tabe i','serving',200,450,28,6,35],
+['shakshuka|shakshouka','serving',250,280,15,14,18],
+['shami|shami kabab|shami kebab','piece',70,170,9,10,10],
+['baghali|fava beans|broad beans|baghala|boiled fava','cup',170,187,13,33,.7],
+['laboo|beetroot|beet|beets|chogondar','medium',82,35,1.3,8,.1]
+);
 
-/* ---------- the parser: "2 eggs, toast and a flat white" → items with numbers ---------- */
+/* Persian names: the first is shown, the rest are other ways people write it. Keyed by each food's first English name. */
+var MACRO_FA={
+'egg':'تخم مرغ|تخممرغ|تخم مرغ آب پز|تخم مرغ عسلی|تخم مرغ سرخ کرده|نیمرو|تخم مرغ نیمرو',
+'egg white':'سفیده تخم مرغ|سفیده','omelette':'املت|املت گوجه|املت پنیر','milk':'شیر','whole milk':'شیر پرچرب','skim milk':'شیر کم چرب|شیر بدون چربی',
+'chocolate milk':'شیر کاکائو|شیرکاکائو','yogurt':'ماست|ماست ساده','greek yogurt':'ماست یونانی|ماست چکیده','doogh':'دوغ','kashk':'کشک',
+'cheese':'پنیر زرد|پنیر گودا|پنیر چدار|پنیر ورقه ای','white cheese':'پنیر|پنیر سفید|پنیر لیقوان|پنیر فتا|پنیر تبریز|پنیر ایرانی','mozzarella':'پنیر موزارلا|موزارلا|پنیر پیتزا',
+'cream cheese':'پنیر خامه ای','cottage cheese':'پنیر کاتیج','butter':'کره','ice cream':'بستنی|بستنی وانیلی','saffron ice cream':'بستنی سنتی|بستنی زعفرانی',
+'whey protein':'پروتئین وی|پودر پروتئین|شیک پروتئین','bread':'نان تست|تست|نان سفید|نون تست','whole wheat bread':'نان سبوس دار|نان جو','lavash':'لواش|نان لواش|نون لواش',
+'sangak':'سنگک|نان سنگک|نون سنگک','barbari':'بربری|نان بربری|نون بربری','taftoon':'تافتون|نان تافتون|نون تافتون','noon':'نان|نون','naan':'نان هندی','pita':'نان پیتا|پیتا',
+'baguette':'باگت|نان باگت|نان فرانسوی','tortilla':'تورتیلا|نان تورتیلا','bagel':'بیگل','croissant':'کروسان','bun':'نان همبرگر|نان رول',
+'rice':'برنج|برنج پخته|برنج سفید','chelo':'چلو|پلو|کته|برنج ایرانی|چلوی زعفرانی','brown rice':'برنج قهوه ای','tahdig':'ته دیگ|تهدیگ','pasta':'پاستا|اسپاگتی|پنه|رشته فرنگی',
+'spaghetti bolognese':'ماکارونی|ماکارانی|ماکارونی با گوشت|اسپاگتی بلونز','mac and cheese':'ماکارونی پنیری|مک اند چیز','pasta alfredo':'پاستا آلفردو|آلفردو','lasagna':'لازانیا',
+'oats':'جو دوسر|جودوسر','oatmeal':'اوتمیل|فرنی جو دوسر|جو دوسر پخته','cereal':'کورن فلکس|کورنفلکس|غلات صبحانه','granola':'گرانولا|موسلی','pancake':'پنکیک','waffle':'وافل',
+'potato':'سیب زمینی|سیبزمینی|سیب زمینی آب پز','fries':'سیب زمینی سرخ کرده|فرنچ فرایز|سیب سرخ کرده','mashed potato':'پوره سیب زمینی|پوره','sweet potato':'سیب زمینی شیرین',
+'couscous':'کوسکوس','quinoa':'کینوا','corn':'ذرت|بلال|ذرت مکزیکی',
+'chicken breast':'سینه مرغ|فیله مرغ|مرغ گریل','chicken thigh':'ران مرغ','chicken':'مرغ|مرغ پخته|مرغ آب پز','fried chicken':'مرغ سوخاری|سوخاری|مرغ سرخ کرده',
+'chicken nuggets':'ناگت|ناگت مرغ','chicken wings':'بال مرغ|بال','steak':'استیک|گوشت گاو|گوشت گوساله|فیله گوساله','ground beef':'گوشت چرخ کرده|چرخ کرده',
+'lamb':'گوشت|گوشت گوسفند|گوشت قرمز|گوشت گوسفندی','lamb chops':'شیشلیک|دنده گوسفندی|دنده','koobideh':'کباب کوبیده|کوبیده|کباب','joojeh kabab':'جوجه کباب|جوجه|کباب جوجه',
+'kabab barg':'کباب برگ|برگ','chelo kabab':'چلو کباب|چلوکباب','kabab torsh':'کباب ترش','jigar':'جگر|جیگر|کباب جگر','shawarma':'شاورما|شاورمای مرغ',
+'doner kebab':'دونر کباب|دونر|دنر کباب|دنر','falafel':'فلافل','falafel wrap':'ساندویچ فلافل','burger':'همبرگر|برگر','cheeseburger':'چیزبرگر|چیز برگر',
+'hot dog':'هات داگ|هاتداگ','sausage':'سوسیس','sosis bandari':'سوسیس بندری|ساندویچ سوسیس','bacon':'بیکن','ham':'ژامبون','turkey breast':'بوقلمون|سینه بوقلمون|ژامبون بوقلمون',
+'salmon':'سالمون|ماهی سالمون|ماهی آزاد','tuna':'تن ماهی|کنسرو تن ماهی|تن','tuna in water':'تن ماهی در آب|تن ماهی رژیمی','shrimp':'میگو',
+'fish':'ماهی|ماهی کبابی|ماهی سفید|ماهی قزل آلا|قزل آلا','fried fish':'ماهی سرخ کرده','fish and chips':'فیش اند چیپس','kotlet':'کتلت|کتلت گوشت',
+'kuku sabzi':'کوکو سبزی|کوکو','kuku sibzamini':'کوکو سیب زمینی','meatballs':'کوفته قلقلی|قلقلی|میت بال','koofteh tabrizi':'کوفته تبریزی|کوفته','dolmeh':'دلمه|دلمه برگ مو',
+'ghormeh sabzi':'قورمه سبزی|قرمه سبزی|قورمه|قرمه|خورش قورمه سبزی|خورش قرمه سبزی','gheymeh':'قیمه|خورش قیمه|قیمه سیب زمینی','fesenjan':'فسنجان|فسنجون|خورش فسنجان',
+'khoresh bademjan':'خورش بادمجان|خورش بادمجون|خورشت بادمجان','khoresh karafs':'خورش کرفس|خورشت کرفس','khoresh':'خورش|خورشت','abgoosht':'آبگوشت|دیزی|آب گوشت',
+'ash reshteh':'آش رشته|آش','halim':'حلیم|حلیم گندم','adasi':'عدسی|سوپ عدس','kaleh pacheh':'کله پاچه|کلهپاچه','lubia polo':'لوبیا پلو|لوبیاپلو','adas polo':'عدس پلو|عدسپلو',
+'zereshk polo ba morgh':'زرشک پلو با مرغ|زرشک پلو|زرشکپلو','baghali polo ba mahicheh':'باقالی پلو با ماهیچه|باقالی پلو|باقلا پلو|ماهیچه',
+'sabzi polo ba mahi':'سبزی پلو با ماهی|سبزی پلو|سبزیپلو','tahchin':'ته چین|تهچین','estamboli polo':'استامبولی|استانبولی|استامبولی پلو|دمی گوجه',
+'kashk bademjan':'کشک بادمجان|کشک بادمجون','mirza ghasemi':'میرزا قاسمی|میرزاقاسمی','salad shirazi':'سالاد شیرازی','olivieh':'الویه|سالاد الویه',
+'mast o khiar':'ماست و خیار|ماست خیار','borani':'بورانی|بورانی اسفناج|بورانی بادمجان','sabzi khordan':'سبزی خوردن|سبزی','torshi':'ترشی|خیارشور|خیار شور',
+'pizza':'پیتزا|پیتزا مخلوط','pepperoni pizza':'پیتزا پپرونی','chicken sandwich':'ساندویچ مرغ','tuna sandwich':'ساندویچ تن ماهی','egg sandwich':'ساندویچ تخم مرغ',
+'cheese sandwich':'ساندویچ پنیر','peanut butter sandwich':'ساندویچ کره بادام زمینی','grilled cheese':'ساندویچ پنیر داغ','avocado toast':'تست آووکادو','sandwich':'ساندویچ|ساندویچ کلاب',
+'burrito':'بوریتو','taco':'تاکو','sushi':'سوشی','fried rice':'برنج سرخ کرده|فرایدرایس','ramen':'رامن|سوپ نودل','instant noodles':'نودل|نودل فوری|اندومی|نودالیت',
+'chicken curry':'مرغ کاری|خوراک مرغ کاری|کاری','biryani':'بریانی','caesar salad':'سالاد سزار','salad':'سالاد|سالاد سبز|سالاد فصل','salad dressing':'سس سالاد|سس',
+'soup':'سوپ|سوپ سبزیجات','chicken soup':'سوپ مرغ|سوپ جو','hummus':'حمص|هوموس','apple':'سیب','banana':'موز','orange':'پرتقال|پرتغال','tangerine':'نارنگی',
+'dates':'خرما','grapes':'انگور','watermelon':'هندوانه|هندونه','melon':'خربزه|طالبی|گرمک','strawberries':'توت فرنگی|توتفرنگی','blueberries':'بلوبری',
+'cherries':'گیلاس|آلبالو','pomegranate':'انار','pomegranate seeds':'دانه انار|انار دانه شده','peach':'هلو','pear':'گلابی','kiwi':'کیوی','mango':'انبه',
+'pineapple':'آناناس','persimmon':'خرمالو','fig':'انجیر','apricot':'زردآلو|زردالو','raisins':'کشمش','dried fruit':'میوه خشک|برگه|برگه زردآلو',
+'cucumber':'خیار','tomato':'گوجه|گوجه فرنگی|گوجهفرنگی','carrot':'هویج','broccoli':'بروکلی|کلم بروکلی','spinach':'اسفناج','lettuce':'کاهو','onion':'پیاز',
+'bell pepper':'فلفل دلمه|فلفل دلمه ای|فلفل','mushrooms':'قارچ','eggplant':'بادمجان|بادمجون','fried eggplant':'بادمجان سرخ کرده|بادمجون سرخ کرده','avocado':'آووکادو|اووکادو',
+'olives':'زیتون','green beans':'لوبیا سبز','peas':'نخود فرنگی|نخودفرنگی','lentils':'عدس','chickpeas':'نخود','beans':'لوبیا|لوبیا قرمز|لوبیا چیتی','tofu':'توفو',
+'almonds':'بادام','walnuts':'گردو','pistachios':'پسته','peanuts':'بادام زمینی|بادامزمینی','cashews':'بادام هندی','mixed nuts':'آجیل|آجیل مخلوط',
+'sunflower seeds':'تخمه|تخمه آفتابگردان','peanut butter':'کره بادام زمینی','tahini':'ارده|ارده کنجد','chocolate':'شکلات|شکلات شیری','dark chocolate':'شکلات تلخ',
+'cookie':'بیسکویت|کوکی|کلوچه','cake':'کیک|کیک شکلاتی','donut':'دونات','crisps':'چیپس|چیپس سیب زمینی','popcorn':'پاپ کورن|پاپکورن|پفک','honey':'عسل','jam':'مربا',
+'sugar':'شکر|قند|نبات','nutella':'نوتلا','granola bar':'گرانولا بار','protein bar':'پروتئین بار','baklava':'باقلوا','gaz':'گز','sohan':'سوهان',
+'zoolbia bamieh':'زولبیا بامیه|زولبیا|بامیه','sholeh zard':'شله زرد|شلهزرد','faloodeh':'فالوده|فالوده شیرازی','rice pudding':'شیر برنج|شیربرنج','muffin':'مافین|کاپ کیک',
+'brownie':'براونی','coke':'نوشابه|کوکا|کوکاکولا|پپسی|نوشابه مشکی','diet coke':'نوشابه رژیمی|کوکا زیرو|نوشابه زیرو','soda':'نوشابه زرد|فانتا|اسپرایت|سون آپ|نوشابه گازدار',
+'orange juice':'آب پرتقال|آبمیوه|آب میوه|آب سیب','coffee':'قهوه|قهوه تلخ|آمریکانو','espresso':'اسپرسو','latte':'لاته|کافه لاته','flat white':'فلت وایت','cappuccino':'کاپوچینو',
+'iced coffee':'آیس کافی|قهوه سرد','tea':'چای|چایی|چای سبز','hot chocolate':'هات چاکلت','smoothie':'اسموتی','milkshake':'شیک|میلک شیک','energy drink':'انرژی زا|نوشیدنی انرژی زا|ردبول|هایپ',
+'beer':'آبجو','malt drink':'ماءالشعیر|دلستر|ایستک|آبجو بدون الکل','wine':'شراب','water':'آب|آب معدنی|آب گازدار','olive oil':'روغن زیتون|روغن|روغن مایع',
+'mayonnaise':'سس مایونز|مایونز','ketchup':'سس گوجه|کچاپ|سس کچاپ','rice cake':'کیک برنجی|رایس کیک',
+'halva':'حلوا','fereni':'فرنی','cake yazdi':'کیک یزدی','sekanjabin':'سکنجبین|شربت سکنجبین','noon panir sabzi':'نان پنیر سبزی|نون پنیر سبزی|نان و پنیر و سبزی|نان و پنیر',
+'yatimcheh':'یتیمچه','kabab tabei':'کباب تابه ای|کباب تابهای','shakshuka':'شکشوکا','shami':'شامی|شامی کباب','baghali':'باقالی|باقلا|باقالی پخته','laboo':'لبو|چغندر'
+};
+
+/* ---------- the parser: "2 eggs, toast and a flat white" / "دو تا تخم مرغ و یک لیوان چای" → items with numbers ---------- */
 var MacroFoods=(function(){
-  var NUMW={a:1,an:1,one:1,two:2,three:3,four:4,five:5,six:6,seven:7,eight:8,nine:9,ten:10,eleven:11,twelve:12,half:.5,couple:2,few:3,dozen:12};
+  var NUM0={a:1,an:1,one:1,two:2,three:3,four:4,five:5,six:6,seven:7,eight:8,nine:9,ten:10,eleven:11,twelve:12,half:.5,couple:2,few:3,dozen:12,
+    'یک':1,'یه':1,'یدونه':1,'یکی':1,'دو':2,'دوتا':2,'سه':3,'سهتا':3,'چهار':4,'چهارتا':4,'پنج':5,'پنجتا':5,'شش':6,'شیش':6,'هفت':7,'هشت':8,'نه':9,'ده':10,'یازده':11,'دوازده':12,
+    'نصف':.5,'نیم':.5,'نصفه':.5,'چند':3,'چندتا':3};
   var FRAC={'½':.5,'¼':.25,'¾':.75,'⅓':1/3,'⅔':2/3};
-  var UA={cup:'cup',cups:'cup',mug:'cup',mugs:'cup',bowl:'bowl',bowls:'bowl',plate:'plate',plates:'plate',slice:'slice',slices:'slice',piece:'piece',pieces:'piece',pc:'piece',pcs:'piece',
+  var UA0={cup:'cup',cups:'cup',mug:'cup',mugs:'cup',bowl:'bowl',bowls:'bowl',plate:'plate',plates:'plate',slice:'slice',slices:'slice',piece:'piece',pieces:'piece',pc:'piece',pcs:'piece',
     handful:'handful',handfuls:'handful',scoop:'scoop',scoops:'scoop',glass:'glass',glasses:'glass',can:'can',cans:'can',bottle:'bottle',bottles:'bottle',
     tbsp:'tbsp',tbs:'tbsp',tablespoon:'tbsp',tablespoons:'tbsp',tsp:'tsp',teaspoon:'tsp',teaspoons:'tsp',spoon:'tbsp',spoons:'tbsp',
     serving:'serving',servings:'serving',portion:'serving',portions:'serving',skewer:'skewer',skewers:'skewer',sikh:'skewer',
     bar:'bar',bars:'bar',shot:'shot',shots:'shot',square:'square',squares:'square',sheet:'sheet',sheets:'sheet',bag:'bag',bags:'bag',
     pack:'pack',packs:'pack',packet:'pack',packets:'pack',cube:'cube',cubes:'cube',fillet:'fillet',fillets:'fillet',wrap:'wrap',wraps:'wrap',
-    sandwich:'sandwich',sandwiches:'sandwich',breast:'breast',breasts:'breast',thigh:'thigh',thighs:'thigh',link:'link',links:'link',chop:'chop',chops:'chop'};
-  var SIZE={small:.7,little:.7,mini:.5,medium:1,regular:1,normal:1,large:1.35,big:1.35,huge:1.7,double:2};
-  var GEN={cup:240,bowl:300,plate:350,slice:30,handful:30,scoop:30,glass:250,can:330,bottle:500,tbsp:15,tsp:5,shot:30,square:10,cube:4,pack:85,bag:28};
-  var MASS={g:1,gr:1,gram:1,grams:1,gm:1,kg:1000,kilo:1000,kilos:1000,ml:1,cl:10,l:1000,liter:1000,liters:1000,litre:1000,litres:1000,oz:28.35,ounce:28.35,ounces:28.35,lb:453.6,lbs:453.6,pound:453.6,pounds:453.6};
+    sandwich:'sandwich',sandwiches:'sandwich',breast:'breast',breasts:'breast',thigh:'thigh',thighs:'thigh',link:'link',links:'link',chop:'chop',chops:'chop',ladle:'ladle',
+    'بشقاب':'plate','پرس':'serving','کاسه':'bowl','لیوان':'glass','فنجان':'cup','فنجون':'cup','استکان':'estekan','قاشق':'tbsp','تکه':'piece','تیکه':'piece','قطعه':'piece',
+    'برش':'slice','ورق':'sheet','مشت':'handful','سیخ':'skewer','اسکوپ':'scoop','پیمانه':'cup','قوطی':'can','بطری':'bottle','شیشه':'bottle','بسته':'pack','پاکت':'pack',
+    'حبه':'cube','کفگیر':'kafgir','ملاقه':'ladle'};
+  var SIZE0={small:.7,little:.7,mini:.5,medium:1,regular:1,normal:1,large:1.35,big:1.35,huge:1.7,double:2,
+    'کوچک':'small','کوچیک':'small','ریز':'small','متوسط':'medium','بزرگ':'large','گنده':'large','درشت':'large','دوبل':'double'};
+  var SIZEV={small:.7,little:.7,mini:.5,medium:1,regular:1,normal:1,large:1.35,big:1.35,huge:1.7,double:2};
+  var GEN={cup:240,bowl:300,plate:350,slice:30,handful:30,scoop:30,glass:250,can:330,bottle:500,tbsp:15,tsp:5,shot:30,square:10,cube:4,pack:85,bag:28,estekan:110,kafgir:90,ladle:200};
+  var MASS0={g:1,gr:1,gram:1,grams:1,gm:1,kg:1000,kilo:1000,kilos:1000,ml:1,cl:10,l:1000,liter:1000,liters:1000,litre:1000,litres:1000,oz:28.35,ounce:28.35,ounces:28.35,lb:453.6,lbs:453.6,pound:453.6,pounds:453.6,
+    'گرم':1,'گرمی':1,'کیلو':1000,'کیلوگرم':1000,'کیلویی':1000,'لیتر':1000};
+  var FILL0={of:1,the:1,some:1,'تا':1,'عدد':1,'دونه':1,'دانه':1,'از':1,'ها':1,'های':1,'رو':1,'را':1,'هم':1};
+  var AND0=['and','with','plus','also','then','n','w','و','با','بعد','بعدش','همراه'];
+  var MULTI0=[['قاشق چای خوری','tsp'],['قاشق چایخوری','tsp'],['قاشق غذا خوری','tbsp'],['قاشق غذاخوری','tbsp'],['قاشق سوپ خوری','tbsp'],['کف دست','handful'],['میلی لیتر','ml'],['سی سی','ml'],['کیلو گرم','kg']];
   var NOPL={large:1,medium:1,small:1,half:1,tbsp:1,tsp:1,'100 g':1};
   var WEAK={meat:1,seeds:1,oil:1,ab:1,zero:1,shake:1,juice:1,soda:1,herbs:1,dressing:1,pepper:1,nuts:1,pure:1,stew:1,khoresh:1,noon:1,nan:1,mash:1,coca:1,mahi:1,gusht:1,morgh:1,liver:1,wing:1,wings:1,date:1,dates:1};
-  function key(s){return String(s||'').toLowerCase().replace(/(\d+)\s*\/\s*(\d+)/g,function(x,a,b){return +b?String(Math.round(a/b*100)/100):x;})
-    .replace(/[’'`]/g,'').replace(/(\d),(\d)/g,'$1.$2').replace(/[^a-z0-9.½¼¾⅓⅔]+/g,' ').replace(/(^|[^0-9])\.|\.(?![0-9])/g,'$1 ')
-    .replace(/(\d)([a-z½¼¾⅓⅔])/g,'$1 $2').replace(/\s+/g,' ').trim();}
-  function sing(w){if(w.length<=3)return w;if(/ies$/.test(w))return w.slice(0,-3)+'y';if(/(ch|sh|x|ss|o)es$/.test(w))return w.slice(0,-2);if(/[^s]s$/.test(w))return w.slice(0,-1);return w;}
-  var FOODS=[],IDX=[];
+  var FU_FA={large:'عدد',medium:'عدد',small:'عدد',unit:'عدد',cup:'فنجان',bowl:'کاسه',plate:'بشقاب',slice:'برش',piece:'تکه',handful:'مشت',scoop:'اسکوپ',glass:'لیوان',can:'قوطی',bottle:'بطری',
+    tbsp:'قاشق غذاخوری',tsp:'قاشق چای‌خوری',serving:'پرس',skewer:'سیخ',bar:'عدد',shot:'شات',square:'تکه',sheet:'ورق',bag:'بسته',pack:'بسته',cube:'حبه',fillet:'فیله',wrap:'عدد',
+    sandwich:'عدد',breast:'عدد',thigh:'عدد',link:'عدد',chop:'تکه',kafgir:'کفگیر',estekan:'استکان',ladle:'ملاقه',half:'نصف',g:'گرم',ml:'میلی‌لیتر'};
+  var SZ_FA={small:'کوچک',little:'کوچک',mini:'کوچک',large:'بزرگ',big:'بزرگ',huge:'خیلی بزرگ',double:'دوبل'};
+  var DIG={fa:'۰۱۲۳۴۵۶۷۸۹',ar:'٠١٢٣٤٥٦٧٨٩'};
+  var CUR='en',LX=null,NUMW,UA,SIZE,MASS,FILL,AND,MULTI,ANDRE,COMP,IDX=[];
+  function letters(s){return String(s||'').toLowerCase().replace(/[۰-۹]/g,function(d){return String(d.charCodeAt(0)-1776);}).replace(/[٠-٩]/g,function(d){return String(d.charCodeAt(0)-1632);})
+    .replace(/٫/g,'.').replace(/[،؛]/g,',').replace(/ي/g,'ی').replace(/ك/g,'ک').replace(/ة/g,'ه').replace(/ى/g,'ی').replace(/[ًٌٍَُِّْٰـ]/g,'')
+    .normalize('NFD').replace(/[̀-ͯٓ-ٕ]/g,'').replace(/ı/g,'i').replace(/ß/g,'ss').replace(/ё/g,'е').replace(/‌/g,' ');}
+  function key(s){return letters(s).replace(/(\d+)\s*\/\s*(\d+)/g,function(x,a,b){return +b?String(Math.round(a/b*100)/100):x;})
+    .replace(/[’'`]/g,'').replace(/(\d),(\d)/g,'$1.$2').replace(/[^a-z0-9.½¼¾⅓⅔Ѐ-ӿ؀-ۿ]+/g,' ').replace(/(^|[^0-9])\.|\.(?![0-9])/g,'$1 ')
+    .replace(/(\d)([^\d\s.½¼¾⅓⅔])/g,'$1 $2').replace(/\s+/g,' ').trim();}
+  function esc(w){return w.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');}
+  function sing(w){if(w.length<=3||/[^a-z]/.test(w))return w;if(/ies$/.test(w))return w.slice(0,-3)+'y';if(/(ch|sh|x|ss|o)es$/.test(w))return w.slice(0,-2);if(/[^s]s$/.test(w))return w.slice(0,-1);return w;}
+  var FOODS=[];
   (typeof MACRO_FOODS!=='undefined'?MACRO_FOODS:[]).forEach(function(r,i){
-    var o={id:i,names:r[0].split('|'),unit:r[1],g:r[2],k:r[3],p:r[4],c:r[5],f:r[6],units:{},ml:r[8]==='ml'};
+    var o={id:i,names:r[0].split('|'),unit:r[1],g:r[2],k:r[3],p:r[4],c:r[5],f:r[6],units:{},ml:r[8]==='ml',tn:{},al:{}};
     (r[7]||'').split(',').forEach(function(x){var kv=x.split(':');if(kv[0])o.units[kv[0].trim()]=Number(kv[1]);});
     o.units[o.unit]=o.g;o.name=o.names[0].charAt(0).toUpperCase()+o.names[0].slice(1);
-    FOODS.push(o);o.names.forEach(function(a){var k=key(a);IDX.push({a:k,w:k.split(' '),o:o,weak:!!WEAK[k]||(k.indexOf(' ')<0&&!!UA[k])||k.length<3});});
-  });
-  IDX.sort(function(x,y){return y.a.length-x.a.length;});
-  var COMP=IDX.filter(function(x){return /\b(and|with|n|plus)\b/.test(x.a);}).map(function(x){return x.a;});
-  function segment(words){var r=seg1(words,false);return r.length?r:seg1(words,true);}
+    var fa=typeof MACRO_FA!=='undefined'&&MACRO_FA[o.names[0]];if(fa){var p=fa.split('|');o.tn.fa=p[0];o.al.fa=p;}
+    FOODS.push(o);});
+  function merge(a,b){var o={};Object.keys(a).forEach(function(k){o[key(k)||k]=a[k];});Object.keys(b||{}).forEach(function(k){var kk=key(k);if(kk)o[kk]=b[k];});return o;}
+  function build(){
+    var fp=(LX&&LX.fp)||{};
+    NUMW=merge(NUM0,fp.num);FILL=merge(FILL0,(fp.fill||[]).reduce(function(m,w){m[w]=1;return m;},{}));MASS=merge(MASS0,fp.mass);
+    UA=merge(UA0,fp.unit);var sz=merge(SIZE0,fp.size);SIZE={};Object.keys(sz).forEach(function(k){var v=sz[k];SIZE[k]=typeof v==='number'?v:SIZEV[v]!=null?SIZEV[v]:1;SIZE['@'+k]=typeof v==='string'?v:k;});
+    AND=AND0.concat((fp.and||[]).map(key)).filter(Boolean);var AS={};AND.forEach(function(w){AS[w]=1;});
+    ANDRE=new RegExp('(^|\\s)(?:'+AND.map(esc).join('|')+')(?=\\s|$)','g');
+    MULTI=MULTI0.concat(fp.multi||[]).map(function(m){return [new RegExp('(^|\\s)'+esc(letters(m[0])).replace(/ /g,'\\s+')+'(?=\\s|$)','g'),m[1]];});
+    IDX=[];FOODS.forEach(function(o){
+      o.names.forEach(function(a){var k=key(a);IDX.push({a:k,w:k.split(' '),o:o,weak:!!WEAK[k]||(k.indexOf(' ')<0&&!!UA[k])||k.length<3});});
+      [o.al.fa,CUR!=='en'&&CUR!=='fa'?o.al[CUR]:null].forEach(function(list){(list||[]).forEach(function(a){var k=key(a);if(!k)return;IDX.push({a:k,w:k.split(' '),o:o,weak:(k.indexOf(' ')<0&&!!UA[k])||k.length<3});});});});
+    IDX.sort(function(x,y){return y.a.length-x.a.length;});
+    COMP=[];IDX.forEach(function(x){if(x.w.length>1&&x.w.some(function(w){return AS[w];})&&COMP.indexOf(x.a)<0)COMP.push(x.a);});
+  }
+  function useLang(code,L){CUR=code||'en';LX=(CUR!=='en'&&CUR!=='fa')?(L||null):null;
+    if(LX&&LX.food&&!LX._foods){LX._foods=1;FOODS.forEach(function(o){var v=LX.food[o.names[0]];if(v){var p=String(v).split('|');o.tn[CUR]=p[0];o.al[CUR]=p;}});}
+    build();}
+  function segment(words){var r=seg1(words,false);if(!r.length)r=seg1(words,true);
+    if(!r.length&&words.some(function(w){return /[؀-ۿ]/.test(w);})){var ar=words.map(function(w){return /^و[؀-ۿ]{2,}/.test(w)?w.slice(1):w;}).map(function(w){return /^(ال|بال|لل)[؀-ۿ]{2,}/.test(w)?w.replace(/^(ال|بال|لل)/,''):w;});
+      r=seg1(ar,false);if(!r.length)r=seg1(ar,true);}
+    return r;}
   function seg1(words,weakOk){
     var cov=words.map(function(){return false;}),sg=words.map(sing),spans=[];
     for(var x=0;x<IDX.length;x++){var ax=IDX[x],n=ax.w.length;if(ax.weak&&(!weakOk||spans.length))continue;
@@ -294,7 +402,7 @@ var MacroFoods=(function(){
   function lev(a,b){if(a===b)return 0;var m=a.length,n=b.length,d=[],i,j;for(i=0;i<=n;i++)d[i]=i;
     for(i=1;i<=m;i++){var prev=d[0];d[0]=i;for(j=1;j<=n;j++){var tmp=d[j];d[j]=Math.min(d[j]+1,d[j-1]+1,prev+(a[i-1]===b[j-1]?0:1));prev=tmp;}}return d[n];}
   function suggest(q,limit){
-    q=key(q).split(' ').filter(function(w){return !(NUMW[w]!=null||UA[w]||SIZE[w]!=null||MASS[w]||/^[\d.½¼¾⅓⅔]+$/.test(w)||w==='of'||w==='the'||w==='some');}).join(' ');
+    q=key(q).split(' ').filter(function(w){return !(NUMW[w]!=null||UA[w]||SIZE[w]!=null||MASS[w]||FILL[w]||/^[\d.½¼¾⅓⅔]+$/.test(w));}).join(' ');
     if(q.length<2)return [];var out=[],seen={};
     IDX.forEach(function(x){var a=x.a,s=0;
       if(a.indexOf(q)===0)s=3;else if((' '+a).indexOf(' '+q)>=0)s=2.5;else if(q.length>=3&&a.indexOf(q)>=0)s=2;
@@ -304,44 +412,58 @@ var MacroFoods=(function(){
   }
   function qStr(q){var w=Math.floor(q+1e-9),fr=q-w,sym=Math.abs(fr-.5)<.01?'½':Math.abs(fr-.25)<.01?'¼':Math.abs(fr-.75)<.01?'¾':null;
     if(sym)return (w?w:'')+sym;return String(Math.round(q*100)/100);}
+  function numL(q){var s=qStr(q),d=DIG[CUR];if(d)return s.replace(/\d/g,function(x){return d[x];}).replace(/\./g,'٫');return CUR==='en'?s:s.replace('.',',');}
   function plural(u,q){if(q<=1||NOPL[u])return u;var w=u.split(' '),h=w[0];h=/(s|sh|ch|x)$/.test(h)?h+'es':/[^aeiou]y$/.test(h)?h.slice(0,-1)+'ies':h+'s';w[0]=h;return w.join(' ');}
-  function amt(g,o){return Math.round(g)+(o.ml?' ml':' g');}
+  function tbl(){return CUR==='fa'?FU_FA:(LX&&LX.fu)||{};}
+  function pick(v,q){return Array.isArray(v)?(q>1?v[1]:v[0]):v;}
+  function uName(u,q){if(CUR==='en')return plural(u,q);var tb=tbl(),v=tb[u];if(v==null)v=tb.unit;if(v==null)return plural(u,q);return pick(v,q);}
+  function szName(s){if(CUR==='en')return s;var tb=CUR==='fa'?SZ_FA:(LX&&LX.sz)||{};return tb[s]||'';}
+  function amt(g,o){var u=o.ml?'ml':'g',lb=CUR==='en'?u:pick(tbl()[u]||u,1);return numL(Math.round(g))+' '+lb;}
+  function title(o){return CUR==='en'?o.name:(o.tn[CUR]||o.name);}
+  function unitName(o){return o.unit==='100 g'?numL(100)+' '+pick(CUR==='en'?'g':tbl().g||'g',1):uName(o.unit,1);}
   function make(o,qty,unit,size,grams){
     var g,label,sf=1;qty=qty==null?1:qty;
     if(size&&o.units[size]){unit=size;size=null;}
-    if(size&&SIZE[size]!=null)sf=SIZE[o.unit]!=null?SIZE[size]/SIZE[o.unit]:SIZE[size];
-    var sz=size&&sf!==1&&SIZE[o.unit]==null?size+' ':'';
-    function lab(u){var noun=o.names.indexOf(u)>=0||o.names.indexOf(u+'s')>=0;return qStr(qty)+' '+(noun?'':sz+plural(u,qty)+' ')+'('+amt(g,o)+')';}
+    if(size&&SIZEV[size]!=null)sf=SIZEV[o.unit]!=null?SIZEV[size]/SIZEV[o.unit]:SIZEV[size];
+    var sz=size&&sf!==1&&SIZEV[o.unit]==null?size+' ':'';
+    function lab(u){var noun=o.names.indexOf(u)>=0||o.names.indexOf(u+'s')>=0;
+      if(CUR==='en')return qStr(qty)+' '+(noun?'':sz+plural(u,qty)+' ')+'('+amt(g,o)+')';
+      var un,szw='';if(SIZEV[u]!=null){un=uName('unit',qty);szw=size&&u===size&&!/^(medium|regular|normal)$/.test(u)?szName(u):'';}
+      else{un=noun?uName('unit',qty):uName(u,qty);szw=sz?szName(size):'';}
+      return numL(qty)+(un?' '+un:'')+(szw?' '+szw:'')+' ('+amt(g,o)+')';}
     if(grams!=null){g=grams;label=amt(g,o);}
     else if(o.unit==='100 g'&&!(unit&&(o.units[unit]||GEN[unit]))){g=qty*100*sf;label=amt(g,o);}
     else if(unit&&o.units[unit]){g=qty*o.units[unit]*sf;label=lab(unit);}
     else if(unit&&GEN[unit]){g=qty*GEN[unit]*sf;label=lab(unit);}
-    else{g=qty*o.g*sf;label=lab(size&&SIZE[o.unit]!=null?size:o.unit);}
-    var m=g/o.g;
-    return {o:o,qty:qty,unit:unit||null,size:size||null,grams:grams==null?null:grams,g:g,portion:label.replace(/\s+/g,' ').trim(),name:(o.name+', '+label).replace(/\s+/g,' ').trim(),
+    else{g=qty*o.g*sf;label=lab(size&&SIZEV[o.unit]!=null?size:o.unit);}
+    var m=g/o.g,sep=CUR==='fa'||CUR==='ar'?'، ':', ';
+    return {o:o,qty:qty,unit:unit||null,size:size||null,grams:grams==null?null:grams,g:g,portion:label.replace(/\s+/g,' ').trim(),name:(title(o)+sep+label).replace(/\s+/g,' ').trim(),
       kcal:Math.round(o.k*m),p:Math.round(o.p*m),c:Math.round(o.c*m),f:Math.round(o.f*m)};
   }
-  function numTok(t){if(FRAC[t]!=null)return FRAC[t];var mix=/^(\d+)([½¼¾⅓⅔])$/.exec(t);if(mix)return +mix[1]+FRAC[mix[2]];
-    if(/^\d+(\.\d+)?$/.test(t))return Number(t);var x=/^x(\d+(\.\d+)?)$/.exec(t);if(x)return Number(x[1]);return null;}
+  function numTok(tk){if(FRAC[tk]!=null)return FRAC[tk];var mix=/^(\d+)([½¼¾⅓⅔])$/.exec(tk);if(mix)return +mix[1]+FRAC[mix[2]];
+    if(/^\d+(\.\d+)?$/.test(tk))return Number(tk);var x=/^x(\d+(\.\d+)?)$/.exec(tk);if(x)return Number(x[1]);return null;}
   function fromWords(o,words){
     var qty=null,tent=false,unit=null,size=null,grams=null;
     for(var i=0;i<words.length;i++){var w=words[i];if(!w)continue;var n=numTok(w);
       if(n!=null&&MASS[words[i+1]]){grams=(grams||0)+n*MASS[words[i+1]];i++;continue;}
       if(n!=null){if(tent||qty==null)qty=n;else qty*=n;tent=false;continue;}
       if(w==='a'||w==='an'){if(qty==null){qty=1;tent=true;}continue;}
-      if(NUMW[w]!=null){if(tent||qty==null)qty=NUMW[w];else qty*=NUMW[w];tent=false;continue;}
-      if(SIZE[w]!=null){size=w;continue;}if(UA[w]){unit=UA[w];continue;}}
+      if(NUMW[w]!=null){if(MASS[words[i+1]]){grams=(grams||0)+NUMW[w]*MASS[words[i+1]];i++;continue;}if(tent||qty==null)qty=NUMW[w];else qty*=NUMW[w];tent=false;continue;}
+      if(SIZE[w]!=null){size=SIZE['@'+w]||w;continue;}if(UA[w]){unit=UA[w];continue;}}
     return make(o,qty,unit,size,grams);
   }
   function parse(text,recent,picks){
-    var t=String(text||'').toLowerCase().replace(/[;+&\n]+/g,',').replace(/\b(\d+|one|two|three|four) and a half\b/g,function(x,n){return String((NUMW[n]||Number(n))+.5);});
-    var prot=[];COMP.forEach(function(a){t=t.replace(new RegExp('\\b'+a.replace(/ /g,'\\s+')+'\\b','g'),function(){prot.push(a);return ' qqp'+(prot.length-1)+'qq ';});});
-    t=t.replace(/\b(and|with|plus|also|then|n|w)\b/g,',');
+    var tx=letters(text).replace(/[;+&\n]+/g,',');
+    MULTI.forEach(function(m){tx=tx.replace(m[0],'$1'+m[1]+' ');});
+    tx=tx.replace(/\b(\d+|one|two|three|four) and a half\b/g,function(x,n){return String((NUMW[n]||Number(n))+.5);})
+      .replace(/(^|\s)(\d+|یک|دو|سه|چهار|پنج)\s+و\s+نیم(?=\s|$)/g,function(x,p,n){return p+String((NUMW[n]||Number(n))+.5);});
+    var prot=[];COMP.forEach(function(a){tx=tx.replace(new RegExp('(^|[\\s,])'+esc(a).replace(/ /g,'\\s+')+'(?=$|[\\s,])','g'),function(m,p){prot.push(a);return p+' qqp'+(prot.length-1)+'qq ';});});
+    tx=tx.replace(ANDRE,'$1,');
     var out={items:[],unknown:[]};
-    t.split(',').map(function(s){return s.replace(/qqp(\d+)qq/g,function(x,i){return prot[+i];}).replace(/\s+/g,' ').trim();}).filter(function(s){return /[a-z]/.test(s);})
+    tx.split(',').map(function(s){return s.replace(/qqp(\d+)qq/g,function(x,i){return prot[+i];}).replace(/\s+/g,' ').trim();}).filter(function(s){return /[a-zЀ-ӿ؀-ۿ]/.test(s);})
       .forEach(function(s){
         var k=key(s),words=k.split(' ');
-        if(recent)for(var r=0;r<recent.length;r++){if(key(recent[r].name)===k){var R=recent[r];out.items.push({recent:true,src:s,name:R.name,portion:'same as last time',kcal:R.kcal,p:R.protein,c:R.carbs,f:R.fat,qty:1});return;}}
+        if(recent)for(var r=0;r<recent.length;r++){if(key(recent[r].name)===k){var R=recent[r];out.items.push({recent:true,src:s,name:R.name,portion:'',kcal:R.kcal,p:R.protein,c:R.carbs,f:R.fat,qty:1});return;}}
         if(picks&&picks[s]!=null){out.items.push(Object.assign(fromWords(FOODS[picks[s]],words),{src:s}));return;}
         var spans=segment(words);
         if(!spans.length){out.unknown.push({text:s,suggest:suggest(s)});return;}
@@ -350,5 +472,6 @@ var MacroFoods=(function(){
       });
     return out;
   }
-  return {parse:parse,make:make,suggest:suggest,foods:FOODS,count:FOODS.length};
+  build();
+  return {parse:parse,make:make,suggest:suggest,foods:FOODS,count:FOODS.length,useLang:useLang,title:title,unitName:unitName,key:key};
 })();
