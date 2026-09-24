@@ -1,5 +1,5 @@
 /* Dastpokht interface text. English and Persian live here; the other languages load from lang/xx.js when chosen. */
-var DP_V='1';
+var DP_V='2';
 var DP_LANGS=[['en','English','ltr','en-US'],['fa','فارسی','rtl','fa-IR'],['ar','العربية','rtl','ar-EG'],['tr','Türkçe','ltr','tr-TR'],
   ['es','Español','ltr','es-ES'],['fr','Français','ltr','fr-FR'],['de','Deutsch','ltr','de-DE'],['ru','Русский','ltr','ru-RU']];
 var DP_LANG=window.DP_LANG||{};
@@ -475,6 +475,16 @@ tipKeepSteadyT:["Keep your training steady","تمرین را منظم نگه د�
 tipKeepSteadyD:["You’re already doing the hard part. Consistency beats intensity.","بخش سخت را انجام می‌دهید. پیوستگی از شدت مهم‌تر است."],
 tipDriftT:["Watch the drift","حواستان به تغییر آرام وزن باشد"],
 tipDriftD:["If your weekly average moves 1 kg either way, shift your calories 150 in the other direction.","اگر میانگین هفتگی ۱ کیلو بالا یا پایین رفت، کالری را ۱۵۰ تا در جهت مخالف تغییر دهید."],
+/* ---------- what should I make ---------- */
+whatMake:["What should I make?","چی درست کنم؟"],
+sayPh2:["I have… chicken, rice, eggplant","دارم… مرغ، برنج، بادمجان"],
+ideasBtn:["Ideas","ایده بده"],
+ideasFor:["Ideas with {list}","ایده با {list}"],
+ideasSub:["Best matches first — the more of your ingredients a dish uses, the higher it is.","بهترین‌ها اول — هر غذا که مواد بیشتری از شما را استفاده کند، بالاتر است."],
+usesX:["Uses: {list}","استفاده از: {list}"],
+ideasNone:["No dish uses those yet — add a couple more things, or check the spelling.","هنوز غذایی با این‌ها پیدا نشد — چند قلم دیگر اضافه کنید یا املا را بررسی کنید."],
+askMore:["Want more ideas? Ask the assistant","ایده‌ی بیشتر می‌خواهید؟ از دستیار بپرسید"],
+askHave:["I have {list}. What should I make?","{list} دارم. چی درست کنم؟"],
 /* ---------- the assistant ---------- */
 askTitle:["Your kitchen assistant","دستیار آشپزخانه‌ی شما"],
 askSub:["Ask for a week of dinners, a menu for guests, a plan for your targets, or help when a dish goes wrong. It knows what’s in your kitchen.","برنامه‌ی شام یک هفته، منوی مهمانی، برنامه‌ی غذایی برای هدف‌هایتان یا کمک وقتی غذایی خراب شد — بپرسید. می‌داند در آشپزخانه چه دارید."],
