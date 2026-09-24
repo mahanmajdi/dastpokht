@@ -570,6 +570,11 @@ html[dir="rtl"] .daynav button{transform:scaleX(-1);}
 @media (min-width:761px){.tabs{background:linear-gradient(180deg,var(--bg) 62%,transparent);}}
 .acct{display:flex;align-items:center;gap:12px;justify-content:space-between;flex-wrap:wrap;}
 .acct .nm{min-width:0;overflow-wrap:anywhere;color:var(--sub);font-size:14px;}
+.mtwrap{overflow-x:auto;margin:8px 0 10px;}
+.mtable{border-collapse:collapse;font-size:14px;min-width:100%;}
+.mtable th,.mtable td{border-bottom:1px solid var(--line);padding:7px 10px;text-align:start;vertical-align:top;}
+.mtable th{font-weight:600;color:var(--sub);font-size:12.5px;}
+.mbody hr{border:0;border-top:1px solid var(--line);margin:12px 0;}
 </style>
 </head>
 <body>
@@ -1224,7 +1229,7 @@ async function savePlan(p){
 
 /* ===================== kitchen, recipes and meals ===================== */
 var kitchen={ingredients:[],appliances:['stove'],staples:true,favorites:[],display_name:null,lang:null,meal:null},kitchenExists=false;
-var community=[],communityLoaded=false,aiOn=false,aiLast=null,tab='cook',filt={cat:'',max:0},libMode='classic',libQuery='',detailRef=null,detailPeople=null;
+var community=[],communityLoaded=false,aiOn=true,aiClaude=false,aiLast=null,tab='cook',filt={cat:'',max:0},libMode='classic',libQuery='',detailRef=null,detailPeople=null;
 var FN='https://ankbtgrxztdvtrrvocca.supabase.co/functions/v1/cook';
 function ico(p,sw){return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="'+(sw||1.8)+'" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+p+'</svg>';}
 var ICON={
@@ -1309,7 +1314,7 @@ function saveKitchen(now){clearTimeout(kT);kDirty=true;cacheKitchen();kT=setTime
   catch(e){handle(e,t('errKitchenSave'));}},now?0:600);}
 async function loadCommunity(){var got=await api('recipes?select=*&order=created_at.desc&limit=300');community=(got||[]).map(fromRow);communityLoaded=true;}
 async function checkAI(){try{var r=await fetch(FN,{method:'POST',headers:{'Content-Type':'application/json',apikey:SB_KEY},body:JSON.stringify({mode:'status'})});
-  if(r.ok){var j=await r.json();aiOn=!!j.ai;}else aiOn=false;}catch(e){aiOn=false;}}
+  if(r.ok){var j=await r.json();aiClaude=!!j.ai;}else aiClaude=false;}catch(e){aiClaude=false;}aiOn=true;}
 function addToKitchen(keys){var added=0;keys.forEach(function(k){if(kitchen.ingredients.indexOf(k)<0){kitchen.ingredients.push(k);added++;}});if(added)saveKitchen();return added;}
 function removeFromKitchen(k){kitchen.ingredients=kitchen.ingredients.filter(function(x){return x!==k;});saveKitchen();}
 function itemName(k){var o=Kitchen.ING[k];return o?(o[LANG]||o.en):k;}
@@ -1722,15 +1727,10 @@ function openAI(){
       [].forEach.call(box.querySelectorAll('.rcard'),function(b,i){b.onclick=function(){closeSheet();go('r/'+aiLast[i].id);};});}
     show();
     go2.onclick=async function(){go2.disabled=true;st.className='st';st.textContent=t('aiThinking');box.textContent='';
-      try{var tok=await token();
-        var body={mode:'ideas',lang:LANG,note:note.value.trim().slice(0,200),staples:kitchen.staples!==false,
-          have:kitchen.ingredients.map(function(k){var o=Kitchen.ING[k];return o?o.en:k;}).slice(0,150),appliances:kitchen.appliances.map(function(k){var o=Kitchen.APP[k];return o?o.en:k;})};
-        var r=await fetch(FN,{method:'POST',headers:{'Content-Type':'application/json',apikey:SB_KEY,Authorization:'Bearer '+tok},body:JSON.stringify(body)});
-        var j={};try{j=await r.json();}catch(e){}
-        if(!r.ok){st.className='st err';st.textContent=t(j.error==='not_configured'?'aiOff':j.error==='limit'?'aiLimit':'aiFail');go2.disabled=false;return;}
-        aiLast=(j.recipes||[]).slice(0,6).map(function(d,i){return aiFrom(d,i);});try{localStorage.setItem('dp.ai',JSON.stringify(aiLast.map(aiData)));}catch(e){}
+      try{var list=await aiIdeas(note.value.trim().slice(0,200));
+        aiLast=list.slice(0,6).map(function(d,i){return aiFrom(d,i);});try{localStorage.setItem('dp.ai',JSON.stringify(aiLast.map(aiData)));}catch(e){}
         st.textContent=aiLast.length?t('aiDone'):t('aiFail');show();}
-      catch(e){st.className='st err';st.textContent=t('aiFail');}
+      catch(e){if(e&&e.status===401){handle(e);return;}st.className='st err';st.textContent=t(e&&e.code==='limit'?'aiLimit':'aiFail');}
       go2.disabled=false;};
   });
 }
@@ -2001,18 +2001,79 @@ function chatContext(){
     meal:kitchen.meal&&mealOn().length?{dishes:mealOn().map(function(r){return r.t[0];}),people:kitchen.meal.people}:null,
     library:DP_RECIPES.map(function(r){return r.id+' | '+r.t[0]+' | '+r.c+' | '+r.min+' min';})};
 }
+/* ---------- which AI answers ----------
+   With an Anthropic key on the server, answers come from Claude through the "cook" edge function.
+   Without one, they come from Pollinations' free text service straight from the browser — no key needed. */
+var FREE_AI='https://text.pollinations.ai/openai';
+var LNAME={en:'English',fa:'Persian (Farsi)',ar:'Arabic',tr:'Turkish',es:'Spanish',fr:'French',de:'German',ru:'Russian'};
+async function freeAI(system,messages,ms){
+  var c=new AbortController(),tm=setTimeout(function(){c.abort();},ms||100000);
+  try{var r=await fetch(FREE_AI,{method:'POST',headers:{'Content-Type':'application/json'},signal:c.signal,
+      body:JSON.stringify({model:'openai',messages:[{role:'system',content:system}].concat(messages)})});
+    if(!r.ok)throw {code:r.status===429?'busy':'fail'};
+    var j=await r.json(),m=j&&j.choices&&j.choices[0]&&j.choices[0].message,out=m&&m.content;
+    if(!out)throw {code:'fail'};return String(out).trim();}
+  finally{clearTimeout(tm);}
+}
+function cleanMsgs(list){var out=[];list.forEach(function(m){if(m.role!=='user'&&m.role!=='assistant')return;var c=String(m.content||'').slice(0,4000);if(!c.trim())return;
+  if(out.length&&out[out.length-1].role===m.role)out[out.length-1].content+='\n\n'+c;else out.push({role:m.role,content:c});});
+  while(out.length&&out[0].role!=='user')out.shift();return out.slice(-12);}
+function kitchenText(c){var tg=c.targets;
+  return ['What they have: '+(c.have.length?c.have.join(', '):"they haven't listed anything yet")+'.',
+    'Pantry basics (salt, black pepper, oil, turmeric, sugar): '+(c.staples?'yes':'not assumed')+'.',
+    'Appliances: '+(c.appliances.length?c.appliances.join(', '):'not listed')+'.',
+    tg?'Daily targets: about '+tg.kcal+' kcal and '+tg.protein+' g protein (goal: '+tg.goal+').':'No daily calorie targets set.',
+    c.meal?"Meal they're planning now: "+c.meal.dishes.join(', ')+' for '+c.meal.people+' people.':''].filter(Boolean).join('\n');}
+function chatSystem(c){return 'You are the kitchen assistant inside Dastpokht, a recipe app for home cooks that focuses on Persian (Iranian) home cooking.\n'+
+  'Always reply in '+(LNAME[LANG]||'English')+', whatever language the recipe names are in.\n\n'+
+  'You help with: daily and weekly meal plans, what to cook from what they have, menus for guests, shopping lists, scaling recipes, substitutions, techniques (rice, tahdig, stews, kebabs, bread, sweets), rescuing mistakes, meal plans that fit their calorie and protein targets, and food-safety basics.\n'+
+  'Style: warm, practical and concise, like an experienced friend in the kitchen. Use short headings and bullet lists; avoid tables. Metric units.\n'+
+  'When you mention a dish from the app library, write its id in double square brackets, like [[ghormeh-sabzi]] — the app turns that into a button that opens the full recipe, so you do not need to repeat its whole recipe. Only use ids from the library list below. You may also suggest dishes that are not in the library; describe those briefly.\n'+
+  'Prefer what they already have and say clearly what they would need to buy. Do not require appliances they do not have.\n'+
+  'Health: general nutrition guidance for their targets is fine. For medical conditions, pregnancy, allergies, or special diets for babies and children, give general ideas and suggest checking with a professional; never promise something is allergen-free.\n'+
+  'Stay on food, cooking, meal planning, nutrition and running a kitchen. If asked about something unrelated, say briefly that you are here for the kitchen and offer a cooking-related way to help.\n\n'+
+  'Today is '+c.date+'.\n'+kitchenText(c)+'\n\nLibrary (id | English name | category | total time):\n'+c.library.join('\n');}
+function ideasSystem(){return 'You are a warm, expert home cook who specialises in Persian (Iranian) home cooking and also knows everyday international dishes.\n'+
+  'Suggest 4 dishes the user can cook mostly with what they already have. Prefer real, well-known dishes (Persian first when they fit).\n'+
+  'Only require appliances they have. Salt, black pepper, oil, turmeric and sugar can be assumed when pantry basics are "yes".\n'+
+  'Write every text field in '+(LNAME[LANG]||'English')+'. Use metric amounts. 4-8 clear steps per dish.\n'+
+  'Reply with ONLY a JSON object, no prose and no code fences, exactly this shape:\n'+
+  '{"recipes":[{"title":"","why":"one sentence on why it fits their kitchen","minutes":45,"servings":4,"category":"one of stew|rice|kebab|soup|main|side|salad|breakfast|dessert|drink|bread|snack","ingredients":["amount + ingredient"],"steps":["step"],"kcal":500,"protein":30,"carbs":50,"fat":20}]}\n'+
+  'kcal/protein/carbs/fat are per-serving estimates.';}
+async function claudeCall(body){var tok=await token();
+  var r=await fetch(FN,{method:'POST',headers:{'Content-Type':'application/json',apikey:SB_KEY,Authorization:'Bearer '+tok},body:JSON.stringify(body)});
+  var j={};try{j=await r.json();}catch(e){}
+  if(r.status===401)throw {status:401};
+  if(!r.ok){if(j.error==='not_configured'){aiClaude=false;throw {code:'retry'};}throw {code:j.error==='limit'?'limit':'fail'};}
+  return j;}
+async function aiIdeas(note){
+  var c=chatContext();
+  if(aiClaude){try{var j=await claudeCall({mode:'ideas',lang:LANG,note:note,staples:c.staples,have:c.have,appliances:c.appliances});return j.recipes||[];}
+    catch(e){if(!e||e.code!=='retry')throw e;}}
+  var txt=await freeAI(ideasSystem(),[{role:'user',content:kitchenText(c)+(note?'\nWhat they would like: '+note:'')}]);
+  var a=txt.indexOf('{'),b=txt.lastIndexOf('}');if(a<0||b<a)throw {code:'fail'};
+  var j2=JSON.parse(txt.slice(a,b+1));return (j2.recipes||[]).filter(function(r){return r&&r.title&&r.steps&&r.steps.length;});
+}
 function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
 function mdLite(src){
   var lines=esc(src).split('\n'),out=[],list=null;
   function inline(s){return s.replace(/\*\*([^*]+)\*\*/g,'<b>$1</b>').replace(/(^|[^*])\*([^*\s][^*]*)\*/g,'$1<i>$2</i>')
     .replace(/\[\[([a-z0-9-]+)\]\]/g,function(m,id){var r=Kitchen.byId(id);return r?'<button type="button" class="rchip" data-r="'+id+'">'+esc(rTitle(r))+'</button>':'';});}
   function close(){if(list){out.push('</'+list+'>');list=null;}}
+  var tbl=null;
+  function flushT(){if(!tbl)return;var h=tbl[0],rows=tbl.slice(1);var o='<div class="mtwrap"><table class="mtable"><thead><tr>'+h.map(function(c){return '<th>'+inline(c)+'</th>';}).join('')+'</tr></thead><tbody>'+
+    rows.map(function(r){return '<tr>'+r.map(function(c){return '<td>'+inline(c)+'</td>';}).join('')+'</tr>';}).join('')+'</tbody></table></div>';out.push(o);tbl=null;}
+  function cells(l){return l.trim().replace(/^\|/,'').replace(/\|$/,'').split('|').map(function(c){return c.trim();});}
   lines.forEach(function(l){var m;
+    if(/^\s*\|.*\|\s*$/.test(l)){close();if(/^[\s|:-]+$/.test(l))return;(tbl=tbl||[]).push(cells(l));return;}
+    flushT();
     if(/^\s*$/.test(l)){close();return;}
+    if(/^\s*(-{3,}|\*{3,}|_{3,})\s*$/.test(l)){close();out.push('<hr>');return;}
     if((m=/^#{1,4}\s+(.*)$/.exec(l))){close();out.push('<h3>'+inline(m[1])+'</h3>');return;}
     if((m=/^\s*[-•*]\s+(.*)$/.exec(l))){if(list!=='ul'){close();out.push('<ul>');list='ul';}out.push('<li>'+inline(m[1])+'</li>');return;}
     if((m=/^\s*\d+[.)]\s+(.*)$/.exec(l))){if(list!=='ol'){close();out.push('<ol>');list='ol';}out.push('<li>'+inline(m[1])+'</li>');return;}
     close();out.push('<p>'+inline(l)+'</p>');});
+  flushT();
   close();return out.join('');
 }
 function bubble(m,hello){
@@ -2037,7 +2098,7 @@ function renderAsk(){
   var top=el('div','top'),hd=el('div');hd.appendChild(el('h1',null,t('askTitle')));top.appendChild(hd);
   if(chat.length){var nb=el('button','sbtn',t('askNew'));nb.type='button';nb.onclick=function(){chat=[];saveChat();renderAsk();};top.appendChild(nb);}
   p.appendChild(top);p.appendChild(el('p','p asksub',t('askSub')));
-  if(!aiOn){var c=el('section','card askoff'),ic=el('span','askic');ic.innerHTML=ICON.spark;c.appendChild(ic);var tx=el('div');tx.appendChild(el('h2',null,t('askOff')));tx.appendChild(el('p','p',t('askOffSub')));c.appendChild(tx);p.appendChild(c);return;}
+  if(false){var c=el('section','card askoff'),ic=el('span','askic');ic.innerHTML=ICON.spark;c.appendChild(ic);var tx=el('div');tx.appendChild(el('h2',null,t('askOff')));tx.appendChild(el('p','p',t('askOffSub')));c.appendChild(tx);p.appendChild(c);return;}
   var box=el('div','chat');box.id='chatbox';box.setAttribute('aria-live','polite');p.appendChild(box);
   var sg=el('div','chatsug');sg.id='chatsug';['askS1','askS2','askS3','askS4','askS5','askS6'].forEach(function(k){var b=el('button','chip',t(k));b.type='button';b.onclick=function(){sendChat(t(k));};sg.appendChild(b);});p.appendChild(sg);
   var f=el('form','composer'),ta=el('textarea'),mic=el('button','micbtn'),sd=el('button','sendbtn');ta.id='chatin';ta.rows=1;ta.placeholder=t('askPh');ta.maxLength=2000;ta.setAttribute('aria-label',t('askPh'));ta.dir='auto';
@@ -2053,16 +2114,13 @@ function renderAsk(){
 async function sendChat(text){
   text=String(text||'').trim();if(!text||chatBusy)return;
   chat.push({role:'user',content:text.slice(0,2000)});saveChat();chatBusy=true;renderChat();
-  var msgs=chat.filter(function(m){return m.role==='user'||m.role==='assistant';}).slice(-12).map(function(m){return {role:m.role,content:m.content};});
-  try{var tok=await token();
-    var r=await fetch(FN,{method:'POST',headers:{'Content-Type':'application/json',apikey:SB_KEY,Authorization:'Bearer '+tok},
-      body:JSON.stringify({mode:'chat',lang:LANG,messages:msgs,context:chatContext()})});
-    var j={};try{j=await r.json();}catch(e){}
-    if(r.ok&&j.reply)chat.push({role:'assistant',content:String(j.reply).slice(0,12000)});
-    else{if(r.status===401){chatBusy=false;handle({status:401});return;}
-      chat.push({role:'error',content:t(j.error==='not_configured'?'aiOff':j.error==='limit'?'aiLimit':'aiFail')});if(j.error==='not_configured'){aiOn=false;}}
-  }catch(e){if(e&&e.status===401){chatBusy=false;handle(e);return;}chat.push({role:'error',content:t('aiFail')});}
-  chatBusy=false;saveChat();if(!$('p-ask').hidden){if(!aiOn)renderAsk();else renderChat();}
+  var msgs=cleanMsgs(chat),reply=null,err=null;
+  try{
+    if(aiClaude){try{var j=await claudeCall({mode:'chat',lang:LANG,messages:msgs,context:chatContext()});reply=j.reply;}catch(e){if(!e||e.code!=='retry')throw e;}}
+    if(reply==null)reply=await freeAI(chatSystem(chatContext()),msgs);
+  }catch(e){if(e&&e.status===401){chatBusy=false;handle(e);return;}err=e&&e.code==='limit'?'aiLimit':'aiFail';}
+  if(reply)chat.push({role:'assistant',content:String(reply).slice(0,12000)});else chat.push({role:'error',content:t(err||'aiFail')});
+  chatBusy=false;saveChat();if(!$('p-ask').hidden)renderChat();
 }
 
 /* ===================== router ===================== */
@@ -2125,7 +2183,7 @@ function relang(){
 function resetState(){
   user=null;profile=null;closeSheet();clearInterval(cookT);cookT=null;clearTimeout(kT);kDirty=false;
   kitchen={ingredients:[],appliances:['stove'],staples:true,favorites:[],display_name:null,lang:null,meal:null};kitchenExists=false;
-  community=[];communityLoaded=false;aiLast=null;aiOn=false;chat=[];chatFor=null;chatBusy=false;
+  community=[];communityLoaded=false;aiLast=null;aiOn=true;aiClaude=false;chat=[];chatFor=null;chatBusy=false;
   try{localStorage.removeItem('dp.ai');localStorage.removeItem('dp.kitchen');}catch(e){}
   days={};recent=[];goals={kcal:2500,protein:150};loaded=false;logBuilt=false;lastRoute='';detailRef=null;
   ['p-cook','p-recipes','p-ask','p-meal','p-kitchen','p-log','p-detail'].forEach(function(id){$(id).textContent='';});
