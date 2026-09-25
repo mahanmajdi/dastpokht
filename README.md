@@ -2,7 +2,7 @@
 
 **Cook with what you have.** Tell Dastpokht what’s in your kitchen and it shows you the dishes you can cook right now — mostly Persian home cooking — plus the ones you’re one or two ingredients away from.
 
-Live: https://mahanmajdi.github.io/macro/
+Live: https://mahanmajdi.github.io/dastpokht/
 
 ## What it does
 
