@@ -1,5 +1,5 @@
 /* Dastpokht interface text. English and Persian live here; the other languages load from lang/xx.js when chosen. */
-var DP_V='4';
+var DP_V='5';
 var DP_LANGS=[['en','English','ltr','en-US'],['fa','فارسی','rtl','fa-IR'],['ar','العربية','rtl','ar-EG'],['tr','Türkçe','ltr','tr-TR'],
   ['es','Español','ltr','es-ES'],['fr','Français','ltr','fr-FR'],['de','Deutsch','ltr','de-DE'],['ru','Русский','ltr','ru-RU']];
 var DP_LANG=window.DP_LANG||{};
@@ -99,6 +99,24 @@ tip8:["Juicy kebab: use mince with some fat, grate the onion and squeeze out its
 tip9:["Frying herbs for ghormeh sabzi: fry the chopped herbs slowly for 15–20 minutes until dark green and sweet-smelling; if they go black they turn bitter.","سرخ کردن سبزی قورمه: سبزی خردشده را ۱۵ تا ۲۰ دقیقه آرام تفت دهید تا سبز تیره و خوش‌بو شود؛ اگر سیاه شود تلخ می‌شود."],
 tip10:["Beans: soak kidney beans or chickpeas for 8 hours or overnight. Boil kidney beans hard for 10 minutes first — undercooked kidney beans aren’t safe to eat.","حبوبات: لوبیا قرمز یا نخود را ۸ ساعت یا از شب قبل خیس کنید. لوبیا قرمز را اول ۱۰ دقیقه با جوش تند بجوشانید؛ لوبیای نیم‌پز برای خوردن بی‌خطر نیست."],
 tip11:["Leftovers: cool cooked food within 2 hours and keep it in the fridge up to 3 days; reheat until steaming hot all the way through. Chill cooked rice quickly.","غذای مانده: غذای پخته را ظرف ۲ ساعت خنک کنید و تا ۳ روز در یخچال نگه دارید؛ هنگام گرم کردن بگذارید کاملاً داغ شود. برنج پخته را زود خنک کنید."],
+cuLabel:["Cuisine","نوع غذا"],
+cuIran:["Iranian","ایرانی"],
+cuIntl:["International","خارجی"],
+cuBoth:["Both","هر دو"],
+cu_it:["Italian","ایتالیایی"],
+cu_fr:["French","فرانسوی"],
+cu_es:["Spanish","اسپانیایی"],
+cu_gr:["Greek","یونانی"],
+cu_mx:["Mexican","مکزیکی"],
+cu_us:["American","آمریکایی"],
+cu_jp:["Japanese","ژاپنی"],
+cu_cn:["Chinese","چینی"],
+cu_kr:["Korean","کره‌ای"],
+cu_th:["Thai","تایلندی"],
+cu_vn:["Vietnamese","ویتنامی"],
+cu_in:["Indian","هندی"],
+cu_me:["Middle Eastern","خاورمیانه‌ای"],
+cu_tr:["Turkish","ترکی"],
 /* ---------- app shell and sign-in ---------- */
 docTitle:["Dastpokht · Your kitchen","دستپخت · آشپزخانه‌ی شما"],
 brand:["Dastpokht","دستپخت"],
