@@ -11,7 +11,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Familjen+Grotesk:wght@400..700&family=IBM+Plex+Mono:wght@400;500&family=Instrument+Sans:wght@400..600&family=Vazirmatn:wght@300..800&family=Manrope:wght@400..800&display=swap">
-<script>(function(){var L=['en','fa','ar','tr','es','fr','de','ru'],l=null;try{l=localStorage.getItem('dp.lang');}catch(e){}if(L.indexOf(l)<0){l='en';var n=navigator.languages||[navigator.language||''];for(var i=0;i<n.length;i++){var c=String(n[i]).slice(0,2).toLowerCase();if(L.indexOf(c)>=0){l=c;break;}}}var h=document.documentElement;h.lang=l;h.dir=(l==='fa'||l==='ar')?'rtl':'ltr';if(l!=='en'&&l!=='fa')document.write('<script src="lang-'+l+'.js?v=3"><\/script>');})();</script>
+<script>(function(){var L=['en','fa','ar','tr','es','fr','de','ru'],l=null;try{l=localStorage.getItem('dp.lang');}catch(e){}if(L.indexOf(l)<0){l='en';var n=navigator.languages||[navigator.language||''];for(var i=0;i<n.length;i++){var c=String(n[i]).slice(0,2).toLowerCase();if(L.indexOf(c)>=0){l=c;break;}}}var h=document.documentElement;h.lang=l;h.dir=(l==='fa'||l==='ar')?'rtl':'ltr';if(l!=='en'&&l!=='fa')document.write('<script src="lang-'+l+'.js?v=4"><\/script>');})();</script>
 <style>
 :root{
   color-scheme:light dark;
@@ -621,6 +621,21 @@ html[dir="rtl"] .ideasbtn svg{transform:scaleX(-1);}
 .snapbody .nutri{margin-top:12px;}
 .snapbody .pbtn.full{margin-top:14px;}
 .snapbtn{display:inline-flex;align-items:center;gap:8px;}.snapbtn svg{width:18px;height:18px;}
+/* how to tell it's done */
+.donecard{border-radius:18px;}
+.donecard.live{margin-top:12px;border:1px solid var(--line);padding:12px 12px 6px;background:rgba(var(--glass),.35);}
+.donehd{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:0 4px 6px;}
+.donehd b{font-size:13.5px;font-weight:700;}
+.donebadge{flex:none;font-size:12px;font-weight:700;padding:3px 10px;border-radius:99px;background:#F6C04E;color:#2B1900;animation:pop .35s var(--ease) both;}
+.donerow{display:flex;gap:11px;align-items:flex-start;padding:9px 8px;border-radius:13px;transition:background .3s;}
+.donerow .dot{width:11px;height:11px;border-radius:50%;flex:none;margin-top:5px;}
+.donerow.almost .dot{background:#E8A21A;}.donerow.perfect .dot{background:#2E9A5E;}.donerow.over .dot{background:#C8364A;}
+.donerow b{display:block;font-size:13px;font-weight:700;}
+.donerow p{margin:2px 0 0;font-size:14.5px;line-height:1.45;color:var(--sub);}
+.donerow.on{background:rgba(246,192,78,.18);}.donerow.perfect.on{background:rgba(46,154,94,.15);}
+.donerow.on p{color:var(--ink);}
+.gsearch{display:inline-flex;align-items:center;gap:6px;margin-top:10px;margin-inline-end:8px;border:1px solid var(--line);background:rgba(var(--glass),.6);border-radius:999px;font:inherit;font-size:13px;font-weight:600;padding:5px 12px;color:var(--ink);cursor:pointer;}
+.gsearch svg{width:15px;height:15px;}.gsearch:hover{border-color:var(--accent);}
 </style>
 </head>
 <body>
@@ -733,10 +748,10 @@ html[dir="rtl"] .ideasbtn svg{transform:scaleX(-1);}
 
 <div class="sheet" id="sheet" hidden><div class="sheetbg" id="sheetbg"></div><div class="sheetcard" id="sheetcard" role="dialog" aria-modal="true" aria-labelledby="sheettitle"></div></div>
 <canvas id="burst" aria-hidden="true"></canvas>
-<script src="foods.js?v=3"></script>
-<script src="recipes.js?v=3"></script>
-<script src="kitchen.js?v=3"></script>
-<script src="i18n.js?v=3"></script>
+<script src="foods.js?v=4"></script>
+<script src="recipes.js?v=4"></script>
+<script src="kitchen.js?v=4"></script>
+<script src="i18n.js?v=4"></script>
 <script>
 (function(){
 'use strict';
@@ -1335,6 +1350,13 @@ function rOther(r){if(r.comm||r.ai)return '';return LANG==='fa'?r.t[0]:r.t[1];}
 function rDesc(r){if(r.comm||r.ai)return r.d[0]||'';if(LANG==='fa')return r.d[1];var x=trRec(r);return (x&&x[1])||r.d[0];}
 function rStep(r,i){var s=r.s&&r.s[i];if(!s)return '';if(r.comm||r.ai)return s[1];if(LANG==='fa')return s[2];var x=trRec(r);return (x&&x[2]&&x[2][i])||s[1];}
 function catName(c){return t('cat_'+c);}
+/* how to tell it's done: [almost there, perfect, overcooked] */
+function rDone(r){if(!r||!r.k||r.comm||r.ai)return null;if(LANG==='fa')return r.k[1];var x=trRec(r);return (x&&x[3]&&x[3].length===3)?x[3]:r.k[0];}
+function doneCard(r,title){var k=rDone(r);if(!k)return null;var c=el('div','donecard');
+  if(title){var h=el('div','donehd'),hb=el('b',null,title);hb.dir='auto';h.appendChild(hb);var bd=el('span','donebadge');bd.hidden=true;h.appendChild(bd);c.appendChild(h);}
+  [['almost','doneAlmost'],['perfect','donePerfect'],['over','doneOver']].forEach(function(x,i){var row=el('div','donerow '+x[0]);row.dataset.k=x[0];row.appendChild(el('i','dot'));
+    var tx=el('div');tx.appendChild(el('b',null,t(x[1])));var p=el('p',null,k[i]);p.dir='auto';tx.appendChild(p);row.appendChild(tx);c.appendChild(row);});
+  return c;}
 function minsTxt(m){m=Math.round(m);if(m<60)return N(m)+' '+t('min');var h=Math.floor(m/60),r=m%60;return N(h)+' '+t('h')+(r?' '+N(r)+' '+t('min'):'');}
 function toast(msg){var d=el('div','toast',msg);document.body.appendChild(d);setTimeout(function(){d.remove();},2700);}
 function buzz(p){try{if(navigator.vibrate&&document.visibilityState==='visible')navigator.vibrate(p);}catch(e){}}
@@ -1582,6 +1604,7 @@ function renderDetail(id){
   var sc=el('section','card');sc.appendChild(el('h2',null,t('steps')));var sl=el('div','steps');
   (r.s||[]).forEach(function(s,i){var d=el('div','step'),sp=el('p',null,rStep(r,i));sp.dir='auto';d.appendChild(sp);if(!r.comm&&!r.ai)d.appendChild(el('time',null,stepWhen(s[0])));sl.appendChild(d);});
   sc.appendChild(sl);p.appendChild(sc);
+  var dk=doneCard(r);if(dk){var dsec=el('section','card');dsec.appendChild(el('h2',null,t('howDone')));dsec.appendChild(dk);p.appendChild(dsec);}
   if(r.m){var comp=Kitchen.companions(r.id);if(comp.length){var cc=el('section','card');cc.appendChild(el('h2',null,t('serveWith')));
     cc.appendChild(grid(comp.map(function(cid){return Kitchen.match(Kitchen.byId(cid),kitchen,h);})));p.appendChild(cc);}}
 }
@@ -1721,7 +1744,8 @@ function renderCookLive(){
   var tm=el('div','timer','0:00');tm.id='ctimer';c.appendChild(tm);var tl=el('div','timerlbl');tl.id='ctlabel';c.appendChild(tl);
   var gb=el('div','goalbar'),gi=el('i');gi.id='cbar';gb.appendChild(gi);c.appendChild(gb);
   if(st.cur){var nw=el('div','nowstep');nw.appendChild(el('b',null,t('nowStep')+' · '+rTitle(st.cur.r)));nw.appendChild(el('p',null,stepText(st.cur)));
-    var dn=el('button','cta',t('doneStep'));dn.type='button';dn.style.marginTop='14px';dn.onclick=function(){var k=st.cur.r.id+':'+st.cur.i;(st.m.done=st.m.done||[]).push(k);saveKitchen();buzz(20);renderCookLive();};nw.appendChild(dn);c.appendChild(nw);}
+    var dn=el('button','cta',t('doneStep'));dn.type='button';dn.style.marginTop='14px';dn.onclick=function(){var k=st.cur.r.id+':'+st.cur.i;(st.m.done=st.m.done||[]).push(k);saveKitchen();buzz(20);renderCookLive();};nw.appendChild(dn);c.appendChild(nw);
+    var dc=doneCard(st.cur.r,t('howDone')+' · '+rTitle(st.cur.r));if(dc){dc.id='cdone';dc.classList.add('live');dc.dataset.r=st.cur.r.id;dc.dataset.name=rTitle(st.cur.r);dc.dataset.min=st.cur.r.min;c.appendChild(dc);}}
   else if(!st.pend.length){var fin=el('div','nowstep');fin.appendChild(el('b',null,t('allDone')));fin.appendChild(el('p',null,t('allDoneText')));c.appendChild(fin);}
   if(st.next){var nx=el('div','nextstep');nx.id='cnext';c.appendChild(nx);}
   var row=el('div','liveacts'),fb=el('button','cta',t('finishMeal')),bk=el('button','textbtn',t('backToPlan'));fb.type='button';bk.type='button';
@@ -1736,6 +1760,10 @@ function tickCook(){
     else{tm.textContent=clockTxt(st.serve-now);lb.textContent=st.serve>now?t('untilServe',{t:hhmm(st.serve)}):t('mealTime');}}
   var frac=st.tl.lead?Math.min(1,Math.max(0,(now-st.start)/(st.serve-st.start))):1;if(bar)bar.style.width=(frac*100).toFixed(1)+'%';
   if(Math.floor(now/1000)%3===0)Ring.to({prog:Math.max(.03,frac)},2400);
+  var dc=$('cdone');if(dc){var left=st.serve-now,win=Math.max(3,Math.min(10,(Number(dc.dataset.min)||30)*.15))*60000,stage=left<=0?'perfect':left<=win?'almost':'';
+    if(dc.dataset.stage!==stage){dc.dataset.stage=stage;[].forEach.call(dc.querySelectorAll('.donerow'),function(rw){rw.classList.toggle('on',rw.dataset.k===stage);});
+      var bd=dc.querySelector('.donebadge');if(bd){bd.textContent=stage==='almost'?t('checkNow'):stage==='perfect'?t('shouldBeReady'):'';bd.hidden=!stage;}
+      if(stage==='almost'&&!notified['chk:'+dc.dataset.r]){notified['chk:'+dc.dataset.r]=1;buzz([80,40,80]);toast(t('checkToast',{x:dc.dataset.name}));}}}
   var nx=$('cnext');if(nx&&st.next){nx.textContent='';nx.appendChild(el('b',null,t('inTime',{x:clockTxt(st.next.at-now)})+' · '+rTitle(st.next.r)+': '));nx.appendChild(document.createTextNode(stepText(st.next)));}
   st.tl.ev.forEach(function(e){var k=e.r.id+':'+e.i;if(e.at<=now&&!notified[k]){notified[k]=1;buzz([120,60,120]);chime();toast(rTitle(e.r)+': '+stepText(e).slice(0,70)+'…');renderCookLive();}});
 }
@@ -2186,10 +2214,153 @@ function openManual(name){manualFrom=name||null;$('quickform').hidden=true;$('ad
   ['fk','fp','fc','ff'].forEach(function(id){$(id).value='';});setMsg('ast2','');animate($('addform'),'enter');setTimeout(function(){(name?$('fk'):$('fname')).focus();},40);}
 function closeManual(){$('addform').hidden=true;$('quickform').hidden=false;animate($('quickform'),'enter');}
 
+/* ===================== built-in kitchen helper =====================
+   Answers from the app's own recipes, doneness cues, food list and the cook's kitchen — no AI service needed.
+   It spots what the question is about (a dish, ingredients, a week plan, guests, calories, lunchboxes, shopping,
+   swaps) and builds the answer; anything else is searched in the recipes and tips, with a Google button under every answer. */
+var HKW={
+  plan:['week','weekly','plan','dinners','schedule','هفته','برنامه','شام ها','أسبوع','الأسبوع','خطة','برنامج','hafta','haftalık','plan','semana','semanal','cenas','semaine','planning','dîners','woche','wochenplan','abendessen','неделю','неделя','неделе','план','ужины'],
+  guests:['guest','guests','party','visitors','مهمان','مهمانی','مهمونی','ضيوف','ضيف','عزومة','misafir','davet','konuk','invitados','fiesta','invités','fête','gäste','gästen','party','гостей','гости','праздник'],
+  people:['people','persons','نفر','نفره','أشخاص','شخص','kişi','kişilik','personas','personnes','personen','человек'],
+  cal:['calorie','calories','kcal','target','diet','protein','macros','کالری','هدف','رژیم','پروتئین','سعرات','سعرة','حمية','بروتين','kalori','hedef','diyet','protein','calorías','caloría','objetivo','dieta','proteína','calories','objectif','régime','protéines','kalorien','ziel','diät','eiweiß','калорий','калории','цель','диета','белок'],
+  kids:['lunchbox','lunch box','school','kids','children','ناهار مدرسه','مدرسه','بچه','کودک','المدرسة','الأطفال','أطفال','beslenme','okul','çocuk','lonchera','fiambrera','colegio','escuela','niños','lunchbox','école','enfants','brotdose','schule','kinder','ланчбокс','школ','детей','дети'],
+  shop:['shopping','groceries','grocery','shopping list','خرید','لیست خرید','فهرست خرید','التسوق','تسوق','مشتريات','alışveriş','market','compra','compras','súper','courses','achats','einkauf','einkaufsliste','einkaufen','покупок','покупки','продукты'],
+  buy:['buy','purchase','بخرم','بخرم؟','أشتري','شراء','alırsam','alabilirim','satın','compro','comprar','achète','acheter','kaufe','kaufen','куплю','докупить','купить'],
+  sub:['instead','substitute','replace','swap','instead of','جایگزین','به جای','بجای','ندارم','بديل','بدلا','بدل','yerine','ikame','sustituir','sustituto','en vez','en lugar','remplacer','place de','au lieu','ersetzen','ersatz','statt','anstatt','заменить','замена','вместо'],
+  done:['done','cooked','ready','overcooked','burnt','burned','undercooked','raw','پخته','آماده','سوخته','خام','جا افتاده','نضج','ناضج','جاهز','محترق','نيئ','pişti','pişmiş','hazır','yanmış','çiğ','hecho','cocido','listo','quemado','crudo','cuit','prêt','brûlé','cru','gar','fertig','verbrannt','roh','готов','готово','сгорел','сырой']
+};
+var HSTOP={how:1,what:1,when:1,why:1,the:1,and:1,for:1,with:1,can:1,get:1,make:1,you:1,your:1,does:1,this:1,that:1,have:1,into:1,from:1,need:1,
+  'چطور':1,'چگونه':1,'چی':1,'چه':1,'برای':1,'کنم':1,'درست':1,'است':1,'این':1,'آن':1,'دارم':1,'کیف':1,'ماذا':1,'هل':1,'nasıl':1,'nedir':1,'için':1,'cómo':1,'qué':1,'para':1,'con':1,'comment':1,'quoi':1,'pour':1,'avec':1,'wie':1,'was':1,'mit':1,'für':1,'как':1,'что':1,'для':1};
+function hHas(txt,list){var s=' '+txt+' ';return list.some(function(w){var k=Kitchen.key(w);return k&&s.indexOf(' '+k)>=0;});}
+function hNum(txt){var m=/(^|\s)(\d{1,2})(\s|$)/.exec(txt);return m?Number(m[2]):null;}
+function hShuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),x=a[i];a[i]=a[j];a[j]=x;}return a;}
+function hHave(m){return m.ready?t('hlpHaveAll'):t('hlpNeed',{list:m.missing.map(function(x){return Kitchen.ingName(x.keys.slice(0,1),LANG);}).join(t('comma'))});}
+function hLine(m,extra){return '[['+m.r.id+']]'+hWithRice(m)+' — '+minsTxt(m.r.min)+' · '+hHave(m)+(extra?' · '+extra:'');}
+function hMatches(){return Kitchen.rank(DP_RECIPES,kitchen,{}).filter(function(m){return m.appsOk;});}
+var HSIDE={chelo:1,kateh:1};/* plain rice goes with a stew, it isn't a dinner on its own */
+function hMain(m){return !HSIDE[m.r.id];}
+function hWithRice(m){return m.r.c==='stew'&&Kitchen.byId('chelo')?' + [[chelo]]':'';}
+/* pick n varied dishes: what you can already make first, a mix of kinds, a little different each time */
+function hPick(ms,n,cats,maxMiss){
+  var pool=ms.filter(function(m){return hMain(m)&&cats.indexOf(m.r.c)>=0&&m.missing.length<=(maxMiss==null?3:maxMiss);});
+  var tiers={};pool.forEach(function(m){(tiers[m.missing.length]=tiers[m.missing.length]||[]).push(m);});
+  var order=[];Object.keys(tiers).sort(function(a,b){return a-b;}).forEach(function(k){order=order.concat(hShuffle(tiers[k]));});
+  var out=[],count={};
+  for(var pass=0;pass<3&&out.length<n;pass++)order.forEach(function(m){if(out.length>=n||out.indexOf(m)>=0)return;var c=m.r.c,last=out.length?out[out.length-1].r.c:null;
+    if(pass<2&&(count[c]||0)>=(pass?3:2))return;if(pass<1&&c===last)return;out.push(m);count[c]=(count[c]||0)+1;});
+  return out;
+}
+function hShop(recipes,people){var sh=Kitchen.shopping(recipes,kitchen,people);
+  if(!sh.length)return '\n'+t('hlpShopNone');
+  return '\n### '+t('hlpToBuy')+'\n'+sh.map(function(s){var amts=s.parts.filter(function(x){return x.x.qty!=null&&x.x.unit!=='taste'&&x.x.unit!=='pinch';}).map(function(x){return Kitchen.ingText(x.x,LANG,x.f);});
+    return '- '+(amts.length?amts.join(' + '):Kitchen.ingName(s.keys,LANG));}).join('\n');}
+function hDays(n){var f;try{f=new Intl.DateTimeFormat(linfo(LANG)[3],{weekday:'long'});}catch(e){f=null;}var out=[],d=new Date();
+  for(var i=0;i<n;i++){var x=new Date(d.getTime()+i*864e5);out.push(f?f.format(x):String(i+1));}return out;}
+
+function hWeek(){var ms=hMatches(),pick=hPick(ms,7,['stew','rice','kebab','main','soup']),days=hDays(7);
+  if(!pick.length)return t('hlpNoMatch');
+  var md='### '+t('hlpPlanTitle')+'\n'+pick.map(function(m,i){return '- **'+days[i]+'**: '+hLine(m);}).join('\n');
+  md+='\n'+hShop(pick.map(function(m){return m.r;}),null)+'\n\n'+t('hlpPlanTip');return md;}
+function hGuests(n){n=n||6;var ms=hMatches(),fancy=ms.filter(function(m){return !m.r.x&&m.r.m&&['stew','kebab','rice'].indexOf(m.r.c)>=0;}),main=hPick(fancy,1,['stew','kebab','rice'],4)[0]||hPick(ms,1,['stew','kebab','rice','main'],4)[0];if(!main)return t('hlpNoMatch');
+  var ids=[main.r.id].concat(Kitchen.companions(main.r.id));if(main.r.c==='stew'&&ids.indexOf('chelo')<0)ids.splice(1,0,'chelo');var list=ids.map(function(id){return Kitchen.byId(id);}).filter(Boolean);
+  if(!list.some(function(r){return r.c==='dessert';})){var ds=hPick(ms,1,['dessert'],2)[0];if(ds)list.push(ds.r);}
+  var h=Kitchen.haveSet(kitchen),md='### '+t('hlpGuestsTitle',{n:N(n)})+'\n'+list.map(function(r){var m=Kitchen.match(r,kitchen,h);return '- '+catName(r.c)+': [['+r.id+']] — '+minsTxt(r.min)+' · '+hHave(m);}).join('\n');
+  md+='\n'+hShop(list,n)+'\n\n'+t('hlpGuestsTip',{n:N(n)});return md;}
+function hDay(){var set=!!(profile&&profile.onboarded_at),T=set&&goals&&goals.kcal?goals.kcal:2000,ms=hMatches().filter(function(m){return m.r.n;});
+  var chelo=Kitchen.byId('chelo');
+  function kcal(m){return m.r.n[0]+(m.r.c==='stew'&&chelo?chelo.n[0]:0);}
+  function prot(m){return m.r.n[1]+(m.r.c==='stew'&&chelo?chelo.n[1]:0);}
+  function best(cats,share,skip){var pool=ms.filter(function(m){return hMain(m)&&cats.indexOf(m.r.c)>=0&&m.missing.length<=2&&skip.indexOf(m)<0;});
+    pool=hShuffle(pool).sort(function(a,b){return (a.missing.length-b.missing.length)||(Math.abs(kcal(a)-share)-Math.abs(kcal(b)-share));});
+    var top=pool.slice(0,4);top.sort(function(a,b){return Math.abs(kcal(a)-share)-Math.abs(kcal(b)-share);});return top[0]||null;}
+  var slots=[['cat_breakfast',['breakfast'],.25],['hlpLunch',['rice','stew','main','kebab','soup'],.35],['hlpDinner',['stew','main','soup','kebab','rice'],.3],['hlpSnack',['side','salad','dessert','drink'],.1]];
+  var used=[],tk=0,tp=0,rows=[];
+  slots.forEach(function(s){var m=best(s[1],T*s[2],used);if(!m)return;used.push(m);var f=Math.min(2,Math.max(.5,Math.round(T*s[2]/kcal(m)*2)/2));
+    var k=Math.round(kcal(m)*f),p=Math.round(prot(m)*f);tk+=k;tp+=p;
+    rows.push('- **'+t(s[0])+'**: [['+m.r.id+']]'+(m.r.c==='stew'&&chelo?' + [[chelo]]':'')+' — '+t('servingsN',{n:Kitchen.frac(f,LANG)})+' · '+N(k)+' '+t('kcal')+' · '+N(p)+' '+t('g')+' '+t('protein').toLowerCase());});
+  var md='### '+t('hlpDayTitle',{k:N(T)})+'\n'+rows.join('\n')+'\n\n**'+t('hlpTotal',{k:N(tk),p:N(tp)})+'**';
+  if(!set)md+='\n\n'+t('hlpDayNoTarget',{k:N(T)});
+  return md;}
+function hKids(){var ok=['kotlet','kuku-sabzi','kuku-sibzamini','olivieh','egg-sandwich','tuna-sandwich','spanish-tortilla','banana-pancakes','pancakes','grilled-cheese','french-toast','egg-fried-rice','pasta-pomodoro','makaroni','deviled-eggs','boiled-eggs','noon-panir-sabzi','kabab-tabei','potato-eggs'];
+  var ms=hMatches().filter(function(m){return ok.indexOf(m.r.id)>=0&&m.missing.length<=2;});
+  var pick=hShuffle(ms).sort(function(a,b){return a.missing.length-b.missing.length;}).slice(0,5),days=hDays(7);
+  if(!pick.length)return t('hlpNoMatch');
+  return '### '+t('hlpKidsTitle')+'\n'+pick.map(function(m,i){return '- **'+days[i]+'**: '+hLine(m);}).join('\n')+'\n'+hShop(pick.map(function(m){return m.r;}),null)+'\n\n'+t('hlpKidsTip');}
+function hShopList(){if(kitchen.meal&&mealOn().length){var on=mealOn();return '### '+t('hlpShopTitle')+'\n'+t('hlpShopFor',{list:on.map(rTitle).join(t('comma'))})+'\n'+hShop(on,kitchen.meal.people);}
+  var pick=hPick(hMatches(),7,['stew','rice','kebab','main','soup']);if(!pick.length)return t('hlpNoMatch');
+  return '### '+t('hlpShopTitle')+'\n'+t('hlpShopWeek')+'\n'+pick.map(function(m){return '- [['+m.r.id+']]';}).join('\n')+'\n'+hShop(pick.map(function(m){return m.r;}),null);}
+function hWith(keys,buy){var names=keys.map(itemName).join(t('comma')),ms=hMatches().map(function(m){var ks=Kitchen.ingList(m.r.i),used=keys.filter(function(k){return ks.some(function(x){return x.keys.indexOf(k)>=0;});});return {m:m,used:used};}).filter(function(x){return x.used.length;});
+  var ready=ms.filter(function(x){return x.m.ready;}).sort(function(a,b){return (b.used.length-a.used.length)||(a.m.r.min-b.m.r.min);}).slice(0,8);
+  var near=ms.filter(function(x){return !x.m.ready&&x.m.missing.length<=2;}).sort(function(a,b){return (b.used.length-a.used.length)||(a.m.missing.length-b.m.missing.length);}).slice(0,buy?8:4);
+  var md='';
+  if(!buy||ready.length){md+='### '+t('hlpWithTitle',{list:names})+'\n'+(ready.length?ready.map(function(x){return '- '+hLine(x.m);}).join('\n'):t('hlpWithNone',{list:names}));}
+  if(near.length){var bb=bestBuys(near.map(function(x){return x.m;}),1)[0];md+='\n\n### '+t('hlpBuyTitle')+'\n'+near.map(function(x){return '- '+hLine(x.m);}).join('\n');
+    if(bb)md+='\n\n'+t('hlpBestBuy',{x:itemName(bb.k),n:N(bb.n)});}
+  return md||t('hlpWithNone',{list:names});}
+var HSUB={'dried lime':['lemon'],'sour grapes':['lemon','vinegar'],lemon:['sour grapes','vinegar'],kashk:['yogurt'],butter:['oil','ghee'],ghee:['butter','oil'],oil:['butter','ghee'],
+  'tomato paste':['tomato'],tomato:['tomato paste'],'pomegranate molasses':['lemon','sugar'],parsley:['coriander','dill'],coriander:['parsley'],dill:['parsley'],chives:['green onion'],'green onion':['chives','onion'],
+  onion:['green onion'],breadcrumbs:['oats','flour'],cornstarch:['flour','rice flour'],'rice flour':['cornstarch','flour'],honey:['sugar','jam'],sugar:['honey'],jam:['honey'],cream:['milk','butter'],
+  milk:['yogurt'],yogurt:['cream','milk'],saffron:['turmeric'],'rose water':['vanilla'],lamb:['beef'],beef:['lamb'],chicken:['fish'],'ground meat':['lamb','beef'],'bell pepper':['chili'],chili:['chili flakes'],
+  'chili flakes':['chili','black pepper'],'soy sauce':['salt'],vinegar:['lemon'],mayonnaise:['yogurt'],pasta:['rice'],rice:['pasta'],barberries:['raisins','lemon'],'kidney beans':['white beans','chickpeas'],'white beans':['kidney beans','chickpeas'],chickpeas:['white beans']};
+function hSub(keys){var out=keys.filter(function(k){return HSUB[k];}).map(function(k){return '- **'+t('hlpSubTitle',{x:itemName(k)})+'**: '+HSUB[k].map(itemName).join(' / ');});
+  if(!out.length)return t('hlpSubNone',{x:keys.map(itemName).join(t('comma'))});return out.join('\n')+'\n\n'+t('hlpSubTip');}
+function hRecipe(r,txt,n){var m=Kitchen.match(r,kitchen),k=rDone(r),doneQ=hHas(txt,HKW.done),f=n?n/r.sv:1;
+  var md='### [['+r.id+']]\n'+minsTxt(r.min)+' · '+t('serves',{n:N(n||r.sv)})+' · '+hHave(m);
+  var cues=k?'\n\n### '+t('howDone')+'\n- **'+t('doneAlmost')+'**: '+k[0]+'\n- **'+t('donePerfect')+'**: '+k[1]+'\n- **'+t('doneOver')+'**: '+k[2]:'';
+  if(doneQ)md+=cues;
+  md+='\n\n### '+t('ingredients')+'\n'+Kitchen.ingList(r.i).filter(function(x){return x.flag!=='s';}).map(function(x){return '- '+Kitchen.ingText(x,LANG,f)+(x.flag==='o'?' ('+t('optional')+')':'');}).join('\n');
+  md+='\n\n### '+t('steps')+'\n'+(r.s||[]).map(function(s,i){return (i+1)+'. '+rStep(r,i);}).join('\n');
+  if(!doneQ)md+=cues;return md;}
+function hFoods(txt){var p=MacroFoods.parse(txt,[],{});if(!p.items.length)return null;var tk=0;
+  var rows=p.items.map(function(x){tk+=x.kcal;return '- '+t('hlpFoodLine',{name:x.name,k:N(x.kcal),p:N(x.p),c:N(x.c),f:N(x.f)});});
+  return '### '+t('hlpFoodTitle')+'\n'+rows.join('\n')+(p.items.length>1?'\n\n**'+t('hlpTotal2',{k:N(tk)})+'**':'')+'\n\n'+t('mealEst');}
+/* find a dish named in the question, in any of the app's languages */
+var HREC=null;
+function hRecIndex(){var out=[];DP_RECIPES.forEach(function(r){var names=[r.t[0],r.t[1],rTitle(r),r.id.replace(/-/g,' ')];
+    names.forEach(function(n){var k=Kitchen.key(String(n).replace(/\(.*?\)/g,''));if(k.length>=4)out.push({k:k,r:r});});});
+  out.sort(function(a,b){return b.k.length-a.k.length;});return out;}
+function hFindRecipe(txt){if(!HREC||HREC.lang!==LANG){HREC=hRecIndex();HREC.lang=LANG;}var s=' '+txt+' ';
+  for(var i=0;i<HREC.length;i++)if(s.indexOf(' '+HREC[i].k+' ')>=0)return HREC[i].r;return null;}
+/* last resort: look through every step, doneness cue and tip for the words in the question */
+function hSearch(txt){var words=txt.split(' ').filter(function(w){return w.length>=3&&!HSTOP[w]&&!/^\d+$/.test(w);});if(!words.length)return null;
+  var docs=[];
+  for(var i=1;i<=11;i++)docs.push({txt:t('tip'+i),r:null});
+  DP_RECIPES.forEach(function(r){(r.s||[]).forEach(function(s,j){docs.push({txt:rStep(r,j),r:r});});var k=rDone(r);if(k)k.forEach(function(c){docs.push({txt:c,r:r});});docs.push({txt:rTitle(r)+'. '+rDesc(r),r:r});});
+  docs.forEach(function(d){var dw=Kitchen.key(d.txt).split(' '),sc=0;words.forEach(function(w){if(dw.some(function(x){return x===w||(w.length>=4&&(x.indexOf(w)===0||w.indexOf(x)===0&&x.length>=4));}))sc++;});d.sc=sc?sc+(d.r?0:1):0;});
+  var need=Math.max(1,Math.ceil(words.length*.4)),hits=docs.filter(function(d){return d.sc>=need;}).sort(function(a,b){return b.sc-a.sc;}),seen={},out=[];
+  hits.forEach(function(d){var key=d.r?d.r.id:'tip:'+d.txt.slice(0,20);if(out.length>=4||(d.r&&(seen[key]||0)>=1))return;seen[key]=(seen[key]||0)+1;out.push(d);});
+  if(!out.length)return null;
+  return '### '+t('hlpFound')+'\n'+out.map(function(d){return '- '+(d.r?'[['+d.r.id+']]: ':'')+d.txt;}).join('\n');}
+/* catch inflected words the parser misses ("картошки", "Tomaten", "яиц") by comparing word stems */
+var HIRR={'яиц':'eggs','яйцами':'eggs','яйцом':'eggs','eiern':'eggs','œufs':'eggs','huevos':'eggs','yumurtalar':'eggs'};
+function hStems(txt){var L=lx(),words=txt.split(' ').filter(function(w){return w.length>=3;}),out=[];
+  words.forEach(function(w){if(HIRR[w]&&out.indexOf(HIRR[w])<0){out.push(HIRR[w]);return;}if(w.length<4)return;
+    Object.keys(Kitchen.ING).some(function(k){var al=[Kitchen.ING[k].en].concat(L&&L.ing&&L.ing[k]?String(L.ing[k]).split('|'):[]);
+      return al.some(function(a){a=Kitchen.key(a);if(a.indexOf(' ')>=0||a.length<4)return false;var n=0,m=Math.min(a.length,w.length);while(n<m&&a[n]===w[n])n++;
+        if(n>=4&&n>=m-2){if(out.indexOf(k)<0)out.push(k);return true;}return false;});});});
+  return out;}
+function helperAnswer(q){
+  var txt=Kitchen.key(q),parsed=Kitchen.parse(q),keys=parsed.keys,r=hFindRecipe(txt),n=hNum(txt);
+  if(!keys.length)keys=hStems(txt);
+  if(!r&&keys.length&&hHas(txt,HKW.done)&&!hHas(txt,HKW.sub)){var byMain=DP_RECIPES.filter(function(x){var l=Kitchen.ingList(x.i);return l.length&&l[0].keys.indexOf(keys[0])>=0&&x.k;})
+    .sort(function(a,b){return (a.x?1:0)-(b.x?1:0)||Kitchen.ingList(a.i).length-Kitchen.ingList(b.i).length;});if(byMain[0])r=byMain[0];}
+  if(r&&keys.length)keys=keys.filter(function(k){return Kitchen.ingList(r.i).every(function(x){return x.keys.indexOf(k)<0;})||hHas(txt,HKW.sub);});
+  if(hHas(txt,HKW.sub)&&keys.length)return hSub(keys);
+  if(r)return hRecipe(r,txt,hHas(txt,HKW.people)||hHas(txt,HKW.guests)?n:null);
+  if(hHas(txt,HKW.guests)||(n&&hHas(txt,HKW.people)))return hGuests(n);
+  if(hHas(txt,HKW.cal)){var fd=hFoods(q);if(fd&&!hHas(txt,HKW.plan))return fd;return hDay();}
+  if(hHas(txt,HKW.kids))return hKids();
+  if(hHas(txt,HKW.shop)&&!keys.length)return hShopList();
+  if(hHas(txt,HKW.plan))return hWeek();
+  if(keys.length)return hWith(keys,hHas(txt,HKW.buy));
+  return hSearch(txt)||t('hlpNoIdea');
+}
+
 /* ===================== the assistant ===================== */
 var chat=[],chatBusy=false,chatFor=null;
 function chatKey(){return 'dp.chat.'+(user?user.id:'x');}
-function loadChat(){if(chatFor===chatKey())return;chatFor=chatKey();try{chat=JSON.parse(localStorage.getItem(chatKey()))||[];}catch(e){chat=[];}}
+function loadChat(){if(chatFor===chatKey())return;chatFor=chatKey();try{chat=JSON.parse(localStorage.getItem(chatKey()))||[];}catch(e){chat=[];}
+  chat=chat.filter(function(m){return m&&m.role!=='error'&&!/pollinations/i.test(String(m.content||''));});while(chat.length&&chat[chat.length-1].role==='user')chat.pop();}
 function saveChat(){try{localStorage.setItem(chatKey(),JSON.stringify(chat.slice(-40)));}catch(e){}}
 function chatContext(){
   var g=null;try{if(profile&&profile.onboarded_at)g={kcal:goals.kcal,protein:goals.protein,goal:computePlan(profile).goal};}catch(e){}
@@ -2199,38 +2370,13 @@ function chatContext(){
     meal:kitchen.meal&&mealOn().length?{dishes:mealOn().map(function(r){return r.t[0];}),people:kitchen.meal.people}:null,
     library:DP_RECIPES.map(function(r){return r.id+' | '+r.t[0]+' | '+r.c+' | '+r.min+' min';})};
 }
-/* ---------- which AI answers ----------
+/* ---------- who answers ----------
    With an Anthropic key on the server, answers come from Claude through the "cook" edge function.
-   Without one, they come from Pollinations' free text service straight from the browser — no key needed. */
-var FREE_AI='https://text.pollinations.ai/openai';
+   Without one (or if that fails), the built-in helper answers from the app's own recipes and your kitchen. */
 var LNAME={en:'English',fa:'Persian (Farsi)',ar:'Arabic',tr:'Turkish',es:'Spanish',fr:'French',de:'German',ru:'Russian'};
-async function freeAI(system,messages,ms){
-  var c=new AbortController(),tm=setTimeout(function(){c.abort();},ms||100000);
-  try{var r=await fetch(FREE_AI,{method:'POST',headers:{'Content-Type':'application/json'},signal:c.signal,
-      body:JSON.stringify({model:'openai',messages:[{role:'system',content:system}].concat(messages)})});
-    if(!r.ok)throw {code:r.status===429?'busy':'fail'};
-    var j=await r.json(),m=j&&j.choices&&j.choices[0]&&j.choices[0].message,out=m&&m.content;
-    if(!out)throw {code:'fail'};return String(out).trim();}
-  finally{clearTimeout(tm);}
-}
 function cleanMsgs(list){var out=[];list.forEach(function(m){if(m.role!=='user'&&m.role!=='assistant')return;var c=String(m.content||'').slice(0,4000);if(!c.trim())return;
   if(out.length&&out[out.length-1].role===m.role)out[out.length-1].content+='\n\n'+c;else out.push({role:m.role,content:c});});
   while(out.length&&out[0].role!=='user')out.shift();return out.slice(-12);}
-function kitchenText(c){var tg=c.targets;
-  return ['What they have: '+(c.have.length?c.have.join(', '):"they haven't listed anything yet")+'.',
-    'Pantry basics (salt, black pepper, oil, turmeric, sugar): '+(c.staples?'yes':'not assumed')+'.',
-    'Appliances: '+(c.appliances.length?c.appliances.join(', '):'not listed')+'.',
-    tg?'Daily targets: about '+tg.kcal+' kcal and '+tg.protein+' g protein (goal: '+tg.goal+').':'No daily calorie targets set.',
-    c.meal?"Meal they're planning now: "+c.meal.dishes.join(', ')+' for '+c.meal.people+' people.':''].filter(Boolean).join('\n');}
-function chatSystem(c){return 'You are the kitchen assistant inside Dastpokht, a recipe app for home cooks that focuses on Persian (Iranian) home cooking.\n'+
-  'Always reply in '+(LNAME[LANG]||'English')+', whatever language the recipe names are in.\n\n'+
-  'You help with: daily and weekly meal plans, what to cook from what they have, menus for guests, shopping lists, scaling recipes, substitutions, techniques (rice, tahdig, stews, kebabs, bread, sweets), rescuing mistakes, meal plans that fit their calorie and protein targets, and food-safety basics.\n'+
-  'Style: warm, practical and concise, like an experienced friend in the kitchen. Use short headings and bullet lists; avoid tables. Metric units.\n'+
-  'When you mention a dish from the app library, write its id in double square brackets, like [[ghormeh-sabzi]] — the app turns that into a button that opens the full recipe, so you do not need to repeat its whole recipe. Only use ids from the library list below. You may also suggest dishes that are not in the library; describe those briefly.\n'+
-  'Prefer what they already have and say clearly what they would need to buy. Do not require appliances they do not have.\n'+
-  'Health: general nutrition guidance for their targets is fine. For medical conditions, pregnancy, allergies, or special diets for babies and children, give general ideas and suggest checking with a professional; never promise something is allergen-free.\n'+
-  'Stay on food, cooking, meal planning, nutrition and running a kitchen. If asked about something unrelated, say briefly that you are here for the kitchen and offer a cooking-related way to help.\n\n'+
-  'Today is '+c.date+'.\n'+kitchenText(c)+'\n\nLibrary (id | English name | category | total time):\n'+c.library.join('\n');}
 async function claudeCall(body){var tok=await token();
   var r=await fetch(FN,{method:'POST',headers:{'Content-Type':'application/json',apikey:SB_KEY,Authorization:'Bearer '+tok},body:JSON.stringify(body)});
   var j={};try{j=await r.json();}catch(e){}
@@ -2263,6 +2409,8 @@ function bubble(m,hello){
   var d=el('div','msg '+(m.role==='user'?'me':m.role==='error'?'err':'bot'));
   if(m.role==='assistant'){var b=el('div','mbody');b.innerHTML=mdLite(m.content);b.dir='auto';d.appendChild(b);
     [].forEach.call(b.querySelectorAll('.rchip'),function(c){c.onclick=function(){go('r/'+c.getAttribute('data-r'));};});
+    if(m.q){var gg=el('button','gsearch');gg.type='button';gg.innerHTML=ico('<circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/>',2);gg.appendChild(document.createTextNode(t('hlpGoogle')));
+      gg.onclick=function(){window.open('https://www.google.com/search?q='+encodeURIComponent(m.q)+'&hl='+LANG,'_blank','noopener');};d.appendChild(gg);}
     if(!hello){var cp=el('button','mcopy',t('askCopy'));cp.type='button';cp.onclick=function(){try{navigator.clipboard.writeText(m.content).then(function(){toast(t('askCopied'));});}catch(e){}};d.appendChild(cp);}}
   else{var p=el('p',null,m.content);p.dir='auto';d.appendChild(p);}
   return d;
@@ -2286,7 +2434,7 @@ function renderAsk(){
   var sg=el('div','chatsug');sg.id='chatsug';['askS1','askS2','askS3','askS4','askS5','askS6'].forEach(function(k){var b=el('button','chip',t(k));b.type='button';b.onclick=function(){sendChat(t(k));};sg.appendChild(b);});p.appendChild(sg);
   var f=el('form','composer'),ta=el('textarea'),mic=el('button','micbtn'),sd=el('button','sendbtn');ta.id='chatin';ta.rows=1;ta.placeholder=t('askPh');ta.maxLength=2000;ta.setAttribute('aria-label',t('askPh'));ta.dir='auto';
   mic.type='button';mic.innerHTML=ICON.mic;mic.setAttribute('aria-label',t('speak'));sd.type='submit';sd.id='chatsend';sd.innerHTML=ico('<path d="M5 12h13M13 6l6 6-6 6"/>',2.2);sd.setAttribute('aria-label',t('askSend'));
-  f.appendChild(ta);if(SR)f.appendChild(mic);f.appendChild(sd);p.appendChild(f);p.appendChild(el('p','fine askfine',t('askFine')));
+  f.appendChild(ta);if(SR)f.appendChild(mic);f.appendChild(sd);p.appendChild(f);p.appendChild(el('p','fine askfine',t(aiClaude?'askFine':'askFineLocal')));
   function grow(){ta.style.height='auto';ta.style.height=Math.min(160,ta.scrollHeight)+'px';}
   ta.addEventListener('input',grow);
   ta.addEventListener('keydown',function(e){if(e.key==='Enter'&&!e.shiftKey&&finePtr){e.preventDefault();f.requestSubmit?f.requestSubmit():f.onsubmit(e);}});
@@ -2298,12 +2446,12 @@ function renderAsk(){
 async function sendChat(text){
   text=String(text||'').trim();if(!text||chatBusy)return;
   chat.push({role:'user',content:text.slice(0,2000)});saveChat();chatBusy=true;renderChat();
-  var msgs=cleanMsgs(chat),reply=null,err=null;
-  try{
-    if(aiClaude){try{var j=await claudeCall({mode:'chat',lang:LANG,messages:msgs,context:chatContext()});reply=j.reply;}catch(e){if(!e||e.code!=='retry')throw e;}}
-    if(reply==null)reply=await freeAI(chatSystem(chatContext()),msgs);
-  }catch(e){if(e&&e.status===401){chatBusy=false;handle(e);return;}err=e&&e.code==='limit'?'aiLimit':'aiFail';}
-  if(reply)chat.push({role:'assistant',content:String(reply).slice(0,12000)});else chat.push({role:'error',content:t(err||'aiFail')});
+  var reply=null,t0=Date.now();
+  if(aiClaude){try{var j=await claudeCall({mode:'chat',lang:LANG,messages:cleanMsgs(chat),context:chatContext()});reply=j&&j.reply||null;}
+    catch(e){if(e&&e.status===401){chatBusy=false;handle(e);return;}reply=null;}}
+  if(!reply){try{reply=helperAnswer(text);}catch(e){console.error(e);reply=t('hlpNoIdea');}
+    var wait=Math.max(0,650-(Date.now()-t0));if(wait)await new Promise(function(r){setTimeout(r,wait);});}
+  chat.push({role:'assistant',content:String(reply).slice(0,12000),q:text.slice(0,300)});
   chatBusy=false;saveChat();if(!$('p-ask').hidden)renderChat();
 }
 

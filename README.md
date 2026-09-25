@@ -14,7 +14,8 @@ Live: https://mahanmajdi.github.io/macro/
 - **Full meal**: pick a main dish and it adds the rice, salad, yogurt and drink that go with it, scales every amount to your table, writes the shopping list and times each step back from serving.
 - **Cook along**: a live timer that chimes and buzzes when the next step is due, across every dish at once.
 - **Recipes from cooks**: anyone can post a recipe for everyone to browse; only the author can edit or delete it.
-- **Kitchen assistant**: a chat that plans your week, suggests dishes from what you have and links to the recipes. It works out of the box (see “The AI” below).
+- **Kitchen assistant**: a chat that plans your week, suggests dishes from what you have and links to the recipes. It works out of the box (see “The assistant” below).
+- **How to tell it’s done**: every dish has three cues — almost there, perfect, overcooked — on the recipe page and in the live cook-along, which highlights “check now” as the timer runs down.
 - **Food log**: type what you ate (“a plate of ghormeh sabzi and a doogh”) and calories, protein, carbs and fat fill in. Optional daily targets.
 - **8 languages**: English, فارسی, العربية, Türkçe, Español, Français, Deutsch, Русский. Persian and Arabic are right-to-left and use their own numerals.
 
@@ -33,11 +34,11 @@ Live: https://mahanmajdi.github.io/macro/
 
 Backend: Supabase (auth by email link, Postgres with row-level security, and the `cook` edge function for AI).
 
-## The AI
+## The assistant
 
-The assistant (Ask tab) works with no key: they use Pollinations’ free text service directly from the browser. It’s free and needs no account, but it can be slow (often 10–30 seconds), and it isn’t guaranteed to stay free or available.
+The Ask tab works with no key and no outside service: a built-in kitchen helper answers from the app’s own recipes, doneness cues, tips, food list and your kitchen — week plans, menus for guests, a day that fits your calorie target, lunchbox ideas, shopping lists, swaps, “how do I know it’s done”, and “what can I make with…”. Every answer has a “Search Google” button for anything beyond that.
 
-Optional upgrade: add a secret named `ANTHROPIC_API_KEY` in Supabase → Edge Functions → Secrets, and answers come from Claude through the `cook` edge function instead (60 requests per cook per day). If that ever fails, the app falls back to the free service.
+Optional upgrade: add a secret named `ANTHROPIC_API_KEY` in Supabase → Edge Functions → Secrets, and answers come from Claude through the `cook` edge function instead (60 requests per cook per day). If that ever fails, the built-in helper answers.
 
 ## Photos
 
