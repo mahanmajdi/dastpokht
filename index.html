@@ -15,7 +15,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Familjen+Grotesk:wght@400..700&family=IBM+Plex+Mono:wght@400;500&family=Instrument+Sans:wght@400..600&family=Vazirmatn:wght@300..800&family=Manrope:wght@400..800&display=swap">
-<script>(function(){var L=['en','fa','ar','tr','es','fr','de','ru'],l=null;try{l=localStorage.getItem('dp.lang');}catch(e){}if(L.indexOf(l)<0){l='en';var n=navigator.languages||[navigator.language||''];for(var i=0;i<n.length;i++){var c=String(n[i]).slice(0,2).toLowerCase();if(L.indexOf(c)>=0){l=c;break;}}}var h=document.documentElement;h.lang=l;h.dir=(l==='fa'||l==='ar')?'rtl':'ltr';if(l!=='en'&&l!=='fa')document.write('<script src="lang-'+l+'.js?v=1"><\/script>');})();</script>
+<script>(function(){var L=['en','fa','ar','tr','es','fr','de','ru'],l=null;try{l=localStorage.getItem('dp.lang');}catch(e){}if(L.indexOf(l)<0){l='en';var n=navigator.languages||[navigator.language||''];for(var i=0;i<n.length;i++){var c=String(n[i]).slice(0,2).toLowerCase();if(L.indexOf(c)>=0){l=c;break;}}}var h=document.documentElement;h.lang=l;h.dir=(l==='fa'||l==='ar')?'rtl':'ltr';if(l!=='en'&&l!=='fa')document.write('<script src="lang-'+l+'.js?v=3"><\/script>');})();</script>
 <style>
 :root{color-scheme:light dark;
   --bg:#FBF6EC;--surf:#FFFFFF;--ink:#1F1712;--sub:#6F6459;--line:rgba(70,45,20,.14);--glass:255,252,246;--ga:.82;
@@ -345,10 +345,10 @@ footer{padding:36px 0 50px;text-align:center;font-size:13.5px;color:var(--sub);p
 </section>
 </main>
 <footer><div class="wrap"><p><b data-t="brand"></b> · <span data-t="L_foot"></span></p></div></footer>
-<script src="foods.js"></script>
-<script src="recipes.js"></script>
-<script src="kitchen.js"></script>
-<script src="i18n.js"></script>
+<script src="foods.js?v=3"></script>
+<script src="recipes.js?v=3"></script>
+<script src="kitchen.js?v=3"></script>
+<script src="i18n.js?v=3"></script>
 <script>
 (function(){
 'use strict';
@@ -380,7 +380,11 @@ var DCOL={'ghormeh-sabzi':'#4B5A22',gheymeh:'#A8461F',fesenjan:'#5A2F1D','khores
   'kuku-sabzi':'#3E6B25','kuku-sibzamini':'#D9A441','mirza-ghasemi':'#B8732E','kashk-bademjan':'#8E6A3E',omlet:'#D2502E',makaroni:'#C0582A',yatimcheh:'#A64A26','salad-shirazi':'#5FA044',
   'mast-o-khiar':'#8FB57C','borani-esfenaj':'#6F9A48',olivieh:'#D9BE72','sabzi-khordan':'#4F8F3A','sholeh-zard':'#F2B01E','shir-berenj':'#E5D6BE',halva:'#8A4E1F',fereni:'#E7D9BF',
   'cake-yazdi':'#D99A3A',doogh:'#B9D1BD',sekanjabin:'#8FBF6A',chai:'#9A3B1A',shakshuka:'#C8432A','egg-fried-rice':'#D9B24A','chicken-curry':'#D08A2A','pasta-pomodoro':'#C8432A',
-  'roast-chicken':'#C07A2E',pancakes:'#D9A44A'};
+  'roast-chicken':'#C07A2E',pancakes:'#D9A44A','boiled-eggs':'#E8C15A','scrambled-eggs':'#F0C040','folded-omelette':'#E9B23C','poached-eggs':'#EDCB6A',
+  tamagoyaki:'#E8B830','steamed-egg':'#E9CF7A',meringues:'#E0CFB0',khagineh:'#D98E1F',eshkeneh:'#C9922E',nargesi:'#4E7A2E','potato-eggs':'#D7A13C',
+  'spanish-tortilla':'#D9A441','french-toast':'#C98A3A','egg-sandwich':'#E4C46A','egg-in-a-hole':'#D9A44A','deviled-eggs':'#E8C65A','egg-custard':'#E6C57A',
+  'banana-pancakes':'#D9B04A','egg-curry':'#C9702A','baked-potatoes':'#B98A4A','mashed-potatoes':'#E0CB94','fried-potatoes':'#E0A83A','grilled-cheese':'#E0A030',
+  'tomato-soup':'#C8432A','garlic-bread':'#C8964A','aglio-olio':'#D8B85A','shir-moz':'#E6D39A','tuna-sandwich':'#B9A06A'};
 var CCOL={stew:'#6A4A22',rice:'#E3A017',kebab:'#B5522A',soup:'#8A7A2E',main:'#B0602A',side:'#5FA044',salad:'#5FA044',breakfast:'#E0A030',dessert:'#E6B84A',drink:'#8FB896',bread:'#C8964A',snack:'#C8964A'};
 function dcol(r){return DCOL[r.id]||CCOL[r.c]||'#B0602A';}
 

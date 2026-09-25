@@ -1,5 +1,5 @@
 /* Dastpokht recipe library — Persian home cooking plus a few everyday dishes.
-   Each recipe: id, category, total minutes, servings, n = [kcal, protein, carbs, fat] per serving,
+   Each recipe: id, category (x:1 = everyday non-Persian dish), total minutes, servings, n = [kcal, protein, carbs, fat] per serving,
    app = appliances needed (comma = all of, | = any of), t/d = [English, Persian] name and one-liner,
    i = ingredients "key:qty:unit:flag" (flag s = basic staple, o = optional),
    s = steps [minutes before serving, English, Persian], m = what to serve with it for a full meal.
@@ -425,7 +425,7 @@ R({id:'chai',c:'drink',min:15,sv:4,n:[5,0,1,0],app:'stove',
   [0,'Pour into glasses and serve with sugar cubes or dates.','در استکان بریزید و با قند یا خرما سرو کنید.']],
  m:''});
 
-R({id:'shakshuka',c:'breakfast',min:25,sv:2,n:[320,17,18,20],app:'stove',
+R({id:'shakshuka',c:'breakfast',min:25,sv:2,n:[320,17,18,20],app:'stove',x:1,
  t:['Shakshuka','شکشوکا'],d:['Eggs poached in a spiced tomato and pepper sauce.','تخم‌مرغ در سس گوجه و فلفل'],
  i:'eggs:4;tomato:4;onion:1;bell pepper:1;garlic:2:clove;cumin:1:tsp:o;chili flakes::pinch:o;cheese:50:g:o;bread:2::o;salt::taste:s;oil:2:tbsp:s;black pepper::taste:s',
  s:[[25,'Soften the onion, pepper and garlic in oil for 8 minutes.','پیاز، فلفل دلمه و سیر را ۸ دقیقه در روغن تفت دهید.'],
@@ -434,9 +434,9 @@ R({id:'shakshuka',c:'breakfast',min:25,sv:2,n:[320,17,18,20],app:'stove',
   [0,'Crumble cheese on top and serve with bread.','پنیر را رویش خرد کنید و با نان سرو کنید.']],
  m:''});
 
-R({id:'egg-fried-rice',c:'rice',min:20,sv:2,n:[450,14,62,15],app:'stove',
+R({id:'egg-fried-rice',c:'rice',min:20,sv:2,n:[450,14,62,15],app:'stove',x:1,
  t:['Egg fried rice','برنج سرخ‌شده با تخم‌مرغ'],d:['Leftover rice turned into dinner in 20 minutes.','برنج مانده، شام بیست‌دقیقه‌ای'],
- i:'rice:2:cup;eggs:2;soy sauce:2:tbsp;peas:0.5:cup:o;carrot:1::o;green onion:2::o;garlic:2:clove:o;oil:2:tbsp:s;salt::taste:s',
+ i:'rice:2:cup;eggs:2;soy sauce:2:tbsp:o;peas:0.5:cup:o;carrot:1::o;green onion:2::o;garlic:2:clove:o;oil:2:tbsp:s;salt::taste:s',
  s:[[20,'Use cold cooked rice — yesterday’s is perfect. Dice the carrot and slice the green onions.','از برنج پخته سرد استفاده کنید (برنج دیروز عالی است). هویج را نگینی و پیازچه را خرد کنید.'],
   [12,'Scramble the eggs in a very hot pan and set them aside.','تخم‌مرغ‌ها را در تابه داغ هم بزنید و کنار بگذارید.'],
   [10,'Stir-fry the garlic, carrot and peas for 3 minutes, then add the rice and toss until hot.','سیر، هویج و نخودفرنگی را ۳ دقیقه تفت دهید، برنج را اضافه کنید و هم بزنید تا داغ شود.'],
@@ -444,7 +444,7 @@ R({id:'egg-fried-rice',c:'rice',min:20,sv:2,n:[450,14,62,15],app:'stove',
   [0,'Serve hot.','داغ سرو کنید.']],
  m:''});
 
-R({id:'chicken-curry',c:'main',min:45,sv:4,n:[380,36,12,20],app:'stove',
+R({id:'chicken-curry',c:'main',min:45,sv:4,n:[380,36,12,20],app:'stove',x:1,
  t:['Chicken curry','کاری مرغ'],d:['Simple chicken curry finished with yogurt.','کاری مرغ ساده با ماست'],
  i:'chicken:600:g;onion:1;garlic:3:clove;tomato:2;curry powder:2:tbsp;yogurt|cream:0.5:cup;oil:3:tbsp:s;salt::taste:s',
  s:[[45,'Fry the onion until golden, then add the garlic and curry powder for a minute.','پیاز را طلایی کنید، سیر و پودر کاری را یک دقیقه تفت دهید.'],
@@ -454,7 +454,7 @@ R({id:'chicken-curry',c:'main',min:45,sv:4,n:[380,36,12,20],app:'stove',
   [0,'Serve with rice.','با برنج سرو کنید.']],
  m:'kateh'});
 
-R({id:'pasta-pomodoro',c:'main',min:25,sv:4,n:[480,15,86,9],app:'stove',
+R({id:'pasta-pomodoro',c:'main',min:25,sv:4,n:[480,15,86,9],app:'stove',x:1,
  t:['Pasta pomodoro','پاستا با سس گوجه'],d:['Pasta in a fresh tomato and garlic sauce.','پاستا با سس گوجه‌فرنگی و سیر'],
  i:'pasta:400:g;tomato:6;garlic:3:clove;cheese:50:g:o;herbs:::o;oil:3:tbsp:s;salt::taste:s;black pepper::taste:s',
  s:[[25,'Put a big pot of salted water on to boil.','قابلمه بزرگ آب‌نمک را روی گاز بگذارید تا بجوشد.'],
@@ -464,7 +464,7 @@ R({id:'pasta-pomodoro',c:'main',min:25,sv:4,n:[480,15,86,9],app:'stove',
   [0,'Serve with cheese.','با پنیر سرو کنید.']],
  m:''});
 
-R({id:'roast-chicken',c:'main',min:90,sv:4,n:[620,48,34,32],app:'oven',
+R({id:'roast-chicken',c:'main',min:90,sv:4,n:[620,48,34,32],app:'oven',x:1,
  t:['Roast chicken & potatoes','مرغ و سیب‌زمینی تنوری'],d:['Lemon and garlic roast chicken with potatoes.','مرغ و سیب‌زمینی تنوری با لیمو و سیر'],
  i:'chicken:1.5:kg;potato:4;lemon:1;garlic:6:clove;butter:2:tbsp:o;saffron::pinch:o;salt::taste:s;black pepper::taste:s;oil:3:tbsp:s',
  s:[[90,'Heat the oven to 200°C (400°F). Rub the chicken with butter, garlic, lemon, salt and pepper.','فر را روی ۲۰۰ درجه گرم کنید. مرغ را با کره، سیر، لیمو، نمک و فلفل ماساژ دهید.'],
@@ -474,11 +474,265 @@ R({id:'roast-chicken',c:'main',min:90,sv:4,n:[620,48,34,32],app:'oven',
   [0,'Serve with the potatoes and a salad.','با سیب‌زمینی و سالاد سرو کنید.']],
  m:'salad-shirazi'});
 
-R({id:'pancakes',c:'breakfast',min:25,sv:4,n:[330,9,48,11],app:'stove',
+R({id:'pancakes',c:'breakfast',min:25,sv:4,n:[330,9,48,11],app:'stove',x:1,
  t:['Pancakes','پنکیک'],d:['Fluffy pancakes in 25 minutes.','پنکیک پفکی در ۲۵ دقیقه'],
  i:'flour:1.5:cup;milk:1.25:cup;eggs:1;baking powder:2:tsp;butter:2:tbsp;honey|jam:::o;sugar:2:tbsp:s;salt::pinch:s',
  s:[[25,'Whisk the flour, baking powder, sugar and salt.','آرد، بکینگ‌پودر، شکر و نمک را مخلوط کنید.'],
   [20,'Whisk in the milk, egg and melted butter until just combined.','شیر، تخم‌مرغ و کره آب‌شده را اضافه کنید و فقط تا یکدست شدن هم بزنید.'],
   [15,'Cook ladlefuls in a lightly oiled pan until bubbles form, flip and cook 1 minute more.','ملاقه‌ملاقه در تابه کمی چرب بریزید تا حباب بزند، برگردانید و یک دقیقه دیگر بپزید.'],
   [0,'Serve with honey or jam.','با عسل یا مربا سرو کنید.']],
+ m:''});
+
+/* ---------- quick dishes from one or two things (so even "I have an egg" gets real ideas) ---------- */
+R({id:'boiled-eggs',c:'breakfast',min:15,sv:2,n:[145,13,1,10],app:'stove',x:1,
+ t:['Boiled eggs','تخم‌مرغ آب‌پز'],d:['Soft, jammy or hard — timings that always work.','عسلی، نیم‌بند یا سفت؛ با زمان‌بندی دقیق'],
+ i:'eggs:4;bread:2::o;salt::taste:s;black pepper::taste:s',
+ s:[[15,'Bring a small pot of water to a gentle boil and lower the eggs in with a spoon.','آب را در قابلمه‌ی کوچکی به جوش ملایم برسانید و تخم‌مرغ‌ها را با قاشق آرام داخل آب بگذارید.'],
+  [12,'Boil 6 minutes for soft and runny, 8 for jammy, 10–11 for hard.','برای عسلی ۶ دقیقه، برای نیم‌بند ۸ دقیقه و برای سفت ۱۰ تا ۱۱ دقیقه بجوشانید.'],
+  [3,'Move them straight into cold water for 2 minutes so they peel easily.','بلافاصله ۲ دقیقه در آب سرد بگذارید تا راحت پوست کنده شوند.'],
+  [0,'Peel, sprinkle with salt and pepper and serve with bread.','پوست بگیرید، نمک و فلفل بزنید و با نان سرو کنید.']],
+ m:'chai'});
+
+R({id:'scrambled-eggs',c:'breakfast',min:8,sv:2,n:[210,14,2,16],app:'stove',x:1,
+ t:['Soft scrambled eggs','تخم‌مرغ هم‌زده'],d:['Creamy eggs cooked low and slow — 8 minutes.','تخم‌مرغ نرم و کرمی روی حرارت ملایم؛ هشت‌دقیقه‌ای'],
+ i:'eggs:4;butter:1:tbsp:o;milk:2:tbsp:o;chives:1:tbsp:o;oil:1:tbsp:s;salt::taste:s;black pepper::taste:s',
+ s:[[8,'Beat the eggs with a pinch of salt (and a splash of milk).','تخم‌مرغ‌ها را با کمی نمک (و کمی شیر) هم بزنید.'],
+  [6,'Melt butter or oil in a pan over low heat, pour in the eggs and stir slowly with a spatula.','کره یا روغن را در تابه روی حرارت ملایم آب کنید، تخم‌مرغ را بریزید و با کفگیر آرام هم بزنید.'],
+  [2,'Take the pan off the heat while they still look a little wet — they finish cooking on their own.','وقتی هنوز کمی خیس به نظر می‌رسد تابه را از روی حرارت بردارید؛ خودش جا می‌افتد.'],
+  [0,'Season with pepper and chives and serve on toast.','فلفل و تره بزنید و روی نان تست سرو کنید.']],
+ m:'chai'});
+
+R({id:'folded-omelette',c:'breakfast',min:10,sv:1,n:[300,19,2,24],app:'stove',x:1,
+ t:['Folded omelette','املت ساده‌ی تاشده'],d:['A plain omelette — add cheese or herbs if you have them.','املت ساده؛ اگر پنیر یا سبزی دارید اضافه کنید'],
+ i:'eggs:3;butter:1:tbsp:o;cheese:30:g:o;herbs:2:tbsp:o;oil:1:tsp:s;salt::taste:s;black pepper::taste:s',
+ s:[[10,'Beat the eggs well with a pinch of salt and pepper.','تخم‌مرغ‌ها را با کمی نمک و فلفل خوب هم بزنید.'],
+  [7,'Heat butter or oil in a non-stick pan over medium heat and pour in the eggs.','کره یا روغن را در تابه‌ی نچسب روی حرارت متوسط داغ کنید و تخم‌مرغ را بریزید.'],
+  [5,'As it sets, pull the edges to the middle and tilt the pan so raw egg runs underneath.','هرچه لبه‌ها می‌بندد آن‌ها را به وسط بکشید و تابه را کج کنید تا تخم‌مرغ خام زیرش برود.'],
+  [2,'While the top is still a little soft, add cheese or herbs to one half and fold it over.','وقتی رویش هنوز کمی نرم است، پنیر یا سبزی را روی یک نیمه بریزید و املت را تا کنید.'],
+  [0,'Slide onto a plate and serve.','در بشقاب بکشید و سرو کنید.']],
+ m:'chai'});
+
+R({id:'poached-eggs',c:'breakfast',min:10,sv:1,n:[150,13,1,10],app:'stove',x:1,
+ t:['Poached eggs on toast','تخم‌مرغ پوشه روی نان تست'],d:['Silky eggs cooked in barely simmering water.','تخم‌مرغ لطیف که در آب با جوش ملایم می‌پزد'],
+ i:'eggs:2;bread:2::o;vinegar:1:tbsp:o;butter:1:tbsp:o;salt::taste:s;black pepper::taste:s',
+ s:[[10,'Bring a deep pan of water to a bare simmer and add the vinegar.','آب را در تابه‌ی گود یا قابلمه به جوش خیلی ملایم برسانید و سرکه را اضافه کنید.'],
+  [7,'Crack each egg into a cup, stir the water into a gentle swirl and slide the egg into the middle.','هر تخم‌مرغ را در فنجانی بشکنید، آب را آرام بچرخانید و تخم‌مرغ را وسط گرداب بریزید.'],
+  [4,'Cook 3 minutes, until the white is set but the yolk is soft. Toast and butter the bread meanwhile.','۳ دقیقه بپزید تا سفیده ببندد ولی زرده نرم بماند. در این فاصله نان را تست کنید و کره بمالید.'],
+  [0,'Lift out with a slotted spoon, drain, season and serve on the toast.','با کفگیر سوراخ‌دار بیرون بیاورید، آبش را بگیرید، نمک و فلفل بزنید و روی نان تست سرو کنید.']],
+ m:'chai'});
+
+R({id:'tamagoyaki',c:'breakfast',min:15,sv:2,n:[190,13,4,13],app:'stove',x:1,
+ t:['Tamagoyaki (rolled omelette)','تاماگویاکی (املت لوله‌ای)'],d:['Sweet-savory Japanese omelette rolled in thin layers.','املت شیرین و شور ژاپنی که لایه‌لایه لوله می‌شود'],
+ i:'eggs:4;soy sauce:1:tsp:o;sugar:2:tsp:s;salt::pinch:s;oil:1:tbsp:s',
+ s:[[15,'Beat the eggs with the sugar, a pinch of salt and the soy sauce.','تخم‌مرغ‌ها را با شکر، کمی نمک و سس سویا هم بزنید.'],
+  [12,'Oil a small pan over medium-low heat and pour in a thin layer of egg.','تابه‌ی کوچکی را روی حرارت ملایم چرب کنید و لایه‌ی نازکی از تخم‌مرغ بریزید.'],
+  [10,'When it’s almost set, roll it to one side. Oil the pan, pour in another thin layer, lift the roll so egg runs under it, and roll again.','وقتی تقریباً بست، آن را به یک طرف لوله کنید. تابه را دوباره چرب کنید، لایه‌ی نازک دیگری بریزید، لوله را کمی بلند کنید تا تخم‌مرغ زیرش برود و دوباره لوله کنید.'],
+  [3,'Repeat until the egg is used up, then let it rest 2 minutes.','تا تمام شدن تخم‌مرغ تکرار کنید و بعد ۲ دقیقه بگذارید بماند.'],
+  [0,'Slice into thick pieces and serve warm or cold.','برش‌های پهن بزنید و گرم یا سرد سرو کنید.']],
+ m:''});
+
+R({id:'steamed-egg',c:'side',min:20,sv:2,n:[120,10,1,8],app:'stove|microwave',x:1,
+ t:['Steamed egg custard','تخم‌مرغ بخارپز'],d:['Silky, savory egg — just eggs, water and salt.','تخم‌مرغ لطیف و شور؛ فقط با تخم‌مرغ، آب و نمک'],
+ i:'eggs:3;green onion:1::o;soy sauce:1:tsp:o;salt::taste:s',
+ s:[[20,'Beat the eggs with 1½ times their volume of warm water and ½ tsp salt. Strain for the smoothest result.','تخم‌مرغ‌ها را با یک‌ونیم برابر حجمشان آب ولرم و نصف قاشق چای‌خوری نمک هم بزنید. برای لطافت بیشتر صافش کنید.'],
+  [17,'Pour into a heatproof bowl and cover with a plate.','در کاسه‌ی نسوز بریزید و رویش را با بشقاب بپوشانید.'],
+  [15,'Steam over gently simmering water for 12–15 minutes (or microwave at medium power, a minute at a time) until just set.','روی آبِ در حال جوش ملایم ۱۲ تا ۱۵ دقیقه بخارپز کنید (یا در مایکروویو با قدرت متوسط، دقیقه‌به‌دقیقه) تا تازه ببندد.'],
+  [0,'Top with sliced green onion and a few drops of soy sauce.','پیازچه‌ی خردشده و چند قطره سس سویا رویش بریزید.']],
+ m:''});
+
+R({id:'meringues',c:'dessert',min:100,sv:6,n:[70,1,17,0],app:'oven',x:1,
+ t:['Meringue kisses','مرنگ'],d:['Crisp little meringues from egg whites and sugar.','شیرینی ترد و پفکی با سفیده‌ی تخم‌مرغ و شکر'],
+ i:'eggs:2;vanilla:::o;sugar:0.5:cup:s',
+ s:[[100,'Heat the oven to 100 °C. Separate the eggs — keep the yolks for scrambled eggs.','فر را روی ۱۰۰ درجه روشن کنید. سفیده و زرده را جدا کنید (زرده‌ها را برای تخم‌مرغ هم‌زده نگه دارید).'],
+  [95,'Whisk the whites until foamy, then add the sugar a spoonful at a time and keep whisking until stiff and glossy.','سفیده‌ها را هم بزنید تا کف کند، بعد شکر را قاشق‌قاشق اضافه کنید و آن‌قدر هم بزنید تا سفت و براق شود.'],
+  [85,'Spoon or pipe small mounds onto a lined tray.','با قاشق یا قیف، کپه‌های کوچک روی سینی کاغذکشیده بریزید.'],
+  [80,'Bake about 70 minutes, until they lift off the paper easily. Let them cool in the oven.','حدود ۷۰ دقیقه بپزید تا راحت از کاغذ جدا شوند و بگذارید در همان فر خنک شوند.'],
+  [0,'Serve, or keep them in an airtight jar.','سرو کنید یا در ظرف دربسته نگه دارید.']],
+ m:'chai'});
+
+R({id:'khagineh',c:'breakfast',min:20,sv:2,n:[420,14,50,20],app:'stove',
+ t:['Khagineh','خاگینه'],d:['Sweet Persian egg cake soaked in saffron and rose water syrup.','خاگینه‌ی شیرین با شربت زعفران و گلاب'],
+ i:'eggs:4;flour:2:tbsp;rose water:1:tbsp:o;saffron:0.25:tsp:o;cardamom:::o;sugar:0.33:cup:s;oil:3:tbsp:s',
+ s:[[20,'Make the syrup: simmer the sugar with ⅓ cup water for 3 minutes, then add the saffron and rose water.','شربت را آماده کنید: شکر را با ⅓ پیمانه آب ۳ دقیقه بجوشانید، بعد زعفران و گلاب را اضافه کنید.'],
+  [15,'Beat the eggs with the flour until smooth.','تخم‌مرغ‌ها را با آرد هم بزنید تا یکدست شود.'],
+  [12,'Heat the oil in a pan, pour in the egg, cover and cook over low heat until the bottom is golden. Flip and brown the other side.','روغن را در تابه داغ کنید، مخلوط تخم‌مرغ را بریزید، درش را بگذارید و روی حرارت ملایم بپزید تا زیرش طلایی شود؛ برگردانید تا طرف دیگرش هم سرخ شود.'],
+  [3,'Cut into wedges, pour the syrup over and let it soak in for a minute.','برش بزنید، شربت را رویش بریزید و یک دقیقه بگذارید به خورد خاگینه برود.'],
+  [0,'Serve warm with tea.','گرم با چای سرو کنید.']],
+ m:'chai'});
+
+R({id:'eshkeneh',c:'soup',min:35,sv:4,n:[220,7,20,13],app:'stove',
+ t:['Eshkeneh','اشکنه'],d:['Humble onion and egg soup with dried mint.','سوپ ساده‌ی پیاز و تخم‌مرغ با نعناع خشک'],
+ i:'onion:2;eggs:3;flour:1:tbsp;dried mint:1:tbsp:o;fenugreek:1:tbsp:o;potato:1::o;bread:2::o;turmeric:1:tsp:s;oil:3:tbsp:s;salt::taste:s;black pepper::taste:s',
+ s:[[35,'Slice the onions thinly and fry in the oil until golden. Stir in the turmeric, flour and dried mint (and fenugreek) for a minute.','پیازها را نازک خلالی کنید و در روغن طلایی کنید. زردچوبه، آرد و نعناع خشک (و شنبلیله) را اضافه کنید و یک دقیقه تفت دهید.'],
+  [28,'Add 4 cups of hot water (and the diced potato), salt and pepper. Simmer 20 minutes.','۴ پیمانه آب داغ (و سیب‌زمینی نگینی)، نمک و فلفل را اضافه کنید و ۲۰ دقیقه بگذارید بجوشد.'],
+  [6,'Crack in the eggs one by one without stirring — or beat them first for threads of egg. Cook 5 minutes.','تخم‌مرغ‌ها را یکی‌یکی داخل سوپ بشکنید و هم نزنید؛ یا اول هم بزنید تا رشته‌رشته شود. ۵ دقیقه بپزید.'],
+  [0,'Serve hot with bread torn into the bowl.','داغ با نان تریدشده سرو کنید.']],
+ m:'sabzi-khordan'});
+
+R({id:'nargesi',c:'main',min:25,sv:3,n:[210,12,9,15],app:'stove',
+ t:['Nargesi (spinach and eggs)','نرگسی اسفناج'],d:['Spinach and onion with eggs set on top — quick and filling.','اسفناج و پیاز با تخم‌مرغ روی آن؛ سریع و سیرکننده'],
+ i:'spinach:500:g;eggs:4;onion:1;garlic:2:clove:o;turmeric:1:tsp:s;oil:3:tbsp:s;salt::taste:s;black pepper::taste:s',
+ s:[[25,'Fry the chopped onion (and garlic) in the oil until golden, then stir in the turmeric.','پیاز (و سیر) خردشده را در روغن طلایی کنید و زردچوبه را اضافه کنید.'],
+  [18,'Add the chopped spinach, salt and pepper and cook until wilted and the water is gone.','اسفناج خردشده، نمک و فلفل را اضافه کنید و بپزید تا بخوابد و آبش کشیده شود.'],
+  [8,'Make small hollows and crack an egg into each. Cover and cook 5–6 minutes.','چند گودی کوچک درست کنید و در هر کدام یک تخم‌مرغ بشکنید. درش را بگذارید و ۵ تا ۶ دقیقه بپزید.'],
+  [0,'Serve from the pan with bread.','در همان تابه با نان سرو کنید.']],
+ m:'mast-o-khiar'});
+
+R({id:'potato-eggs',c:'breakfast',min:25,sv:2,n:[360,13,33,20],app:'stove',
+ t:['Potatoes and eggs','سیب‌زمینی و تخم‌مرغ'],d:['Crispy potato cubes with eggs cooked right in the pan.','سیب‌زمینی نگینی ترد با تخم‌مرغ در همان تابه'],
+ i:'potato:2;eggs:3;onion:1::o;pickles:2::o;turmeric:0.5:tsp:s;oil:3:tbsp:s;salt::taste:s;black pepper::taste:s',
+ s:[[25,'Peel and dice the potatoes small (and slice the onion).','سیب‌زمینی‌ها را پوست بگیرید و ریز نگینی کنید (و پیاز را خلالی کنید).'],
+  [20,'Fry them in the oil over medium heat, stirring now and then, until golden and tender — about 12 minutes.','در روغن روی حرارت متوسط سرخ کنید و گاهی هم بزنید تا طلایی و نرم شود؛ حدود ۱۲ دقیقه.'],
+  [7,'Season with salt, pepper and turmeric, crack in the eggs, cover and cook until set.','نمک، فلفل و زردچوبه بزنید، تخم‌مرغ‌ها را رویش بشکنید، درش را بگذارید و بپزید تا ببندد.'],
+  [0,'Serve hot with bread and pickles.','داغ با نان و خیارشور سرو کنید.']],
+ m:'chai'});
+
+R({id:'spanish-tortilla',c:'main',min:45,sv:4,n:[330,12,27,20],app:'stove',x:1,
+ t:['Spanish tortilla','تورتیای اسپانیایی'],d:['Thick potato omelette — good hot or cold.','املت ضخیم سیب‌زمینی؛ هم گرم خوشمزه است هم سرد'],
+ i:'potato:4;eggs:6;onion:1::o;oil:0.5:cup:s;salt::taste:s',
+ s:[[45,'Slice the potatoes (and onion) thinly and cook them gently in the oil for 15–20 minutes, until soft but not brown.','سیب‌زمینی‌ها (و پیاز) را نازک حلقه کنید و در روغن روی حرارت ملایم ۱۵ تا ۲۰ دقیقه بپزید تا نرم شود ولی رنگ نگیرد.'],
+  [25,'Drain off most of the oil. Beat the eggs with salt, mix in the potatoes and let it sit 5 minutes.','بیشتر روغن را خالی کنید. تخم‌مرغ‌ها را با نمک هم بزنید، سیب‌زمینی را اضافه کنید و ۵ دقیقه بگذارید بماند.'],
+  [18,'Pour into a hot oiled pan and cook over low heat for about 8 minutes.','در تابه‌ی داغ و چرب بریزید و روی حرارت ملایم حدود ۸ دقیقه بپزید.'],
+  [9,'Flip it using a plate and cook the other side for 4–5 minutes.','با کمک یک بشقاب برگردانید و طرف دیگر را ۴ تا ۵ دقیقه بپزید.'],
+  [0,'Let it rest a few minutes and cut into wedges.','چند دقیقه بگذارید بماند و برش بزنید.']],
+ m:'salad-shirazi'});
+
+R({id:'french-toast',c:'breakfast',min:15,sv:2,n:[340,13,40,14],app:'stove',x:1,
+ t:['French toast','نان تست فرانسوی'],d:['Bread soaked in egg and milk, fried golden.','نان خیس‌خورده در تخم‌مرغ و شیر، سرخ و طلایی'],
+ i:'bread:4;eggs:2;milk:0.5:cup;cinnamon:0.5:tsp:o;butter:1:tbsp:o;honey|jam:::o;sugar:1:tbsp:s;oil:1:tbsp:s',
+ s:[[15,'Whisk the eggs, milk, sugar and cinnamon in a wide dish.','تخم‌مرغ، شیر، شکر و دارچین را در ظرف پهنی هم بزنید.'],
+  [12,'Heat butter or oil in a pan over medium heat.','کره یا روغن را در تابه روی حرارت متوسط داغ کنید.'],
+  [10,'Dip each slice of bread in the egg for a few seconds on each side and fry 2–3 minutes a side until golden.','هر برش نان را چند ثانیه از هر طرف در مخلوط تخم‌مرغ بخوابانید و هر طرف ۲ تا ۳ دقیقه سرخ کنید تا طلایی شود.'],
+  [0,'Serve with honey or jam.','با عسل یا مربا سرو کنید.']],
+ m:'chai'});
+
+R({id:'egg-sandwich',c:'breakfast',min:15,sv:2,n:[400,17,31,23],app:'stove',x:1,
+ t:['Egg salad sandwich','ساندویچ سالاد تخم‌مرغ'],d:['Chopped boiled eggs and mayo in bread.','تخم‌مرغ آب‌پز خردشده با سس مایونز لای نان'],
+ i:'eggs:4;mayonnaise:2:tbsp;bread:4;pickles:2::o;tomato:1::o;lettuce:::o;salt::taste:s;black pepper::taste:s',
+ s:[[15,'Hard-boil the eggs for 10 minutes, then cool them in cold water.','تخم‌مرغ‌ها را ۱۰ دقیقه بجوشانید تا سفت شوند و در آب سرد خنک کنید.'],
+  [4,'Peel and chop the eggs and mix with the mayonnaise, salt, pepper and chopped pickles.','پوست تخم‌مرغ‌ها را بگیرید، خرد کنید و با سس مایونز، نمک، فلفل و خیارشور خردشده مخلوط کنید.'],
+  [0,'Spread on the bread with tomato and lettuce and close the sandwich.','با گوجه و کاهو لای نان بگذارید.']],
+ m:''});
+
+R({id:'egg-in-a-hole',c:'breakfast',min:10,sv:2,n:[230,9,15,15],app:'stove',x:1,
+ t:['Egg in a hole','تخم‌مرغ در نان'],d:['An egg fried inside a slice of toast.','تخم‌مرغی که وسط برش نان سرخ می‌شود'],
+ i:'bread:2;eggs:2;butter:1:tbsp:o;cheese:::o;oil:1:tbsp:s;salt::taste:s;black pepper::taste:s',
+ s:[[10,'Cut a round hole in the middle of each slice of bread with the rim of a glass.','با لبه‌ی یک لیوان وسط هر برش نان را گرد ببُرید.'],
+  [8,'Butter or oil a pan over medium heat, lay in the bread and crack an egg into each hole.','تابه را روی حرارت متوسط با کره یا روغن چرب کنید، نان‌ها را بگذارید و در سوراخ هر کدام یک تخم‌مرغ بشکنید.'],
+  [5,'Cook 2–3 minutes, flip carefully and cook 1 minute more. Toast the cut-out circles alongside.','۲ تا ۳ دقیقه بپزید، با احتیاط برگردانید و یک دقیقه دیگر بپزید. دایره‌های نان را هم کنارش برشته کنید.'],
+  [0,'Season and serve right away.','نمک و فلفل بزنید و فوراً سرو کنید.']],
+ m:'chai'});
+
+R({id:'deviled-eggs',c:'side',min:25,sv:3,n:[230,13,1,19],app:'stove',x:1,
+ t:['Deviled eggs','تخم‌مرغ شکم‌پر'],d:['Boiled egg halves filled with a creamy yolk mix.','نیمه‌های تخم‌مرغ آب‌پز پرشده با مخلوط کرمی زرده'],
+ i:'eggs:6;mayonnaise:3:tbsp;vinegar:1:tsp:o;chili flakes:::o;parsley:::o;salt::taste:s;black pepper::taste:s',
+ s:[[25,'Hard-boil the eggs for 10 minutes, then cool completely in cold water.','تخم‌مرغ‌ها را ۱۰ دقیقه بجوشانید تا سفت شوند و در آب سرد کاملاً خنک کنید.'],
+  [10,'Peel, halve lengthwise and pop the yolks into a bowl.','پوست بگیرید، از طول نصف کنید و زرده‌ها را در کاسه‌ای بریزید.'],
+  [6,'Mash the yolks with the mayonnaise, vinegar, salt and pepper until smooth.','زرده‌ها را با سس مایونز، سرکه، نمک و فلفل له کنید تا یکدست شود.'],
+  [0,'Spoon back into the whites and top with chili flakes or parsley.','مخلوط را با قاشق داخل سفیده‌ها بریزید و رویش پول‌بیبر یا جعفری بپاشید.']],
+ m:''});
+
+R({id:'egg-custard',c:'dessert',min:50,sv:4,n:[190,8,23,7],app:'oven',x:1,
+ t:['Baked egg custard','کاسترد تخم‌مرغ'],d:['Smooth sweet custard from eggs, milk and sugar.','دسر لطیف با تخم‌مرغ، شیر و شکر'],
+ i:'eggs:3;milk:2:cup;vanilla:::o;cinnamon:::o;sugar:0.33:cup:s',
+ s:[[50,'Heat the oven to 160 °C and boil a kettle of water.','فر را روی ۱۶۰ درجه روشن کنید و کتری آب را بگذارید جوش بیاید.'],
+  [45,'Warm the milk. Whisk the eggs with the sugar and vanilla, then slowly whisk in the warm milk.','شیر را گرم کنید. تخم‌مرغ‌ها را با شکر و وانیل هم بزنید و شیر گرم را کم‌کم در حال هم زدن اضافه کنید.'],
+  [40,'Pour into small cups, set them in a deep tray and add hot water halfway up the cups.','در ظرف‌های کوچک بریزید، در سینی گودی بچینید و تا نیمه‌ی ظرف‌ها آب داغ بریزید.'],
+  [35,'Bake about 30 minutes, until set at the edges but still a little wobbly in the middle.','حدود ۳۰ دقیقه بپزید تا لبه‌ها ببندد ولی وسطش هنوز کمی لرزان باشد.'],
+  [0,'Dust with cinnamon and serve warm or chilled.','دارچین بپاشید و گرم یا سرد سرو کنید.']],
+ m:''});
+
+R({id:'banana-pancakes',c:'breakfast',min:15,sv:1,n:[260,13,28,11],app:'stove',x:1,
+ t:['Banana pancakes','پنکیک موز'],d:['Pancakes from just a banana and two eggs.','پنکیک فقط با یک موز و دو تخم‌مرغ'],
+ i:'banana:1;eggs:2;oats:2:tbsp:o;cinnamon:::o;honey:::o;oil:1:tsp:s',
+ s:[[15,'Mash the banana well and beat in the eggs (and the oats and cinnamon).','موز را خوب له کنید و تخم‌مرغ (و جو دوسر و دارچین) را اضافه کنید و هم بزنید.'],
+  [10,'Lightly oil a pan over medium-low heat and pour in small pancakes.','تابه را روی حرارت ملایم کمی چرب کنید و پنکیک‌های کوچک بریزید.'],
+  [7,'Cook until the edges set, flip gently and cook 1 minute more.','بپزید تا لبه‌ها ببندد، آرام برگردانید و یک دقیقه دیگر بپزید.'],
+  [0,'Serve with a drizzle of honey.','با کمی عسل سرو کنید.']],
+ m:''});
+
+R({id:'egg-curry',c:'main',min:35,sv:3,n:[300,14,12,22],app:'stove',x:1,
+ t:['Egg curry','کاری تخم‌مرغ'],d:['Boiled eggs in a spiced onion and tomato sauce.','تخم‌مرغ آب‌پز در سس ادویه‌دار پیاز و گوجه'],
+ i:'eggs:6;onion:2;tomato:3;garlic:3:clove:o;curry powder:1:tbsp:o;chili:::o;turmeric:1:tsp:s;oil:3:tbsp:s;salt::taste:s',
+ s:[[35,'Hard-boil the eggs for 10 minutes, cool, peel and make a few shallow cuts in each.','تخم‌مرغ‌ها را ۱۰ دقیقه بجوشانید، خنک کنید، پوست بگیرید و روی هر کدام چند برش سطحی بزنید.'],
+  [30,'Fry the chopped onion in the oil until golden, then add the garlic, turmeric and curry powder for a minute.','پیاز خردشده را در روغن طلایی کنید، بعد سیر، زردچوبه و پودر کاری را اضافه کنید و یک دقیقه تفت دهید.'],
+  [22,'Add the chopped tomatoes, salt and ½ cup water and simmer until thick, about 10 minutes.','گوجه‌ی خردشده، نمک و نصف پیمانه آب را اضافه کنید و حدود ۱۰ دقیقه بپزید تا غلیظ شود.'],
+  [10,'Add the eggs and simmer 8 minutes, spooning the sauce over them.','تخم‌مرغ‌ها را اضافه کنید و ۸ دقیقه بپزید و سس را رویشان بریزید.'],
+  [0,'Serve with rice or bread.','با برنج یا نان سرو کنید.']],
+ m:'chelo'});
+
+R({id:'baked-potatoes',c:'side',min:60,sv:4,n:[260,6,42,8],app:'oven|microwave|air fryer',x:1,
+ t:['Baked potatoes','سیب‌زمینی تنوری'],d:['Fluffy baked potatoes with butter, cheese or yogurt.','سیب‌زمینی پخته‌ی پفکی با کره، پنیر یا ماست'],
+ i:'potato:4;butter:2:tbsp:o;cheese:::o;yogurt:::o;chives:::o;oil:1:tbsp:s;salt::taste:s;black pepper::taste:s',
+ s:[[60,'Heat the oven to 200 °C. Scrub the potatoes, prick them with a fork and rub with oil and salt.','فر را روی ۲۰۰ درجه روشن کنید. سیب‌زمینی‌ها را خوب بشویید، با چنگال سوراخ کنید و روغن و نمک بمالید.'],
+  [55,'Bake about 50 minutes until soft inside (or microwave 8–10 minutes, turning once).','حدود ۵۰ دقیقه بپزید تا داخلش نرم شود (یا در مایکروویو ۸ تا ۱۰ دقیقه و یک بار برگردانید).'],
+  [0,'Split open, fluff with a fork and top with butter, cheese, yogurt or chives.','از وسط باز کنید، با چنگال پفکی کنید و کره، پنیر، ماست یا تره رویش بریزید.']],
+ m:''});
+
+R({id:'mashed-potatoes',c:'side',min:30,sv:4,n:[240,5,38,8],app:'stove',x:1,
+ t:['Mashed potatoes','پوره‌ی سیب‌زمینی'],d:['Smooth, buttery mash in 30 minutes.','پوره‌ی نرم و کره‌ای در ۳۰ دقیقه'],
+ i:'potato:5;butter:3:tbsp;milk:0.5:cup;salt::taste:s;black pepper::taste:s',
+ s:[[30,'Peel and quarter the potatoes and boil in salted water for about 20 minutes, until very soft.','سیب‌زمینی‌ها را پوست بگیرید، چهار تکه کنید و در آب نمک حدود ۲۰ دقیقه بپزید تا کاملاً نرم شود.'],
+  [8,'Drain well and let them steam dry for a minute. Warm the milk with the butter.','خوب آبکش کنید و یک دقیقه بگذارید بخارشان برود. شیر را با کره گرم کنید.'],
+  [4,'Mash the potatoes, then beat in the warm milk and butter and season.','سیب‌زمینی‌ها را له کنید، شیر و کره‌ی گرم را اضافه کنید، هم بزنید و نمک و فلفل بزنید.'],
+  [0,'Serve hot.','داغ سرو کنید.']],
+ m:''});
+
+R({id:'fried-potatoes',c:'side',min:30,sv:3,n:[290,4,38,14],app:'stove|air fryer|oven',
+ t:['Fried potatoes','سیب‌زمینی سرخ‌کرده'],d:['Golden, crisp potato wedges or fries.','سیب‌زمینی سرخ‌کرده‌ی طلایی و ترد'],
+ i:'potato:4;ketchup:::o;oil:0.5:cup:s;salt::taste:s',
+ s:[[30,'Cut the potatoes into sticks or wedges, rinse and dry them well.','سیب‌زمینی‌ها را خلالی یا قاچی کنید، بشویید و کاملاً خشک کنید.'],
+  [22,'Fry in hot oil in batches until golden and crisp (or toss with a little oil and air-fry at 200 °C for 18–20 minutes).','دسته‌دسته در روغن داغ سرخ کنید تا طلایی و ترد شود (یا با کمی روغن در هواپز با ۲۰۰ درجه ۱۸ تا ۲۰ دقیقه بپزید).'],
+  [0,'Drain on paper, salt right away and serve.','روی دستمال کاغذی بگذارید تا روغنش گرفته شود، فوراً نمک بزنید و سرو کنید.']],
+ m:''});
+
+R({id:'grilled-cheese',c:'breakfast',min:10,sv:1,n:[440,18,31,28],app:'stove',x:1,
+ t:['Grilled cheese sandwich','ساندویچ پنیر داغ'],d:['Crisp buttery bread with melted cheese.','نان ترد و کره‌ای با پنیر آب‌شده'],
+ i:'bread:2;cheese:60:g;butter:1:tbsp:o;tomato:1::o;oil:1:tsp:s',
+ s:[[10,'Butter the outside of the bread (or brush with oil) and put the cheese (and tomato) between the slices.','بیرون برش‌های نان را کره (یا روغن) بمالید و پنیر (و گوجه) را بینشان بگذارید.'],
+  [7,'Cook in a pan over medium-low heat, about 3 minutes a side, pressing gently, until golden and the cheese melts.','در تابه روی حرارت ملایم هر طرف حدود ۳ دقیقه بپزید و کمی فشار دهید تا طلایی شود و پنیر آب شود.'],
+  [0,'Cut in half and serve hot.','از وسط نصف کنید و داغ سرو کنید.']],
+ m:''});
+
+R({id:'tomato-soup',c:'soup',min:35,sv:4,n:[130,3,14,7],app:'stove',x:1,
+ t:['Tomato soup','سوپ گوجه‌فرنگی'],d:['Simple tomato soup with onion and garlic.','سوپ ساده‌ی گوجه‌فرنگی با پیاز و سیر'],
+ i:'tomato:8;onion:1;garlic:2:clove:o;butter:2:tbsp:o;cream:0.25:cup:o;basil:::o;sugar:1:tsp:s;oil:1:tbsp:s;salt::taste:s;black pepper::taste:s',
+ s:[[35,'Chop the onion, garlic and tomatoes.','پیاز، سیر و گوجه‌ها را خرد کنید.'],
+  [30,'Soften the onion and garlic in butter or oil for 5 minutes.','پیاز و سیر را ۵ دقیقه در کره یا روغن تفت دهید تا نرم شود.'],
+  [25,'Add the tomatoes, 2 cups water, sugar, salt and pepper and simmer 20 minutes.','گوجه‌ها، ۲ پیمانه آب، شکر، نمک و فلفل را اضافه کنید و ۲۰ دقیقه بپزید.'],
+  [4,'Blend until smooth (or mash well) and stir in the cream.','با گوشت‌کوب برقی یا مخلوط‌کن صاف کنید (یا خوب له کنید) و خامه را اضافه کنید.'],
+  [0,'Serve hot with bread.','داغ با نان سرو کنید.']],
+ m:'grilled-cheese'});
+
+R({id:'garlic-bread',c:'side',min:15,sv:4,n:[210,5,26,10],app:'oven|air fryer|stove',x:1,
+ t:['Garlic bread','نان سیر'],d:['Toasty bread with garlic butter.','نان برشته با کره‌ی سیر'],
+ i:'bread:6;butter:4:tbsp;garlic:3:clove;parsley:::o;cheese:::o;salt::pinch:s',
+ s:[[15,'Heat the oven to 200 °C. Mix soft butter with crushed garlic, a pinch of salt and chopped parsley.','فر را روی ۲۰۰ درجه روشن کنید. کره‌ی نرم را با سیر له‌شده، کمی نمک و جعفری خردشده مخلوط کنید.'],
+  [10,'Spread it on the bread (and add cheese if you like).','روی نان‌ها بمالید (و اگر دوست دارید پنیر هم بریزید).'],
+  [8,'Bake 7–8 minutes until golden, or toast in a pan, butter side down.','۷ تا ۸ دقیقه بپزید تا طلایی شود، یا در تابه با سمت کره‌ای رو به پایین برشته کنید.'],
+  [0,'Serve warm.','گرم سرو کنید.']],
+ m:'tomato-soup'});
+
+R({id:'aglio-olio',c:'main',min:20,sv:2,n:[560,13,72,24],app:'stove',x:1,
+ t:['Spaghetti aglio e olio','اسپاگتی با سیر و روغن'],d:['Pasta tossed with garlic, oil and chili — 20 minutes.','پاستا با سیر، روغن و فلفل؛ بیست‌دقیقه‌ای'],
+ i:'pasta:200:g;garlic:4:clove;chili flakes:0.5:tsp:o;parsley:::o;cheese:::o;oil:4:tbsp:s;salt::taste:s',
+ s:[[20,'Boil the pasta in well-salted water until just tender. Keep a cup of the cooking water.','پاستا را در آب نمک بپزید تا تازه نرم شود. یک لیوان از آب پاستا را نگه دارید.'],
+  [8,'Meanwhile, warm the oil with the thinly sliced garlic over low heat until pale golden, then add the chili flakes.','در این فاصله روغن را با سیر نازک‌برش‌خورده روی حرارت ملایم گرم کنید تا سیر کمی طلایی شود و پول‌بیبر را اضافه کنید.'],
+  [3,'Toss in the drained pasta with a splash of the cooking water until glossy.','پاستای آبکش‌شده و کمی از آب پاستا را اضافه کنید و هم بزنید تا براق شود.'],
+  [0,'Finish with parsley (and cheese) and serve.','جعفری (و پنیر) رویش بریزید و سرو کنید.']],
+ m:''});
+
+R({id:'shir-moz',c:'drink',min:5,sv:2,n:[230,9,40,5],app:'blender',
+ t:['Banana milkshake (shir moz)','شیر موز'],d:['Banana blended with cold milk — breakfast in a glass.','موز و شیر سرد؛ صبحانه در یک لیوان'],
+ i:'banana:2;milk:2:cup;honey|dates:::o;walnuts:::o;cinnamon:::o',
+ s:[[5,'Put the bananas, cold milk and a little honey or a few dates in the blender.','موز، شیر سرد و کمی عسل یا چند خرما را در مخلوط‌کن بریزید.'],
+  [2,'Blend until smooth and frothy.','مخلوط کنید تا یکدست و کف‌دار شود.'],
+  [0,'Pour into glasses and dust with cinnamon.','در لیوان بریزید و کمی دارچین بپاشید.']],
+ m:''});
+
+R({id:'tuna-sandwich',c:'main',min:10,sv:2,n:[380,24,31,17],app:'',x:1,
+ t:['Tuna sandwich','ساندویچ تن ماهی'],d:['Tuna, mayo and pickles in bread — no cooking.','تن ماهی، مایونز و خیارشور لای نان؛ بدون پخت'],
+ i:'tuna:1;bread:4;mayonnaise:2:tbsp:o;onion:0.5::o;pickles:2::o;tomato:1::o;lemon:::o;black pepper::taste:s',
+ s:[[10,'Drain the tuna and mash it with the mayonnaise, finely chopped onion and pickles, a squeeze of lemon and pepper.','روغن تن ماهی را بگیرید و آن را با مایونز، پیاز و خیارشور ریزخردشده، کمی آب‌لیمو و فلفل مخلوط کنید.'],
+  [0,'Fill the bread with the tuna and sliced tomato.','مخلوط تن ماهی و گوجه‌ی حلقه‌شده را لای نان بگذارید.']],
  m:''});
