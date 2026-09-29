@@ -18,15 +18,16 @@ Live: https://mahanmajdi.github.io/dastpokht/
 - **Kitchen assistant**: a chat that plans your week, suggests dishes from what you have and links to the recipes. It works out of the box (see “The assistant” below).
 - **How to tell it’s done**: every dish has three cues — almost there, perfect, overcooked — on the recipe page and in the live cook-along, which highlights “check now” as the timer runs down.
 - **Food log**: type what you ate (“a plate of ghormeh sabzi and a doogh”) and calories, protein, carbs and fat fill in. Optional daily targets.
+- **A real photo of every dish**: each recipe card and recipe page shows a freely licensed photo from Wikimedia Commons, credited on the recipe page.
 - **8 languages**: English, فارسی, العربية, Türkçe, Español, Français, Deutsch, Русский. Persian and Arabic are right-to-left and use their own numerals.
 
 ## Files
 
 | File | What it is |
 | --- | --- |
-| `index.html` | Landing page, with a working “try it” demo |
+| `index.html` | Landing page: sign up / sign in at the top, a 3D carousel of dishes, a working “try it” demo, feature tour, photo gallery with a cuisine filter, and FAQ |
 | `app.html` | The app |
-| `recipes.js` | Recipe library (English + Persian) |
+| `recipes.js` | Recipe library (English + Persian), and the photo for each dish (`DP_PIC`) |
 | `kitchen.js` | Ingredient catalogue, matcher, meal timeline and shopping list |
 | `foods.js` | Food list and parser for the food log |
 | `i18n.js` | Interface text in English and Persian |

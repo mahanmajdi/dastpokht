@@ -1716,3 +1716,62 @@ var DP_CU={shakshuka:'me','egg-fried-rice':'cn','chicken-curry':'in','pasta-pomo
   'banana-pancakes':'basic','boiled-eggs':'basic','scrambled-eggs':'basic','folded-omelette':'basic','poached-eggs':'basic','egg-sandwich':'basic','egg-in-a-hole':'basic',
   'baked-potatoes':'basic','mashed-potatoes':'basic','grilled-cheese':'basic','tomato-soup':'basic','tuna-sandwich':'basic'};
 DP_RECIPES.forEach(function(r){if(!r.cu&&DP_CU[r.id])r.cu=DP_CU[r.id];if(r.cu)r.x=1;});
+
+/* ---------- a real photo of every dish (Wikimedia Commons, freely licensed) ----------
+   [hash path, file name, 1 = small original, use as is]. dpPic(id, 330|500|960) gives a thumbnail url. */
+var DP_PIC={
+"ghormeh-sabzi":["b/bd","Ghormeh_Sabzi.JPG"],"gheymeh":["d/db","Gheymeh_stew.jpg"],"fesenjan":["1/1d","Khoresht-e_fesenjan.jpg"],"khoresh-bademjan":["5/5d","Eggplant_stew_persian.jpg"],"abgoosht":["5/59","Dizi.jpg",1],
+"chelo":["4/4f","Making_Chelow_8.jpg"],"kateh":["1/1c","Persianmom%27s_mother%27s_%28persiangrandma%29_perfect_tahdig_rice.png"],"loobia-polo":["4/49","Loobia_Polo.jpg"],"adas-polo":["6/61","Adas_polo.JPG"],
+"baghali-polo":["1/17","Baghala_polo.jpg"],"sabzi-polo":["1/1e","Sabzi_polo.jpg"],"tahchin":["8/85","Tachin.jpg",1],"joojeh-kabab":["c/cf","Isfahan_1220532_nevit.jpg"],
+"koobideh":["2/26","Kabab_koobideh_bbq_persian_food.jpg"],"ash-reshteh":["5/54","Ash_Reshteh.JPG"],"nimroo":["f/f0","Fried_Egg_2.jpg"],"halim":["0/0f","Pakistani_Haleem_served_with_garnish.jpg"],
+"kotlet":["4/4a","Kotlet_%283119520131%29.jpg"],"kuku-sabzi":["f/ff","Kookoo-sabzi.jpg",1],"mirza-ghasemi":["2/2d","Mirza-Qasemi_dish.jpg"],"kashk-bademjan":["1/10","Kashk_e_Baademjaan.jpg"],
+"salad-shirazi":["4/4b","%D8%B3%D8%A7%D9%84%D8%A7%D8%AF_%D8%B4%DB%8C%D8%B1%D8%A7%D8%B2%DB%8C.jpg",1],"mast-o-khiar":["2/23","Cacik-1.jpg"],"borani-esfenaj":["9/9a","Bouranee.png"],
+"olivieh":["8/89","%D0%A1%D0%B0%D0%BB%D0%B0%D1%82_%D0%9E%D0%BB%D0%B8%D0%B2%D1%8C%D0%B5_03.jpg"],"sabzi-khordan":["f/f9","%D4%BF%D5%A1%D5%B6%D5%A1%D5%B9%D5%AB_3.JPG"],"sholeh-zard":["3/31","Sholezard_for_Nowruz.jpg",1],
+"shir-berenj":["4/40","Kheer_with_condensed_milk..JPG"],"doogh":["c/c8","%D0%A2%D0%90%D0%9D_%28%D0%BD%D0%B0%D0%BF%D0%B8%D1%82%D0%BE%D0%BA%29.jpg",1],"sekanjabin":["2/2b","Sekanjebin_%28drink%29.jpg",1],
+"chai":["8/8a","Cup_of_black_tea.JPG"],"shakshuka":["1/18","Shakshuka_by_Calliopejen1.jpg"],"egg-fried-rice":["c/c3","Koh_Mak%2C_Thailand%2C_Fried_rice_with_seafood%2C_Thai_fried_rice.jpg"],
+"chicken-curry":["0/00","Chicken_tikka_masala_%28cropped%29.jpg"],"pasta-pomodoro":["3/33","Spaghettata.JPG"],"roast-chicken":["d/d9","Max%27s_Roasted_Chicken_-_Evan_Swigart.jpg"],
+"pancakes":["4/40","Foodiesfeed.com_pouring-honey-on-pancakes-with-walnuts.jpg"],"boiled-eggs":["c/cc","Soft-boiled-egg.jpg"],"scrambled-eggs":["2/20","Scrambed_eggs.jpg"],
+"folded-omelette":["6/6e","Blond_unbrowned_omelet_with_mushrooms_and_herbs.jpg"],"poached-eggs":["6/6b","Fog_Eater_Cafe_-_April_2023_-_Sarah_Stierch_04.jpg"],
+"tamagoyaki":["0/06","%E9%B3%A5%E7%84%BC%E3%81%8D%E5%B1%85%E9%85%92%E5%B1%8B_%2839394233682%29.jpg"],"steamed-egg":["2/20","Gyeranjjim.jpg",1],"meringues":["1/19","Meringues_9027.jpg"],
+"eshkeneh":["c/cc","%D8%A7%D8%B4%DA%A9%D9%86%D9%87_%D8%AE%D9%88%D8%B1%D8%A7%DA%A9_%D8%A7%DB%8C%D8%B1%D8%A7%D9%86%DB%8C.jpg"],"potato-eggs":["3/30","Flickr_lifeontheedge_3672951574--Home_fried_potatoes.jpg"],
+"spanish-tortilla":["4/49","Tortilla_de_patata_-_San_Sebasti%C3%A1n.jpg"],"french-toast":["4/42","FrenchToast.JPG"],"egg-sandwich":["f/ff","Egg_Sandwich.jpg",1],"egg-in-a-hole":["2/25","Egg_in_the_basket-01.jpg"],
+"deviled-eggs":["9/93","0.2014_Ostereier_zum_Fr%C3%BChst%C3%BCck%2C_Beskiden%2C_Nowotaniec.jpg"],"egg-custard":["1/1f","Custard.jpg"],
+"banana-pancakes":["4/40","Foodiesfeed.com_pouring-honey-on-pancakes-with-walnuts.jpg"],"egg-curry":["6/6f","Taj_Mahal_-_Lamb_Curry_Madras.jpg"],"baked-potatoes":["9/93","BakedPotatoWithButter.jpg"],
+"mashed-potatoes":["5/51","Sous_vide_mashed_potatoes.jpg"],"fried-potatoes":["8/83","French_Fries.JPG",1],"grilled-cheese":["7/7c","Cheddar_cheese_sandwich.jpg"],
+"tomato-soup":["8/8c","Tomato_soup%2C_plant-based_%2844040252791%29.jpg"],"garlic-bread":["5/59","Garlicbread.jpg"],"aglio-olio":["6/6f","Aglio_e_olio.jpg"],"shir-moz":["6/68","Strawberry_milk_shake_%28cropped%29.jpg"],
+"tuna-sandwich":["b/b4","Tuna_fish_sandwiches_for_the_National_School_Lunch_Program.jpg"],"pizza-margherita":["5/57","Neapolitan_pizza_at_Trappica_%2848701940197%29.jpg"],
+"spaghetti-bolognese":["4/4d","Tagliatelle_al_rag%C3%B9_%28image_modified%29.jpg"],"beef-lasagna":["2/26","Lasagna_bolognese.jpg"],"fettuccine-alfredo":["9/91","Fettuccine_Alfredo_originals.jpg"],
+"pesto-pasta":["c/c9","BasilPesto.JPG"],"mushroom-risotto":["1/1d","Esno4Wkmana_jul_2014_Cassnam_067.jpg"],"bruschetta":["1/1f","2014_Bruschetta_The_Larder_Chiang_Mai.jpg"],
+"caprese-salad":["b/b1","Caprese-1_%28tigher_crop%29.jpg"],"minestrone":["f/fe","Minestrone_soup_%285%29.jpg"],"tiramisu":["5/58","Tiramisu_-_Raffaele_Diomede.jpg"],"crepes":["0/09","Crepes_dsc07085.jpg"],
+"spinach-quiche":["2/29","Quiche.jpg"],"ratatouille":["3/37","Ratatouille_home_cooked.jpg",1],"french-onion-soup":["5/5a","Soupe_%C3%A0_l%27oignon.jpg"],"paella":["e/ed","01_Paella_Valenciana_original.jpg"],
+"gazpacho":["9/99","Gazpacho_Malague%C3%B1o_con_su_%E2%80%9Cpica%C3%ADto%E2%80%9D_-_Moreno%2C_Playa_Burriana_%28cropped%29.jpg"],"greek-salad":["f/f2","Greece_Food_Horiatiki.JPG"],
+"chicken-souvlaki":["c/cd","%CE%95%CE%BB%CE%BB%CE%B7%CE%BD%CE%B9%CE%BA%CF%8C_%CE%A3%CE%BF%CF%85%CE%B2%CE%BB%CE%AC%CE%BA%CE%B9_-_panoramio.jpg"],"tzatziki":["2/23","Cacik-1.jpg"],
+"moussaka":["a/a8","MussakasMeMelitsanesKePatates01.JPG"],"beef-tacos":["e/e6","Tacos_de_%28carne%29_asada.jpg"],"chicken-burrito":["6/60","Burrito.JPG"],"cheese-quesadilla":["0/01","Empanada_flor_de_Calabaza.jpg"],
+"guacamole":["6/64","Guacamole_IMGP1271.jpg"],"loaded-nachos":["8/87","Nachos-cheese.jpg"],"chili-con-carne":["5/50","Bowl_of_chili.jpg"],"chicken-enchiladas":["e/ec","Enchilada_Rice_Beans.jpg"],
+"mexican-rice":["0/0e","Mexican_rice_144235.jpg"],"beef-burger":["4/4d","Cheeseburger.jpg"],"mac-and-cheese":["4/44","Original_Mac_n_Cheese_.jpg"],"fried-chicken":["2/2c","Fried-Chicken-Set.jpg"],
+"beef-hot-dogs":["b/b1","Hot_dog_with_mustard.png"],"chicken-club-sandwich":["5/51","Club_sandwich_at_Caf%C3%A9_Picnic.jpg"],"chicken-caesar-salad":["2/23","Caesar_salad_%282%29.jpg"],
+"bbq-chicken-wings":["5/51","Buffalo_wings-01.jpg"],"brownies":["6/68","Chocolatebrownie.JPG"],"chocolate-chip-cookies":["b/b4","Choco_chip_cookie.png",1],"apple-pie":["2/2f","Apple_pie_14.jpg"],
+"sushi-maki":["6/60","Sushi_platter.jpg"],"chicken-teriyaki":["f/f0","Chicken_teriyaki_bento_box_-_Massachusetts.jpg"],"chicken-ramen":["c/c3","Shoyu_Ramen%EF%BC%88Tokyo_Ramen%EF%BC%89_-_01.jpg"],
+"onigiri":["4/43","%E5%B0%8F%E6%96%99%E7%90%86%E3%83%90%E3%83%AB%E3%81%95%E3%81%8F%E3%82%89_%E7%89%B9%E8%A3%BD%E3%81%8A%E3%81%AB%E3%81%8E%E3%82%8A.jpg",1],
+"chicken-katsu":["e/e5","Matsunoya_W_Mega_Chicken_Katsu_Set_20200923-04.jpg"],"kung-pao-chicken":["c/c2","Kung-pao-shanghai.jpg"],"sweet-sour-chicken":["c/ca","Flickr_preppybyday_4665999863--General_Tso%27s_Chicken.jpg"],
+"chicken-chow-mein":["a/a6","Homemade_Chow_mein_with_shrimps_and_meat_with_a_choy_and_Choung.jpg"],
+"chicken-dumplings":["8/88","%E5%8F%B0%E7%81%A3%E5%8D%97%E6%8A%95%E8%8D%89%E5%B1%AF%E6%B0%B4%E9%A4%83Nantou%2C_Taiwan_Caotun_dumplings.jpg",1],"egg-drop-soup":["e/e7","5-Minute_Egg_Drop_Soup-5_%2832079790121%29.jpg"],
+"beef-bulgogi":["c/ce","Bulgogi_2.jpg"],"bibimbap":["4/44","Dolsot-bibimbap.jpg"],"chicken-pad-thai":["3/39","Phat_Thai_kung_Chang_Khien_street_stall.jpg"],
+"thai-chicken-curry":["d/da","Yellow_curry_and_green_curry_-_Nok_Nok_Kitchen_at_The_Cow_2025-09-30.jpg"],"thai-basil-chicken":["3/36","Gaprao_rice_%28Spicy_minced_chicken_on_rice_with_fried_egg%29_%2816413970650%29.jpg"],
+"beef-pho":["5/52","Bowl_of_Meatball_pho.jpg"],"fresh-spring-rolls":["1/1a","Homemade_spring_rolls_%287010969349%29.jpg"],"butter-chicken":["4/41","Butter_Chicken_%26_Butter_Naan_-_Home_-_Chandigarh_-_India_-_0006.jpg"],
+"chana-masala":["8/8e","Chana_masala.jpg"],"dal-tadka":["6/69","Punjabi_style_Dal_Makhani.jpg"],"chicken-biryani":["5/5a","%22Hyderabadi_Dum_Biryani%22.jpg"],"palak-paneer":["b/b7","Palakpaneer_Rayagada_Odisha_0009.jpg"],
+"aloo-gobi":["a/a9","Aloo_Ghobi.jpg"],"chicken-tikka":["b/bd","Tandoorimumbai.jpg",1],"garlic-naan":["4/4e","Annapurna_Naan.jpg"],"hummus":["b/bf","Lebanese_style_hummus.jpg"],"falafel":["5/57","Falafels_2.jpg"],
+"chicken-shawarma":["0/00","Shawarma_2.jpg"],"tabbouleh":["a/ac","Tabouleh_1.JPG"],"baba-ghanoush":["5/5f","Baba_Ganoush_05of05_%288735238183%29.jpg"],"mercimek":["6/61","EgFoodLentilSoup.jpg",1],
+"menemen":["d/dd","Menemen_in_a_sahan.jpg"],"lahmacun":["c/c7","Lahmacun.jpg"],"beef-kofte":["d/d2","Izgara_k%C3%B6fte.jpg"],
+"khoresh-karafs":["d/d8","%D8%AE%D9%88%D8%B1%D8%B4_%DA%A9%D8%B1%D9%81%D8%B3_%D8%A8%D8%A7_%D9%85%D8%B1%D8%BA.jpg"],"zereshk-polo":["f/f3","Zereshk_polo.jpg",1],"estamboli":["0/0e","Mexican_rice_144235.jpg"],
+"kabab-tabei":["c/c0","%DA%A9%D8%A8%D8%A7%D8%A8_%D8%AA%D8%A7%D8%A8%D9%87%E2%80%8C%D8%A7%DB%8C_%D8%A2%D8%A8%D8%AF%D8%A7%D8%B1.jpg"],"adasi":["4/44","Adasi.png"],"soup-jo":["a/a8","Vegetable_beef_barley_soup.jpg"],
+"noon-panir-sabzi":["9/9a","Nun_Barbar%C3%AD_fatto_con_farina_di_grano_del_Senatore_Cappelli.jpg"],"kuku-sibzamini":["8/87","%DA%A9%D9%88%DA%A9%D9%88_%D8%B3%DB%8C%D8%A8_%D8%B2%D9%85%DB%8C%D9%86%DB%8C.jpg",1],
+"omlet":["0/0c","Iranian_omelet.jpg"],"makaroni":["4/4d","Tagliatelle_al_rag%C3%B9_%28image_modified%29.jpg"],"yatimcheh":["2/2d","Mixed_food1.jpg"],"halva":["3/3e","Persian_halva.jpg"],
+"fereni":["0/07","Kheer_Trio.jpg",1],"cake-yazdi":["9/9f","Cyzd.jpg",1],"khagineh":["a/ad","%D8%AE%D8%A7%DA%AF%DB%8C%D9%86%D9%87_%D8%A7%D8%B5%D9%81%D9%87%D8%A7%D9%86%DB%8C.jpg"],"nargesi":["a/a7","Nargesi_omelette.jpg"]};
+var DP_PICW=[330,500,960];
+function dpPicBase(p){return 'https://upload.wikimedia.org/wikipedia/commons/';}
+function dpPic(id,w){var p=DP_PIC[id];if(!p)return null;if(p[2])return dpPicBase(p)+p[0]+'/'+p[1];
+  w=w||330;for(var i=0;i<DP_PICW.length;i++)if(DP_PICW[i]>=w){w=DP_PICW[i];break;}if(w>960)w=960;
+  return dpPicBase(p)+'thumb/'+p[0]+'/'+p[1]+'/'+w+'px-'+p[1];}
+function dpPicSet(id,max){var p=DP_PIC[id];if(!p||p[2])return '';return DP_PICW.filter(function(w){return w<=(max||960);}).map(function(w){return dpPic(id,w)+' '+w+'w';}).join(', ');}
+function dpPicPage(id){var p=DP_PIC[id];return p?'https://commons.wikimedia.org/wiki/File:'+p[1]:null;}
